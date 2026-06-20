@@ -1,5 +1,5 @@
 [build]
-  command = "expo export --platform web"
+  command = "expo export --platform web && node scripts/inject-pwa.mjs"
   publish = "dist"
 
 # SPA fallback — serve index.html for any route the static files don't match,

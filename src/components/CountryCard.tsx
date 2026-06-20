@@ -1,8 +1,9 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import type { Country, VisaRule } from "@/types";
 import { colors, regionColor, VISA_META } from "@/lib/theme";
 import { budgetLabel, visaDetailLine, visaIconName } from "@/utils/format";
+import { AppImage } from "./AppImage";
 import { Icon, type IconName } from "./Icon";
 import { VisaBadge } from "./VisaBadge";
 
@@ -45,11 +46,7 @@ export function CountryCard({
           className="absolute left-0 right-0 top-0 z-10 h-1.5"
           style={{ backgroundColor: accent }}
         />
-        <Image
-          source={{ uri: country.heroImage }}
-          className="h-44 w-full"
-          resizeMode="cover"
-        />
+        <AppImage uri={country.heroImage} className="h-44 w-full" />
         {/* gradient-ish scrim */}
         <View className="absolute inset-0 bg-black/10" />
         <View className="absolute left-3 top-3">

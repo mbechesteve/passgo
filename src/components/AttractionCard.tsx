@@ -1,8 +1,9 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import type { Attraction } from "@/types";
 import { colors } from "@/lib/theme";
 import { usd } from "@/utils/format";
+import { AppImage } from "./AppImage";
 import { Icon, type IconName } from "./Icon";
 
 export function AttractionCard({
@@ -23,10 +24,9 @@ export function AttractionCard({
       }`}
     >
       <View className="relative">
-        <Image
-          source={{ uri: attraction.image }}
+        <AppImage
+          uri={attraction.image}
           className={compact ? "h-28 w-full" : "h-36 w-full"}
-          resizeMode="cover"
         />
         <View className="absolute left-2 top-2 rounded-lg bg-black/55 px-2 py-0.5">
           <Text className="text-[11px] font-semibold text-white">

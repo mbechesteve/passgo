@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import type { City } from "@/types";
+import { resizePicsum } from "@/data/images";
+import { AppImage } from "./AppImage";
 
 /**
  * A city section header used in Country Detail, the Planner and the Map sheet.
@@ -27,10 +29,9 @@ export function CityGroup({
   return (
     <View className="mb-5">
       <View className="mb-3 flex-row items-center">
-        <Image
-          source={{ uri: city.image }}
+        <AppImage
+          uri={resizePicsum(city.image, 120, 120)}
           className="h-12 w-12 rounded-xl"
-          resizeMode="cover"
         />
         <View className="ml-3 flex-1">
           <View className="flex-row items-center">

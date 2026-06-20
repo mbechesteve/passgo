@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
   Linking,
   Pressable,
   ScrollView,
@@ -12,6 +10,7 @@ import { useNavigation, useRoute, type RouteProp } from "@react-navigation/nativ
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { AppImage } from "@/components/AppImage";
 import { AttractionCard } from "@/components/AttractionCard";
 import { CityGroup } from "@/components/CityGroup";
 import { Icon, type IconName } from "@/components/Icon";
@@ -48,6 +47,9 @@ export function CountryDetailScreen() {
   const bucketList = useAppStore((s) => s.bucketListCountryCodes);
   const toggleBucket = useAppStore((s) => s.toggleBucketList);
   const createTrip = useTripStore((s) => s.createTrip);
+  const addAttraction = useTripStore((s) => s.addAttraction);
+  const setActiveTrip = useTripStore((s) => s.setActiveTrip);
+  const trips = useTripStore((s) => s.trips);
 
   const [country, setCountry] = useState<Country>();
   const [rule, setRule] = useState<VisaRule>();
@@ -85,18 +87,29 @@ export function CountryDetailScreen() {
   }, [code, passportCode]);
 
   if (loading || !country) {
-    return (
-      <View className="flex-1 items-center justify-center bg-surface-muted">
-        <ActivityIndicator color="#ff385c" />
-      </View>
-    );
+    return <CountryDetailSkeleton />;
   }
 
   const saved = bucketList.includes(country.code);
   const meta = rule ? VISA_META[rule.visaType] : null;
 
-  const startPlanning = () => {
-    createTrip(country.code, `${country.name} trip`);
+  // The trip for this country (if one exists), so attractions can be added
+  // straight from here and the CTA can reflect what's already planned.
+  const countryTrip = trips.find((t) => t.countryCode === country.code);
+  const addedIds = new Set(
+    countryTrip?.items.map((i) => i.attractionId).filter(Boolean) as string[]
+  );
+
+  const addToTrip = (attraction: Attraction) => {
+    const tripId =
+      countryTrip?.id ?? createTrip(country.code, `${country.name} trip`);
+    addAttraction(tripId, attraction);
+  };
+
+  const goToTrip = () => {
+    const tripId =
+      countryTrip?.id ?? createTrip(country.code, `${country.name} trip`);
+    setActiveTrip(tripId);
     nav.navigate("Tabs", { screen: "Plan" });
   };
 
@@ -105,7 +118,7 @@ export function CountryDetailScreen() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Hero */}
         <View className="relative">
-          <Image source={{ uri: country.heroImage }} className="h-72 w-full" resizeMode="cover" />
+          <AppImage uri={country.heroImage} className="h-72 w-full" />
           <View className="absolute inset-0 bg-black/25" />
           <SafeAreaView edges={["top"]} className="absolute left-0 right-0 top-0">
             <View className="flex-row items-center justify-between px-4 pt-2">
@@ -233,7 +246,13 @@ export function CountryDetailScreen() {
                     contentContainerStyle={{ paddingRight: 16 }}
                   >
                     {list.map((a) => (
-                      <AttractionCard key={a.id} attraction={a} compact />
+                      <AttractionCard
+                        key={a.id}
+                        attraction={a}
+                        compact
+                        added={addedIds.has(a.id)}
+                        onAdd={() => addToTrip(a)}
+                      />
                     ))}
                   </ScrollView>
                 </CityGroup>
@@ -247,14 +266,43 @@ export function CountryDetailScreen() {
       <SafeAreaView edges={["bottom"]} className="absolute bottom-0 left-0 right-0 bg-surface border-t border-surface-sunken">
         <View className="flex-row items-center gap-3 px-4 py-3">
           <View className="flex-1">
-            <Text className="text-[12px] text-ink-400">Plan your visit</Text>
+            <Text className="text-[12px] text-ink-400">
+              {countryTrip ? "In your trip" : "Plan your visit"}
+            </Text>
             <Text className="text-[15px] font-semibold text-ink-900">
-              {cities.length} cities · {Object.values(attractionsByCity).flat().length} spots
+              {countryTrip
+                ? `${countryTrip.items.length} ${
+                    countryTrip.items.length === 1 ? "stop added" : "stops added"
+                  }`
+                : `${cities.length} cities · ${Object.values(attractionsByCity).flat().length} spots`}
             </Text>
           </View>
-          <Button title="Start planning" onPress={startPlanning} className="px-6" />
+          <Button
+            title={countryTrip ? "View trip" : "Start planning"}
+            onPress={goToTrip}
+            className="px-6"
+          />
         </View>
       </SafeAreaView>
+    </View>
+  );
+}
+
+function CountryDetailSkeleton() {
+  return (
+    <View className="flex-1 bg-surface-muted">
+      <View className="h-72 w-full bg-surface-sunken" />
+      <View className="px-4">
+        <View className="-mt-5 flex-row gap-2.5">
+          {[0, 1, 2].map((i) => (
+            <View key={i} className="h-[72px] flex-1 rounded-xl bg-surface" />
+          ))}
+        </View>
+        <View className="mt-5 h-3 w-3/4 rounded bg-surface-sunken" />
+        <View className="mt-2 h-3 w-1/2 rounded bg-surface-sunken" />
+        <View className="mt-6 h-28 rounded-card bg-surface" />
+        <View className="mt-4 h-20 rounded-card bg-surface" />
+      </View>
     </View>
   );
 }
