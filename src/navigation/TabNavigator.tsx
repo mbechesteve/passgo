@@ -1,6 +1,7 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import { Icon, type IconName } from "@/components/Icon";
 import { colors } from "@/lib/theme";
 import { DiscoverScreen } from "@/screens/DiscoverScreen";
 import { PlanScreen } from "@/screens/PlanScreen";
@@ -11,46 +12,48 @@ import type { TabParamList } from "./types";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-const ICONS: Record<keyof TabParamList, string> = {
-  Discover: "🧭",
-  Plan: "🧳",
-  Map: "🗺️",
-  Premium: "👑",
-  Profile: "👤",
+// Consistent Feather line icons that tint with the active/inactive color.
+const ICONS: Record<keyof TabParamList, IconName> = {
+  Discover: "compass",
+  Plan: "calendar",
+  Map: "map",
+  Premium: "star",
+  Profile: "user",
 };
-
-function TabIcon({
-  route,
-  focused,
-}: {
-  route: keyof TabParamList;
-  focused: boolean;
-}) {
-  return (
-    <View className="items-center justify-center" style={{ width: 56 }}>
-      <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.5 }}>
-        {ICONS[route]}
-      </Text>
-    </View>
-  );
-}
 
 export function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: colors.brand[700],
+        tabBarActiveTintColor: colors.ink[900],
         tabBarInactiveTintColor: colors.ink[400],
-        tabBarLabelStyle: { fontSize: 11, fontWeight: "700", marginBottom: 4 },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: "600", marginBottom: 6 },
+        tabBarItemStyle: { paddingTop: 2 },
         tabBarStyle: {
-          height: 64,
-          paddingTop: 6,
+          height: 66,
+          paddingTop: 8,
           borderTopColor: "#d8d8d8",
           backgroundColor: "#ffffff",
         },
-        tabBarIcon: ({ focused }) => (
-          <TabIcon route={route.name} focused={focused} />
+        tabBarIcon: ({ focused, color }) => (
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <Icon
+              name={ICONS[route.name]}
+              size={21}
+              color={color}
+            />
+            {/* Active marker — a small ink dot, echoing the brand stamp. */}
+            <View
+              style={{
+                marginTop: 4,
+                height: 4,
+                width: 4,
+                borderRadius: 2,
+                backgroundColor: focused ? colors.ink[900] : "transparent",
+              }}
+            />
+          </View>
         ),
       })}
     >

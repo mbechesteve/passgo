@@ -12,12 +12,15 @@ export function CityGroup({
   city,
   count,
   index,
+  accentColor,
   children,
   right,
 }: {
   city: City;
   count?: number;
   index?: number;
+  /** Region accent for the step number (defaults to brand ink). */
+  accentColor?: string;
   children?: ReactNode;
   right?: ReactNode;
 }) {
@@ -32,7 +35,10 @@ export function CityGroup({
         <View className="ml-3 flex-1">
           <View className="flex-row items-center">
             {typeof index === "number" ? (
-              <View className="mr-2 h-5 w-5 items-center justify-center rounded-full bg-brand-700">
+              <View
+                className="mr-2 h-5 w-5 items-center justify-center rounded-full bg-brand-700"
+                style={accentColor ? { backgroundColor: accentColor } : undefined}
+              >
                 <Text className="text-[11px] font-semibold text-white">
                   {index + 1}
                 </Text>

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import { colors } from "@/lib/theme";
+import { Icon, type IconName } from "@/components/Icon";
 
 // ── Card ──────────────────────────────────────────────────────────────────────
 export function Card({
@@ -145,16 +146,16 @@ export function Tag({ label }: { label: string }) {
 export function Stat({
   value,
   label,
-  emoji,
+  icon,
 }: {
   value: string;
   label: string;
-  emoji: string;
+  icon: IconName;
 }) {
   return (
-    <View className="flex-1 items-center rounded-2xl bg-surface-muted py-3">
-      <Text className="text-base">{emoji}</Text>
-      <Text className="mt-1 text-[15px] font-semibold text-ink-900">{value}</Text>
+    <View className="flex-1 items-center rounded-xl border border-surface-sunken bg-surface-muted py-3">
+      <Icon name={icon} size={16} color={colors.ink[700]} />
+      <Text className="mt-1.5 text-[15px] font-semibold text-ink-900">{value}</Text>
       <Text className="text-[11px] font-medium text-ink-500">{label}</Text>
     </View>
   );

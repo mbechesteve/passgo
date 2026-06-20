@@ -1,7 +1,9 @@
 import { Image, Pressable, Text, View } from "react-native";
 
 import type { Attraction } from "@/types";
+import { colors } from "@/lib/theme";
 import { usd } from "@/utils/format";
+import { Icon, type IconName } from "./Icon";
 
 export function AttractionCard({
   attraction,
@@ -31,8 +33,11 @@ export function AttractionCard({
             {attraction.category}
           </Text>
         </View>
-        <View className="absolute right-2 top-2 flex-row items-center rounded-lg bg-white/90 px-2 py-0.5">
-          <Text className="text-[11px] font-bold text-amber-600">★ {attraction.rating.toFixed(1)}</Text>
+        <View className="absolute right-2 top-2 flex-row items-center rounded-lg bg-white/90 px-2 py-1">
+          <Icon name="star" size={11} color="#f59e0b" />
+          <Text className="ml-1 text-[11px] font-bold text-ink-900">
+            {attraction.rating.toFixed(1)}
+          </Text>
         </View>
       </View>
 
@@ -48,8 +53,8 @@ export function AttractionCard({
 
         <View className="mt-2 flex-row items-center justify-between">
           <View className="flex-row items-center">
-            <Meta emoji="🕒" text={`${attraction.durationHours}h`} />
-            <Meta emoji="🎟️" text={usd(attraction.feeUsd)} />
+            <Meta icon="clock" text={`${attraction.durationHours}h`} />
+            <Meta icon="tag" text={usd(attraction.feeUsd)} />
           </View>
           {onAdd ? (
             <Pressable
@@ -61,7 +66,7 @@ export function AttractionCard({
               }`}
             >
               <Text
-                className={`text-[12px] font-bold ${
+                className={`text-[12px] font-semibold ${
                   added ? "text-brand-800" : "text-white"
                 }`}
               >
@@ -80,9 +85,9 @@ export function AttractionCard({
   );
 }
 
-const Meta = ({ emoji, text }: { emoji: string; text: string }) => (
+const Meta = ({ icon, text }: { icon: IconName; text: string }) => (
   <View className="mr-3 flex-row items-center">
-    <Text className="text-[11px]">{emoji}</Text>
-    <Text className="ml-1 text-[12px] font-semibold text-ink-700">{text}</Text>
+    <Icon name={icon} size={12} color={colors.ink[500]} />
+    <Text className="ml-1.5 text-[12px] font-semibold text-ink-700">{text}</Text>
   </View>
 );

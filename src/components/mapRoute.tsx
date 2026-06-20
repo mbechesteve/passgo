@@ -1,7 +1,9 @@
 import { ScrollView, Text, View } from "react-native";
 
 import type { Attraction, City } from "@/types";
+import { colors } from "@/lib/theme";
 import { distanceKm, km } from "@/utils/format";
+import { Icon } from "./Icon";
 
 export interface MapData {
   cities: City[];
@@ -26,8 +28,8 @@ export function MapRouteList({ data, height }: { data: MapData; height: number }
       style={{ minHeight: height }}
     >
       <View className="mb-3 flex-row items-center">
-        <Text className="text-base">🗺️</Text>
-        <Text className="ml-2 text-[13px] font-bold text-ink-700">
+        <Icon name="map" size={15} color={colors.ink[700]} />
+        <Text className="ml-2 text-[13px] font-semibold text-ink-700">
           Route preview
         </Text>
         <View className="ml-auto rounded-full bg-ocean-100 px-2 py-0.5">
@@ -51,9 +53,12 @@ export function MapRouteList({ data, height }: { data: MapData; height: number }
                 <Text className="ml-2 text-[14px] font-bold text-ink-900">
                   {city.name}
                 </Text>
-                <Text className="ml-auto text-[11px] text-ink-400">
-                  📍 {pins.length} spots
-                </Text>
+                <View className="ml-auto flex-row items-center">
+                  <Icon name="map-pin" size={11} color={colors.ink[400]} />
+                  <Text className="ml-1 text-[11px] text-ink-400">
+                    {pins.length} spots
+                  </Text>
+                </View>
               </View>
               {next ? (
                 <View className="my-1.5 ml-3 flex-row items-center">

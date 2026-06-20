@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AttractionCard } from "@/components/AttractionCard";
 import { CityGroup } from "@/components/CityGroup";
+import { Icon, type IconName } from "@/components/Icon";
 import { PremiumLock } from "@/components/PremiumLock";
 import { Button, Card, SectionTitle, Stat, Tag } from "@/components/ui";
 import { VisaBadge } from "@/components/VisaBadge";
@@ -24,7 +25,7 @@ import {
   fetchPrepGuide,
   fetchVisaRule,
 } from "@/data/repository";
-import { VISA_META } from "@/lib/theme";
+import { colors, regionColor, VISA_META } from "@/lib/theme";
 import { useAppStore } from "@/store/useAppStore";
 import { useTripStore } from "@/store/useTripStore";
 import type {
@@ -127,18 +128,24 @@ export function CountryDetailScreen() {
             <Text className="mt-2 text-3xl font-semibold text-white">
               {country.flag} {country.name}
             </Text>
-            <Text className="text-[13px] font-medium text-white/90">
-              {country.region} · {country.capital} · {country.currency}
-            </Text>
+            <View className="flex-row items-center">
+              <View
+                className="mr-1.5 h-2 w-2 rounded-full"
+                style={{ backgroundColor: regionColor(country.region) }}
+              />
+              <Text className="text-[13px] font-medium text-white/90">
+                {country.region} · {country.capital} · {country.currency}
+              </Text>
+            </View>
           </View>
         </View>
 
         <View className="px-4">
           {/* Quick stats */}
           <View className="-mt-5 flex-row gap-2.5">
-            <Stat emoji="💸" value={`$${country.dailyBudgetUsd}`} label="per day" />
-            <Stat emoji="📅" value={`${country.suggestedDays}d`} label="suggested" />
-            <Stat emoji="☀️" value={country.bestSeason.split(" ")[0]} label="best season" />
+            <Stat icon="dollar-sign" value={`$${country.dailyBudgetUsd}`} label="per day" />
+            <Stat icon="calendar" value={`${country.suggestedDays}d`} label="suggested" />
+            <Stat icon="sun" value={country.bestSeason.split(" ")[0]} label="best season" />
           </View>
 
           <Text className="mt-4 text-[14px] leading-5 text-ink-700">
@@ -168,9 +175,9 @@ export function CountryDetailScreen() {
               >
                 <View className="mt-4 border-t border-surface-sunken pt-4">
                   <View className="flex-row gap-2.5">
-                    <Stat emoji="💵" value={usd(rule.costUsd)} label="cost" />
-                    <Stat emoji="⏱️" value={processing(rule.processingDays)} label="processing" />
-                    <Stat emoji="🗓️" value={`${rule.stayDays}d`} label="max stay" />
+                    <Stat icon="dollar-sign" value={usd(rule.costUsd)} label="cost" />
+                    <Stat icon="clock" value={processing(rule.processingDays)} label="processing" />
+                    <Stat icon="calendar" value={`${rule.stayDays}d`} label="max stay" />
                   </View>
                   {rule.notes ? (
                     <Text className="mt-3 text-[13px] leading-5 text-ink-500">
@@ -255,22 +262,16 @@ export function CountryDetailScreen() {
 function PrepSection({ prep }: { prep: PrepGuide }) {
   return (
     <View className="gap-3">
-      <PrepCard emoji="📄" title="Documents" items={prep.documents} />
-      <PrepCard emoji="💉" title="Vaccinations" items={prep.vaccinations} />
+      <PrepCard icon="file-text" title="Documents" items={prep.documents} />
+      <PrepCard icon="shield" title="Vaccinations" items={prep.vaccinations} />
       <Card className="p-4">
-        <View className="mb-2 flex-row items-center">
-          <Text className="text-base">💱</Text>
-          <Text className="ml-2 text-[15px] font-bold text-ink-900">Money</Text>
-        </View>
+        <PrepHeader icon="credit-card" title="Money" />
         <PrepLine label="Tips" value={prep.currency.tips} />
         <PrepLine label="Cards" value={prep.currency.cards} />
         <PrepLine label="Cash" value={prep.currency.cash} />
       </Card>
       <Card className="p-4">
-        <View className="mb-2 flex-row items-center">
-          <Text className="text-base">📶</Text>
-          <Text className="ml-2 text-[15px] font-bold text-ink-900">SIM & data</Text>
-        </View>
+        <PrepHeader icon="wifi" title="SIM & data" />
         <View className="mb-2 flex-row flex-wrap gap-1.5">
           {prep.sim.providers.map((p) => (
             <Tag key={p} label={p} />
@@ -278,29 +279,39 @@ function PrepSection({ prep }: { prep: PrepGuide }) {
         </View>
         <Text className="text-[13px] leading-5 text-ink-500">{prep.sim.tips}</Text>
       </Card>
-      <PrepCard emoji="🛡️" title="Safety" items={prep.safety} />
+      <PrepCard icon="alert-triangle" title="Safety" items={prep.safety} />
+    </View>
+  );
+}
+
+function PrepHeader({ icon, title }: { icon: IconName; title: string }) {
+  return (
+    <View className="mb-3 flex-row items-center">
+      <View className="h-7 w-7 items-center justify-center rounded-lg border border-surface-sunken bg-surface-muted">
+        <Icon name={icon} size={14} color={colors.ink[700]} />
+      </View>
+      <Text className="ml-2.5 text-[15px] font-semibold text-ink-900">{title}</Text>
     </View>
   );
 }
 
 function PrepCard({
-  emoji,
+  icon,
   title,
   items,
 }: {
-  emoji: string;
+  icon: IconName;
   title: string;
   items: string[];
 }) {
   return (
     <Card className="p-4">
-      <View className="mb-2 flex-row items-center">
-        <Text className="text-base">{emoji}</Text>
-        <Text className="ml-2 text-[15px] font-bold text-ink-900">{title}</Text>
-      </View>
+      <PrepHeader icon={icon} title={title} />
       {items.map((it, i) => (
-        <View key={i} className="mb-1 flex-row">
-          <Text className="text-brand-600">•</Text>
+        <View key={i} className="mb-1.5 flex-row items-start">
+          <View className="mt-0.5">
+            <Icon name="check" size={13} color={colors.ink[400]} />
+          </View>
           <Text className="ml-2 flex-1 text-[13px] leading-5 text-ink-700">{it}</Text>
         </View>
       ))}

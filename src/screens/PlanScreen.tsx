@@ -16,8 +16,10 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { AttractionCard } from "@/components/AttractionCard";
 import { CityGroup } from "@/components/CityGroup";
+import { Icon } from "@/components/Icon";
 import { Screen } from "@/components/Screen";
 import { Button, Card, Pill } from "@/components/ui";
+import { colors, regionColor } from "@/lib/theme";
 import { fetchCountryGraph } from "@/data/repository";
 import { getCountryByCode } from "@/data/mockCountries";
 import { getCityById } from "@/data/mockCities";
@@ -46,7 +48,9 @@ export function PlanScreen() {
       <Screen className="px-6">
         <Header title="Trip Planner" />
         <View className="flex-1 items-center justify-center">
-          <Text className="text-5xl">🧳</Text>
+          <View className="h-16 w-16 items-center justify-center rounded-2xl bg-surface-muted">
+            <Icon name="briefcase" size={28} color={colors.ink[400]} />
+          </View>
           <Text className="mt-3 text-[17px] font-semibold text-ink-900">
             No trips yet
           </Text>
@@ -66,22 +70,29 @@ export function PlanScreen() {
   return (
     <Screen>
       <Header title="Trip Planner" />
-      {/* Trip switcher */}
+      {/* Trip switcher — fixed-height wrapper so the row can't stretch the
+          pills vertically (react-native-web stretches an unbounded horizontal
+          ScrollView in a flex column). */}
       {trips.length > 1 ? (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 8 }}
-        >
-          {trips.map((t) => (
-            <Pill
-              key={t.id}
-              label={`${getCountryByCode(t.countryCode)?.flag ?? ""} ${t.title}`}
-              active={t.id === active?.id}
-              onPress={() => setActiveTrip(t.id)}
-            />
-          ))}
-        </ScrollView>
+        <View style={{ height: 44 }} className="mb-1">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              alignItems: "center",
+            }}
+          >
+            {trips.map((t) => (
+              <Pill
+                key={t.id}
+                label={`${getCountryByCode(t.countryCode)?.flag ?? ""} ${t.title}`}
+                active={t.id === active?.id}
+                onPress={() => setActiveTrip(t.id)}
+              />
+            ))}
+          </ScrollView>
+        </View>
       ) : null}
 
       {active ? <TripEditor key={active.id} tripId={active.id} /> : null}
@@ -133,6 +144,19 @@ function TripEditor({ tripId }: { tripId: string }) {
           onChangeText={(v) => updateMeta(trip.id, { title: v })}
           className="mt-1 text-[20px] font-semibold text-ink-900"
         />
+        {/* Itinerary summary */}
+        <View className="mt-2 flex-row items-center">
+          <Icon name="map-pin" size={13} color={colors.ink[500]} />
+          <Text className="ml-1.5 text-[12.5px] font-semibold text-ink-700">
+            {cityIdsWithItems.length}{" "}
+            {cityIdsWithItems.length === 1 ? "city" : "cities"}
+          </Text>
+          <Text className="mx-2 text-ink-400">·</Text>
+          <Icon name="check-square" size={13} color={colors.ink[500]} />
+          <Text className="ml-1.5 text-[12.5px] font-semibold text-ink-700">
+            {trip.items.length} {trip.items.length === 1 ? "stop" : "stops"}
+          </Text>
+        </View>
         <View className="mt-3 flex-row gap-3">
           <Field
             label="Start"
@@ -158,8 +182,10 @@ function TripEditor({ tripId }: { tripId: string }) {
 
       {trip.items.length === 0 ? (
         <Card className="mb-4 items-center p-6">
-          <Text className="text-3xl">📍</Text>
-          <Text className="mt-2 text-[14px] font-semibold text-ink-700">
+          <View className="h-12 w-12 items-center justify-center rounded-2xl bg-surface-muted">
+            <Icon name="map-pin" size={22} color={colors.ink[400]} />
+          </View>
+          <Text className="mt-2.5 text-[14px] font-semibold text-ink-700">
             Add activities to start your itinerary
           </Text>
         </Card>
@@ -169,7 +195,13 @@ function TripEditor({ tripId }: { tripId: string }) {
           const items = grouped.get(cityId) ?? [];
           if (!city) return null;
           return (
-            <CityGroup key={cityId} city={city} index={idx} count={items.length}>
+            <CityGroup
+              key={cityId}
+              city={city}
+              index={idx}
+              count={items.length}
+              accentColor={country ? regionColor(country.region) : undefined}
+            >
               <NestableDraggableFlatList
                 data={items}
                 keyExtractor={(i) => i.id}
@@ -244,19 +276,30 @@ function PlannerRow({
       }`}
     >
       <View className="flex-row items-center">
-        <Pressable onLongPress={drag} delayLongPress={120} hitSlop={8} className="pr-3">
-          <Text className="text-lg text-ink-400">≡</Text>
+        <Pressable
+          onLongPress={drag}
+          delayLongPress={120}
+          hitSlop={8}
+          accessibilityLabel="Drag to reorder"
+          className="pr-3"
+        >
+          <Icon name="menu" size={18} color={colors.ink[400]} />
         </Pressable>
         <View className="flex-1">
-          <Text className="text-[14px] font-bold text-ink-900">{item.title}</Text>
+          <Text className="text-[14px] font-semibold text-ink-900">{item.title}</Text>
           {attraction ? (
             <Text className="text-[11px] text-ink-400">
               {attraction.category} · {attraction.durationHours}h
             </Text>
           ) : null}
         </View>
-        <Pressable onPress={onRemove} hitSlop={8} className="pl-3">
-          <Text className="text-[13px] font-bold text-red-500">Remove</Text>
+        <Pressable
+          onPress={onRemove}
+          hitSlop={8}
+          accessibilityLabel={`Remove ${item.title}`}
+          className="h-7 w-7 items-center justify-center rounded-full bg-surface-muted"
+        >
+          <Icon name="x" size={14} color={colors.ink[500]} />
         </Pressable>
       </View>
       <TextInput

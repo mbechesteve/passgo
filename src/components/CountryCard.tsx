@@ -1,8 +1,9 @@
 import { Image, Pressable, Text, View } from "react-native";
 
 import type { Country, VisaRule } from "@/types";
-import { regionColor } from "@/lib/theme";
-import { budgetLabel } from "@/utils/format";
+import { colors, regionColor, VISA_META } from "@/lib/theme";
+import { budgetLabel, visaDetailLine, visaIconName } from "@/utils/format";
+import { Icon, type IconName } from "./Icon";
 import { VisaBadge } from "./VisaBadge";
 
 /**
@@ -91,25 +92,42 @@ export function CountryCard({
         </View>
       </View>
 
+      {/* Visa detail bar — surfaces the cost + processing/stay the spec wanted. */}
+      {rule ? (
+        <View className="flex-row items-center border-b border-surface-sunken bg-surface-muted px-4 py-2.5">
+          <Icon
+            name={visaIconName(rule) as IconName}
+            size={14}
+            color={VISA_META[rule.visaType].color}
+          />
+          <Text className="ml-2 flex-1 text-[12.5px] font-semibold text-ink-900">
+            {visaDetailLine(rule)}
+          </Text>
+        </View>
+      ) : null}
+
       <View className="p-4">
         <Text className="text-[13px] leading-5 text-ink-500" numberOfLines={2}>
           {country.summary}
         </Text>
-        <View className="mt-3 flex-row items-center">
-          <Fact emoji="💸" text={`~$${country.dailyBudgetUsd}/day`} />
-          <Fact emoji="📅" text={`${country.suggestedDays} days`} />
-          <Fact emoji="🎚️" text={budgetLabel[country.budgetTier]} />
+        <View className="mt-3 flex-row items-center justify-between">
+          <View className="flex-row items-center">
+            <Fact icon="dollar-sign" text={`~$${country.dailyBudgetUsd}/day`} />
+            <Fact icon="calendar" text={`${country.suggestedDays} days`} />
+            <Fact icon="sliders" text={budgetLabel[country.budgetTier]} />
+          </View>
+          <Icon name="arrow-right" size={16} color={colors.ink[400]} />
         </View>
       </View>
     </Pressable>
   );
 }
 
-function Fact({ emoji, text }: { emoji: string; text: string }) {
+function Fact({ icon, text }: { icon: IconName; text: string }) {
   return (
     <View className="mr-4 flex-row items-center">
-      <Text className="text-[12px]">{emoji}</Text>
-      <Text className="ml-1 text-[12px] font-semibold text-ink-700">{text}</Text>
+      <Icon name={icon} size={13} color={colors.ink[500]} />
+      <Text className="ml-1.5 text-[12px] font-semibold text-ink-700">{text}</Text>
     </View>
   );
 }

@@ -20,29 +20,29 @@ export interface SubscriptionPackage {
   popular?: boolean;
 }
 
-export const PREMIUM_BENEFITS: { emoji: string; title: string; blurb: string }[] = [
+export const PREMIUM_BENEFITS: { icon: string; title: string; blurb: string }[] = [
   {
-    emoji: "📋",
+    icon: "file-text",
     title: "Full visa requirements",
     blurb: "Exact cost, processing time, max stay and official links.",
   },
   {
-    emoji: "✅",
+    icon: "check-square",
     title: "Prep checklists",
     blurb: "Documents, vaccinations, currency, SIM and safety per country.",
   },
   {
-    emoji: "📥",
+    icon: "download",
     title: "Offline maps",
     blurb: "Download routes and city maps to use without data.",
   },
   {
-    emoji: "📄",
+    icon: "share-2",
     title: "Export itinerary PDF",
     blurb: "Share a polished day-by-day plan with your travel companions.",
   },
   {
-    emoji: "♾️",
+    icon: "globe",
     title: "Unlimited trips",
     blurb: "Plan as many destinations as you like, ad-free.",
   },

@@ -73,6 +73,25 @@ PassGo/
 
 ---
 
+## Deploy the web build (Vercel / Netlify / static)
+
+The app exports to a static SPA — `npm run build` (`expo export --platform web`)
+writes everything to `dist/`. Two things the host must do, both already wired up:
+
+- **Build with `expo export` and serve `dist/`** — otherwise the host serves
+  nothing (blank page).
+- **SPA fallback** — rewrite every route to `/index.html` so refreshes and deep
+  links don't 404.
+
+`vercel.json` and `netlify.toml` configure both. On Vercel, the committed
+`vercel.json` overrides any auto-detected framework — just redeploy. Assets are
+referenced from the domain **root** (`/_expo/...`), so deploy at the root of the
+domain, not a sub-path.
+
+```bash
+npm run build      # → dist/  (what the host runs)
+```
+
 ## Going live with Supabase
 
 1. Create a project at [supabase.com](https://supabase.com).

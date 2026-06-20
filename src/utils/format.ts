@@ -36,6 +36,41 @@ export const budgetLabel: Record<string, string> = {
   luxury: "Premium",
 };
 
+/** A plain-English visa detail line for cards, e.g. "Free · stay up to 90 days". */
+export function visaDetailLine(rule: VisaRule): string {
+  const cost = rule.costUsd === 0 ? "Free" : usd(rule.costUsd);
+  switch (rule.visaType) {
+    case "visa_free":
+      return `Free entry · stay up to ${rule.stayDays} days`;
+    case "visa_on_arrival":
+      return `On arrival · ${cost} · stay ${rule.stayDays} days`;
+    case "eta":
+    case "evisa":
+      return `${cost} · approved in ~${processing(rule.processingDays)}`;
+    case "visa_required":
+      return `Embassy visa · ~${processing(rule.processingDays)}`;
+    default:
+      return cost;
+  }
+}
+
+/** Feather icon name matching the visa type. */
+export function visaIconName(rule: VisaRule): string {
+  switch (rule.visaType) {
+    case "visa_free":
+      return "check-circle";
+    case "visa_on_arrival":
+      return "map-pin";
+    case "eta":
+    case "evisa":
+      return "globe";
+    case "visa_required":
+      return "alert-circle";
+    default:
+      return "info";
+  }
+}
+
 /** Great-circle distance in km between two coordinates (Haversine). */
 export function distanceKm(
   a: { lat: number; lng: number },

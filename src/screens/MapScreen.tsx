@@ -4,10 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { CityGroup } from "@/components/CityGroup";
+import { Icon } from "@/components/Icon";
 import { PassGoMap } from "@/components/PassGoMap";
 import { PremiumLock } from "@/components/PremiumLock";
 import { Screen } from "@/components/Screen";
 import { Button, Card } from "@/components/ui";
+import { colors, regionColor } from "@/lib/theme";
 import { fetchCountryGraph } from "@/data/repository";
 import { getCountryByCode } from "@/data/mockCountries";
 import { groupItemsByCity, useTripStore } from "@/store/useTripStore";
@@ -38,7 +40,9 @@ export function MapScreen() {
       <Screen className="px-6">
         <Header title="Map View" />
         <View className="flex-1 items-center justify-center">
-          <Text className="text-5xl">🗺️</Text>
+          <View className="h-16 w-16 items-center justify-center rounded-2xl bg-surface-muted">
+            <Icon name="map" size={28} color={colors.ink[400]} />
+          </View>
           <Text className="mt-3 text-[17px] font-semibold text-ink-900">
             No trip to map yet
           </Text>
@@ -97,7 +101,9 @@ export function MapScreen() {
 
         {/* Route summary */}
         <Card className="mt-4 flex-row items-center p-4">
-          <Text className="text-2xl">🧭</Text>
+          <View className="h-10 w-10 items-center justify-center rounded-xl bg-surface-muted">
+            <Icon name="navigation" size={18} color={colors.ink[700]} />
+          </View>
           <View className="ml-3 flex-1">
             <Text className="text-[15px] font-semibold text-ink-900">
               {mapCities.length} cities · {mapAttractions.length} stops
@@ -116,9 +122,11 @@ export function MapScreen() {
             onUpgrade={() => nav.navigate("Paywall", { source: "map" })}
           >
             <Card className="flex-row items-center p-4">
-              <Text className="text-2xl">📥</Text>
+              <View className="h-10 w-10 items-center justify-center rounded-xl bg-surface-muted">
+                <Icon name="download" size={18} color={colors.ink[700]} />
+              </View>
               <View className="ml-3 flex-1">
-                <Text className="text-[15px] font-bold text-ink-900">
+                <Text className="text-[15px] font-semibold text-ink-900">
                   Offline map ready
                 </Text>
                 <Text className="text-[12px] text-ink-500">
@@ -147,15 +155,22 @@ export function MapScreen() {
                     order: 0,
                   }));
           return (
-            <CityGroup key={city.id} city={city} index={idx} count={planned.length}>
+            <CityGroup
+              key={city.id}
+              city={city}
+              index={idx}
+              count={planned.length}
+              accentColor={country ? regionColor(country.region) : undefined}
+            >
               <View className="flex-row flex-wrap gap-1.5">
                 {planned.map((p) => (
                   <View
                     key={p.id}
-                    className="rounded-full bg-ocean-100 px-3 py-1.5"
+                    className="flex-row items-center rounded-full border border-surface-sunken bg-surface-muted px-3 py-1.5"
                   >
-                    <Text className="text-[12px] font-semibold text-ocean-700">
-                      📍 {p.title}
+                    <Icon name="map-pin" size={11} color={colors.ink[500]} />
+                    <Text className="ml-1.5 text-[12px] font-semibold text-ink-700">
+                      {p.title}
                     </Text>
                   </View>
                 ))}
