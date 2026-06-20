@@ -1,0 +1,56 @@
+import type { VisaRule } from "@/types";
+import { VISA_META } from "@/lib/theme";
+
+/** "Free" or "$50". */
+export const usd = (amount: number) =>
+  amount === 0 ? "Free" : `$${amount % 1 === 0 ? amount : amount.toFixed(2)}`;
+
+/** Human processing time. */
+export const processing = (days: number) => {
+  if (days <= 0) return "Instant";
+  if (days === 1) return "1 day";
+  return `${days} days`;
+};
+
+/** Compact badge text, e.g. "e-Visa · 1 day", "VoA $50", "Visa-Free". */
+export function visaBadgeText(rule: VisaRule): string {
+  const meta = VISA_META[rule.visaType];
+  switch (rule.visaType) {
+    case "visa_free":
+      return meta.short;
+    case "visa_on_arrival":
+      return `VoA ${usd(rule.costUsd)}`;
+    case "evisa":
+    case "eta":
+      return `${meta.short} · ${processing(rule.processingDays)}`;
+    case "visa_required":
+      return meta.short;
+    default:
+      return meta.short;
+  }
+}
+
+export const budgetLabel: Record<string, string> = {
+  budget: "Budget",
+  moderate: "Moderate",
+  luxury: "Premium",
+};
+
+/** Great-circle distance in km between two coordinates (Haversine). */
+export function distanceKm(
+  a: { lat: number; lng: number },
+  b: { lat: number; lng: number }
+): number {
+  const R = 6371;
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+  const lat1 = (a.lat * Math.PI) / 180;
+  const lat2 = (b.lat * Math.PI) / 180;
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+export const km = (v: number) =>
+  v < 1 ? `${Math.round(v * 1000)} m` : `${v.toFixed(v < 10 ? 1 : 0)} km`;

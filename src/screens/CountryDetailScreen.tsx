@@ -1,0 +1,316 @@
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  Linking,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { AttractionCard } from "@/components/AttractionCard";
+import { CityGroup } from "@/components/CityGroup";
+import { PremiumLock } from "@/components/PremiumLock";
+import { Button, Card, SectionTitle, Stat, Tag } from "@/components/ui";
+import { VisaBadge } from "@/components/VisaBadge";
+import {
+  fetchAttractions,
+  fetchCities,
+  fetchCountry,
+  fetchPrepGuide,
+  fetchVisaRule,
+} from "@/data/repository";
+import { VISA_META } from "@/lib/theme";
+import { useAppStore } from "@/store/useAppStore";
+import { useTripStore } from "@/store/useTripStore";
+import type {
+  Attraction,
+  City,
+  Country,
+  PrepGuide,
+  VisaRule,
+} from "@/types";
+import { processing, usd } from "@/utils/format";
+import type { RootStackParamList } from "@/navigation/types";
+
+type Nav = NativeStackNavigationProp<RootStackParamList>;
+type Rt = RouteProp<RootStackParamList, "CountryDetail">;
+
+export function CountryDetailScreen() {
+  const nav = useNavigation<Nav>();
+  const { code } = useRoute<Rt>().params;
+  const passportCode = useAppStore((s) => s.passportCountry);
+  const bucketList = useAppStore((s) => s.bucketListCountryCodes);
+  const toggleBucket = useAppStore((s) => s.toggleBucketList);
+  const createTrip = useTripStore((s) => s.createTrip);
+
+  const [country, setCountry] = useState<Country>();
+  const [rule, setRule] = useState<VisaRule>();
+  const [prep, setPrep] = useState<PrepGuide>();
+  const [cities, setCities] = useState<City[]>([]);
+  const [attractionsByCity, setAttractionsByCity] = useState<
+    Record<string, Attraction[]>
+  >({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let live = true;
+    (async () => {
+      setLoading(true);
+      const [c, r, p, cs] = await Promise.all([
+        fetchCountry(code),
+        fetchVisaRule(passportCode, code),
+        fetchPrepGuide(code),
+        fetchCities(code),
+      ]);
+      const entries = await Promise.all(
+        cs.map(async (city) => [city.id, await fetchAttractions(city.id)] as const)
+      );
+      if (!live) return;
+      setCountry(c);
+      setRule(r);
+      setPrep(p);
+      setCities(cs);
+      setAttractionsByCity(Object.fromEntries(entries));
+      setLoading(false);
+    })();
+    return () => {
+      live = false;
+    };
+  }, [code, passportCode]);
+
+  if (loading || !country) {
+    return (
+      <View className="flex-1 items-center justify-center bg-surface-muted">
+        <ActivityIndicator color="#ff385c" />
+      </View>
+    );
+  }
+
+  const saved = bucketList.includes(country.code);
+  const meta = rule ? VISA_META[rule.visaType] : null;
+
+  const startPlanning = () => {
+    createTrip(country.code, `${country.name} trip`);
+    nav.navigate("Tabs", { screen: "Plan" });
+  };
+
+  return (
+    <View className="flex-1 bg-surface-muted">
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+        {/* Hero */}
+        <View className="relative">
+          <Image source={{ uri: country.heroImage }} className="h-72 w-full" resizeMode="cover" />
+          <View className="absolute inset-0 bg-black/25" />
+          <SafeAreaView edges={["top"]} className="absolute left-0 right-0 top-0">
+            <View className="flex-row items-center justify-between px-4 pt-2">
+              <Pressable
+                onPress={() => nav.goBack()}
+                className="h-10 w-10 items-center justify-center rounded-full bg-black/40"
+              >
+                <Text className="text-lg text-white">‹</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => toggleBucket(country.code)}
+                className="h-10 w-10 items-center justify-center rounded-full bg-black/40"
+              >
+                <Text className="text-base">{saved ? "❤️" : "🤍"}</Text>
+              </Pressable>
+            </View>
+          </SafeAreaView>
+          <View className="absolute bottom-4 left-4 right-4">
+            {rule ? <VisaBadge rule={rule} /> : null}
+            <Text className="mt-2 text-3xl font-semibold text-white">
+              {country.flag} {country.name}
+            </Text>
+            <Text className="text-[13px] font-medium text-white/90">
+              {country.region} · {country.capital} · {country.currency}
+            </Text>
+          </View>
+        </View>
+
+        <View className="px-4">
+          {/* Quick stats */}
+          <View className="-mt-5 flex-row gap-2.5">
+            <Stat emoji="💸" value={`$${country.dailyBudgetUsd}`} label="per day" />
+            <Stat emoji="📅" value={`${country.suggestedDays}d`} label="suggested" />
+            <Stat emoji="☀️" value={country.bestSeason.split(" ")[0]} label="best season" />
+          </View>
+
+          <Text className="mt-4 text-[14px] leading-5 text-ink-700">
+            {country.summary}
+          </Text>
+
+          {/* Visa — basic free, full requirements Premium */}
+          <SectionTitle title="Visa requirements" className="mb-3 mt-6" />
+          {rule && meta ? (
+            <Card className="p-4">
+              <View className="flex-row items-center justify-between">
+                <View className="flex-1">
+                  <Text className="text-[12px] font-semibold uppercase text-ink-400">
+                    Entry type
+                  </Text>
+                  <Text className="mt-0.5 text-[18px] font-semibold text-ink-900">
+                    {meta.label}
+                  </Text>
+                </View>
+                <VisaBadge rule={rule} />
+              </View>
+
+              <PremiumLock
+                title="See full requirements"
+                blurb="Cost, processing time, max stay and the official application link."
+                onUpgrade={() => nav.navigate("Paywall", { source: "visa" })}
+              >
+                <View className="mt-4 border-t border-surface-sunken pt-4">
+                  <View className="flex-row gap-2.5">
+                    <Stat emoji="💵" value={usd(rule.costUsd)} label="cost" />
+                    <Stat emoji="⏱️" value={processing(rule.processingDays)} label="processing" />
+                    <Stat emoji="🗓️" value={`${rule.stayDays}d`} label="max stay" />
+                  </View>
+                  {rule.notes ? (
+                    <Text className="mt-3 text-[13px] leading-5 text-ink-500">
+                      {rule.notes}
+                    </Text>
+                  ) : null}
+                  <Button
+                    title="Open official source ↗"
+                    variant="secondary"
+                    className="mt-3"
+                    onPress={() => Linking.openURL(rule.officialLink)}
+                  />
+                </View>
+              </PremiumLock>
+            </Card>
+          ) : (
+            <Card className="p-4">
+              <Text className="text-[14px] text-ink-500">
+                No visa rule on file for this destination yet.
+              </Text>
+            </Card>
+          )}
+
+          {/* How to prepare — Premium */}
+          <SectionTitle title="How to prepare" className="mb-3 mt-6" />
+          <PremiumLock
+            title="Unlock the prep checklist"
+            blurb="Documents, vaccinations, currency, SIM cards and safety tips."
+            onUpgrade={() => nav.navigate("Paywall", { source: "prep" })}
+          >
+            {prep ? <PrepSection prep={prep} /> : null}
+          </PremiumLock>
+
+          {/* Cities + attractions */}
+          <SectionTitle
+            title="Top cities & things to do"
+            className="mb-3 mt-6"
+          />
+          {cities.length === 0 ? (
+            <Card className="p-4">
+              <Text className="text-[14px] text-ink-500">
+                Detailed city guides are coming soon for {country.name}.
+              </Text>
+            </Card>
+          ) : (
+            cities.map((city) => {
+              const list = attractionsByCity[city.id] ?? [];
+              return (
+                <CityGroup key={city.id} city={city} count={list.length}>
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ paddingRight: 16 }}
+                  >
+                    {list.map((a) => (
+                      <AttractionCard key={a.id} attraction={a} compact />
+                    ))}
+                  </ScrollView>
+                </CityGroup>
+              );
+            })
+          )}
+        </View>
+      </ScrollView>
+
+      {/* Sticky CTA */}
+      <SafeAreaView edges={["bottom"]} className="absolute bottom-0 left-0 right-0 bg-surface border-t border-surface-sunken">
+        <View className="flex-row items-center gap-3 px-4 py-3">
+          <View className="flex-1">
+            <Text className="text-[12px] text-ink-400">Plan your visit</Text>
+            <Text className="text-[15px] font-semibold text-ink-900">
+              {cities.length} cities · {Object.values(attractionsByCity).flat().length} spots
+            </Text>
+          </View>
+          <Button title="Start planning" onPress={startPlanning} className="px-6" />
+        </View>
+      </SafeAreaView>
+    </View>
+  );
+}
+
+function PrepSection({ prep }: { prep: PrepGuide }) {
+  return (
+    <View className="gap-3">
+      <PrepCard emoji="📄" title="Documents" items={prep.documents} />
+      <PrepCard emoji="💉" title="Vaccinations" items={prep.vaccinations} />
+      <Card className="p-4">
+        <View className="mb-2 flex-row items-center">
+          <Text className="text-base">💱</Text>
+          <Text className="ml-2 text-[15px] font-bold text-ink-900">Money</Text>
+        </View>
+        <PrepLine label="Tips" value={prep.currency.tips} />
+        <PrepLine label="Cards" value={prep.currency.cards} />
+        <PrepLine label="Cash" value={prep.currency.cash} />
+      </Card>
+      <Card className="p-4">
+        <View className="mb-2 flex-row items-center">
+          <Text className="text-base">📶</Text>
+          <Text className="ml-2 text-[15px] font-bold text-ink-900">SIM & data</Text>
+        </View>
+        <View className="mb-2 flex-row flex-wrap gap-1.5">
+          {prep.sim.providers.map((p) => (
+            <Tag key={p} label={p} />
+          ))}
+        </View>
+        <Text className="text-[13px] leading-5 text-ink-500">{prep.sim.tips}</Text>
+      </Card>
+      <PrepCard emoji="🛡️" title="Safety" items={prep.safety} />
+    </View>
+  );
+}
+
+function PrepCard({
+  emoji,
+  title,
+  items,
+}: {
+  emoji: string;
+  title: string;
+  items: string[];
+}) {
+  return (
+    <Card className="p-4">
+      <View className="mb-2 flex-row items-center">
+        <Text className="text-base">{emoji}</Text>
+        <Text className="ml-2 text-[15px] font-bold text-ink-900">{title}</Text>
+      </View>
+      {items.map((it, i) => (
+        <View key={i} className="mb-1 flex-row">
+          <Text className="text-brand-600">•</Text>
+          <Text className="ml-2 flex-1 text-[13px] leading-5 text-ink-700">{it}</Text>
+        </View>
+      ))}
+    </Card>
+  );
+}
+
+const PrepLine = ({ label, value }: { label: string; value: string }) => (
+  <View className="mb-1.5 flex-row">
+    <Text className="w-12 text-[12px] font-bold text-ink-400">{label}</Text>
+    <Text className="flex-1 text-[13px] leading-5 text-ink-700">{value}</Text>
+  </View>
+);
