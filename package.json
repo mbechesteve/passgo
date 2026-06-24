@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build": "expo export --platform web && node scripts/inject-pwa.mjs",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
@@ -39,7 +40,8 @@
     "@babel/core": "^7.24.0",
     "@types/react": "~18.2.79",
     "babel-plugin-module-resolver": "^5.0.2",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "vitest": "^2.1.9"
   },
   "overrides": {
     "react-native-css-interop": "0.1.22"
