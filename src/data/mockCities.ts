@@ -4,6 +4,37 @@ import { img } from "./images";
 // Cities for the flagship destinations. Coordinates are real so the Map View and
 // route distances are meaningful.
 export const MOCK_CITIES: City[] = [
+  // Vietnam
+  {
+    id: "city_hoian",
+    countryCode: "VN",
+    name: "Hoi An",
+    lat: 15.8801,
+    lng: 108.338,
+    image: img("hoian"),
+    blurb: "UNESCO old town of lantern-lit lanes, tailors and An Bang Beach.",
+    suggestedDays: 4,
+  },
+  {
+    id: "city_danang",
+    countryCode: "VN",
+    name: "Da Nang",
+    lat: 16.0544,
+    lng: 108.2022,
+    image: img("danang"),
+    blurb: "Marble Mountains, the Dragon Bridge and the airport gateway to Hoi An.",
+    suggestedDays: 1,
+  },
+  {
+    id: "city_hanoi",
+    countryCode: "VN",
+    name: "Hanoi",
+    lat: 21.0278,
+    lng: 105.8342,
+    image: img("hanoi"),
+    blurb: "The capital's Old Quarter, Hoan Kiem Lake and Train Street.",
+    suggestedDays: 2,
+  },
   // Tanzania
   {
     id: "city_zanzibar",

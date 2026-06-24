@@ -4,6 +4,17 @@ import type { VisaRule } from "@/types";
 // rules change frequently; the officialLink is the source of truth.
 export const MOCK_VISA_RULES: VisaRule[] = [
   {
+    id: "v_ke_vn",
+    passportCountry: "KE",
+    destCountry: "VN",
+    visaType: "evisa",
+    costUsd: 25,
+    processingDays: 3,
+    stayDays: 90,
+    officialLink: "https://evisa.gov.vn/",
+    notes: "Single/multiple-entry e-visa via the official portal; apply ahead of travel.",
+  },
+  {
     id: "v_ke_tz",
     passportCountry: "KE",
     destCountry: "TZ",
