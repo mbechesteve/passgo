@@ -116,6 +116,78 @@ export interface TripItem {
   order: number;
 }
 
+export interface Flight {
+  id: string;
+  airline: string;
+  route: string;
+  departDate?: string;
+  returnDate?: string;
+  pricePpKes?: number;
+  status?: "Booked" | "Pending" | "Cancelled";
+  notes?: string;
+}
+
+export interface Stay {
+  id: string;
+  location: string;
+  hotel: string;
+  checkIn?: string;
+  checkOut?: string;
+  nights?: number;
+  totalKes?: number;
+  link?: string;
+  status?: "Confirmed" | "Pending" | "Cancelled";
+  notes?: string;
+}
+
+export interface ItineraryBlock {
+  time: string;
+  activity: string;
+  area?: string;
+}
+
+export interface ItineraryDay {
+  id: string;
+  date?: string;
+  location: string;
+  plan: string[];
+  blocks?: ItineraryBlock[];
+  notes?: string;
+}
+
+export interface BudgetItem {
+  id: string;
+  category: string;
+  estimatedKes?: number;
+  actualKes?: number;
+  paidBy?: string;
+  status?: string;
+}
+
+export interface DocItem {
+  id: string;
+  label: string;
+  folder: "core" | "backup";
+  checked: boolean;
+}
+
+export interface PackItem {
+  id: string;
+  category: string;
+  name: string;
+  qty?: string;
+  date?: string;
+  checked: boolean;
+}
+
+export interface AppRec {
+  id: string;
+  category: string;
+  name: string;
+  purpose?: string;
+  link?: string;
+}
+
 export interface Trip {
   id: string;
   countryCode: string;
@@ -125,6 +197,23 @@ export interface Trip {
   accommodation?: string;
   items: TripItem[];
   createdAt: string;
+
+  // ── Trip companion (all optional) ──
+  travelers?: string[];
+  overview?: {
+    areas?: string;
+    departure?: string;
+    durationLabel?: string;
+    route?: string[];
+  };
+  flights?: Flight[];
+  stays?: Stay[];
+  schedule?: ItineraryDay[];
+  budget?: BudgetItem[];
+  documents?: DocItem[];
+  packing?: PackItem[];
+  shopping?: PackItem[];
+  apps?: AppRec[];
 }
 
 // ── User / profile ────────────────────────────────────────────────────────────
