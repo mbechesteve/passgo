@@ -3,6 +3,12 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import type { Attraction, Trip, TripItem } from "@/types";
+import { VIETNAM_TRIP } from "@/data/seedVietnamTrip";
+import {
+  setBudgetActualItem,
+  toggleDocItem,
+  togglePackItem,
+} from "@/store/tripReducers";
 
 interface TripState {
   trips: Trip[];
@@ -25,6 +31,13 @@ interface TripState {
   ) => void;
   /** Replace the ordered item list for a single city after a drag reorder. */
   reorderCityItems: (tripId: string, cityId: string, items: TripItem[]) => void;
+
+  seeded: boolean;
+  seedIfEmpty: () => void;
+  toggleDoc: (tripId: string, docId: string) => void;
+  togglePack: (tripId: string, list: "packing" | "shopping", itemId: string) => void;
+  setBudgetActual: (tripId: string, itemId: string, actualKes: number | undefined) => void;
+  updateTripRich: (tripId: string, patch: Partial<Trip>) => void;
 }
 
 // Deterministic-ish id without Date.now (unavailable in some sandboxes at build
@@ -37,6 +50,7 @@ export const useTripStore = create<TripState>()(
     (set, get) => ({
       trips: [],
       activeTripId: null,
+      seeded: false,
 
       createTrip: (countryCode, title) => {
         const id = uid("trip");
@@ -115,10 +129,46 @@ export const useTripStore = create<TripState>()(
             return { ...t, items: [...others, ...renumbered] };
           }),
         })),
+
+      seedIfEmpty: () =>
+        set((s) => {
+          if (s.seeded) return s;
+          return {
+            seeded: true,
+            trips: [VIETNAM_TRIP, ...s.trips],
+            activeTripId: s.activeTripId ?? VIETNAM_TRIP.id,
+          };
+        }),
+
+      toggleDoc: (tripId, docId) =>
+        set((s) => ({
+          trips: s.trips.map((t) => (t.id === tripId ? toggleDocItem(t, docId) : t)),
+        })),
+
+      togglePack: (tripId, list, itemId) =>
+        set((s) => ({
+          trips: s.trips.map((t) =>
+            t.id === tripId ? togglePackItem(t, list, itemId) : t
+          ),
+        })),
+
+      setBudgetActual: (tripId, itemId, actualKes) =>
+        set((s) => ({
+          trips: s.trips.map((t) =>
+            t.id === tripId ? setBudgetActualItem(t, itemId, actualKes) : t
+          ),
+        })),
+
+      updateTripRich: (tripId, patch) =>
+        set((s) => ({
+          trips: s.trips.map((t) => (t.id === tripId ? { ...t, ...patch } : t)),
+        })),
     }),
     {
       name: "passgo-trips",
       storage: createJSONStorage(() => AsyncStorage),
+      version: 2,
+      migrate: (persisted) => persisted as TripState,
     }
   )
 );
