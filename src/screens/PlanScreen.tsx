@@ -14,6 +14,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+import { TripHub } from "@/components/trip/TripHub";
 import { AttractionCard } from "@/components/AttractionCard";
 import { CityGroup } from "@/components/CityGroup";
 import { Icon } from "@/components/Icon";
@@ -25,7 +26,7 @@ import { getCountryByCode } from "@/data/mockCountries";
 import { getCityById } from "@/data/mockCities";
 import { getAttractionById } from "@/data/mockAttractions";
 import { groupItemsByCity, useTripStore } from "@/store/useTripStore";
-import type { Attraction, City, TripItem } from "@/types";
+import type { Attraction, City, Trip, TripItem } from "@/types";
 import type { RootStackParamList } from "@/navigation/types";
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
@@ -95,7 +96,13 @@ export function PlanScreen() {
         </View>
       ) : null}
 
-      {active ? <TripEditor key={active.id} tripId={active.id} /> : null}
+      {active ? (
+        isRichTrip(active) ? (
+          <TripHub key={active.id} tripId={active.id} />
+        ) : (
+          <TripEditor key={active.id} tripId={active.id} />
+        )
+      ) : null}
     </Screen>
   );
 }
@@ -339,6 +346,16 @@ function Field({
         className="rounded-xl border border-surface-sunken bg-surface px-3 py-2.5 text-[14px] text-ink-900"
       />
     </View>
+  );
+}
+
+/** A trip carries companion data once any rich module is populated. */
+function isRichTrip(t: Trip): boolean {
+  return Boolean(
+    t.documents?.length ||
+      t.flights?.length ||
+      t.schedule?.length ||
+      t.budget?.length
   );
 }
 

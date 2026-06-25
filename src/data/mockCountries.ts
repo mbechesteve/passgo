@@ -6,6 +6,25 @@ import { img } from "./images";
 // with the official source linked on each Country Detail screen.
 export const MOCK_COUNTRIES: Country[] = [
   {
+    id: "c_vn",
+    code: "VN",
+    name: "Vietnam",
+    flag: "🇻🇳",
+    region: "Asia",
+    capital: "Hanoi",
+    currency: "VND",
+    currencyName: "Vietnamese Dong",
+    languages: ["Vietnamese"],
+    dailyBudgetUsd: 45,
+    budgetTier: "budget",
+    suggestedDays: 7,
+    bestSeason: "Feb–Apr & Aug–Oct",
+    heroImage: img("vn-hero"),
+    summary:
+      "Lantern-lit Hoi An, the buzz of Hanoi's Old Quarter and a 3,000 km coastline of beaches and street food.",
+    popularityRank: 0,
+  },
+  {
     id: "c_tz",
     code: "TZ",
     name: "Tanzania",

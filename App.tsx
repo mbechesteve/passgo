@@ -1,7 +1,9 @@
 import "./global.css";
 
+import { useEffect } from "react";
 import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useTripStore } from "@/store/useTripStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -14,6 +16,10 @@ import { RootNavigator } from "@/navigation/RootNavigator";
 const PHONE_WIDTH = 440;
 
 export default function App() {
+  useEffect(() => {
+    useTripStore.getState().seedIfEmpty();
+  }, []);
+
   const framed = Platform.OS === "web";
   return (
     <GestureHandlerRootView
