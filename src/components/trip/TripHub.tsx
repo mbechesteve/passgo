@@ -5,6 +5,7 @@ import { Pill } from "@/components/ui";
 import { getCountryByCode } from "@/data/mockCountries";
 import { useTripStore } from "@/store/useTripStore";
 import { BookingsModule } from "./BookingsModule";
+import { BudgetModule } from "./BudgetModule";
 import { DocumentsModule } from "./DocumentsModule";
 import { ItineraryModule } from "./ItineraryModule";
 import { OverviewModule } from "./OverviewModule";
@@ -47,7 +48,8 @@ export function TripHub({ tripId }: { tripId: string }) {
         {module === "Documents" ? <DocumentsModule tripId={tripId} /> : null}
         {module === "Itinerary" ? <ItineraryModule trip={trip} /> : null}
         {module === "Bookings" ? <BookingsModule trip={trip} /> : null}
-        {!["Overview", "Documents", "Itinerary", "Bookings"].includes(module) ? (
+        {module === "Budget" ? <BudgetModule tripId={tripId} /> : null}
+        {!["Overview", "Documents", "Itinerary", "Bookings", "Budget"].includes(module) ? (
           <Text className="text-ink-500">{module} — coming up.</Text>
         ) : null}
       </ScrollView>
