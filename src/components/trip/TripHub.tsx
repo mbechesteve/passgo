@@ -4,6 +4,7 @@ import { ScrollView, Text, View } from "react-native";
 import { Pill } from "@/components/ui";
 import { getCountryByCode } from "@/data/mockCountries";
 import { useTripStore } from "@/store/useTripStore";
+import { BookingsModule } from "./BookingsModule";
 import { DocumentsModule } from "./DocumentsModule";
 import { ItineraryModule } from "./ItineraryModule";
 import { OverviewModule } from "./OverviewModule";
@@ -45,7 +46,8 @@ export function TripHub({ tripId }: { tripId: string }) {
         {module === "Overview" ? <OverviewModule trip={trip} /> : null}
         {module === "Documents" ? <DocumentsModule tripId={tripId} /> : null}
         {module === "Itinerary" ? <ItineraryModule trip={trip} /> : null}
-        {!["Overview", "Documents", "Itinerary"].includes(module) ? (
+        {module === "Bookings" ? <BookingsModule trip={trip} /> : null}
+        {!["Overview", "Documents", "Itinerary", "Bookings"].includes(module) ? (
           <Text className="text-ink-500">{module} — coming up.</Text>
         ) : null}
       </ScrollView>
