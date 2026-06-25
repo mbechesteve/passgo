@@ -9,6 +9,7 @@ import { BudgetModule } from "./BudgetModule";
 import { DocumentsModule } from "./DocumentsModule";
 import { ItineraryModule } from "./ItineraryModule";
 import { OverviewModule } from "./OverviewModule";
+import { PackingModule } from "./PackingModule";
 
 const MODULES = ["Overview", "Documents", "Itinerary", "Bookings", "Budget", "Packing"] as const;
 type Module = (typeof MODULES)[number];
@@ -49,9 +50,7 @@ export function TripHub({ tripId }: { tripId: string }) {
         {module === "Itinerary" ? <ItineraryModule trip={trip} /> : null}
         {module === "Bookings" ? <BookingsModule trip={trip} /> : null}
         {module === "Budget" ? <BudgetModule tripId={tripId} /> : null}
-        {!["Overview", "Documents", "Itinerary", "Bookings", "Budget"].includes(module) ? (
-          <Text className="text-ink-500">{module} — coming up.</Text>
-        ) : null}
+        {module === "Packing" ? <PackingModule tripId={tripId} /> : null}
       </ScrollView>
     </View>
   );
