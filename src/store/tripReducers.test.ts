@@ -32,7 +32,9 @@ describe("toggleDocItem", () => {
 
 describe("togglePackItem", () => {
   it("flips a packing item", () => {
-    expect(togglePackItem(base, "packing", "p1").packing?.[0].checked).toBe(true);
+    const next = togglePackItem(base, "packing", "p1");
+    expect(next.packing?.[0].checked).toBe(true);
+    expect(next).not.toBe(base); // immutable
   });
   it("flips a shopping item", () => {
     expect(togglePackItem(base, "shopping", "s1").shopping?.[0].checked).toBe(true);
@@ -41,7 +43,9 @@ describe("togglePackItem", () => {
 
 describe("setBudgetActualItem", () => {
   it("sets an actual amount", () => {
-    expect(setBudgetActualItem(base, "b1", 348434).budget?.[0].actualKes).toBe(348434);
+    const next = setBudgetActualItem(base, "b1", 348434);
+    expect(next.budget?.[0].actualKes).toBe(348434);
+    expect(next).not.toBe(base); // immutable
   });
   it("clears with undefined", () => {
     const withVal = setBudgetActualItem(base, "b1", 100);

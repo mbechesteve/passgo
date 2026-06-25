@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 
 import { Card, Stat } from "@/components/ui";
-import { Icon } from "@/components/Icon";
+import { Icon, type IconName } from "@/components/Icon";
 import { colors } from "@/lib/theme";
 import { daysUntil, kes } from "@/utils/format";
 import { budgetTotals, docProgress } from "@/utils/tripStats";
@@ -62,7 +62,7 @@ export function OverviewModule({ trip }: { trip: Trip }) {
   );
 }
 
-function Meta({ icon, text }: { icon: any; text: string }) {
+function Meta({ icon, text }: { icon: IconName; text: string }) {
   return (
     <View className="mr-3 mt-1.5 flex-row items-center">
       <Icon name={icon} size={13} color={colors.ink[500]} />

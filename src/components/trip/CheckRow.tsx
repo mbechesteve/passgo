@@ -1,7 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 
 import { Icon } from "@/components/Icon";
-import { colors } from "@/lib/theme";
 
 export function CheckRow({
   label,

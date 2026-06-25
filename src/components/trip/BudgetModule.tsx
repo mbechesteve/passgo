@@ -29,8 +29,13 @@ export function BudgetModule({ tripId }: { tripId: string }) {
       </Card>
 
       <Card className="px-4 py-1">
-        {items.map((b) => (
-          <Row key={b.id} item={b} onActual={(v) => setActual(tripId, b.id, v)} />
+        {items.map((b, i) => (
+          <Row
+            key={b.id}
+            item={b}
+            isLast={i === items.length - 1}
+            onActual={(v) => setActual(tripId, b.id, v)}
+          />
         ))}
       </Card>
     </View>
@@ -39,13 +44,19 @@ export function BudgetModule({ tripId }: { tripId: string }) {
 
 function Row({
   item,
+  isLast,
   onActual,
 }: {
   item: BudgetItem;
+  isLast: boolean;
   onActual: (v: number | undefined) => void;
 }) {
   return (
-    <View className="flex-row items-center border-b border-surface-sunken py-3 last:border-b-0">
+    <View
+      className={`flex-row items-center py-3 ${
+        isLast ? "" : "border-b border-surface-sunken"
+      }`}
+    >
       <View className="flex-1">
         <Text className="text-[14px] font-semibold text-ink-900">{item.category}</Text>
         <View className="mt-0.5 flex-row items-center">
