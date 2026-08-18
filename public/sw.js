@@ -1,8 +1,8 @@
-// PassGo service worker — network-first so the app is never served stale while
+// Pamoja service worker — network-first so the app is never served stale while
 // online (important during active development), with a cache fallback so it
 // still opens offline once installed. A fetch handler is also what makes the
 // app installable ("Add to Home Screen") on Android/Chrome.
-const CACHE = "passgo-v1";
+const CACHE = "pamoja-v1";
 
 self.addEventListener("install", () => self.skipWaiting());
 

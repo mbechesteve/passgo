@@ -14,11 +14,11 @@ if (!existsSync(html)) {
 
 const HEAD = `
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#080808" />
+    <meta name="theme-color" content="#04222b" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="PassGo" />
+    <meta name="apple-mobile-web-app-title" content="Pamoja" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180.png" />
   `;
 

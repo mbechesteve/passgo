@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-// Theme tokens follow DESIGN.md (Webflow-inspired): white canvas, near-black
-// (#080808) primary for every CTA/heading, hairline-bordered white cards, tight
-// 4px button / 8px card radii, and a weight ceiling of 600. Chromatic accents
-// (purple/blue/green/amber/red) are reserved for category & status surfaces.
+// Theme tokens follow DESIGN.md: two hues only — deep (#04222b) and accent
+// (#0e6ba8), sampled from the PAMOJA proposal artwork. No per-category colors.
 module.exports = {
   content: ["./App.tsx", "./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
