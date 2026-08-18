@@ -167,7 +167,7 @@ Delete `usd`, `processing`, `visaBadgeText`, `budgetLabel`, `visaDetailLine`, `v
 
 - [ ] **Step 5: Trim `src/utils/format.test.ts` to match**
 
-Delete every `describe` block covering a removed function. Keep only the blocks for `kes`, `daysUntil`, `distanceKm` and `km`. If a kept block imports a removed symbol, drop it from the import.
+The file currently holds exactly two `describe` blocks — `kes` and `daysUntil` — and both cover functions that survive. So no test deletions are needed; only fix the import line if it names a removed symbol. Verify with `grep -n '^describe' src/utils/format.test.ts` before changing anything.
 
 - [ ] **Step 6: Empty the domain types**
 
@@ -1250,6 +1250,16 @@ describe("the partner seed", () => {
     expect(new Set(partners.map((p) => p.shortCode)).size).toBe(2189);
   });
 
+  it("gives every partner a distinct name — no two listings collide", () => {
+    expect(new Set(partners.map((p) => p.name)).size).toBe(2189);
+  });
+
+  it("spreads the network widely across Nairobi's wards", () => {
+    // Mixed radix reaches 18 of the 20 wards; assert the spread, not the exact
+    // number, so tuning the name pools does not break the test.
+    expect(new Set(partners.map((p) => p.ward)).size).toBeGreaterThanOrEqual(15);
+  });
+
   it("is deterministic — two calls produce the same network", () => {
     expect(generatePartners()).toEqual(partners);
   });
@@ -1363,7 +1373,11 @@ export function generatePartners(): Partner[] {
     const first = FIRST[category];
     const second = SECOND[category];
     for (let i = named.length; i < PARTNER_TARGETS[category]; i++) {
-      const w = i % WARDS.length;
+      // Mixed radix over (first, second, ward) so the triple is injective in i
+      // and no two partners share a name. Cycling the ward on `i % WARDS.length`
+      // instead would repeat the same name every 160 entries — 1,258 duplicates
+      // in Eat alone.
+      const w = Math.floor(i / (first.length * second.length)) % WARDS.length;
       const name = `${first[i % first.length]} ${
         second[Math.floor(i / first.length) % second.length]
       } ${WARDS[w].replace(" ward", "")}`;

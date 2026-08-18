@@ -9,3 +9,4 @@ web-build/
 *.orig.*
 ios/
 android/
+.superpowers/
