@@ -1,14 +1,145 @@
-import { Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, TextInput, View } from "react-native";
+import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
+import { Button } from "@/components/ui";
+import { Eyebrow } from "@/components/pamoja/Eyebrow";
+import { RecordLine } from "@/components/pamoja/RecordLine";
+import { colors } from "@/lib/theme";
+import { now } from "@/lib/clock";
+import { kes } from "@/utils/format";
+import { passStatus } from "@/utils/pass";
+import { buildRedemption, computeMoney } from "@/utils/redeem";
+import { usePartnerStore } from "@/store/usePartnerStore";
+import { usePassStore } from "@/store/usePassStore";
+import { useRecordStore } from "@/store/useRecordStore";
+import type { PassEvent } from "@/types";
+import type { RootStackParamList } from "@/navigation/types";
 
-/** Stub — replaced in a later task. */
 export function ConfirmScreen() {
+  const navigation = useNavigation<any>();
+  const { params } = useRoute<RouteProp<RootStackParamList, "Confirm">>();
+
+  const pass = usePassStore((s) => s.pass);
+  const partners = usePartnerStore((s) => s.partners);
+  const load = usePartnerStore((s) => s.load);
+  const events = useRecordStore((s) => s.events);
+  const append = useRecordStore((s) => s.append);
+  const ingestShortCode = useRecordStore((s) => s.ingestShortCode);
+
+  const [amount, setAmount] = useState("1000");
+  const [written, setWritten] = useState<PassEvent | null>(null);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const partner = partners.find((p) => p.id === params.partnerId);
+
+  if (!pass || !partner || passStatus(pass, now()) !== "active") {
+    return (
+      <Screen>
+        <View className="flex-1 items-center justify-center px-5">
+          <Text className="text-[15px] text-body">
+            This discount cannot be claimed right now. Nothing has been
+            recorded.
+          </Text>
+        </View>
+      </Screen>
+    );
+  }
+
+  // Step 3 — the line, once written.
+  if (written) {
+    return (
+      <Screen>
+        <View className="flex-1 px-5 pt-8">
+          <Eyebrow>Step 3 of 3 · One line written</Eyebrow>
+          <View className="mt-3">
+            <RecordLine event={written} />
+          </View>
+          <Text className="mt-4 font-mono text-[11px] leading-4 text-mute">
+            Held on this device. No dashboard anywhere assembles this view of
+            you.
+          </Text>
+          <Button
+            title="See my wallet"
+            className="mt-6"
+            onPress={() => navigation.navigate("Wallet")}
+          />
+        </View>
+      </Screen>
+    );
+  }
+
+  const gross = Number.parseInt(amount, 10);
+  const valid = Number.isFinite(gross) && gross > 0;
+  const money = computeMoney(valid ? gross : 0, partner.discountPct);
+
+  const onConfirm = () => {
+    const event = buildRedemption({
+      pass,
+      partner,
+      gross,
+      channel: params.channel,
+      at: now(),
+      seq: events.length,
+    });
+    // Two paths, one line. `shortcode` arrives inbound — the fan never touched
+    // her phone — so it enters the record through its own door.
+    if (params.channel === "shortcode") ingestShortCode(event);
+    else append(event);
+    setWritten(event);
+  };
+
   return (
     <Screen>
-      <View className="flex-1 items-center justify-center">
-        <Text className="text-ink">Confirm</Text>
-      </View>
+      <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
+        <Eyebrow className="mt-8">Step 2 of 3 · Confirm</Eyebrow>
+        <Text className="mt-3 font-display text-[26px] tracking-[-0.5px] text-ink">
+          {partner.name}
+        </Text>
+        <Text className="mt-1 font-mono text-[12px] text-mute">
+          {partner.ward} · {params.channel === "shortcode" ? "Card code" : "Scanned"}
+        </Text>
+
+        <Eyebrow className="mt-8">What the bill comes to</Eyebrow>
+        <TextInput
+          value={amount}
+          onChangeText={setAmount}
+          keyboardType="number-pad"
+          className="mt-2 rounded-card border border-hairline bg-canvas px-4 py-4 font-mono text-[16px] text-ink"
+        />
+
+        <View className="mt-6 rounded-card border border-hairline bg-panel px-5 py-5">
+          <Text className="font-mono text-[15px] text-ink">{kes(money.gross)}</Text>
+          <Text
+            className="mt-1 font-mono text-[15px]"
+            style={{ color: colors.accent }}
+          >
+            −{money.discount.toLocaleString("en-US")}
+          </Text>
+          <View className="mt-2 border-t border-hairline pt-2">
+            <Text className="font-mono-medium text-[20px] text-ink">
+              {money.net.toLocaleString("en-US")}
+            </Text>
+          </View>
+        </View>
+
+        <Text className="mt-4 font-mono text-[11px] leading-4 text-mute">
+          You pay {partner.name} {kes(money.net)} directly, by M-Pesa, Airtel
+          Money or card. Pamoja never holds your money — it only records that
+          this happened.
+        </Text>
+
+        <Button
+          title="Confirm the discount"
+          className="mt-6"
+          disabled={!valid}
+          onPress={onConfirm}
+        />
+      </ScrollView>
     </Screen>
   );
 }
