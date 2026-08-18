@@ -19,9 +19,9 @@ export function Card({
 }: ViewProps & { className?: string; children: ReactNode }) {
   return (
     <View
-      className={`rounded-card bg-surface border border-surface-sunken ${className}`}
+      className={`rounded-card bg-canvas border border-hairline ${className}`}
       style={{
-        shadowColor: colors.ink[900],
+        shadowColor: colors.ink,
         shadowOpacity: 0.06,
         shadowRadius: 16,
         shadowOffset: { width: 0, height: 6 },
@@ -35,7 +35,7 @@ export function Card({
 }
 
 // ── Button ────────────────────────────────────────────────────────────────────
-type ButtonVariant = "primary" | "secondary" | "ghost" | "premium";
+type ButtonVariant = "primary" | "secondary" | "ghost";
 
 export function Button({
   title,
@@ -55,13 +55,12 @@ export function Button({
 }) {
   // Webflow: near-black primary, white+hairline secondary, 4px radius.
   const styles: Record<ButtonVariant, { bg: string; text: string }> = {
-    primary: { bg: "bg-brand-700", text: "text-white" },
+    primary: { bg: "bg-deep", text: "text-white" },
     secondary: {
-      bg: "bg-surface border border-surface-sunken",
-      text: "text-ink-900",
+      bg: "bg-canvas border border-hairline",
+      text: "text-ink",
     },
-    ghost: { bg: "bg-transparent", text: "text-ink-900" },
-    premium: { bg: "bg-ocean-600", text: "text-white" },
+    ghost: { bg: "bg-transparent", text: "text-ink" },
   };
   const s = styles[variant];
   return (
@@ -74,7 +73,7 @@ export function Button({
       {...rest}
     >
       {loading ? (
-        <ActivityIndicator color={variant === "secondary" || variant === "ghost" ? colors.brand[700] : "#fff"} />
+        <ActivityIndicator color={variant === "secondary" || variant === "ghost" ? colors.deep : "#fff"} />
       ) : (
         <>
           {icon ? <View className="mr-2">{icon}</View> : null}
@@ -100,13 +99,13 @@ export function Pill({
       onPress={onPress}
       className={`mr-2 rounded-full border px-3.5 py-2 ${
         active
-          ? "bg-brand-700 border-brand-700"
-          : "bg-surface border-surface-sunken"
+          ? "bg-deep border-deep"
+          : "bg-canvas border-hairline"
       }`}
     >
       <Text
         className={`text-[13px] font-semibold ${
-          active ? "text-white" : "text-ink-700"
+          active ? "text-white" : "text-body"
         }`}
       >
         {label}
@@ -127,7 +126,7 @@ export function SectionTitle({
 }) {
   return (
     <View className={`flex-row items-center justify-between ${className}`}>
-      <Text className="text-[17px] font-semibold text-ink-900">{title}</Text>
+      <Text className="text-[17px] font-semibold text-ink">{title}</Text>
       {action}
     </View>
   );
@@ -136,8 +135,8 @@ export function SectionTitle({
 // ── Tag ───────────────────────────────────────────────────────────────────────
 export function Tag({ label }: { label: string }) {
   return (
-    <View className="self-start rounded-lg bg-surface-muted px-2 py-1">
-      <Text className="text-[11px] font-semibold text-ink-500">{label}</Text>
+    <View className="self-start rounded-lg bg-surface px-2 py-1">
+      <Text className="text-[11px] font-semibold text-mute">{label}</Text>
     </View>
   );
 }
@@ -153,10 +152,10 @@ export function Stat({
   icon: IconName;
 }) {
   return (
-    <View className="flex-1 items-center rounded-xl border border-surface-sunken bg-surface-muted py-3">
-      <Icon name={icon} size={16} color={colors.ink[700]} />
-      <Text className="mt-1.5 text-[15px] font-semibold text-ink-900">{value}</Text>
-      <Text className="text-[11px] font-medium text-ink-500">{label}</Text>
+    <View className="flex-1 items-center rounded-xl border border-hairline bg-surface py-3">
+      <Icon name={icon} size={16} color={colors.body} />
+      <Text className="mt-1.5 text-[15px] font-semibold text-ink">{value}</Text>
+      <Text className="text-[11px] font-medium text-mute">{label}</Text>
     </View>
   );
 }

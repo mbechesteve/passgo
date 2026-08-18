@@ -13,7 +13,7 @@ export function Screen({
   className?: string;
 }) {
   return (
-    <SafeAreaView edges={edges} className="flex-1 bg-surface-muted">
+    <SafeAreaView edges={edges} className="flex-1 bg-surface">
       <View className={`flex-1 ${className}`}>{children}</View>
     </SafeAreaView>
   );

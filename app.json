@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "PassGo",
-    "slug": "passgo",
+    "name": "Pamoja",
+    "slug": "pamoja",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "passgo",
+    "scheme": "pamoja",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,16 +15,16 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.craydel.passgo",
+      "bundleIdentifier": "com.uratibu.pamoja",
       "config": {
         "googleMapsApiKey": "YOUR_IOS_GOOGLE_MAPS_API_KEY"
       }
     },
     "android": {
-      "package": "com.craydel.passgo",
+      "package": "com.uratibu.pamoja",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#080808"
+        "backgroundColor": "#04222b"
       },
       "config": {
         "googleMaps": {
@@ -35,9 +35,6 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
-    },
-    "extra": {
-      "revenueCatApiKey": "YOUR_REVENUECAT_PUBLIC_KEY"
     }
   }
 }

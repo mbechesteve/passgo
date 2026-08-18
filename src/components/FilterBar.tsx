@@ -1,14 +1,13 @@
 import { ScrollView, Text, View } from "react-native";
 
-import type { BudgetTier, Region } from "@/types";
 import { Pill } from "./ui";
 
 export interface DiscoverFilters {
-  region: Region | "All";
-  budget: BudgetTier | "All";
+  region: string;
+  budget: string;
   /** Max suggested trip length in days, or null for any. */
   maxDays: number | null;
-  /** Only show "easy" (visa-free / VoA / e-Visa / ETA) destinations. */
+  /** Only show "easy" destinations. */
   easyOnly: boolean;
 }
 
@@ -19,7 +18,7 @@ export const DEFAULT_FILTERS: DiscoverFilters = {
   easyOnly: true,
 };
 
-const REGIONS: (Region | "All")[] = [
+const REGIONS: string[] = [
   "All",
   "Africa",
   "Asia",
@@ -29,7 +28,7 @@ const REGIONS: (Region | "All")[] = [
   "Oceania",
 ];
 
-const BUDGETS: { key: BudgetTier | "All"; label: string }[] = [
+const BUDGETS: { key: string; label: string }[] = [
   { key: "All", label: "Any budget" },
   { key: "budget", label: "💰 Budget" },
   { key: "moderate", label: "💰💰 Moderate" },
@@ -111,7 +110,7 @@ const Row = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Label = ({ text }: { text: string }) => (
-  <Text className="mb-1.5 mt-3 text-[12px] font-bold uppercase tracking-wide text-ink-400">
+  <Text className="mb-1.5 mt-3 text-[12px] font-bold uppercase tracking-wide text-faint">
     {text}
   </Text>
 );

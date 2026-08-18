@@ -1,9 +1,27 @@
 import { ScrollView, Text, View } from "react-native";
 
-import type { Attraction, City } from "@/types";
 import { colors } from "@/lib/theme";
 import { distanceKm, km } from "@/utils/format";
 import { Icon } from "./Icon";
+
+// Minimal geo shapes for map plotting. Not domain types — a later task's
+// venue/place model plugs into MapData without this file needing to change.
+export interface City {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  blurb?: string;
+}
+
+export interface Attraction {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  category?: string;
+  cityId: string;
+}
 
 export interface MapData {
   cities: City[];
@@ -24,16 +42,16 @@ export function MapRouteList({ data, height }: { data: MapData; height: number }
 
   return (
     <View
-      className="rounded-card border border-surface-sunken bg-surface-muted p-4"
+      className="rounded-card border border-hairline bg-surface p-4"
       style={{ minHeight: height }}
     >
       <View className="mb-3 flex-row items-center">
-        <Icon name="map" size={15} color={colors.ink[700]} />
-        <Text className="ml-2 text-[13px] font-semibold text-ink-700">
+        <Icon name="map" size={15} color={colors.body} />
+        <Text className="ml-2 text-[13px] font-semibold text-body">
           Route preview
         </Text>
-        <View className="ml-auto rounded-full bg-ocean-100 px-2 py-0.5">
-          <Text className="text-[11px] font-semibold text-ocean-700">
+        <View className="ml-auto rounded-full bg-panel px-2 py-0.5">
+          <Text className="text-[11px] font-semibold text-accent">
             Live map on device
           </Text>
         </View>
@@ -45,25 +63,25 @@ export function MapRouteList({ data, height }: { data: MapData; height: number }
           return (
             <View key={city.id}>
               <View className="flex-row items-center">
-                <View className="h-6 w-6 items-center justify-center rounded-full bg-brand-700">
+                <View className="h-6 w-6 items-center justify-center rounded-full bg-deep">
                   <Text className="text-[11px] font-semibold text-white">
                     {i + 1}
                   </Text>
                 </View>
-                <Text className="ml-2 text-[14px] font-bold text-ink-900">
+                <Text className="ml-2 text-[14px] font-bold text-ink">
                   {city.name}
                 </Text>
                 <View className="ml-auto flex-row items-center">
-                  <Icon name="map-pin" size={11} color={colors.ink[400]} />
-                  <Text className="ml-1 text-[11px] text-ink-400">
+                  <Icon name="map-pin" size={11} color={colors.faint} />
+                  <Text className="ml-1 text-[11px] text-faint">
                     {pins.length} spots
                   </Text>
                 </View>
               </View>
               {next ? (
                 <View className="my-1.5 ml-3 flex-row items-center">
-                  <View className="h-5 w-px bg-brand-200" />
-                  <Text className="ml-3 text-[11px] font-medium text-ink-500">
+                  <View className="h-5 w-px bg-hairline" />
+                  <Text className="ml-3 text-[11px] font-medium text-mute">
                     ↓ {km(distanceKm(city, next))} to {next.name}
                   </Text>
                 </View>

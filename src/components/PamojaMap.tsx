@@ -1,21 +1,20 @@
 import { useMemo } from "react";
 import { View } from "react-native";
 
-import type { City } from "@/types";
 import { colors } from "@/lib/theme";
-import { MapRouteList, regionFor, type MapData } from "./mapRoute";
+import { MapRouteList, regionFor, type City, type MapData } from "./mapRoute";
 
 export type { MapData } from "./mapRoute";
 
 /**
  * Native map (iOS/Android). Renders react-native-maps with a marker per city
  * (the cluster anchor), attraction pins, and a dashed polyline route between
- * cities. Metro picks PassGoMap.web.tsx on web, so this file's native-only
+ * cities. Metro picks PamojaMap.web.tsx on web, so this file's native-only
  * `require` is never bundled for web.
  *
- * Named PassGoMap to avoid colliding with react-native-maps' own MapView.
+ * Named PamojaMap to avoid colliding with react-native-maps' own MapView.
  */
-export function PassGoMap({ data, height = 320 }: { data: MapData; height?: number }) {
+export function PamojaMap({ data, height = 320 }: { data: MapData; height?: number }) {
   const region = useMemo(() => regionFor(data.cities), [data.cities]);
 
   let Maps: typeof import("react-native-maps");
@@ -40,7 +39,7 @@ export function PassGoMap({ data, height = 320 }: { data: MapData; height?: numb
             coordinate={{ latitude: c.lat, longitude: c.lng }}
             title={c.name}
             description={c.blurb}
-            pinColor={colors.brand[700]}
+            pinColor={colors.deep}
           />
         ))}
         {data.attractions.map((a) => (
@@ -49,14 +48,14 @@ export function PassGoMap({ data, height = 320 }: { data: MapData; height?: numb
             coordinate={{ latitude: a.lat, longitude: a.lng }}
             title={a.name}
             description={a.category}
-            pinColor={colors.ocean[600]}
+            pinColor={colors.accent}
             opacity={0.9}
           />
         ))}
         {routeCoords.length > 1 ? (
           <Polyline
             coordinates={routeCoords}
-            strokeColor={colors.brand[600]}
+            strokeColor={colors.deep}
             strokeWidth={3}
             lineDashPattern={[6, 6]}
           />

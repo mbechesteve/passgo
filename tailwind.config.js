@@ -10,54 +10,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary — near-black ink. `brand-700` (#080808) is every primary CTA.
-        brand: {
-          50: "#f3f3f3", // light selected-row highlight
-          100: "#e6e6e6", // light chip / light text on dark bands
-          200: "#cccccc",
-          300: "#999999",
-          400: "#4d4d4d",
-          500: "#1f1f1f",
-          600: "#141414",
-          700: "#080808", // primary CTA / active tab / ink
-          800: "#000000",
-          900: "#000000",
-        },
-        // Premium sub-brand — Webflow accent purple.
-        ocean: {
-          50: "#f3edff",
-          100: "#e9ddff",
-          300: "#7a3dff", // accent purple
-          500: "#6a2fe6",
-          600: "#7a3dff", // premium button / icon fill
-          700: "#5a23c0", // gradient deep
-        },
-        // Text on white — ink down to mute-soft.
-        ink: {
-          900: "#080808", // headings + ink
-          700: "#363636", // body
-          500: "#898989", // mute
-          400: "#ababab", // mute-soft / placeholder
-        },
-        surface: {
-          DEFAULT: "#ffffff", // canvas / cards
-          muted: "#f6f6f6", // subtle inset wells, page tint
-          sunken: "#d8d8d8", // hairline borders
-        },
-        // Semantic visa-status colors = Webflow chromatic accents.
-        visa: {
-          free: "#00d722", // accent green
-          voa: "#ffae13", // accent yellow
-          evisa: "#3b89ff", // accent blue
-          required: "#ee1d36", // accent red
-        },
+        // Sampled from the PAMOJA proposal artwork (Figures 1 and 3). Two hues only.
+        deep: { DEFAULT: "#04222b", soft: "#223c44" }, // Pass card / dark surfaces
+        accent: { DEFAULT: "#0e6ba8" },                 // the single blue
+        ink: { DEFAULT: "#16181a" },
+        body: { DEFAULT: "#545557" },
+        mute: { DEFAULT: "#676869" },
+        faint: { DEFAULT: "#acadae" },
+        hairline: { DEFAULT: "#dde3e4" },
+        panel: { DEFAULT: "#eef0f0" },
+        surface: { DEFAULT: "#f5f8f8" },
+        canvas: { DEFAULT: "#ffffff" },
       },
       fontFamily: {
         sans: ["System"],
       },
-      borderRadius: {
-        card: "8px", // Webflow card radius (rounded.md)
-      },
+      borderRadius: { card: "10px" },
     },
   },
   plugins: [],

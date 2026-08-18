@@ -8,7 +8,7 @@ export type IconName = React.ComponentProps<typeof Feather>["name"];
 export function Icon({
   name,
   size = 16,
-  color = colors.ink[900],
+  color = colors.ink,
 }: {
   name: IconName;
   size?: number;

@@ -29,4 +29,4 @@ export const storage = {
   },
 };
 
-export const cacheKey = (name: string) => `passgo:cache:${name}`;
+export const cacheKey = (name: string) => `pamoja:cache:${name}`;
