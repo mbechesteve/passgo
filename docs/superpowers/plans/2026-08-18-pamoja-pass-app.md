@@ -82,25 +82,30 @@
 
 ### Task 1: Clear the ground and rebrand the shell
 
-Delete the PassGo domain, install the Pamoja design tokens, and leave the app booting on four placeholder tabs. Nothing in this task is Pamoja *behaviour* — it exists so every later task starts from a clean, compiling tree.
+Delete the PassGo domain, install the Pamoja design tokens, and leave the app booting on four placeholder tabs. Nothing here is Pamoja *behaviour* — it exists so every later task starts from a clean, compiling tree.
+
+**The hard part is not the deletions — it is that the theme rewrite in Step 5 changes `colors` from nested ramps (`colors.ink[900]`) to flat tokens (`colors.ink`), which breaks every KEPT component that referenced the old shape.** Steps 8 and 9 fix all of them. `tsc` cannot pass until they do.
 
 **Files:**
-- Delete: the 25 files listed under "Deleted" in File Structure
-- Rename: `src/components/PassGoMap.tsx` → `src/components/PamojaMap.tsx`, `src/components/PassGoMap.web.tsx` → `src/components/PamojaMap.web.tsx`
-- Modify: `app.json`, `tailwind.config.js`, `src/lib/theme.ts`, `src/lib/storage.ts:33`, `src/utils/format.ts`, `src/utils/format.test.ts`, `src/types/index.ts`, `src/navigation/{types,TabNavigator,RootNavigator}.tsx`, `package.json`, `DESIGN.md`, `README.md`
+- Delete: the files listed in Step 1 (27 of them)
+- Rename: `src/components/PassGoMap.tsx` → `PamojaMap.tsx`, `PassGoMap.web.tsx` → `PamojaMap.web.tsx`
+- Modify: `app.json`, `tailwind.config.js`, `src/lib/theme.ts`, `src/lib/storage.ts`, `src/utils/format.ts`, `src/types/index.ts`, `src/data/repository.ts`, `src/components/{Icon,Screen,ui/index,PamojaMap,mapRoute}.tsx`, `src/navigation/{types,TabNavigator,RootNavigator}.tsx`, `package.json`, `DESIGN.md`, `README.md`
 - Create: `src/screens/{Home,Explore,Services,Pass}Screen.tsx` (placeholders)
 
 **Interfaces:**
 - Consumes: nothing (first task)
-- Produces: Tailwind tokens `deep`, `deep-soft`, `accent`, `ink`, `body`, `mute`, `faint`, `hairline`, `panel`, `surface`, `canvas`; `colors` export from `@/lib/theme` with the same keys; `TabParamList = { Home: undefined; Explore: undefined; Services: undefined; Pass: undefined }`
+- Produces: Tailwind tokens `deep`, `deep-soft`, `accent`, `ink`, `body`, `mute`, `faint`, `hairline`, `panel`, `surface`, `canvas`; flat `colors` export from `@/lib/theme` with those same keys; `TabParamList = { Home: undefined; Explore: undefined; Services: undefined; Pass: undefined }`
 
 - [ ] **Step 1: Delete the PassGo domain**
+
+`MapScreen` and `ProfileScreen` are on this list even though they are not in the plan's original prose: Pamoja has no Map or Profile tab, and both depend on `mockCountries`, `passports`, `useAppStore` and `useTripStore`, all of which go.
 
 ```bash
 cd /home/mbeche/Documents/projects/2026/PassGo
 git rm -q src/screens/DiscoverScreen.tsx src/screens/CountryDetailScreen.tsx \
   src/screens/PlanScreen.tsx src/screens/PaywallScreen.tsx \
   src/screens/PremiumScreen.tsx src/screens/OnboardingScreen.tsx \
+  src/screens/MapScreen.tsx src/screens/ProfileScreen.tsx \
   src/components/CountryCard.tsx src/components/AttractionCard.tsx \
   src/components/CityGroup.tsx src/components/VisaBadge.tsx \
   src/components/PremiumLock.tsx
@@ -116,16 +121,45 @@ git mv src/components/PassGoMap.tsx src/components/PamojaMap.tsx
 git mv src/components/PassGoMap.web.tsx src/components/PamojaMap.web.tsx
 ```
 
-- [ ] **Step 2: Replace the theme tokens**
+- [ ] **Step 2: Blank the repository**
 
-Replace the whole `colors` block in `tailwind.config.js` (keep `content`, `presets`, `darkMode`, `plugins` as they are):
+`src/data/repository.ts` imports five deleted mock modules, so it cannot survive Step 1 as written. Task 6 rewrites it in full; until then it holds only the cache helper. Replace the whole file:
+
+```ts
+// Repository layer — the single seam between the UI and its data source.
+// Rebuilt for Pamoja in a later task; this is the cache helper it keeps.
+
+import { cacheKey, storage } from "@/lib/storage";
+
+/** Read-through cache: cached copy if present, else compute, persist, return. */
+export async function cached<T>(name: string, compute: () => T): Promise<T> {
+  const hit = await storage.getJSON<T>(cacheKey(name));
+  if (hit != null) return hit;
+  const data = compute();
+  await storage.setJSON(cacheKey(name), data);
+  return data;
+}
+```
+
+- [ ] **Step 3: Empty the domain types**
+
+Replace all of `src/types/index.ts` — Task 2 fills it in:
+
+```ts
+// Domain model — filled in by Task 2.
+export {};
+```
+
+- [ ] **Step 4: Replace the Tailwind tokens**
+
+In `tailwind.config.js`, replace the whole `colors` block and the `borderRadius` block (leave `content`, `presets`, `darkMode`, `fontFamily` and `plugins` untouched — fonts are Task 8):
 
 ```js
       colors: {
         // Sampled from the PAMOJA proposal artwork (Figures 1 and 3). Two hues only.
         deep: { DEFAULT: "#04222b", soft: "#223c44" }, // Pass card / dark surfaces
         accent: { DEFAULT: "#0e6ba8" },                 // the single blue
-        ink: { DEFAULT: "#16181a", 900: "#16181a", 800: "#2b2d2f" },
+        ink: { DEFAULT: "#16181a" },
         body: { DEFAULT: "#545557" },
         mute: { DEFAULT: "#676869" },
         faint: { DEFAULT: "#acadae" },
@@ -137,9 +171,9 @@ Replace the whole `colors` block in `tailwind.config.js` (keep `content`, `prese
       borderRadius: { card: "10px" },
 ```
 
-- [ ] **Step 3: Replace `src/lib/theme.ts`**
+- [ ] **Step 5: Replace the theme module**
 
-Delete the file's entire contents and replace with:
+Replace all of `src/lib/theme.ts`:
 
 ```ts
 // Central palette — kept in sync with tailwind.config.js. Used where raw color
@@ -150,7 +184,6 @@ export const colors = {
   deepSoft: "#223c44",
   accent: "#0e6ba8",
   ink: "#16181a",
-  inkSoft: "#2b2d2f",
   body: "#545557",
   mute: "#676869",
   faint: "#acadae",
@@ -161,34 +194,64 @@ export const colors = {
 } as const;
 ```
 
-- [ ] **Step 4: Trim `src/utils/format.ts` to what survives**
+- [ ] **Step 6: Trim `src/utils/format.ts`**
 
-Delete `usd`, `processing`, `visaBadgeText`, `budgetLabel`, `visaDetailLine`, `visaIconName` and the `VisaRule` / `VISA_META` imports. Keep exactly `distanceKm`, `km`, `kes`, `daysUntil` with their current bodies. The file should now import nothing.
+Delete `usd`, `processing`, `visaBadgeText`, `budgetLabel`, `visaDetailLine`, `visaIconName`, and the `VisaRule` / `VISA_META` imports. Keep exactly `distanceKm`, `km`, `kes`, `daysUntil` with their current bodies. The file should then import nothing.
 
-- [ ] **Step 5: Trim `src/utils/format.test.ts` to match**
+- [ ] **Step 7: Check the format test**
 
-The file currently holds exactly two `describe` blocks — `kes` and `daysUntil` — and both cover functions that survive. So no test deletions are needed; only fix the import line if it names a removed symbol. Verify with `grep -n '^describe' src/utils/format.test.ts` before changing anything.
+The file holds exactly two `describe` blocks — `kes` and `daysUntil` — both covering functions that survive. Confirm with `grep -n '^describe' src/utils/format.test.ts` and change only the import line if it names a removed symbol. No test deletions.
 
-- [ ] **Step 6: Empty the domain types**
+- [ ] **Step 8: Repoint every `colors.*` reference in kept components**
 
-Replace all of `src/types/index.ts` with a placeholder — Task 2 fills it in:
+These are the exact substitutions. Nothing else in these files changes.
 
-```ts
-// Domain model — filled in by Task 2.
-export {};
-```
+| File | From | To |
+| --- | --- | --- |
+| `src/components/Icon.tsx` | `colors.ink[900]` | `colors.ink` |
+| `src/components/ui/index.tsx` | `colors.brand[700]` | `colors.deep` |
+| `src/components/ui/index.tsx` | `colors.ink[700]` | `colors.body` |
+| `src/components/ui/index.tsx` | `colors.ink[900]` | `colors.ink` |
+| `src/components/PamojaMap.tsx` | `colors.brand[600]`, `colors.brand[700]` | `colors.deep` |
+| `src/components/PamojaMap.tsx` | `colors.ocean[600]` | `colors.accent` |
+| `src/components/mapRoute.tsx` | `colors.ink[400]` | `colors.faint` |
+| `src/components/mapRoute.tsx` | `colors.ink[700]` | `colors.body` |
 
-- [ ] **Step 7: Update the storage key prefix**
+- [ ] **Step 9: Repoint every Tailwind class in kept components**
 
-In `src/lib/storage.ts`, change the last line:
+Across `src/components/{Icon,Screen,ui/index,SkeletonCard,FilterBar,AppImage,PamojaMap,PamojaMap.web,mapRoute}.tsx` only:
+
+| From | To |
+| --- | --- |
+| `bg-brand-700` | `bg-deep` |
+| `bg-brand-200` | `bg-hairline` |
+| `border-brand-700` | `border-deep` |
+| `bg-ocean-600` | `bg-accent` |
+| `bg-ocean-100` | `bg-panel` |
+| `text-ocean-700` | `text-accent` |
+| `bg-surface` | `bg-canvas` |
+| `bg-surface-muted` | `bg-surface` |
+| `border-surface-sunken` | `border-hairline` |
+| `text-ink-900` | `text-ink` |
+| `text-ink-700` | `text-body` |
+| `text-ink-500` | `text-mute` |
+| `text-ink-400` | `text-faint` |
+
+Also in `src/components/ui/index.tsx`: delete the `premium` entry from the `ButtonVariant` union and the `styles` map (no paywall in Pamoja).
+
+Verify none survive: `grep -rnE "(bg|text|border)-(brand|ocean|surface-(muted|sunken)|ink-[0-9])" src/` must print nothing.
+
+- [ ] **Step 10: Update the storage key prefix**
+
+In `src/lib/storage.ts`, the last line becomes:
 
 ```ts
 export const cacheKey = (name: string) => `pamoja:cache:${name}`;
 ```
 
-- [ ] **Step 8: Four placeholder screens**
+- [ ] **Step 11: Four placeholder screens**
 
-Create each of `src/screens/HomeScreen.tsx`, `ExploreScreen.tsx`, `ServicesScreen.tsx`, `PassScreen.tsx` with the same shape, substituting the name:
+Create `src/screens/HomeScreen.tsx`, `ExploreScreen.tsx`, `ServicesScreen.tsx`, `PassScreen.tsx`, each in this shape with the name substituted:
 
 ```tsx
 import { Text, View } from "react-native";
@@ -206,7 +269,7 @@ export function HomeScreen() {
 }
 ```
 
-- [ ] **Step 9: Rewrite the navigation**
+- [ ] **Step 12: Rewrite the navigation**
 
 `src/navigation/types.ts`:
 
@@ -223,7 +286,7 @@ export type RootStackParamList = {
 };
 ```
 
-`src/navigation/TabNavigator.tsx` — keep the existing structure and styling approach, changing only the routes, icons and colors:
+`src/navigation/TabNavigator.tsx`:
 
 ```tsx
 import { View } from "react-native";
@@ -277,41 +340,63 @@ export function TabNavigator() {
 }
 ```
 
-Then open `src/navigation/RootNavigator.tsx` and reduce it to a stack with a single `Tabs` screen rendering `TabNavigator`, deleting every import of a removed screen. Task 8 reintroduces gating and modals.
+`src/navigation/RootNavigator.tsx` — reduce to a single-screen stack, deleting the `useAppStore` import and every reference to a deleted screen:
 
-- [ ] **Step 10: Rebrand `app.json`**
+```tsx
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-Set `expo.name` to `"Pamoja"`, `expo.slug` to `"pamoja"`, `expo.scheme` to `"pamoja"`, `expo.ios.bundleIdentifier` to `"com.uratibu.pamoja"`, `expo.android.package` to `"com.uratibu.pamoja"`, and `expo.android.adaptiveIcon.backgroundColor` to `"#04222b"`. Delete the `expo.extra.revenueCatApiKey` entry (leave `extra` present but empty if nothing else is in it).
+import { TabNavigator } from "./TabNavigator";
+import type { RootStackParamList } from "./types";
 
-- [ ] **Step 11: Drop the paywall dependency**
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+export function RootNavigator() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Tabs" component={TabNavigator} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+```
+
+If `App.tsx` currently wraps `RootNavigator` in its own `NavigationContainer`, keep the container there and drop it here instead — do not end up with two.
+
+- [ ] **Step 13: Rebrand `app.json`**
+
+Set `expo.name` to `"Pamoja"`, `expo.slug` to `"pamoja"`, `expo.scheme` to `"pamoja"`, `expo.ios.bundleIdentifier` and `expo.android.package` to `"com.uratibu.pamoja"`, and `expo.android.adaptiveIcon.backgroundColor` to `"#04222b"`. Delete `expo.extra.revenueCatApiKey`.
+
+- [ ] **Step 14: Package name**
 
 ```bash
 npm pkg set name=pamoja
 ```
 
-Then check whether `react-native-purchases` appears in `package.json` dependencies; if so, `npm uninstall react-native-purchases`. (It is expected to be absent — the paywall was a placeholder — in which case do nothing.)
+`react-native-purchases` is expected to be absent from dependencies (the paywall was a placeholder). Check; if absent, do nothing.
 
-- [ ] **Step 12: Replace `DESIGN.md`**
+- [ ] **Step 15: Replace `DESIGN.md`**
 
-Replace the whole file with the Pamoja system — the palette table and typography notes from the spec's "Design system" section, under a `# Pamoja Design System` heading. Copy the hex values exactly.
+Replace the whole file with a `# Pamoja Design System` document carrying the palette table from Step 4 (exact hex values) and a note that headings use a geometric sans with negative tracking while everything procedural — codes, amounts, record lines — is uppercase mono.
 
-- [ ] **Step 13: Update `README.md`**
+- [ ] **Step 16: Update `README.md`**
 
-Rewrite the title and the opening description for Pamoja: what the PAMOJA Pass is, the four tabs, that it runs on mock data, and the demo-clock date. Delete the "Demo the Premium flow" section and every reference to passports, visas, Discover, trips or RevenueCat.
+Rewrite the title and opening for Pamoja: what the PAMOJA Pass is, the four tabs, that it runs on mock data, and the demo-clock date of Wednesday 23 June 2027. Delete the "Demo the Premium flow" section and every mention of passports, visas, Discover, trips or RevenueCat.
 
-- [ ] **Step 14: Verify the tree compiles and tests pass**
+- [ ] **Step 17: Verify the tree compiles and tests pass**
 
 Run: `npm run lint && npm test`
-Expected: `tsc` reports no errors; vitest passes with only the trimmed `format.test.ts` suite.
+Expected: `tsc` clean; vitest passes with the `format` suite.
 
-If `tsc` reports an unresolved import, it is a file that referenced something deleted in Step 1 — fix it by deleting the reference, not by restoring the file.
+Any unresolved import is a file still referencing something deleted in Step 1 — fix by deleting the dead reference, never by restoring a deleted file.
 
-- [ ] **Step 15: Verify the app boots**
+- [ ] **Step 18: Verify the app boots**
 
 Run: `npm run web`
-Expected: the app loads and shows four tabs — Home, Explore, Services, Pass — with the blue active tint.
+Expected: four tabs — Home, Explore, Services, Pass — with the blue (`#0e6ba8`) active tint on a `#f5f8f8` background.
 
-- [ ] **Step 16: Commit**
+- [ ] **Step 19: Commit**
 
 ```bash
 git add -A
