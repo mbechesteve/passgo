@@ -7,6 +7,7 @@ import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { OfferRow } from "@/components/pamoja/OfferRow";
 import { colors } from "@/lib/theme";
 import { now } from "@/lib/clock";
+import { S } from "@/lib/strings";
 import { fetchMatches } from "@/data/repository";
 import { usePartnerStore } from "@/store/usePartnerStore";
 import { useRecordStore } from "@/store/useRecordStore";
@@ -29,14 +30,14 @@ function SavedTile({ saved }: { saved: number }) {
       style={{ backgroundColor: colors.deep }}
     >
       <Text className="font-mono text-[11px] uppercase tracking-[1.5px] text-faint">
-        You've saved
+        {S.homeYouveSaved}
       </Text>
       <Text className="mt-1.5 font-display text-[32px] tracking-[-0.5px] text-white">
         {kes(saved)}
       </Text>
       {saved === 0 && (
         <Text className="mt-2 font-mono text-[11px] leading-4 text-faint">
-          Find an offer near you and your first line gets written.
+          {S.homeSavedEmptyHint}
         </Text>
       )}
     </View>
@@ -65,7 +66,7 @@ export function HomeScreen() {
   return (
     <Screen>
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
-        <Eyebrow className="mt-4">Today</Eyebrow>
+        <Eyebrow className="mt-4">{S.homeToday}</Eyebrow>
 
         {/* A fan who lives here leads with the match; a fan who flew in leads
             with validity and the border they came through. Figure 3. */}
@@ -92,7 +93,7 @@ export function HomeScreen() {
                 </Text>
                 {crossing && (
                   <Text className="mt-1 font-mono text-[12px] text-mute">
-                    Entered at {crossing.place.name}
+                    {S.homeEnteredAtPrefix} {crossing.place.name}
                   </Text>
                 )}
               </View>
@@ -101,7 +102,7 @@ export function HomeScreen() {
           </>
         )}
 
-        <Eyebrow className="mt-8">Offers near you</Eyebrow>
+        <Eyebrow className="mt-8">{S.homeOffersNearYou}</Eyebrow>
         <View className="mt-2">
           {offers.map((p) => (
             <OfferRow

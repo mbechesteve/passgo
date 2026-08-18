@@ -4,6 +4,7 @@ import { Screen } from "@/components/Screen";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { Figure } from "@/components/pamoja/Figure";
 import { RecordLine } from "@/components/pamoja/RecordLine";
+import { S } from "@/lib/strings";
 import { useRecordStore } from "@/store/useRecordStore";
 import { kes } from "@/utils/format";
 import { groupByDay, totalSaved, totalSpent } from "@/utils/record";
@@ -19,25 +20,23 @@ export function WalletScreen() {
         {storageError ? (
           <View className="mt-4 rounded-card border border-hairline bg-panel px-4 py-3">
             <Text className="text-[13px] leading-5 text-ink">
-              Your record could not be saved to this device. Recent lines may be
-              missing.
+              {S.walletStorageError}
             </Text>
           </View>
         ) : null}
 
         <View className="mt-6 flex-row">
           <View className="flex-1">
-            <Figure value={kes(totalSaved(events))} label="You've saved" />
+            <Figure value={kes(totalSaved(events))} label={S.walletYouveSaved} />
           </View>
           <View className="flex-1">
-            <Figure value={kes(totalSpent(events))} label="You've spent" />
+            <Figure value={kes(totalSpent(events))} label={S.walletYouveSpent} />
           </View>
         </View>
 
         {groups.length === 0 ? (
           <Text className="mt-10 text-[15px] leading-6 text-body">
-            Nothing yet. Every time you use your Pass, one line is written here
-            — and nowhere else.
+            {S.walletEmptyState}
           </Text>
         ) : (
           groups.map((g) => (
@@ -53,8 +52,7 @@ export function WalletScreen() {
         )}
 
         <Text className="mt-10 font-mono text-[11px] leading-4 text-mute">
-          This record is yours, and it is held on this device. No dashboard
-          anywhere assembles this view of you.
+          {S.walletClosingNote}
         </Text>
       </ScrollView>
     </Screen>

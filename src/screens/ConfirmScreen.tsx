@@ -8,6 +8,7 @@ import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { RecordLine } from "@/components/pamoja/RecordLine";
 import { colors } from "@/lib/theme";
 import { now } from "@/lib/clock";
+import { S } from "@/lib/strings";
 import { kes } from "@/utils/format";
 import { passStatus } from "@/utils/pass";
 import { buildRedemption, computeMoney } from "@/utils/redeem";
@@ -47,10 +48,7 @@ export function ConfirmScreen() {
     return (
       <Screen>
         <View className="flex-1 items-center justify-center px-5">
-          <Text className="text-[15px] text-body">
-            This discount cannot be claimed right now. Nothing has been
-            recorded.
-          </Text>
+          <Text className="text-[15px] text-body">{S.confirmUnavailable}</Text>
         </View>
       </Screen>
     );
@@ -61,16 +59,15 @@ export function ConfirmScreen() {
     return (
       <Screen>
         <View className="flex-1 px-5 pt-8">
-          <Eyebrow>Step 3 of 3 · One line written</Eyebrow>
+          <Eyebrow>{S.confirmStepWritten}</Eyebrow>
           <View className="mt-3">
             <RecordLine event={written} />
           </View>
           <Text className="mt-4 font-mono text-[11px] leading-4 text-mute">
-            Held on this device. No dashboard anywhere assembles this view of
-            you.
+            {S.confirmHeldNote}
           </Text>
           <Button
-            title="See my wallet"
+            title={S.confirmSeeWallet}
             className="mt-6"
             onPress={() => navigation.navigate("Wallet")}
           />
@@ -104,15 +101,18 @@ export function ConfirmScreen() {
   return (
     <Screen>
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
-        <Eyebrow className="mt-8">Step 2 of 3 · Confirm</Eyebrow>
+        <Eyebrow className="mt-8">{S.confirmStepConfirm}</Eyebrow>
         <Text className="mt-3 font-display text-[26px] tracking-[-0.5px] text-ink">
           {partner.name}
         </Text>
         <Text className="mt-1 font-mono text-[12px] text-mute">
-          {partner.ward} · {params.channel === "shortcode" ? "Card code" : "Scanned"}
+          {partner.ward} ·{" "}
+          {params.channel === "shortcode"
+            ? S.confirmChannelCardCode
+            : S.confirmChannelScanned}
         </Text>
 
-        <Eyebrow className="mt-8">What the bill comes to</Eyebrow>
+        <Eyebrow className="mt-8">{S.confirmBillHeading}</Eyebrow>
         <TextInput
           value={amount}
           onChangeText={setAmount}
@@ -139,13 +139,12 @@ export function ConfirmScreen() {
         </View>
 
         <Text className="mt-4 font-mono text-[11px] leading-4 text-mute">
-          You pay {partner.name} {kes(money.net)} directly, by M-Pesa, Airtel
-          Money or card. Pamoja never holds your money — it only records that
-          this happened.
+          {S.confirmPayPrefix} {partner.name} {kes(money.net)}{" "}
+          {S.confirmPaySuffix}
         </Text>
 
         <Button
-          title="Confirm the discount"
+          title={S.confirmButton}
           className="mt-6"
           disabled={!valid}
           onPress={onConfirm}

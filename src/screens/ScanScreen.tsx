@@ -6,6 +6,7 @@ import { Screen } from "@/components/Screen";
 import { Button } from "@/components/ui";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { now } from "@/lib/clock";
+import { S } from "@/lib/strings";
 import { passStatus, validityLabel } from "@/utils/pass";
 import { findByShortCode } from "@/utils/partners";
 import { usePartnerStore } from "@/store/usePartnerStore";
@@ -29,13 +30,12 @@ export function ScanScreen() {
     return (
       <Screen>
         <View className="flex-1 px-5 pt-8">
-          <Eyebrow>Cannot redeem</Eyebrow>
+          <Eyebrow>{S.scanCannotRedeem}</Eyebrow>
           <Text className="mt-3 font-display text-[24px] tracking-[-0.5px] text-ink">
-            {pass ? validityLabel(pass, now()) : "No Pass on this device"}
+            {pass ? validityLabel(pass, now()) : S.scanNoPassOnDevice}
           </Text>
           <Text className="mt-3 text-[15px] leading-6 text-body">
-            Your Pass has to be active to claim a discount. Nothing has been
-            recorded.
+            {S.scanInactiveBody}
           </Text>
         </View>
       </Screen>
@@ -45,7 +45,7 @@ export function ScanScreen() {
   const onSubmit = () => {
     const partner = findByShortCode(partners, code);
     if (!partner) {
-      setError("That code was not recognised.");
+      setError(S.scanCodeNotRecognised);
       return;
     }
     setError(null);
@@ -55,9 +55,9 @@ export function ScanScreen() {
   return (
     <Screen>
       <View className="flex-1 px-5 pt-8">
-        <Eyebrow>Step 1 of 3 · Scan</Eyebrow>
+        <Eyebrow>{S.scanStep}</Eyebrow>
         <Text className="mt-3 font-display text-[26px] tracking-[-0.5px] text-ink">
-          Enter the merchant's code
+          {S.scanHeading}
         </Text>
 
         <TextInput
@@ -66,7 +66,7 @@ export function ScanScreen() {
             setCode(t);
             setError(null);
           }}
-          placeholder="e.g. MO-001"
+          placeholder={S.scanPlaceholder}
           autoCapitalize="characters"
           autoCorrect={false}
           className="mt-6 rounded-card border border-hairline bg-canvas px-4 py-4 font-mono text-[16px] text-ink"
@@ -76,14 +76,13 @@ export function ScanScreen() {
           <View className="mt-3">
             <Text className="text-[14px] text-ink">{error}</Text>
             <Text className="mt-1 font-mono text-[11px] leading-4 text-mute">
-              Ask the merchant to enter your Pass code instead — it works
-              without your phone.
+              {S.scanHelperText}
             </Text>
           </View>
         ) : null}
 
         <Button
-          title="Continue"
+          title={S.scanContinue}
           className="mt-6"
           disabled={code.trim().length === 0}
           onPress={onSubmit}

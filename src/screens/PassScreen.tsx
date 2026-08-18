@@ -7,6 +7,7 @@ import { Icon } from "@/components/Icon";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { PassCard } from "@/components/pamoja/PassCard";
 import { colors } from "@/lib/theme";
+import { S } from "@/lib/strings";
 import { fetchEntitlements } from "@/data/repository";
 import { usePassStore } from "@/store/usePassStore";
 import { forCountry } from "@/utils/entitlements";
@@ -33,7 +34,7 @@ export function PassScreen() {
           <PassCard pass={pass} />
         </View>
 
-        <Eyebrow className="mt-8">What your Pass unlocks</Eyebrow>
+        <Eyebrow className="mt-8">{S.passUnlocksHeading}</Eyebrow>
         <View className="mt-2">
           {mine.map((e) => (
             <View key={e.id} className="border-b border-hairline py-3.5">
@@ -48,9 +49,11 @@ export function PassScreen() {
           className="mt-6 flex-row items-center justify-between rounded-card border border-hairline bg-canvas px-5 py-4 active:opacity-80"
         >
           <View>
-            <Text className="font-medium text-[15px] text-ink">My Wallet</Text>
+            <Text className="font-medium text-[15px] text-ink">
+              {S.passWalletTitle}
+            </Text>
             <Text className="mt-0.5 text-[13px] text-body">
-              Tickets, passes, purchases
+              {S.passWalletSubtitle}
             </Text>
           </View>
           <Icon name="chevron-right" size={18} color={colors.mute} />

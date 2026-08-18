@@ -7,13 +7,14 @@ import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { PamojaMap, type MapData } from "@/components/PamojaMap";
 import { colors } from "@/lib/theme";
 import { now } from "@/lib/clock";
+import { S } from "@/lib/strings";
 import { fetchExplore } from "@/data/repository";
 import type { ExploreItem, ExploreKind } from "@/types";
 
 const SEGMENTS: { key: ExploreKind; label: string }[] = [
-  { key: "event", label: "Events" },
-  { key: "place", label: "Places" },
-  { key: "fan-zone", label: "Fan Zones" },
+  { key: "event", label: S.exploreSegmentEvents },
+  { key: "place", label: S.exploreSegmentPlaces },
+  { key: "fan-zone", label: S.exploreSegmentFanZones },
 ];
 
 /** Nairobi's centre — every seeded item sits in the city, so the map gets one
@@ -50,7 +51,7 @@ function Row({ item }: { item: ExploreItem }) {
           className="mt-1 font-mono text-[11px]"
           style={{ color: colors.accent }}
         >
-          Free entry with your Pass
+          {S.exploreFreeEntry}
         </Text>
       ) : null}
     </View>
@@ -88,7 +89,7 @@ export function ExploreScreen() {
 
         {comingUp.length > 0 ? (
           <>
-            <Eyebrow className="mt-6">Coming up</Eyebrow>
+            <Eyebrow className="mt-6">{S.exploreComingUp}</Eyebrow>
             <View className="mt-2">
               {comingUp.map((i) => (
                 <Row key={i.id} item={i} />
@@ -99,7 +100,7 @@ export function ExploreScreen() {
 
         {nearYou.length > 0 ? (
           <>
-            <Eyebrow className="mt-6">Near you</Eyebrow>
+            <Eyebrow className="mt-6">{S.exploreNearYou}</Eyebrow>
             <View className="mt-2">
               {nearYou.map((i) => (
                 <Row key={i.id} item={i} />

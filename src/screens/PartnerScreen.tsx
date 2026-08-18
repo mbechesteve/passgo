@@ -5,6 +5,7 @@ import { useNavigation, useRoute, type RouteProp } from "@react-navigation/nativ
 import { Screen } from "@/components/Screen";
 import { Button } from "@/components/ui";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
+import { S } from "@/lib/strings";
 import { usePartnerStore } from "@/store/usePartnerStore";
 import { CATEGORY_LABEL } from "@/utils/partners";
 import type { RootStackParamList } from "@/navigation/types";
@@ -25,9 +26,7 @@ export function PartnerScreen() {
     return (
       <Screen>
         <View className="flex-1 items-center justify-center px-5">
-          <Text className="text-[15px] text-body">
-            That partner is no longer listed.
-          </Text>
+          <Text className="text-[15px] text-body">{S.partnerNotListed}</Text>
         </View>
       </Screen>
     );
@@ -45,17 +44,17 @@ export function PartnerScreen() {
         </Text>
 
         <View className="mt-6 rounded-card border border-hairline bg-panel px-5 py-5">
-          <Eyebrow>Your discount</Eyebrow>
+          <Eyebrow>{S.partnerDiscountHeading}</Eyebrow>
           <Text className="mt-1 font-display text-[32px] tracking-[-0.5px] text-ink">
             −{partner.discountPct}%
           </Text>
           <Text className="mt-3 font-mono text-[11px] text-mute">
-            Merchant code {partner.shortCode}
+            {S.partnerMerchantCodePrefix} {partner.shortCode}
           </Text>
         </View>
 
         <Button
-          title="Scan to redeem"
+          title={S.partnerScanButton}
           className="mt-6"
           onPress={() =>
             navigation.navigate("Confirm", {
@@ -65,7 +64,7 @@ export function PartnerScreen() {
           }
         />
         <Button
-          title="I read my card code at the counter"
+          title={S.partnerShortCodeButton}
           variant="secondary"
           className="mt-3"
           onPress={() =>
@@ -77,8 +76,7 @@ export function PartnerScreen() {
         />
 
         <Text className="mt-4 font-mono text-[11px] leading-4 text-mute">
-          You pay the merchant directly by M-Pesa, Airtel Money or card. Pamoja
-          never holds your money.
+          {S.partnerDisclaimer}
         </Text>
       </ScrollView>
     </Screen>

@@ -4,14 +4,15 @@ import { Text, TextInput, View } from "react-native";
 import { Screen } from "@/components/Screen";
 import { Button } from "@/components/ui";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
+import { S } from "@/lib/strings";
 import { usePassStore } from "@/store/usePassStore";
 import { DEMO_HOLDER_NAME } from "@/utils/issue";
 import type { HostCountry } from "@/types";
 
 const COUNTRIES: { code: HostCountry; label: string }[] = [
-  { code: "KE", label: "Kenya" },
-  { code: "UG", label: "Uganda" },
-  { code: "TZ", label: "Tanzania" },
+  { code: "KE", label: S.issuanceCountryKenya },
+  { code: "UG", label: S.issuanceCountryUganda },
+  { code: "TZ", label: S.issuanceCountryTanzania },
 ];
 
 export function IssuanceScreen() {
@@ -28,7 +29,7 @@ export function IssuanceScreen() {
         {step === 0 && (
           <View className="mt-6">
             <Text className="font-display text-[28px] tracking-[-0.5px] text-ink">
-              Where are you collecting your Pass?
+              {S.issuanceStep0Heading}
             </Text>
             <View className="mt-6">
               {COUNTRIES.map((c) => (
@@ -41,27 +42,30 @@ export function IssuanceScreen() {
                 />
               ))}
             </View>
-            <Button title="Continue" className="mt-4" onPress={() => setStep(1)} />
+            <Button
+              title={S.issuanceContinue}
+              className="mt-4"
+              onPress={() => setStep(1)}
+            />
           </View>
         )}
 
         {step === 1 && (
           <View className="mt-6">
             <Text className="font-display text-[28px] tracking-[-0.5px] text-ink">
-              Who is the Pass for?
+              {S.issuanceStep1Heading}
             </Text>
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="Full name"
+              placeholder={S.issuanceNamePlaceholder}
               className="mt-6 rounded-card border border-hairline bg-canvas px-4 py-4 text-[16px] text-ink"
             />
             <Text className="mt-3 font-mono text-[11px] leading-4 text-mute">
-              Prototype only. A real Pass is verified once, when it is issued, by
-              the accrediting authority — not self-entered.
+              {S.issuanceStep1Disclaimer}
             </Text>
             <Button
-              title="Continue"
+              title={S.issuanceContinue}
               className="mt-6"
               disabled={name.trim().length === 0}
               onPress={() => setStep(2)}
@@ -72,14 +76,13 @@ export function IssuanceScreen() {
         {step === 2 && (
           <View className="mt-6">
             <Text className="font-display text-[28px] tracking-[-0.5px] text-ink">
-              Your ticket
+              {S.issuanceStep2Heading}
             </Text>
             <Text className="mt-3 text-[15px] leading-6 text-body">
-              Your Pass is created with your ticket, and works at the border, at
-              the turnstile, on transport and at every partner business.
+              {S.issuanceStep2Body}
             </Text>
             <Button
-              title="Create my Pass"
+              title={S.issuanceCreateButton}
               className="mt-6"
               onPress={() => issue({ holderName: name, issuedIn: country })}
             />
