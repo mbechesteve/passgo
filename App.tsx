@@ -4,6 +4,16 @@ import { Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  useFonts,
+  SpaceGrotesk_500Medium,
+  SpaceGrotesk_600SemiBold,
+  SpaceGrotesk_700Bold,
+} from "@expo-google-fonts/space-grotesk";
+import {
+  IBMPlexMono_400Regular,
+  IBMPlexMono_500Medium,
+} from "@expo-google-fonts/ibm-plex-mono";
 
 import { RootNavigator } from "@/navigation/RootNavigator";
 
@@ -14,6 +24,15 @@ import { RootNavigator } from "@/navigation/RootNavigator";
 const PHONE_WIDTH = 440;
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    SpaceGrotesk_500Medium,
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
+    IBMPlexMono_400Regular,
+    IBMPlexMono_500Medium,
+  });
+  if (!fontsLoaded) return null;
+
   const framed = Platform.OS === "web";
   return (
     <GestureHandlerRootView

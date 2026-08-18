@@ -20,8 +20,16 @@ module.exports = {
         surface: { DEFAULT: "#f5f8f8" },
         canvas: { DEFAULT: "#ffffff" },
       },
+      // NOTE: family keys must not collide with Tailwind's font-WEIGHT utilities.
+      // A key named `semibold` or `bold` would generate `font-semibold` /
+      // `font-bold` and clash with the built-in weight classes. Use these names,
+      // and address weight through the family — the faces carry it.
       fontFamily: {
-        sans: ["System"],
+        sans: ["SpaceGrotesk_500Medium"],
+        medium: ["SpaceGrotesk_600SemiBold"],
+        display: ["SpaceGrotesk_700Bold"],
+        mono: ["IBMPlexMono_400Regular"],
+        "mono-medium": ["IBMPlexMono_500Medium"],
       },
       borderRadius: { card: "10px" },
     },

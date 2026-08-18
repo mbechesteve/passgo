@@ -21,7 +21,7 @@ export function Card({
     <View
       className={`rounded-card bg-canvas border border-hairline ${className}`}
       style={{
-        shadowColor: colors.ink,
+        shadowColor: colors.deep,
         shadowOpacity: 0.06,
         shadowRadius: 16,
         shadowOffset: { width: 0, height: 6 },
@@ -77,7 +77,7 @@ export function Button({
       ) : (
         <>
           {icon ? <View className="mr-2">{icon}</View> : null}
-          <Text className={`text-[15px] font-semibold ${s.text}`}>{title}</Text>
+          <Text className={`font-medium text-[15px] ${s.text}`}>{title}</Text>
         </>
       )}
     </Pressable>
@@ -104,7 +104,7 @@ export function Pill({
       }`}
     >
       <Text
-        className={`text-[13px] font-semibold ${
+        className={`font-medium text-[13px] ${
           active ? "text-white" : "text-body"
         }`}
       >
@@ -126,7 +126,7 @@ export function SectionTitle({
 }) {
   return (
     <View className={`flex-row items-center justify-between ${className}`}>
-      <Text className="text-[17px] font-semibold text-ink">{title}</Text>
+      <Text className="font-medium text-[17px] text-ink">{title}</Text>
       {action}
     </View>
   );
@@ -135,8 +135,8 @@ export function SectionTitle({
 // ── Tag ───────────────────────────────────────────────────────────────────────
 export function Tag({ label }: { label: string }) {
   return (
-    <View className="self-start rounded-lg bg-surface px-2 py-1">
-      <Text className="text-[11px] font-semibold text-mute">{label}</Text>
+    <View className="self-start rounded-lg bg-panel px-2 py-1">
+      <Text className="font-medium text-[11px] text-mute">{label}</Text>
     </View>
   );
 }
@@ -152,10 +152,10 @@ export function Stat({
   icon: IconName;
 }) {
   return (
-    <View className="flex-1 items-center rounded-xl border border-hairline bg-surface py-3">
+    <View className="flex-1 items-center rounded-xl border border-hairline bg-panel py-3">
       <Icon name={icon} size={16} color={colors.body} />
-      <Text className="mt-1.5 text-[15px] font-semibold text-ink">{value}</Text>
-      <Text className="text-[11px] font-medium text-mute">{label}</Text>
+      <Text className="mt-1.5 font-medium text-[15px] text-ink">{value}</Text>
+      <Text className="font-medium text-[11px] text-mute">{label}</Text>
     </View>
   );
 }
