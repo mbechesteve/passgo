@@ -103,4 +103,10 @@ describe("buildRedemption", () => {
     const b = buildRedemption({ ...base, channel: "qr", seq: 2 });
     expect(a.id).not.toBe(b.id);
   });
+
+  it("collides on id when two redemptions share a seq — why Confirm needs a submit lock", () => {
+    const a = buildRedemption({ ...base, channel: "qr", seq: 3 });
+    const b = buildRedemption({ ...base, channel: "qr", seq: 3 });
+    expect(a.id).toBe(b.id);
+  });
 });

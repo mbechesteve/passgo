@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
 import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
 
@@ -30,6 +30,12 @@ export function ConfirmScreen() {
 
   const [amount, setAmount] = useState("1000");
   const [written, setWritten] = useState<PassEvent | null>(null);
+  // A ref, not state: React batches state updates, so a double-tap in the same
+  // frame would see the same stale `written`/`events.length` before either tap
+  // re-renders. A ref mutates synchronously, so the second tap's read of
+  // `submitted.current` sees the first tap's write immediately. Do not
+  // "simplify" this into useState — that reintroduces the double-write bug.
+  const submitted = useRef(false);
 
   useEffect(() => {
     void load();
@@ -78,6 +84,8 @@ export function ConfirmScreen() {
   const money = computeMoney(valid ? gross : 0, partner.discountPct);
 
   const onConfirm = () => {
+    if (submitted.current) return; // synchronous — immune to batching
+    submitted.current = true;
     const event = buildRedemption({
       pass,
       partner,
@@ -113,7 +121,10 @@ export function ConfirmScreen() {
         />
 
         <View className="mt-6 rounded-card border border-hairline bg-panel px-5 py-5">
-          <Text className="font-mono text-[15px] text-ink">{kes(money.gross)}</Text>
+          <Eyebrow>KES</Eyebrow>
+          <Text className="mt-2 font-mono text-[15px] text-ink">
+            {money.gross.toLocaleString("en-US")}
+          </Text>
           <Text
             className="mt-1 font-mono text-[15px]"
             style={{ color: colors.accent }}

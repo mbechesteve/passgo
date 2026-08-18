@@ -66,6 +66,11 @@ export const useRecordStore = create<RecordState>()(
       append: (event) => set((s) => ({ events: [...s.events, event] })),
       ingestShortCode: (event) =>
         set((s) => ({
+          // The override below is unreachable from ConfirmScreen today — it
+          // already gates on `channel === "shortcode"` before calling this.
+          // Keep it anyway: it is defence for future callers (e.g. a real
+          // inbound push from a counter terminal) that might not pre-gate,
+          // not dead code to be deleted as redundant.
           events: [...s.events, { ...event, channel: "shortcode" as const }],
         })),
       clear: () => set({ events: [] }),
