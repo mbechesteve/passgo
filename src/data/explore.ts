@@ -1,0 +1,63 @@
+import type { ExploreItem } from "@/types";
+
+// The places, events and fan zones named in Figure 3.
+export const EXPLORE_ITEMS: ExploreItem[] = [
+  {
+    id: "x-uhuru-park",
+    kind: "fan-zone",
+    name: "Fan Zone · Uhuru Park",
+    detail: "Free entry with your Pass",
+    freeWithPass: true,
+    opensAt: "14:00",
+    ward: "Starehe ward", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2921, lng: 36.8170 },
+  },
+  {
+    id: "x-kasarani-zone",
+    kind: "fan-zone",
+    name: "Fan Zone · Kasarani",
+    detail: "Free entry with your Pass",
+    freeWithPass: true,
+    opensAt: "12:00",
+    ward: "Kasarani ward", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2266, lng: 36.8899 },
+  },
+  {
+    id: "x-nairobi-museum",
+    kind: "place",
+    name: "Nairobi Museum",
+    detail: "Kenya's national collection",
+    freeWithPass: false,
+    ward: "Parklands ward", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2740, lng: 36.8150 },
+  },
+  {
+    id: "x-karura-forest",
+    kind: "place",
+    name: "Karura Forest",
+    detail: "Walking and cycling trails",
+    freeWithPass: false,
+    ward: "Ruaraka ward", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2360, lng: 36.8330 },
+  },
+  {
+    id: "x-opening-ceremony",
+    kind: "event",
+    name: "Opening ceremony",
+    detail: "Kasarani Stadium",
+    freeWithPass: false,
+    startsAt: "2027-06-19T17:00:00+03:00",
+    ward: "Kasarani ward", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2266, lng: 36.8899 },
+  },
+  {
+    id: "x-nairobi-live",
+    kind: "event",
+    name: "Nairobi Live",
+    detail: "Music at the fan zone, nightly",
+    freeWithPass: true,
+    startsAt: "2027-06-24T19:00:00+03:00",
+    ward: "Starehe ward", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2921, lng: 36.8170 },
+  },
+];
