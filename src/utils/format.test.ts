@@ -30,4 +30,8 @@ describe("daysUntil", () => {
   it("returns null for undefined", () => {
     expect(daysUntil(undefined, now)).toBeNull();
   });
+  it("requires an explicit instant — no hidden read of the wall clock", () => {
+    // @ts-expect-error - `now` is required; omitting it must not type-check
+    expect(() => daysUntil("2026-07-01T00:00:00Z")).toThrow();
+  });
 });
