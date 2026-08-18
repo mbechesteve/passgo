@@ -2648,7 +2648,31 @@ export function IssuanceScreen() {
 
 - [ ] **Step 3: Gate the root navigator**
 
-Rewrite `src/navigation/RootNavigator.tsx` so it renders `IssuanceScreen` when `usePassStore((s) => s.pass)` is `null` and the tab navigator otherwise, with `Category`, `Partner`, `Wallet`, `Scan` and `Confirm` registered as additional stack screens (`Scan` and `Confirm` with `presentation: "modal"`). Wait for `hydrated` before deciding — render `null` until then, so a returning fan never flashes the issuance screen. Screens created in later tasks can be stubbed with the placeholder pattern from Task 1 Step 8 and replaced in place.
+**First create the five stub screens this step registers**, or `tsc` will fail on
+unresolved imports — Tasks 12, 13 and 14 replace them in place:
+
+```bash
+for s in CategoryScreen PartnerScreen WalletScreen ScanScreen ConfirmScreen; do
+  cat > "src/screens/$s.tsx" <<EOF
+import { Text, View } from "react-native";
+
+import { Screen } from "@/components/Screen";
+
+/** Stub — replaced in a later task. */
+export function ${s%Screen}Screen() {
+  return (
+    <Screen>
+      <View className="flex-1 items-center justify-center">
+        <Text className="text-ink">${s%Screen}</Text>
+      </View>
+    </Screen>
+  );
+}
+EOF
+done
+```
+
+Then rewrite `src/navigation/RootNavigator.tsx` so it renders `IssuanceScreen` when `usePassStore((s) => s.pass)` is `null` and the tab navigator otherwise, with `Category`, `Partner`, `Wallet`, `Scan` and `Confirm` registered as additional stack screens (`Scan` and `Confirm` with `presentation: "modal"`). Wait for `hydrated` before deciding — render `null` until then, so a returning fan never flashes the issuance screen.
 
 - [ ] **Step 4: Verify the gate works**
 
