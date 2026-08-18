@@ -47,11 +47,11 @@ export function MapRouteList({ data, height }: { data: MapData; height: number }
     >
       <View className="mb-3 flex-row items-center">
         <Icon name="map" size={15} color={colors.body} />
-        <Text className="ml-2 text-[13px] font-semibold text-body">
+        <Text className="ml-2 text-[13px] font-medium text-body">
           Route preview
         </Text>
         <View className="ml-auto rounded-full bg-panel px-2 py-0.5">
-          <Text className="text-[11px] font-semibold text-accent">
+          <Text className="text-[11px] font-medium text-accent">
             Live map on device
           </Text>
         </View>
@@ -64,11 +64,11 @@ export function MapRouteList({ data, height }: { data: MapData; height: number }
             <View key={city.id}>
               <View className="flex-row items-center">
                 <View className="h-6 w-6 items-center justify-center rounded-full bg-deep">
-                  <Text className="text-[11px] font-semibold text-white">
+                  <Text className="text-[11px] font-medium text-white">
                     {i + 1}
                   </Text>
                 </View>
-                <Text className="ml-2 text-[14px] font-bold text-ink">
+                <Text className="ml-2 text-[14px] font-display text-ink">
                   {city.name}
                 </Text>
                 <View className="ml-auto flex-row items-center">
