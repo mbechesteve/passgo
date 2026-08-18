@@ -22,10 +22,11 @@ export const kes = (n?: number): string =>
   n == null ? "—" : `KES ${Math.round(n).toLocaleString("en-US")}`;
 
 /**
- * Whole days from `now` (default: current time) to an ISO date.
+ * Whole days from `now` to an ISO date.
+ * Caller must pass the instant via `now()` from @/lib/clock.
  * Positive = future, 0 = today, negative = past, null = no date.
  */
-export const daysUntil = (iso?: string, now: Date = new Date()): number | null => {
+export const daysUntil = (iso: string | undefined, now: Date): number | null => {
   if (!iso) return null;
   const MS = 86_400_000;
   const start = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
