@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Pamoja — Design Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  :root{
+    --deep:#04222b; --deep-soft:#223c44; --accent:#0e6ba8; --accent-tint:#e2edf4;
+    --ink:#16181a; --body:#4a565b; --mute:#5a686d; --faint:#8a9599;
+    --hairline:#dde3e4; --panel:#eef0f0; --surface:#f5f8f8; --canvas:#fff;
+  }
+  *{box-sizing:border-box}
+  body{font-family:Outfit,system-ui,sans-serif;color:var(--body);margin:0;font-size:10.5pt;line-height:1.5}
+  h1{font-size:26pt;font-weight:800;color:var(--deep);letter-spacing:-.5pt;margin:0 0 4pt}
+  h2{font-size:14pt;font-weight:700;color:var(--ink);margin:18pt 0 6pt;letter-spacing:-.2pt;
+     border-top:1px solid var(--hairline);padding-top:10pt}
+  h3{font-size:11pt;font-weight:700;color:var(--ink);margin:12pt 0 3pt}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:7.5pt;letter-spacing:1.4pt;
+     text-transform:uppercase;color:var(--mute)}
+  .lede{font-size:12pt;color:var(--body);margin:6pt 0 0}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:8.5pt}
+  table{width:100%;border-collapse:collapse;margin:6pt 0;font-size:9pt}
+  th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:7.5pt;letter-spacing:1pt;
+     text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--hairline);padding:4pt 6pt 4pt 0;font-weight:500}
+  td{border-bottom:1px solid var(--hairline);padding:4pt 6pt 4pt 0;vertical-align:top}
+  ul{margin:4pt 0 4pt 14pt;padding:0} li{margin:2pt 0}
+  .swatches{display:flex;flex-wrap:wrap;gap:5pt;margin:6pt 0}
+  .sw{width:74pt;border:1px solid var(--hairline);border-radius:4pt;overflow:hidden}
+  .sw .chip{height:26pt} .sw .lbl{padding:3pt 4pt;font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:var(--mute)}
+  .box{border:1px solid var(--hairline);background:var(--panel);border-radius:5pt;padding:8pt 10pt;margin:6pt 0}
+  .rule{border-left:3px solid var(--accent);background:var(--accent-tint);border-radius:0 5pt 5pt 0;
+        padding:7pt 10pt;margin:7pt 0}
+  .bad{border-left:3px solid #9c3b3b;background:#f6ecec;border-radius:0 5pt 5pt 0;padding:7pt 10pt;margin:7pt 0}
+  pre{font-family:'JetBrains Mono',monospace;font-size:8pt;background:var(--panel);border-radius:5pt;
+      padding:8pt 10pt;overflow:hidden;color:var(--ink);line-height:1.45}
+  .cols{display:flex;gap:14pt} .cols>*{flex:1}
+  .pill{display:inline-block;border:1px solid var(--accent);color:var(--accent);border-radius:20pt;
+        padding:1.5pt 7pt;font-size:8pt;margin:0 3pt 3pt 0}
+  h2{page-break-after:avoid}
+  h3{page-break-after:avoid}
+  table,.bad,.rule,.box,pre,.swatches{page-break-inside:avoid}
+  footer{margin-top:14pt;border-top:1px solid var(--hairline);padding-top:6pt;
+         font-family:'JetBrains Mono',monospace;font-size:7pt;color:var(--faint)}
+</style></head><body>
+
+<p class="eyebrow">Design brief · for Claude Design</p>
+<h1>Pamoja</h1>
+<p class="lede">The fan companion app for the <strong>PAMOJA Pass</strong> at AFCON 2027 —
+one digital pass used across Kenya, Uganda and Tanzania for match access, travel and
+city services. This brief asks for a <strong>mobile and desktop redesign</strong> with
+usability and navigation as the priority.</p>
+
+<div class="rule"><strong>What already works and must survive:</strong> the two-hue palette,
+Outfit + JetBrains Mono, the Mount Kenya media motif, and the product's rule that Pamoja
+<em>never holds a fan's money</em>. Everything below the "Problems" heading is open.</div>
+
+<h2>What the app is</h2>
+<p>A React Native / Expo app (iOS, Android, and a static web export) running entirely on
+mock data — no backend. A fixed demo clock puts the fan mid-tournament:
+<span class="mono">Wed 23 June 2027, 12:55 EAT</span>, standing in Kasarani, Nairobi,
+holding an active Pass.</p>
+
+<table>
+  <tr><th>Thing</th><th>What it is</th></tr>
+  <tr><td>The Pass</td><td>The credential. Identity, entitlements, validity. Rendered from local state only — never a network call.</td></tr>
+  <tr><td>The record</td><td>An append-only list of discounts claimed. Held on the device. Drives every "you've saved" figure.</td></tr>
+  <tr><td>The ticket</td><td>A seat, distinct from the credential. Category, gate, section, seat.</td></tr>
+  <tr><td>Partners</td><td>2,189 businesses giving Pass holders a discount, in six categories.</td></tr>
+  <tr><td>Fixtures</td><td>11 seeded matches across three countries and six venues.</td></tr>
+</table>
+
+<h2>Design system as it stands</h2>
+<div class="swatches">
+  <div class="sw"><div class="chip" style="background:#04222b"></div><div class="lbl">deep<br>#04222b</div></div>
+  <div class="sw"><div class="chip" style="background:#223c44"></div><div class="lbl">deep-soft<br>#223c44</div></div>
+  <div class="sw"><div class="chip" style="background:#0e6ba8"></div><div class="lbl">accent<br>#0e6ba8</div></div>
+  <div class="sw"><div class="chip" style="background:#e2edf4"></div><div class="lbl">accent-tint<br>#e2edf4</div></div>
+  <div class="sw"><div class="chip" style="background:#16181a"></div><div class="lbl">ink<br>#16181a</div></div>
+  <div class="sw"><div class="chip" style="background:#4a565b"></div><div class="lbl">body<br>#4a565b</div></div>
+  <div class="sw"><div class="chip" style="background:#dde3e4"></div><div class="lbl">hairline<br>#dde3e4</div></div>
+  <div class="sw"><div class="chip" style="background:#eef0f0"></div><div class="lbl">panel<br>#eef0f0</div></div>
+  <div class="sw"><div class="chip" style="background:#f5f8f8"></div><div class="lbl">surface<br>#f5f8f8</div></div>
+</div>
+<p><strong>Two hues only</strong> — <span class="mono">deep</span> and
+<span class="mono">accent</span> — sampled from the proposal artwork and matching the
+Uratibu brand guideline exactly (Forest, Command Cerulean, Tint, Paper, Ink). There is no
+per-category or per-status colour coding. Where something has tiers, tier is shown as
+<em>depth of the one accent</em> (100% / 55% / 25%); a disabled or sold-out state leaves
+the hue entirely for <span class="mono">panel</span>.</p>
+
+<p><strong>Type.</strong> Outfit carries voice; JetBrains Mono carries anything procedural
+— codes, amounts, record lines, timestamps, pass numbers — uppercased for eyebrows. The
+split is the point: a glance tells narrative text from data you might read aloud, type in,
+or match against a physical document. Families are addressed by semantic key
+(<span class="mono">font-sans, font-medium, font-display, font-display-heavy, font-mono,
+font-mono-medium</span>), never by weight utility.</p>
+
+<p><strong>Shape and motif.</strong> Cards use a 10px radius. All media is cropped to
+<strong>Mount Kenya's split summit</strong> — Batian, the Gate of the Mists, Nelion — from
+one geometry table, which also produces the Explore tab icon. Media only: cards, chips and
+panels stay rectangular.</p>
+
+<h2>Screens today — 15 in total</h2>
+<table>
+  <tr><th>Screen</th><th>Tab</th><th>What's on it</th></tr>
+  <tr><td>Home</td><td>Home</td><td>Greeting + avatar, next fixture card, savings money-box with sparkline, nearest offers.</td></tr>
+  <tr><td>Explore</td><td>Explore</td><td>Search across fixtures/venues/offers, 4 filter pills, this week's fixtures, events, offers by category.</td></tr>
+  <tr><td>Live</td><td>Live</td><td>Live score, match stats trio, also-live list, next-up.</td></tr>
+  <tr><td>Services</td><td>Services</td><td>6 service tiles, a Getting-there row, "2,189 partner businesses", 6 category tiles.</td></tr>
+  <tr><td>Pass</td><td>Pass</td><td>The Pass card, what it unlocks, the match ticket, a wallet row.</td></tr>
+  <tr><td>Wallet</td><td>Pass ›</td><td>Saved/spent figures, savings-rate donut, week chip, the record grouped by day.</td></tr>
+  <tr><td>Getting there</td><td>Services ›</td><td>Drive/Fly toggle, Arriving/Leaving toggle, up to 5 route pills, route strip, stats, cost estimate, documents, good-to-know, caveat, last-leg band.</td></tr>
+  <tr><td>Ticket office</td><td>Explore ›</td><td>Hall map of Talanta's bowl, tier legend, block selection, seat stepper, total, hand-off.</td></tr>
+  <tr><td>Category</td><td>Services ›</td><td>Partners in one category.</td></tr>
+  <tr><td>Partner</td><td>Explore/Home/Services ›</td><td>Discount, merchant code, two redeem routes.</td></tr>
+  <tr><td>Scan</td><td>Services ›</td><td>Enter the merchant's code.</td></tr>
+  <tr><td>Confirm</td><td>Explore/Home/Services ›</td><td>Bill amount, discount maths, write one record line.</td></tr>
+  <tr><td>Parking</td><td>Services ›</td><td>Zones A–D with walk minutes.</td></tr>
+  <tr><td>Safety</td><td>Services ›</td><td>Steward help line, report a problem.</td></tr>
+  <tr><td>Issuance</td><td>—</td><td>3-step Pass creation. The only screen with no tab bar.</td></tr>
+</table>
+
+<h2>Navigation model</h2>
+<pre>5 tabs, each owning its own stack — a pushed screen stays under the tab bar.
+
+Home     ── Partner ── Confirm
+Explore  ── Partner ── Confirm ── TicketOffice
+Live
+Services ── Category ── Partner ── Confirm ── Scan ── Parking ── Safety ── GettingThere
+Pass     ── Wallet
+
+Above all five: Issuance, shown only when no Pass exists.</pre>
+<p>Screens reachable from more than one tab are registered in each of those stacks, so
+every tab keeps its own history. Back is a circular chevron at the top-left, which hides
+itself at a stack root. <strong>Verified sound:</strong> the tab bar is present on all 15
+screens and back works on every pushed screen.</p>
+
+<h2>Layout today</h2>
+<table>
+  <tr><th>Viewport</th><th>What happens</th></tr>
+  <tr><td>Phone</td><td>Single column, tab bar across the bottom.</td></tr>
+  <tr><td>&lt; 1024px on web</td><td>The app is framed in a 440px phone-width column on a neutral backdrop.</td></tr>
+  <tr><td>&ge; 1024px</td><td>Tabs become a 96px rail down the left; content sits in a 640px centred column.</td></tr>
+</table>
+
+<h2>Problems to solve — evidence, not opinion</h2>
+
+<div class="bad"><strong>1. Seven of eleven fixtures cannot be reached.</strong>
+Explore is the app's only fixture list, and it is capped to a seven-day window
+<em>and</em> five rows. Home shows one fixture; Live shows what is live or next. There is
+no full schedule anywhere. A fan cannot see who plays next week, and a match dated
+outside the window is invisible app-wide — this was discovered when a fixture had to be
+re-dated to make its own ticket office reachable at all.</div>
+
+<div class="rule"><strong>2. Assistive-tech roles — fixed 19 Aug 2026, no design needed.</strong>
+Eleven of the app's fifteen pressables had no <span class="mono">accessibilityRole</span>,
+so every interactive row, tile and pill was announced as plain content: a screen with
+twelve controls reported one. Roles and selected/disabled states are now in place
+(measured 1 → 12 on Getting there). What is <em>still</em> a design question is the
+<strong>visible</strong> side: focus rings and pressed states are currently opacity
+changes only.</div>
+
+<div class="bad"><strong>3. Getting there stacks three rows of chrome before content.</strong>
+Drive/Fly, then Arriving/Leaving, then up to five route pills. Three decisions before the
+fan sees a single fact, and two of the three are modal.</div>
+
+<div class="bad"><strong>4. Services is a grab-bag.</strong> Six service tiles, a
+getting-there row, a partner count, and six category tiles on one screen — transport,
+food, lodging, safety, retail and cross-border travel under one word.</div>
+
+<div class="bad"><strong>5. Desktop is a phone in a column.</strong> The rail works, but
+nothing reflows: no screen uses more than one column, so a 1440px viewport shows the same
+single-file list a 390px phone does.</div>
+
+<div class="bad"><strong>6. Affordances are inconsistent.</strong> One fixture row opens a
+ticket office; the other three look identical and do nothing. The office is reachable
+from exactly one place in the app.</div>
+
+<h2>What to design</h2>
+<h3>Mobile</h3>
+<ul>
+  <li>An information architecture that exposes <strong>the whole schedule</strong>, and a
+      route from any fixture to what a fan can do about it — travel, tickets, the ground.</li>
+  <li>A better answer than three stacked toggles for "how do I get to a match", covering
+      road and air, in and out of Nairobi.</li>
+  <li>A split or restructure of Services that separates matchday logistics from the
+      2,189-partner discount network.</li>
+  <li>Visible focus rings and pressed states for every control — the semantics are now correct, the visual feedback is still just an opacity change.</li>
+</ul>
+<h3>Desktop</h3>
+<ul>
+  <li>A layout that earns its width: multi-column where content is list-like, and a
+      persistent secondary pane where a fan is comparing things (routes, blocks, offers).</li>
+  <li>A place for the rail to carry more than five words.</li>
+</ul>
+
+<h2>The agreed target design</h2>
+<p>Brainstormed 19 August 2026. The three decisions below are settled; the visual design
+of them is what this brief is asking for.</p>
+
+<h3>1. The match is the spine</h3>
+<p>Almost everything a fan does hangs off a specific fixture — where it is, how to get
+there, tickets, parking, the ground. Today the fixture is a row buried under a search box
+and the things attached to it are scattered across three tabs. A <strong>Matches</strong>
+tab holds the full schedule; tapping a fixture opens <strong>one screen that composes
+everything about it</strong>:</p>
+<pre>MATCH DETAIL
+  TeamRow (flags + names) · kickoff · venue AND city
+  State ......... scheduled -> live (score, stats) -> full-time     [absorbs the Live tab]
+  Getting there . road + air legs to THIS city, with cost estimates
+  Tickets ....... hall map + block picker, where a map exists
+  At the ground . parking zones + walk times, safety, shuttles
+  Your ticket ... if the Pass carries one for this match</pre>
+
+<h3>2. Four tabs</h3>
+<table>
+  <tr><th>Tab</th><th>Holds</th></tr>
+  <tr><td><strong>Home</strong></td><td>Today: a live match if one is live, the next fixture, savings, offers near you, and the arriving-in-Kenya travel guide.</td></tr>
+  <tr><td><strong>Matches</strong></td><td>The full schedule, grouped by day. Row chips: LIVE / TICKETS / FLY / IN N DAYS. Leads to match detail.</td></tr>
+  <tr><td><strong>Offers</strong></td><td>The 2,189-partner network: search, six categories, nearby, and the redemption flow.</td></tr>
+  <tr><td><strong>Pass</strong></td><td>The credential, what it unlocks, the match ticket, and the record.</td></tr>
+</table>
+<p><span class="pill">Live</span> stops being a tab — it is dead most of the tournament —
+and becomes a state of a match. <span class="pill">Services</span> splits: matchday
+logistics attach to the match they belong to, and the discount network becomes Offers,
+which is what fans actually go looking for.</p>
+
+<h3>3. Desktop is two-pane master/detail</h3>
+<pre>+------+------------------+---------------------------+
+| rail | MATCHES          | Kenya v Mali              |
+| Home | > Sat 26 Jun     | Kasarani, Nairobi         |
+| Match|   Mon 28 Jun     | Gates open 14:00          |
+| Offer|   Tue 29 Jun     | Getting there / Tickets   |
+| Pass |   Wed 30 Jun     | At the ground             |
++------+------------------+---------------------------+</pre>
+<p>Almost every screen in this app is a list that leads to a detail, so the list and the
+detail should be visible together above 1024px: schedule beside a match, offers beside a
+partner, the Pass beside its record. Home stays a single wide surface, but multi-column.</p>
+
+<h3>Where today's 15 screens go</h3>
+<table>
+  <tr><th>Today</th><th>Becomes</th></tr>
+  <tr><td>Home</td><td>Home — plus a loud live-match entry and the arriving-in-Kenya guide</td></tr>
+  <tr><td>Explore</td><td>Splits: fixtures → Matches, offers → Offers, events → Home</td></tr>
+  <tr><td>Live</td><td>The live state of a match detail</td></tr>
+  <tr><td>Services</td><td>Splits: logistics → match detail sections, partners → Offers</td></tr>
+  <tr><td>Pass, Wallet</td><td>Pass, Pass › Wallet (unchanged)</td></tr>
+  <tr><td>Getting there</td><td>Per-match travel → match detail; arriving in Kenya → Home ›</td></tr>
+  <tr><td>Ticket office</td><td>Match detail › (or a section within it)</td></tr>
+  <tr><td>Category, Partner, Scan, Confirm</td><td>Offers › (the redemption flow, unchanged)</td></tr>
+  <tr><td>Parking, Safety</td><td>Match detail sections</td></tr>
+  <tr><td>Issuance</td><td>Unchanged — the only screen with no tab bar</td></tr>
+</table>
+
+<h3>Two tensions this creates, to design around</h3>
+<div class="rule"><strong>Live needs a one-tap path.</strong> Folding it into a match is
+right, but during a match a fan must not have to go Matches → find the fixture → scroll.
+Home has to surface a live match loudly and lead straight to it.</div>
+<div class="rule"><strong>Inbound travel is not match-specific.</strong> "Arriving in
+Kenya from Uganda" belongs to a fan, not a fixture. Per-match travel lives in the detail;
+the arriving guide needs its own home off Home or it is orphaned.</div>
+
+<h2>Non-negotiables</h2>
+<ul>
+  <li><strong>No payment, ever.</strong> Pamoja never holds funds, never sees a card
+      number, needs no banking licence. Money flows are hand-offs: the fan pays the
+      merchant, the seller, or the airline directly.</li>
+  <li><strong>Two hues.</strong> No third brand colour, no per-category or per-status
+      colour coding.</li>
+  <li><strong>Outfit and JetBrains Mono</strong>, addressed by semantic key.</li>
+  <li><strong>No invented data presented as fact.</strong> Prices, fares, schedules and
+      entry requirements carry an "as of" date and a confirm-before-you-travel caveat, or
+      are labelled prototype figures. Nothing may imply a precision it does not have.</li>
+  <li><strong>The record is local.</strong> No dashboard anywhere assembles a view of a fan.</li>
+</ul>
+
+<footer>Pamoja design brief · generated 19 August 2026 · palette, type and motif taken from
+DESIGN.md · problems 1, 2 and 5 verified by driving the built app in a browser at
+420×1000 and 1440×900</footer>
+</body></html>

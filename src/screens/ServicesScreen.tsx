@@ -50,6 +50,7 @@ export function ServicesScreen() {
 
         <Pressable
           onPress={() => navigation.navigate("GettingThere")}
+          accessibilityRole="button"
           className="mt-1 flex-row items-center justify-between rounded-card border border-hairline bg-canvas px-4 py-4 active:opacity-80"
         >
           <View className="flex-1">

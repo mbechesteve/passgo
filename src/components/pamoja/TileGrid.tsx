@@ -19,6 +19,7 @@ export function TileGrid({ tiles }: { tiles: Tile[] }) {
         <Pressable
           key={tile.key}
           onPress={tile.onPress}
+          accessibilityRole="button"
           className="mb-3 w-[48%] rounded-card border border-hairline bg-canvas px-4 py-4 active:opacity-80"
         >
           <Icon name={tile.icon} size={18} color={colors.accent} />

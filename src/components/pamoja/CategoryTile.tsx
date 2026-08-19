@@ -16,6 +16,7 @@ export function CategoryTile({
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="button"
       className="mb-3 flex-1 rounded-card border border-hairline bg-panel px-4 py-5 active:opacity-80"
     >
       <Text className="font-medium text-[17px] text-ink">

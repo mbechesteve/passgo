@@ -68,6 +68,8 @@ export function Button({
     <Pressable
       onPress={onPress}
       disabled={disabled || loading}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!(disabled || loading), busy: !!loading }}
       className={`flex-row items-center justify-center rounded px-5 py-3.5 active:opacity-80 ${s.bg} ${
         disabled ? "opacity-40" : ""
       } ${className}`}
@@ -100,6 +102,8 @@ export function Pill({
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected: !!active }}
       className={`mr-2 flex-row items-center rounded-full border px-3.5 py-2 ${
         active
           ? "bg-deep border-deep"

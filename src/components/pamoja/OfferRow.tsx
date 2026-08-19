@@ -16,6 +16,7 @@ export function OfferRow({
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="button"
       className="flex-row items-center border-b border-hairline py-3 active:opacity-70"
     >
       <View className="h-10 w-10 items-center justify-center rounded-card bg-panel">

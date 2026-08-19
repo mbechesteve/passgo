@@ -191,6 +191,8 @@ export function ExploreScreen() {
                     onPress={() =>
                       navigation.navigate("TicketOffice", { matchId: m.id })
                     }
+                    accessibilityRole="button"
+                    accessibilityState={{ disabled: !onSale }}
                     className={`flex-row items-center justify-between border-b border-hairline py-3.5 ${
                       onSale ? "active:opacity-70" : ""
                     }`}

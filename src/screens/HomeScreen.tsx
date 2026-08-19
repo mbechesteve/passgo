@@ -70,7 +70,7 @@ function FixtureCard({
         <Text className="text-[13px] text-body">
           {`${S.homeGatesOpenPrefix} ${gatesOpenLabel(fixture)}`}
         </Text>
-        <Pressable onPress={onViewPass}>
+        <Pressable onPress={onViewPass} accessibilityRole="button">
           <Text className="font-medium text-[14px] text-accent">
             {S.homeViewPass}
           </Text>
@@ -155,7 +155,10 @@ export function HomeScreen() {
 
         <View className="mt-8 flex-row items-center justify-between">
           <Eyebrow>{S.homeOffersNearYou}</Eyebrow>
-          <Pressable onPress={() => navigation.navigate("ServicesTab")}>
+          <Pressable
+            onPress={() => navigation.navigate("ServicesTab")}
+            accessibilityRole="button"
+          >
             <Text className="font-medium text-[13px] text-accent">
               {S.homeSeeAll}
             </Text>

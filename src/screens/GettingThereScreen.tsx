@@ -206,6 +206,7 @@ export function GettingThereScreen() {
                 <Pressable
                   key={leg.key}
                   onPress={leg.onPress}
+                  accessibilityRole="button"
                   className="flex-row items-center border-b border-hairline py-3.5 active:opacity-70"
                 >
                   <View className="flex-1 pr-3">

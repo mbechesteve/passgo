@@ -39,6 +39,7 @@ export function CategoryScreen() {
         renderItem={({ item }) => (
           <Pressable
             onPress={() => navigation.navigate("Partner", { partnerId: item.id })}
+            accessibilityRole="button"
             className="flex-row items-center justify-between border-b border-hairline py-3.5 active:opacity-70"
           >
             <View className="flex-1 pr-3">

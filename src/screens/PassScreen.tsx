@@ -114,6 +114,7 @@ export function PassScreen() {
 
         <Pressable
           onPress={() => navigation.navigate("Wallet")}
+          accessibilityRole="button"
           className="mt-6 flex-row items-center justify-between rounded-card border border-hairline bg-canvas px-5 py-4 active:opacity-80"
         >
           <View>
