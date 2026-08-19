@@ -237,7 +237,7 @@ re-run to confirm PASS. A guard you have not watched fail is not a guard.
 - [ ] **Step 4: Full suite and lint**
 
 Run: `npm run lint && npm test`
-Expected: all green, 12 files, 89 tests.
+Expected: all green — 13 files, 92 tests (the 12 files and 85 tests already present, plus this file's 7).
 
 - [ ] **Step 5: Commit**
 
