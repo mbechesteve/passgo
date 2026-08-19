@@ -1,0 +1,134 @@
+/*
+  Shared chrome for every page of the portal: the board's tokens, base type, buttons, the
+  utility bar, the nav and the footer. index.html keeps its own page-specific CSS inline;
+  login, sign-up and the dashboard need nothing beyond what is here plus a little of their
+  own.
+
+  Extracted rather than copied — four pages each carrying their own token block is how two
+  of them end up a different shade of gold.
+*/
+:root {
+  --ink:        #121316;   /* nav, cards, CTA band */
+  --ink-2:      #2A2C30;   /* ridges, hairlines on dark */
+  --ink-3:      #16181a;   /* utility bar, ticker */
+  --ink-deep:   #0A0B0D;   /* hero base */
+  --gold:       #F2C744;   /* eyebrows, numbers, hovers */
+  --gold-btn:   #F2C200;   /* buttons */
+  --gold-hot:   #FFD427;   /* button hover */
+  --green:      #067647;   /* links, list dates, event titles */
+  --green-mid:  #0A9455;   /* link hover, focus rings, next-button hover */
+  --green-bg:   #E4F1E0;   /* row hover, live chip */
+  --red:        #E8412F;   /* the live dot, and nothing else */
+  --band:       #eef0f0;
+  --paper:      #f5f8f8;   /* the page ground — not white */
+  --white:      #ffffff;
+  --stone:      #D6D3CC;
+  --stone-2:    #C9C5BD;
+  --grey:       #8A8D91;
+  --body:       #4a565b;
+  --hairline:   #dde3e4;
+  --pad-x:      clamp(20px, 5vw, 64px);
+}
+@keyframes livedot { 0%, 100% { opacity: 1 } 50% { opacity: 0.35 } }
+@keyframes tickerscroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink-3);
+       font-family: Outfit, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--green); text-decoration: none; }
+a:hover { color: var(--green-mid); }
+::selection { background: #06764733; }
+h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; }
+p { margin: 0; }
+img { display: block; max-width: 100%; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; }
+.m11  { font-size: 11px; letter-spacing: 0.1em; }
+
+/* Focus rings: green on light, white on dark — as the board sets them. */
+:focus-visible { outline: 2px solid var(--green-mid); outline-offset: 2px; }
+.hero :focus-visible, .cta-band :focus-visible, .nav :focus-visible { outline-color: var(--white); }
+
+/* Framed photography: grey, then a multiply wash. Every image on the page. */
+.shot { position: absolute; inset: 0; filter: grayscale(1) contrast(1.06); }
+.shot img { width: 100%; height: 100%; object-fit: cover; }
+.wash { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+        background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(28,30,34,0.9) 100%); }
+/* The ridge line, drawn twice on the board: behind the hero, and across the CTA band. */
+.ridge { position: absolute; inset: 0; background: var(--ink-2); }
+.ridge-hero { clip-path: polygon(0 30%, 14% 30%, 27% 8%, 35% 22%, 43% 13%, 49% 26%,
+                                 57% 2%, 70% 24%, 82% 17%, 100% 32%, 100% 100%, 0 100%); }
+.ridge-cta  { clip-path: polygon(0 58%, 14% 58%, 27% 34%, 35% 50%, 43% 40%, 49% 54%,
+                                 57% 26%, 70% 52%, 82% 44%, 100% 60%, 100% 100%, 0 100%); }
+
+.btn { font-family: Outfit, sans-serif; border: none; cursor: pointer; display: inline-flex;
+       align-items: center; justify-content: center; gap: 12px; min-height: 46px; }
+.btn-gold { background: var(--gold-btn); color: var(--ink); font-size: 17px; font-weight: 700;
+            padding: 17px 32px; border-radius: 10px; }
+.btn-gold:hover { background: var(--gold-hot); color: var(--ink); }
+.btn-gold:active { filter: brightness(0.95); }
+.btn-pill-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.55);
+                  color: var(--white); font-size: 15px; font-weight: 500;
+                  padding: 11px 26px; border-radius: 999px; }
+.btn-pill-ghost:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.btn-pill-white { background: var(--white); color: var(--ink); font-size: 15px; font-weight: 700;
+                  padding: 12px 30px; border-radius: 999px; }
+.btn-pill-white:hover { opacity: 0.92; color: var(--ink); }
+.btn-pill-white:active { filter: brightness(0.95); }
+.btn-white { background: var(--white); color: var(--ink); font-size: 17px; font-weight: 700;
+             padding: 18px 36px; border-radius: 10px; }
+.btn-white:hover { opacity: 0.92; color: var(--ink); }
+.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: var(--white);
+               font-size: 16px; font-weight: 600; padding: 14px 30px; border-radius: 10px; }
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.underline-link { color: var(--white); font-size: 16px; font-weight: 600;
+                  border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 3px; }
+.underline-link:hover { color: var(--gold); }
+
+/* ── Utility bar ─────────────────────────────────────────────────────────── */
+.utility { background: var(--ink-3); color: var(--band); display: flex; align-items: center;
+           gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
+
+/* ── Nav ─────────────────────────────────────────────────────────────────── */
+.nav { background: var(--ink); display: flex; align-items: center; gap: clamp(16px, 3vw, 44px);
+       padding: 18px var(--pad-x); position: sticky; top: 0; z-index: 30; }
+.brand-name { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); line-height: 1; }
+.brand-sub { display: block; margin-top: 3px; font-size: 9px; letter-spacing: 0.14em; color: var(--stone-2); }
+.nav-links { display: flex; gap: 34px; align-items: center; flex: 1; }
+.nav-links a { color: var(--white); font-size: 16px; font-weight: 500; }
+.nav-links a:hover { color: var(--gold); }
+.nav-cta { display: flex; gap: 12px; align-items: center; }
+
+
+/* ── Footer (shared) ─────────────────────────────────────────────────────── */
+footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(--band);
+         padding: clamp(40px, 6vw, 64px) var(--pad-x); }
+.foot-row { display: flex; justify-content: space-between; align-items: flex-start;
+            gap: 48px; flex-wrap: wrap; }
+.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); }
+.foot-row p.foot-copy { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
+                        max-width: 360px; line-height: 1.6; margin-top: 12px; }
+.foot-cols { display: flex; gap: clamp(32px, 5vw, 64px); font-size: 14px; }
+.foot-cols ul { display: flex; flex-direction: column; gap: 11px; }
+.foot-cols b { color: var(--white); font-weight: 700; margin-bottom: 2px; }
+.foot-cols a { color: rgba(238,240,240,0.75); }
+.foot-cols a:hover { color: var(--gold); }
+
+/* ── Mobile nav (shared) ─────────────────────────────────────────────────── */
+.burger, .mob-only { display: none; }
+.menu-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+@media (max-width: 860px) {
+  .nav { flex-wrap: wrap; gap: 12px; }
+  .nav-links { display: none; order: 3; flex-basis: 100%; flex-direction: column; gap: 0;
+               margin: 6px 0 4px; border-top: 1px solid var(--ink-2); }
+  .nav-links a { padding: 14px 2px; border-bottom: 1px solid var(--ink-2); }
+  .menu-toggle:checked ~ .nav-links { display: flex; }
+  .burger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+            border: 1px solid rgba(255,255,255,0.55); border-radius: 999px; color: var(--white);
+            font-size: 18px; cursor: pointer; letter-spacing: 2px; }
+  .mob-only { display: inline-flex; }
+  .desk-only { display: none; }
+  .nav-cta { margin-left: auto; }
+}

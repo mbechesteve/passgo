@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Pass — Pamoja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<!--
+  The inside of the app, on the web.
+
+  Every figure below is the app's own, not written for this page: the holder, the serial,
+  the validity, the seat, the record line and its two totals, and the partner counts are
+  the ones src/utils/spec-figures.test.ts guards as proposal specifications. If the app's
+  figures change, this page is wrong and the test is what will say so.
+-->
+
+<div class="utility mono m11">
+  <span style="color:var(--stone-2)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+</div>
+
+<nav class="nav" aria-label="Main">
+  <input class="menu-toggle" type="checkbox" id="menu">
+  <a href="index.html" style="color:inherit">
+    <span class="brand-name">Pamoja</span>
+    <span class="brand-sub mono">The official fan pass</span>
+  </a>
+  <div class="nav-links">
+    <a href="dashboard.html">My Pass</a>
+    <a href="index.html#matches">Matches &amp; Tickets</a>
+    <a href="index.html#events">Events</a>
+    <a href="index.html#explore">Explore</a>
+    <a href="index.html#partners">Partners</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-pill-ghost desk-only" href="index.html">Log out</a>
+    <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
+  </div>
+</nav>
+
+<main class="dash">
+  <div class="dash-head">
+    <div>
+      <p class="eyebrow mono" style="color:var(--body);font-family:'JetBrains Mono',monospace;text-transform:uppercase;font-size:11px;letter-spacing:0.12em">Wed 23 Jun 2027 · 12:55 EAT</p>
+      <h1 style="margin-top:10px">Karibu, Amina.</h1>
+    </div>
+    <span class="pill-tag">Pass active · 24 days left</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- The credential -->
+    <section class="panel dark c5">
+      <p class="eyebrow">The credential</p>
+      <p class="figure" style="font-size:30px;letter-spacing:0.04em">KE-PM-8842</p>
+      <p class="muted" style="margin-top:10px">Amina Nakato · issued in Kenya</p>
+      <p class="mono" style="margin-top:18px;font-size:10px;letter-spacing:0.12em;color:var(--gold)">Valid in all three countries</p>
+      <div style="margin-top:22px">
+        <div class="rowline"><span>Match access</span><span class="mono-val">One tap at the turnstile</span></div>
+        <div class="rowline"><span>Reduced transport fares</span><span class="mono-val">Kenya</span></div>
+        <div class="rowline"><span>Partner discounts</span><span class="mono-val">2,189 businesses</span></div>
+      </div>
+      <p class="muted" style="margin-top:20px;font-size:13px">Rendered from your own device. No
+        network call is needed to make it work, and no dashboard anywhere assembles this view
+        of you but this one.</p>
+    </section>
+
+    <!-- Next match and the seat -->
+    <section class="panel c7">
+      <p class="eyebrow">Your next match</p>
+      <h2 style="font-size:30px;letter-spacing:-0.03em">Kenya v Mali</h2>
+      <p class="muted" style="margin-top:8px">Sat 26 Jun · Kick-off 16:00 EAT · Gates open 14:00 ·
+        Kasarani, Nairobi</p>
+      <div style="margin-top:20px">
+        <div class="rowline"><span>Your seat</span><span class="mono-val">Cat 2 · Gate D · Section 214 · Seat 17</span></div>
+        <div class="rowline"><span>Ticket · Cat 2</span><span class="mono-val">KES 2,000 → KES 1,500</span></div>
+        <div class="rowline"><span>Shuttle both ways</span><span class="mono-val">KES 600 → free</span></div>
+      </div>
+      <p class="muted" style="margin-top:18px;font-size:13px">What the ticket is worth is an
+        entitlement's stated value, so it is never added to what you have saved.</p>
+      <div style="display:flex;gap:12px;margin-top:22px;flex-wrap:wrap">
+        <a class="btn btn-gold" href="index.html#matches" style="font-size:15px;padding:13px 24px">Getting there</a>
+        <a class="btn btn-pill-ghost" href="index.html#matches"
+           style="border-color:var(--hairline);color:var(--ink);border-radius:10px;padding:13px 24px">All 11 fixtures</a>
+      </div>
+    </section>
+
+    <!-- The record -->
+    <section class="panel c8">
+      <p class="eyebrow">Your record</p>
+      <div style="display:flex;gap:48px;flex-wrap:wrap">
+        <div>
+          <p class="figure">KES 150</p>
+          <p class="muted" style="margin-top:6px">You've saved</p>
+        </div>
+        <div>
+          <p class="figure" style="color:var(--body)">KES 850</p>
+          <p class="muted" style="margin-top:6px">You've spent</p>
+        </div>
+      </div>
+      <div style="margin-top:24px">
+        <div class="rowline">
+          <span>Mama Oliech · food and drink</span>
+          <span class="mono-val">KES 850 · Kasarani ward · 12:55</span>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:18px;font-size:13px">Append-only, and held on your device.
+        You paid the merchant directly — Pamoja only wrote the line.</p>
+    </section>
+
+    <!-- Partner network -->
+    <section class="panel c4">
+      <p class="eyebrow">Partner discounts</p>
+      <p class="figure">2,189</p>
+      <p class="muted" style="margin-top:6px">businesses, three countries</p>
+      <div style="margin-top:20px">
+        <div class="rowline"><span>Eat</span><span class="mono-val">1,340</span></div>
+        <div class="rowline"><span>Shop</span><span class="mono-val">460</span></div>
+        <div class="rowline"><span>Stay</span><span class="mono-val">210</span></div>
+        <div class="rowline"><span>Do</span><span class="mono-val">95</span></div>
+        <div class="rowline"><span>Move</span><span class="mono-val">84</span></div>
+      </div>
+    </section>
+
+    <!-- Into the app itself -->
+    <section class="panel dark c12">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap">
+        <div>
+          <p class="eyebrow">The app</p>
+          <h2 style="font-size:26px;letter-spacing:-0.03em;color:var(--white)">Open the Pass on your phone.</h2>
+          <p class="muted" style="margin-top:10px;max-width:52ch">This dashboard is the web view.
+            The app is where the Pass is actually held — the schedule, the ticket office, travel
+            to every venue, and the record, all on the device.</p>
+        </div>
+        <a class="btn btn-gold" href="http://localhost:8931/">Open the app</a>
+      </div>
+    </section>
+
+  </div>
+
+  <p class="prototype" style="border-color:var(--hairline)">Prototype. Nothing here is
+    authenticated — the login form opens this page whatever you type. The holder, serial,
+    validity, seat, record line and partner counts are the app's own demo figures, with the
+    clock fixed to Wed 23 June 2027, 12:55 EAT. Pamoja holds no funds and stores no payment
+    details, so there is no balance on this page and nothing to top up.</p>
+</main>
+
+<footer>
+  <div class="foot-row">
+    <div>
+      <p class="foot-brand">Pamoja</p>
+      <p class="foot-copy">The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never
+        holds funds — every payment is a direct hand-off.</p>
+    </div>
+    <div class="foot-cols">
+      <ul>
+        <li><b>The Pass</b></li>
+        <li><a href="dashboard.html">My Pass</a></li>
+        <li><a href="index.html#partners">Partners</a></li>
+      </ul>
+      <ul>
+        <li><b>Matchday</b></li>
+        <li><a href="index.html#matches">Schedule</a></li>
+        <li><a href="index.html#events">Fan events</a></li>
+        <li><a href="dashboard.html">Security · *723#</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

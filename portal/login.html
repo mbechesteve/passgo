@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in — Pamoja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<div class="utility mono m11">
+  <span style="color:var(--stone-2)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+</div>
+
+<nav class="nav" aria-label="Main">
+  <input class="menu-toggle" type="checkbox" id="menu">
+  <a href="index.html" style="color:inherit">
+    <span class="brand-name">Pamoja</span>
+    <span class="brand-sub mono">The official fan pass</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#pass">Get the Pass</a>
+    <a href="index.html#matches">Matches &amp; Tickets</a>
+    <a href="index.html#events">Events</a>
+    <a href="index.html#explore">Explore</a>
+    <a href="index.html#partners">Partners</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-pill-white desk-only" href="login.html">Log in</a>
+    <a class="btn btn-pill-white mob-only" href="signup.html" style="font-size:13px;padding:11px 18px">Get the Pass</a>
+    <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
+  </div>
+</nav>
+
+<main class="split-page">
+  <div class="split-media">
+    <div class="shot"><img src="img/door-access.jpg" alt="Supporters outside Kasarani before kick-off."></div>
+    <div class="veil"></div>
+    <div class="quote">
+      <p>Your Pass is on your device.<br>Not on our servers.</p>
+      <span class="mono">One pass · Three countries · Every match</span>
+    </div>
+  </div>
+
+  <div class="split-form">
+    <div class="form-card">
+      <p class="eyebrow mono">Welcome back</p>
+      <h1>Log in to your Pass.</h1>
+      <p class="sub">Your Pass number is printed on your card and shown in the app.
+        We send a one-time code — there is no password to remember and none to steal.</p>
+
+      <form action="dashboard.html" method="get">
+        <label class="field">
+          <span>Pass number</span>
+          <input type="text" name="pass" inputmode="text" autocomplete="username"
+                 placeholder="KE-PM-8842" value="KE-PM-8842" required>
+        </label>
+        <label class="field">
+          <span>One-time code</span>
+          <input type="text" name="code" inputmode="numeric" autocomplete="one-time-code"
+                 placeholder="6 digits" maxlength="6">
+        </label>
+        <button class="btn btn-gold" type="submit">Log in</button>
+      </form>
+
+      <p class="alt">No Pass yet? <a href="signup.html">Get one in under three minutes →</a></p>
+
+      <p class="prototype">Prototype. Nothing is authenticated and no credentials are stored —
+        any value opens the dashboard. Pamoja asks for no payment details at any point.</p>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="foot-row">
+    <div>
+      <p class="foot-brand">Pamoja</p>
+      <p class="foot-copy">The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never
+        holds funds — every payment is a direct hand-off.</p>
+    </div>
+    <div class="foot-cols">
+      <ul>
+        <li><b>The Pass</b></li>
+        <li><a href="signup.html">Get the Pass</a></li>
+        <li><a href="index.html#partners">Partners</a></li>
+      </ul>
+      <ul>
+        <li><b>Matchday</b></li>
+        <li><a href="index.html#matches">Schedule</a></li>
+        <li><a href="index.html#events">Fan events</a></li>
+        <li><a href="dashboard.html">Security · *723#</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

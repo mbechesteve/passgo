@@ -1,0 +1,75 @@
+/*
+  Login, sign-up and dashboard. Everything shared with the marketing page — tokens, base
+  type, buttons, nav, footer — comes from portal.css; this is only what those three need.
+*/
+.split-page { display: flex; min-height: calc(100vh - 120px); }
+.split-media { position: relative; flex: 1 1 46%; background: var(--ink-deep); overflow: hidden; }
+.split-media .veil { position: absolute; inset: 0; pointer-events: none;
+                     background: linear-gradient(200deg, rgba(10,11,13,0.45) 0%, rgba(10,11,13,0.92) 100%); }
+.split-media .quote { position: absolute; left: clamp(24px, 4vw, 56px); right: clamp(24px, 4vw, 56px);
+                      bottom: clamp(28px, 4vw, 56px); color: var(--white); }
+.split-media .quote p { font-size: clamp(24px, 3vw, 34px); font-weight: 800;
+                        letter-spacing: -0.03em; line-height: 1.05; }
+.split-media .quote span { display: block; margin-top: 14px; font-size: 13px;
+                           letter-spacing: 0.12em; color: var(--stone-2); }
+.split-form { flex: 1 1 54%; display: flex; align-items: center; justify-content: center;
+              padding: clamp(40px, 6vw, 88px) var(--pad-x); background: var(--paper); }
+.form-card { width: 100%; max-width: 460px; }
+.form-card .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--green); margin-bottom: 14px; }
+.form-card h1 { font-size: clamp(30px, 4.4vw, 42px); color: var(--ink); }
+.form-card .sub { margin-top: 14px; font-size: 16px; font-weight: 300; color: var(--body); }
+
+label.field { display: block; margin-top: 26px; }
+label.field span { display: block; font-family: "JetBrains Mono", ui-monospace, monospace;
+                   text-transform: uppercase; font-size: 10px; letter-spacing: 0.12em;
+                   color: var(--body); margin-bottom: 8px; }
+input[type="text"], input[type="email"], input[type="tel"] {
+  width: 100%; min-height: 50px; padding: 13px 16px; border: 1px solid var(--hairline);
+  border-radius: 10px; background: var(--white); color: var(--ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 15px;
+}
+input:focus-visible { outline: 2px solid var(--green-mid); outline-offset: 2px; border-color: var(--green); }
+.choices { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.choices input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.choices label { border: 1px solid var(--hairline); background: var(--white); border-radius: 10px;
+                 padding: 13px 20px; min-height: 50px; display: inline-flex; align-items: center;
+                 cursor: pointer; font-weight: 600; font-size: 15px; }
+.choices input:checked + label { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.choices input:focus-visible + label { outline: 2px solid var(--green-mid); outline-offset: 2px; }
+.form-card .btn { width: 100%; margin-top: 30px; }
+.form-card .alt { margin-top: 22px; font-size: 15px; color: var(--body); }
+.prototype { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--hairline);
+             font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10px;
+             line-height: 1.7; letter-spacing: 0.06em; text-transform: uppercase; color: var(--body); }
+
+/* ── Dashboard ───────────────────────────────────────────────────────────── */
+.dash { padding: clamp(32px, 5vw, 56px) var(--pad-x) clamp(56px, 8vw, 88px); }
+.dash-head { display: flex; justify-content: space-between; align-items: flex-end;
+             gap: 32px; flex-wrap: wrap; margin-bottom: 36px; }
+.dash-head h1 { font-size: clamp(30px, 4.4vw, 44px); color: var(--ink); }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+.panel { background: var(--white); border: 1px solid var(--hairline); border-radius: 10px;
+         padding: 26px 28px; grid-column: span 12; }
+.panel.dark { background: var(--ink); border-color: var(--ink-2); color: var(--band); }
+.panel h2 { font-size: 20px; color: inherit; }
+.panel .eyebrow { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase;
+                  font-size: 10px; letter-spacing: 0.12em; color: var(--body); margin-bottom: 12px; }
+.panel.dark .eyebrow { color: var(--gold); }
+.figure { font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 600;
+          font-size: 40px; line-height: 1; color: var(--ink); }
+.panel.dark .figure { color: var(--white); }
+.muted { font-size: 14px; font-weight: 300; color: var(--body); }
+.panel.dark .muted { color: var(--stone); }
+.rowline { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0;
+           border-bottom: 1px solid var(--hairline); font-size: 14px; }
+.panel.dark .rowline { border-color: var(--ink-2); }
+.rowline:last-child { border-bottom: 0; }
+.rowline .mono-val { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; color: var(--body); }
+.panel.dark .rowline .mono-val { color: var(--stone-2); }
+.pill-tag { display: inline-block; font-family: "JetBrains Mono", ui-monospace, monospace;
+            text-transform: uppercase; font-size: 10px; letter-spacing: 0.1em; font-weight: 600;
+            padding: 5px 11px; border-radius: 4px; background: var(--green-bg); color: var(--green); }
+@media (min-width: 880px) {
+  .c4 { grid-column: span 4; } .c5 { grid-column: span 5; }
+  .c6 { grid-column: span 6; } .c7 { grid-column: span 7; } .c8 { grid-column: span 8; }
+}

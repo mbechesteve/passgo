@@ -77,6 +77,28 @@ credits" line. The board's footer carries no legal text and neither does this on
 the link is not optional decoration: the "BY" in CC BY-SA is a licence term, so that page
 is what keeps displaying the photographs lawful. The prototype caveat moved there too.
 
+## Pages
+
+| File | What it is |
+|---|---|
+| `index.html` | the marketing page — the board, ported |
+| `login.html` | Pass number + one-time code. No password: there is none to steal, and none to store |
+| `signup.html` | the app's own three questions — country, name, ticket reference. No payment fields anywhere |
+| `dashboard.html` | the inside of the app on the web: credential, next match and seat, the record, the partner network |
+| `credits.html` | photo attributions. **Unlinked** — see Photography |
+| `portal.css` | tokens, base type, buttons, nav, footer — shared by all of them |
+| `auth.css` | only what login, sign-up and the dashboard add |
+
+Nothing is authenticated. Both forms are `method="get"` to `dashboard.html`, so any input
+opens it, no credentials are stored, and no payment details are collected on any page —
+Rev. 2 §05 holds here as it does in the app.
+
+The dashboard's figures are the **app's**, not written for the page: `KE-PM-8842`,
+Amina Nakato, `Valid · 24 days left`, Cat 2 / Gate D / Section 214 / Seat 17, the
+`KES 850 · food and drink · Kasarani ward · 12:55` record line with its `KES 150` saved,
+and the five partner counts. `src/utils/spec-figures.test.ts` guards those, so if the app's
+figures move, that suite is what will say this page is stale.
+
 ## Not wired into deployment
 
 `vercel.json` and `netlify.toml` serve the app's `dist/` at the domain root. This page is

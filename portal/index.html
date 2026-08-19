@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
 <style>
 /*
   A port of the "Pamoja Portal" board, transcribed from its own markup rather than
@@ -26,100 +27,6 @@
   The palette is the board's and is NOT the app's (deep #04222b + accent #0e6ba8, per
   Uratibu). Nothing here is imported by src/.
 */
-:root {
-  --ink:        #121316;   /* nav, cards, CTA band */
-  --ink-2:      #2A2C30;   /* ridges, hairlines on dark */
-  --ink-3:      #16181a;   /* utility bar, ticker */
-  --ink-deep:   #0A0B0D;   /* hero base */
-  --gold:       #F2C744;   /* eyebrows, numbers, hovers */
-  --gold-btn:   #F2C200;   /* buttons */
-  --gold-hot:   #FFD427;   /* button hover */
-  --green:      #067647;   /* links, list dates, event titles */
-  --green-mid:  #0A9455;   /* link hover, focus rings, next-button hover */
-  --green-bg:   #E4F1E0;   /* row hover, live chip */
-  --red:        #E8412F;   /* the live dot, and nothing else */
-  --band:       #eef0f0;
-  --paper:      #f5f8f8;   /* the page ground — not white */
-  --white:      #ffffff;
-  --stone:      #D6D3CC;
-  --stone-2:    #C9C5BD;
-  --grey:       #8A8D91;
-  --body:       #4a565b;
-  --hairline:   #dde3e4;
-  --pad-x:      clamp(20px, 5vw, 64px);
-}
-@keyframes livedot { 0%, 100% { opacity: 1 } 50% { opacity: 0.35 } }
-@keyframes tickerscroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--paper); color: var(--ink-3);
-       font-family: Outfit, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-a { color: var(--green); text-decoration: none; }
-a:hover { color: var(--green-mid); }
-::selection { background: #06764733; }
-h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; }
-p { margin: 0; }
-img { display: block; max-width: 100%; }
-ul { margin: 0; padding: 0; list-style: none; }
-
-.mono { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; }
-.m11  { font-size: 11px; letter-spacing: 0.1em; }
-
-/* Focus rings: green on light, white on dark — as the board sets them. */
-:focus-visible { outline: 2px solid var(--green-mid); outline-offset: 2px; }
-.hero :focus-visible, .cta-band :focus-visible, .nav :focus-visible { outline-color: var(--white); }
-
-/* Framed photography: grey, then a multiply wash. Every image on the page. */
-.shot { position: absolute; inset: 0; filter: grayscale(1) contrast(1.06); }
-.shot img { width: 100%; height: 100%; object-fit: cover; }
-.wash { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
-        background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(28,30,34,0.9) 100%); }
-/* The ridge line, drawn twice on the board: behind the hero, and across the CTA band. */
-.ridge { position: absolute; inset: 0; background: var(--ink-2); }
-.ridge-hero { clip-path: polygon(0 30%, 14% 30%, 27% 8%, 35% 22%, 43% 13%, 49% 26%,
-                                 57% 2%, 70% 24%, 82% 17%, 100% 32%, 100% 100%, 0 100%); }
-.ridge-cta  { clip-path: polygon(0 58%, 14% 58%, 27% 34%, 35% 50%, 43% 40%, 49% 54%,
-                                 57% 26%, 70% 52%, 82% 44%, 100% 60%, 100% 100%, 0 100%); }
-
-.btn { font-family: Outfit, sans-serif; border: none; cursor: pointer; display: inline-flex;
-       align-items: center; justify-content: center; gap: 12px; min-height: 46px; }
-.btn-gold { background: var(--gold-btn); color: var(--ink); font-size: 17px; font-weight: 700;
-            padding: 17px 32px; border-radius: 10px; }
-.btn-gold:hover { background: var(--gold-hot); color: var(--ink); }
-.btn-gold:active { filter: brightness(0.95); }
-.btn-pill-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.55);
-                  color: var(--white); font-size: 15px; font-weight: 500;
-                  padding: 11px 26px; border-radius: 999px; }
-.btn-pill-ghost:hover { background: rgba(255,255,255,0.1); color: var(--white); }
-.btn-pill-white { background: var(--white); color: var(--ink); font-size: 15px; font-weight: 700;
-                  padding: 12px 30px; border-radius: 999px; }
-.btn-pill-white:hover { opacity: 0.92; color: var(--ink); }
-.btn-pill-white:active { filter: brightness(0.95); }
-.btn-white { background: var(--white); color: var(--ink); font-size: 17px; font-weight: 700;
-             padding: 18px 36px; border-radius: 10px; }
-.btn-white:hover { opacity: 0.92; color: var(--ink); }
-.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: var(--white);
-               font-size: 16px; font-weight: 600; padding: 14px 30px; border-radius: 10px; }
-.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-.underline-link { color: var(--white); font-size: 16px; font-weight: 600;
-                  border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 3px; }
-.underline-link:hover { color: var(--gold); }
-
-/* ── Utility bar ─────────────────────────────────────────────────────────── */
-.utility { background: var(--ink-3); color: var(--band); display: flex; align-items: center;
-           gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
-
-/* ── Nav ─────────────────────────────────────────────────────────────────── */
-.nav { background: var(--ink); display: flex; align-items: center; gap: clamp(16px, 3vw, 44px);
-       padding: 18px var(--pad-x); position: sticky; top: 0; z-index: 30; }
-.brand-name { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); line-height: 1; }
-.brand-sub { display: block; margin-top: 3px; font-size: 9px; letter-spacing: 0.14em; color: var(--stone-2); }
-.nav-links { display: flex; gap: 34px; align-items: center; flex: 1; }
-.nav-links a { color: var(--white); font-size: 16px; font-weight: 500; }
-.nav-links a:hover { color: var(--gold); }
-.nav-cta { display: flex; gap: 12px; align-items: center; }
-
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .hero { position: relative; height: 760px; background: var(--ink-deep); overflow: hidden; }
 .veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
@@ -299,9 +206,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 .cta-band p { font-size: 17px; font-weight: 300; color: var(--stone); margin-top: 14px; max-width: 520px; }
 .cta-band .btn { flex: 0 0 auto; }
 
-footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(--band);
-         padding: clamp(40px, 6vw, 64px) var(--pad-x); }
-.foot-row { display: flex; justify-content: space-between; align-items: flex-start;
             gap: 48px; flex-wrap: wrap; }
 .foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); }
 .foot-row p.foot-copy { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
@@ -310,7 +214,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
 .foot-cols ul { display: flex; flex-direction: column; gap: 11px; }
 .foot-cols b { color: var(--white); font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
-.foot-cols a:hover { color: var(--gold); }
 
 /* Motion the board runs continuously, stopped for anyone who asks for less of it. */
 @media (prefers-reduced-motion: reduce) {
@@ -320,8 +223,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
 }
 
 /* ── Narrower than the board's 1200px canvas ─────────────────────────────── */
-.burger, .mob-only { display: none; }
-.menu-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 @media (min-width: 760px)  { .broken { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 250px; } }
 @media (min-width: 1100px) { .broken { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 280px; gap: 24px; } }
 @media (max-width: 1100px) {
@@ -375,8 +276,8 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
     <a href="#partners">Partners</a>
   </div>
   <div class="nav-cta">
-    <a class="btn btn-pill-white desk-only" href="#pass">Log in</a>
-    <a class="btn btn-pill-white mob-only" href="#pass" style="font-size:13px;padding:11px 18px">Get the Pass</a>
+    <a class="btn btn-pill-white desk-only" href="login.html">Log in</a>
+    <a class="btn btn-pill-white mob-only" href="signup.html" style="font-size:13px;padding:11px 18px">Get the Pass</a>
     <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
   </div>
 </nav>
@@ -397,7 +298,7 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
         <p class="lede">Match access, travel and city services on one digital pass. Pamoja never
           holds your money — every payment is a direct hand-off.</p>
         <div class="acts">
-          <a class="btn btn-gold" href="#pass">Get your Pamoja Pass
+          <a class="btn btn-gold" href="signup.html">Get your Pamoja Pass
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
           </a>
           <a class="underline-link" href="#matches">See the schedule</a>
@@ -520,7 +421,7 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
         <h2>Kenya v Mali</h2>
         <p class="when mono">Sat 26 Jun · Kick-off 16:00 EAT · Gates open 14:00</p>
         <div class="acts">
-          <a class="btn btn-gold" href="#pass">Get tickets</a>
+          <a class="btn btn-gold" href="signup.html">Get tickets</a>
           <a class="btn btn-outline" href="#pass">Getting there · shuttle every 15 min</a>
         </div>
       </div>
@@ -662,7 +563,7 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
         <h2>Own the tournament.</h2>
         <p>One pass, three countries, every match you can reach. Set it up before you fly and land ready.</p>
       </div>
-      <a class="btn btn-white" href="#pass">Get your Pamoja Pass</a>
+      <a class="btn btn-white" href="signup.html">Get your Pamoja Pass</a>
     </div>
   </section>
 
@@ -678,14 +579,14 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
     <div class="foot-cols">
       <ul>
         <li><b>The Pass</b></li>
-        <li><a href="#pass">Get the Pass</a></li>
+        <li><a href="signup.html">Get the Pass</a></li>
         <li><a href="#partners">Partners</a></li>
       </ul>
       <ul>
         <li><b>Matchday</b></li>
         <li><a href="#matches">Schedule</a></li>
         <li><a href="#events">Fan events</a></li>
-        <li><a href="#pass">Security · *723#</a></li>
+        <li><a href="dashboard.html">Security · *723#</a></li>
       </ul>
     </div>
   </div>

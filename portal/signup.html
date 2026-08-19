@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get the Pass — Pamoja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<div class="utility mono m11">
+  <span style="color:var(--stone-2)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+</div>
+
+<nav class="nav" aria-label="Main">
+  <input class="menu-toggle" type="checkbox" id="menu">
+  <a href="index.html" style="color:inherit">
+    <span class="brand-name">Pamoja</span>
+    <span class="brand-sub mono">The official fan pass</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#pass">Get the Pass</a>
+    <a href="index.html#matches">Matches &amp; Tickets</a>
+    <a href="index.html#events">Events</a>
+    <a href="index.html#explore">Explore</a>
+    <a href="index.html#partners">Partners</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-pill-white desk-only" href="login.html">Log in</a>
+    <a class="btn btn-pill-white mob-only" href="signup.html" style="font-size:13px;padding:11px 18px">Get the Pass</a>
+    <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
+  </div>
+</nav>
+
+<main class="split-page">
+  <div class="split-media">
+    <div class="shot"><img src="img/mt-kenya.jpg" alt="Batian and Nelion, the twin summits of Mount Kenya."></div>
+    <div class="veil"></div>
+    <div class="quote">
+      <p>Twende, pamoja.</p>
+      <span class="mono">Issued in under 3 minutes · no payment details needed</span>
+    </div>
+  </div>
+
+  <div class="split-form">
+    <div class="form-card">
+      <p class="eyebrow mono">Three steps</p>
+      <h1>Get your Pamoja Pass.</h1>
+      <p class="sub">The same three questions the app asks: where you collect it, who it is for,
+        and the ticket it travels with.</p>
+
+      <form action="dashboard.html" method="get">
+        <label class="field" style="margin-bottom:0">
+          <span>1 · Where are you collecting your Pass?</span>
+        </label>
+        <div class="choices">
+          <input type="radio" name="country" id="ke" value="KE" checked>
+          <label for="ke">Kenya</label>
+          <input type="radio" name="country" id="ug" value="UG">
+          <label for="ug">Uganda</label>
+          <input type="radio" name="country" id="tz" value="TZ">
+          <label for="tz">Tanzania</label>
+        </div>
+
+        <label class="field">
+          <span>2 · Who is the Pass for?</span>
+          <input type="text" name="name" autocomplete="name" placeholder="Full name"
+                 value="Amina Nakato" required>
+        </label>
+
+        <label class="field">
+          <span>3 · Your ticket reference</span>
+          <input type="text" name="ticket" placeholder="KEN-MLI · 2606-8842" value="KEN-MLI · 2606-8842">
+        </label>
+
+        <button class="btn btn-gold" type="submit">Create my Pass</button>
+      </form>
+
+      <p class="alt">Already have one? <a href="login.html">Log in →</a></p>
+
+      <p class="prototype">Prototype only. A real Pass is verified once, when it is issued, by the
+        accrediting authority — not self-entered. No payment details are collected here or
+        anywhere else: Pamoja never holds funds.</p>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="foot-row">
+    <div>
+      <p class="foot-brand">Pamoja</p>
+      <p class="foot-copy">The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never
+        holds funds — every payment is a direct hand-off.</p>
+    </div>
+    <div class="foot-cols">
+      <ul>
+        <li><b>The Pass</b></li>
+        <li><a href="signup.html">Get the Pass</a></li>
+        <li><a href="index.html#partners">Partners</a></li>
+      </ul>
+      <ul>
+        <li><b>Matchday</b></li>
+        <li><a href="index.html#matches">Schedule</a></li>
+        <li><a href="index.html#events">Fan events</a></li>
+        <li><a href="dashboard.html">Security · *723#</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
