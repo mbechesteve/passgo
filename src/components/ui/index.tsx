@@ -35,7 +35,7 @@ export function Card({
 }
 
 // ── Button ────────────────────────────────────────────────────────────────────
-type ButtonVariant = "primary" | "secondary" | "ghost";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "accent";
 
 export function Button({
   title,
@@ -61,6 +61,7 @@ export function Button({
       text: "text-ink",
     },
     ghost: { bg: "bg-transparent", text: "text-ink" },
+    accent: { bg: "bg-accent", text: "text-white" },
   };
   const s = styles[variant];
   return (

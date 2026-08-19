@@ -71,8 +71,8 @@ export function MoneyBox({
 
       <Button
         title={S.homeBrowseOffers}
-        variant="primary"
-        className="mt-4 self-start bg-accent"
+        variant="accent"
+        className="mt-4 self-start"
         onPress={onBrowse}
       />
     </LinearGradient>
