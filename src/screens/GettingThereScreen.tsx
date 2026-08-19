@@ -19,13 +19,12 @@ import {
   fetchParking,
 } from "@/data/repository";
 import { dateLabel } from "@/utils/format";
-import { awayCitySuffix, fixturesIn, linkForCountry } from "@/utils/air";
+import { awayCitySuffix, fixturesInCity, linkById } from "@/utils/air";
 import { kickoffLabel, matchLabel } from "@/utils/match";
 import { walkRangeLabel } from "@/utils/parking";
 import type {
   AirLink,
   BorderCrossing,
-  HostCountry,
   Match,
   OriginCountry,
   ParkingZone,
@@ -53,7 +52,8 @@ export function GettingThereScreen() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [mode, setMode] = useState<Mode>("drive");
   const [origin, setOrigin] = useState<OriginCountry>("UG");
-  const [destination, setDestination] = useState<HostCountry>("UG");
+  // The leg, by id — a fan picks a city to travel to, and two of them are inside Kenya.
+  const [legId, setLegId] = useState("air-eldoret");
 
   useEffect(() => {
     void fetchBorderCrossings().then(setCrossings);
@@ -64,7 +64,7 @@ export function GettingThereScreen() {
 
   const at = now();
   const crossing = crossings.find((c) => c.origin === origin);
-  const link = linkForCountry(links, destination);
+  const link = linkById(links, legId);
   const walk = walkRangeLabel(zones);
 
   // Both rows carry figures the app already stands behind — the shuttle interval in the
@@ -198,9 +198,9 @@ export function GettingThereScreen() {
               {links.map((l) => (
                 <View key={l.id} className="mb-2">
                   <Pill
-                    label={l.countryLabel}
-                    active={l.country === destination}
-                    onPress={() => setDestination(l.country)}
+                    label={l.servesCity}
+                    active={l.id === legId}
+                    onPress={() => setLegId(l.id)}
                   />
                 </View>
               ))}
@@ -228,7 +228,7 @@ export function GettingThereScreen() {
                     list, so a schedule change cannot leave this block stale. */}
                 <Eyebrow className="mt-8">{S.flyFixturesThere}</Eyebrow>
                 <View className="mt-2">
-                  {fixturesIn(matches, link.country, at).map((m) => (
+                  {fixturesInCity(matches, link.servesCity, at).map((m) => (
                     <View key={m.id} className="border-b border-hairline py-3.5">
                       <Text className="font-medium text-[15px] text-ink">
                         {matchLabel(m)}
@@ -244,7 +244,11 @@ export function GettingThereScreen() {
                 <GoodToKnow items={link.goodToKnow} />
 
                 <Text className="mt-6 font-mono text-[11px] leading-4 text-mute">
-                  {`${S.drivingAsOfPrefix} ${dateLabel(link.asOf)}. ${S.airConfirmCaveat}`}
+                  {`${S.drivingAsOfPrefix} ${dateLabel(link.asOf)}. ${
+                    link.country === "KE"
+                      ? S.airConfirmCaveatDomestic
+                      : S.airConfirmCaveat
+                  }`}
                 </Text>
               </>
             ) : null}

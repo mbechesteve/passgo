@@ -1,32 +1,31 @@
-import type { AirLink, HostCountry, Match } from "@/types";
+import type { AirLink, Match } from "@/types";
 
-/** The air leg to a host country, or null where there is none to fly. */
-export function linkForCountry(
-  links: AirLink[],
-  country: HostCountry
-): AirLink | null {
-  return links.find((l) => l.country === country) ?? null;
+/** The leg a fan has selected. */
+export function linkById(links: AirLink[], id: string): AirLink | null {
+  return links.find((l) => l.id === id) ?? null;
 }
 
-/** Fixtures still to come in one country, soonest first. */
-export function fixturesIn(
-  matches: Match[],
-  country: HostCountry,
-  at: Date
-): Match[] {
+/**
+ * Fixtures still to come in one city, soonest first.
+ *
+ * By city, not by country: a domestic leg to Eldoret must not offer every fixture in
+ * Kenya, most of which are in Nairobi and need no flight at all.
+ */
+export function fixturesInCity(matches: Match[], city: string, at: Date): Match[] {
   return matches
-    .filter((m) => m.country === country && new Date(m.kickoff) > at)
+    .filter((m) => m.city === city && new Date(m.kickoff) > at)
     .sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime());
 }
 
 /**
- * " · Kampala" for a fixture outside Kenya, "" for one inside it.
+ * " · Kampala" for a fixture away from Nairobi, "" for one in it.
  *
- * `kickoffLabel` names the venue and nothing else, which is enough while every
- * fixture is in Nairobi — as is every offer, parking zone and shuttle in the app. A
- * ground abroad is the exception, and "Tue 16:00 · Namboole" does not tell a fan in
- * Nairobi that it is in another country.
+ * `kickoffLabel` names the venue and nothing else. That is enough for Nairobi, where
+ * every offer, parking zone and shuttle in the app also is — but "Tue 16:00 · Bukhungu"
+ * does not tell a fan in Nairobi that the ground is a flight away. Keyed on the city
+ * rather than the country, because Eldoret and Kakamega are both in Kenya and both
+ * need saying.
  */
 export function awayCitySuffix(match: Match): string {
-  return match.country === "KE" ? "" : ` · ${match.city}`;
+  return match.city === "Nairobi" ? "" : ` · ${match.city}`;
 }

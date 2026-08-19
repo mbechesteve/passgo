@@ -63,8 +63,13 @@ export const S = {
   flyFixturesThere: "Fixtures there",
   // Stronger than the road caveat, because the road exists and the June 2027 air
   // network is not published by anyone. See the note in src/data/air.ts.
+  //
+  // Two versions, because a domestic hop has no embassy to ask: telling a fan flying
+  // Nairobi to Eldoret to check entry requirements would be advice about nothing.
   airConfirmCaveat:
     "Airlines and schedules for June 2027 are not published. Confirm the route with the airline, and entry requirements with the relevant embassy, before you travel.",
+  airConfirmCaveatDomestic:
+    "Schedules for June 2027 are not published. Confirm the route with the airline before you travel.",
 
   // ── ExploreScreen ───────────────────────────────────────────────────────
   exploreTitle: "Go and see Nairobi.",

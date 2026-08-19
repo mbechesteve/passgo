@@ -186,9 +186,14 @@ export type OriginCountry = "UG" | "TZ" | "RW" | "ET";
  */
 export interface AirLink {
   id: string;
-  /** The host country this leg reaches — the Fly view's selector. */
+  /** The host country this leg reaches. Domestic legs are "KE". */
   country: HostCountry;
-  countryLabel: string; // "To Uganda"
+  /**
+   * The city whose fixtures this leg is for — the Fly view's selector, and what
+   * `fixturesInCity` matches on. Not always the arrival city: the nearest airport to
+   * Bukhungu, Kakamega is Kisumu's.
+   */
+  servesCity: string;
   fromCity: string; // "Nairobi"
   fromCode: string; // "NBO"
   toCity: string; // "Entebbe"
