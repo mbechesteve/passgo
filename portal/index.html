@@ -108,10 +108,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* ── Utility bar ─────────────────────────────────────────────────────────── */
 .utility { background: var(--ink-3); color: var(--band); display: flex; align-items: center;
-           justify-content: space-between; gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
-.utility .set { display: flex; gap: 28px; }
-.utility .set span { cursor: pointer; opacity: 0.85; }
-.utility .set span:hover { opacity: 1; }
+           gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
 
 /* ── Nav ─────────────────────────────────────────────────────────────────── */
 .nav { background: var(--ink); display: flex; align-items: center; gap: clamp(16px, 3vw, 44px);
@@ -181,8 +178,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .door .num { position: absolute; top: 18px; left: 20px; font-family: "JetBrains Mono", monospace;
              font-size: 13px; letter-spacing: 0.1em; color: var(--gold); }
 /* Collapsed: the title, turned on its side, and nothing else. */
-/* Lifted clear of the credit strip: at 22px the rotated title ran straight through it. */
-.d-shut { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+.d-shut { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
           writing-mode: vertical-rl; font-weight: 600; font-size: 16px; color: var(--stone);
           white-space: nowrap; pointer-events: none; opacity: 1;
           transition: opacity 250ms cubic-bezier(0.2, 0, 0, 1); }
@@ -196,12 +192,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 .d-open h3 { font-size: 30px; letter-spacing: -0.02em; color: var(--white); margin-bottom: 10px; }
 .d-open p { font-size: 15px; font-weight: 300; color: var(--stone); line-height: 1.55; max-width: 420px; }
 /* The board prints each photo's credit on the card itself. */
-/* One line, truncated — a sliver is 128px wide and a long credit wrapped across three
-   lines and over the title. The board's own 04 credit is cut off the same way. */
-.d-credit { position: absolute; bottom: 6px; left: 14px; right: 14px;
-            font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: 0.05em;
-            color: rgba(245,248,248,0.45); pointer-events: none;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ── Featured fixture + fixtures list ────────────────────────────────────── */
 .featured { position: relative; border-radius: 10px; overflow: hidden; background: var(--ink);
@@ -217,9 +207,6 @@ ul { margin: 0; padding: 0; list-style: none; }
                     color: var(--white); line-height: 0.95; }
 .featured-body .when { font-size: 13px; letter-spacing: 0.1em; color: var(--stone-2); margin: 18px 0 30px; }
 .featured-body .acts { display: flex; gap: 12px; flex-wrap: wrap; }
-.featured .credit { position: absolute; bottom: 6px; right: 14px; z-index: 2;
-                    font-family: "JetBrains Mono", monospace; font-size: 9px;
-                    color: rgba(245,248,248,0.45); }
 
 .list-head { display: flex; justify-content: space-between; align-items: baseline;
              margin: 48px 0 8px; gap: 24px; flex-wrap: wrap; }
@@ -273,8 +260,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 .tile .cap { position: absolute; left: 22px; right: 22px; bottom: 20px; pointer-events: none; }
 .tile h3 { font-size: 21px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
 .tile p { font-size: 13px; font-weight: 300; color: var(--stone); }
-.tile .credit { position: absolute; bottom: 4px; right: 12px; font-family: "JetBrains Mono", monospace;
-                font-size: 9px; color: rgba(245,248,248,0.4); pointer-events: none; }
 .tile.feature { grid-column: span 2; grid-row: span 2; }
 .tile.feature .cap { left: 28px; right: 28px; bottom: 26px; }
 .tile.feature h3 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 800; margin: 14px 0 6px; }
@@ -326,9 +311,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
 .foot-cols b { color: var(--white); font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
 .foot-cols a:hover { color: var(--gold); }
-.credit-link { margin-top: 36px; font-size: 12px; }
-.credit-link a { color: rgba(238,240,240,0.45); text-decoration: underline; }
-.credit-link a:hover { color: var(--gold); }
 
 /* Motion the board runs continuously, stopped for anyone who asks for less of it. */
 @media (prefers-reduced-motion: reduce) {
@@ -348,7 +330,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
   .door { flex: 1 1 auto !important; min-height: 250px; }
   .d-shut { display: none; }
   .d-open { position: static; opacity: 1 !important; padding: 90px 26px 8px; }
-  .d-credit { position: static; padding: 0 26px 16px; }
 }
 @media (max-width: 860px) {
   .nav { flex-wrap: wrap; gap: 12px; }
@@ -378,10 +359,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
 
 <div class="utility mono m11">
   <span style="color:var(--stone-2)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
-  <span class="set">
-    <span>Accessibility ▾</span>
-    <span>EN / SW / FR ▾</span>
-  </span>
 </div>
 
 <nav class="nav" aria-label="Main">
@@ -398,7 +375,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
     <a href="#partners">Partners</a>
   </div>
   <div class="nav-cta">
-    <a class="btn btn-pill-ghost desk-only" href="#pass">Track my Pass</a>
     <a class="btn btn-pill-white desk-only" href="#pass">Log in</a>
     <a class="btn btn-pill-white mob-only" href="#pass" style="font-size:13px;padding:11px 18px">Get the Pass</a>
     <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
@@ -476,7 +452,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
           <h3>Match access</h3>
           <p>Your identity, entitlements and validity in one QR. Rendered on your device — never a network call at the gate.</p>
         </span>
-        <span class="d-credit">Wikimedia Commons, CC</span>
       </label>
 
       <input type="radio" name="door" id="door-2">
@@ -490,7 +465,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
           <h3>Travel &amp; borders</h3>
           <p>Road and air routes to every venue, crossing requirements and documents — with as-of dates on every figure.</p>
         </span>
-        <span class="d-credit">Wikimedia Commons, CC</span>
       </label>
 
       <input type="radio" name="door" id="door-3">
@@ -504,7 +478,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
           <h3>Partner discounts</h3>
           <p>Food, lodging, transport, retail, culture and essentials. You pay the merchant directly; the Pass writes the record.</p>
         </span>
-        <span class="d-credit">Wikimedia Commons, CC</span>
       </label>
 
       <input type="radio" name="door" id="door-4">
@@ -518,7 +491,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
           <h3>City services</h3>
           <p>Parking zones, stadium walking times and matchday transit laid over Nairobi, Kampala and Dar.</p>
         </span>
-        <span class="d-credit">Lmwangi / Wikimedia Commons, CC BY-SA 3.0</span>
       </label>
 
       <input type="radio" name="door" id="door-5">
@@ -532,7 +504,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
           <h3>Security</h3>
           <p>Steward help line and problem reporting from any screen — *723# from any network in the three countries.</p>
         </span>
-        <span class="d-credit">AMISOM / Wikimedia Commons</span>
       </label>
     </div>
     <p class="note mono">Pamoja never holds funds — every payment is a direct hand-off to the merchant, seller or airline.</p>
@@ -553,7 +524,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
           <a class="btn btn-outline" href="#pass">Getting there · shuttle every 15 min</a>
         </div>
       </div>
-      <span class="credit">Wikimedia Commons, CC</span>
     </div>
 
     <div class="list-head">
@@ -638,27 +608,22 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
           <h3>Maasai Mara</h3>
           <p>The Great Migration runs right through the group stage.</p>
         </div>
-        <span class="credit">Wikimedia Commons, CC BY-SA 4.0</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/mt-kenya.jpg" alt="The summits of Mount Kenya."></div><div class="wash"></div>
         <div class="cap"><h3>Mount Kenya</h3><p>Batian, Nelion, the Gate of the Mists</p></div>
-        <span class="credit">Chris 73 / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/lamu.jpg" alt="A dhow off Lamu."></div><div class="wash"></div>
         <div class="cap"><h3>Lamu Old Town</h3><p>700 years of Swahili dhow country</p></div>
-        <span class="credit">K. R. Gjertsen / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/x-nairobi.jpg" alt="The Nairobi skyline seen from Uhuru Park."></div><div class="wash"></div>
         <div class="cap"><h3>Nairobi</h3><p>The only capital with a national park</p></div>
-        <span class="credit">Jorge Láscar / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/x-savannah.jpg" alt="A desert date tree on the Maasai Mara plains."></div><div class="wash"></div>
         <div class="cap"><h3>Mara Conservancies</h3><p>Quiet plains beyond the reserve</p></div>
-        <span class="credit">Wikimedia Commons</span>
       </a>
     </div>
   </section>
@@ -714,7 +679,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
       <ul>
         <li><b>The Pass</b></li>
         <li><a href="#pass">Get the Pass</a></li>
-        <li><a href="#pass">Track my Pass</a></li>
         <li><a href="#partners">Partners</a></li>
       </ul>
       <ul>
@@ -725,7 +689,6 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
       </ul>
     </div>
   </div>
-  <p class="credit-link"><a href="credits.html">Photo credits</a></p>
 </footer>
 
 <script>
