@@ -3,6 +3,9 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
+import { FixtureDetail } from "@/components/pamoja/FixtureDetail";
+import { LIST_WIDTH } from "@/lib/layout";
+import { useLayoutMode } from "@/lib/useLayout";
 import { Chip } from "@/components/pamoja/Chip";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { now } from "@/lib/clock";
@@ -38,6 +41,9 @@ const TONE: Record<FixtureStatusKind, "accent" | "tint" | "panel"> = {
  */
 export function MatchesScreen() {
   const navigation = useNavigation<any>();
+  const wide = useLayoutMode() === "wide";
+  // Wide keeps the chosen fixture beside the list; a phone pushes it as its own screen.
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [matches, setMatches] = useState<Match[]>([]);
   const [maps, setMaps] = useState<HallMap[]>([]);
   const ticket = usePassStore((s) => s.ticket);
@@ -51,14 +57,29 @@ export function MatchesScreen() {
   const groups = dayGroups(matches, at);
   const venues = new Set(matches.map((m) => m.venue)).size;
 
-  return (
-    <Screen>
-      <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
-        <View className="mt-4 flex-row items-end justify-between">
+  // The first fixture stands selected on a wide viewport, so the detail pane is never
+  // an empty panel waiting to be told what to show.
+  const shown =
+    selectedId ?? (wide ? groups[0]?.matches[0]?.id ?? null : null);
+
+  const open = (id: string) => {
+    if (wide) setSelectedId(id);
+    else navigation.navigate("Fixture", { matchId: id });
+  };
+
+  const list = (
+    <ScrollView
+      className="flex-1 px-5"
+      contentContainerClassName="pb-10"
+      style={wide ? { flexGrow: 0, flexBasis: LIST_WIDTH, width: LIST_WIDTH } : undefined}
+    >
+        {/* Stacked, not a row: in the 420px list pane beside the detail, a title and a
+            meta line side by side both wrap. */}
+        <View className="mt-4">
           <Text className="font-display text-[26px] tracking-[-0.5px] text-ink">
             {S.matchesTitle}
           </Text>
-          <Text className="font-mono text-[10px] uppercase tracking-[1.2px] text-mute">
+          <Text className="mt-1 font-mono text-[10px] uppercase tracking-[1.2px] text-mute">
             {`${matches.length} ${S.matchesFixtures} · ${venues} ${S.matchesVenues}`}
           </Text>
         </View>
@@ -76,9 +97,12 @@ export function MatchesScreen() {
                 return (
                   <Pressable
                     key={m.id}
-                    onPress={() => navigation.navigate("Fixture", { matchId: m.id })}
+                    onPress={() => open(m.id)}
                     accessibilityRole="button"
-                    className="mb-2 rounded-card border border-hairline bg-canvas px-4 py-3.5 active:opacity-70"
+                    accessibilityState={{ selected: shown === m.id }}
+                    className={`mb-2 rounded-card border bg-canvas px-4 py-3.5 active:opacity-70 ${
+                      shown === m.id && wide ? "border-accent" : "border-hairline"
+                    }`}
                   >
                     <View className="flex-row items-start justify-between">
                       {/* One compact line per fixture: a schedule is scanned, not
@@ -107,7 +131,23 @@ export function MatchesScreen() {
             </View>
           </View>
         ))}
-      </ScrollView>
+    </ScrollView>
+  );
+
+  if (!wide) return <Screen>{list}</Screen>;
+
+  return (
+    <Screen fill>
+      <View className="flex-1 flex-row">
+        {list}
+        <View className="flex-1 border-l border-hairline">
+          {shown ? (
+            <ScrollView className="flex-1" contentContainerClassName="pb-10">
+              <FixtureDetail matchId={shown} />
+            </ScrollView>
+          ) : null}
+        </View>
+      </View>
     </Screen>
   );
 }

@@ -17,12 +17,18 @@ export function Screen({
   children,
   edges = ["top"],
   className = "",
+  fill = false,
 }: {
   children: ReactNode;
   edges?: ("top" | "bottom" | "left" | "right")[];
   className?: string;
+  /**
+   * Opt out of the centred reading column on wide viewports. A list-and-detail screen
+   * lays out its own panes and needs the whole scene; a single column of prose does not.
+   */
+  fill?: boolean;
 }) {
-  const wide = useLayoutMode() === "wide";
+  const wide = useLayoutMode() === "wide" && !fill;
   return (
     <SafeAreaView edges={edges} className="flex-1 bg-surface">
       <View

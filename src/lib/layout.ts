@@ -18,8 +18,16 @@ export const WIDE_MIN = 1024;
 /** The framed column on the web build below the breakpoint. */
 export const PHONE_FRAME_WIDTH = 440;
 
-/** The tab rail's width in the wide arrangement. */
-export const RAIL_WIDTH = 96;
+/**
+ * The tab rail's width in the wide arrangement.
+ *
+ * 232 rather than 96: at icon-and-label size the rail could only carry five words, and
+ * the design canvas gives it the wordmark, the live match and the Pass's own status too.
+ */
+export const RAIL_WIDTH = 232;
+
+/** The schedule pane beside the rail, with the detail taking what is left. */
+export const LIST_WIDTH = 420;
 
 /** How wide the content column is allowed to grow beside the rail. */
 export const CONTENT_MAX = 640;

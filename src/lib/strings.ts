@@ -123,6 +123,11 @@ export const S = {
     "Prototype figures. Real allocation and pricing are the LOC's to set.",
   officeTickets: "Tickets",
 
+  // ── TabRail (wide viewports) ────────────────────────────────────────────
+  railWordmark: "Pamoja",
+  railSubtitle: "Pamoja Pass · AFCON 2027",
+  railPassLabel: "Pass",
+
   // ── MatchesScreen ───────────────────────────────────────────────────────
   matchesTitle: "The whole tournament.",
   matchesFixtures: "fixtures",
