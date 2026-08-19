@@ -9,6 +9,7 @@
 // changes.
 
 import type {
+  AirLink,
   BorderCrossing,
   Entitlement,
   ExploreItem,
@@ -28,6 +29,7 @@ import { ENTITLEMENTS } from "./entitlements";
 import { PARKING_ZONES } from "./parking";
 import { BORDER_CROSSINGS } from "./borders";
 import { HALL_MAPS } from "./hallmaps";
+import { AIR_LINKS } from "./air";
 
 /** Read-through cache: cached copy if present, else compute, persist, return. */
 async function cached<T>(name: string, compute: () => T): Promise<T> {
@@ -60,6 +62,10 @@ export async function fetchEntitlements(): Promise<Entitlement[]> {
 
 export async function fetchParking(): Promise<ParkingZone[]> {
   return cached("parking", () => PARKING_ZONES);
+}
+
+export async function fetchAirLinks(): Promise<AirLink[]> {
+  return cached("airlinks", () => AIR_LINKS);
 }
 
 export async function fetchHallMaps(): Promise<HallMap[]> {

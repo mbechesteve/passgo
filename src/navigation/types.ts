@@ -36,7 +36,7 @@ export type ServicesStackParamList = {
   Category: { category: PartnerCategory };
   Parking: undefined;
   Safety: undefined;
-  Driving: undefined;
+  GettingThere: undefined;
   Scan: undefined;
 } & SharedRoutes;
 

@@ -96,7 +96,7 @@ rather than reinvents.
 | `SearchField` | The search box atop Services and category lists. |
 | `MoneyBox` | The Home savings panel — the record's own total, nothing else moves it. |
 | `TileGrid` | The two-column matchday services band. |
-| `RouteStrip` | A border crossing's route — origin city/code, the post, destination city/code. |
+| `RouteStrip` | Either leg of a journey — city/code, what's between them (a border post or `FLY`), city/code. |
 | `TicketCard` | The match ticket — crest header, gate/section/seat, and the non-scannable code stand-in. |
 | `PeakFrame` | The Mount Kenya crop every image passes through. Fills with the deep gradient until a licensed photograph of that exact place exists. |
 | `PeakIcon` | The same summit stroked at tab size — the Explore tab's icon. |

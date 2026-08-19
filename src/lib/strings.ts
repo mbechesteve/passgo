@@ -36,9 +36,12 @@ export const S = {
     "directly, by M-Pesa, Airtel Money or card. Pamoja never holds your money — it only records that this happened.",
   confirmButton: "Confirm the discount",
 
-  // ── DrivingScreen ───────────────────────────────────────────────────────
-  drivingTitle: "Driving in",
-  drivingStandfirst: "Everything you need at the border, based on where you start.",
+  // ── GettingThereScreen ──────────────────────────────────────────────────
+  gettingThereTitle: "Getting there.",
+  gettingThereStandfirst:
+    "What you need to reach the ground, by road or by air.",
+  modeDrive: "Drive",
+  modeFly: "Fly",
   drivingYourRoute: "Your route",
   drivingDistance: "Distance",
   drivingDriveTime: "Drive time",
@@ -53,6 +56,15 @@ export const S = {
   drivingParkAndWalk: "Park and walk",
   drivingConfirmCaveat:
     "Confirm current requirements with the relevant embassy or border authority before you travel.",
+  flyVia: "FLY",
+  flyTransferPrefix: "Then",
+  flyTransferMiddle: "by road to",
+  flyNeed: "At the airport you'll need",
+  flyFixturesThere: "Fixtures there",
+  // Stronger than the road caveat, because the road exists and the June 2027 air
+  // network is not published by anyone. See the note in src/data/air.ts.
+  airConfirmCaveat:
+    "Airlines and schedules for June 2027 are not published. Confirm the route with the airline, and entry requirements with the relevant embassy, before you travel.",
 
   // ── ExploreScreen ───────────────────────────────────────────────────────
   exploreTitle: "Go and see Nairobi.",
@@ -204,8 +216,8 @@ export const S = {
   servicesSafetyDetail: "Report or get help fast",
   servicesStays: "Stays",
   servicesStaysDetail: "Verified lodges near the ground",
-  servicesDrivingTitle: "Driving in",
-  servicesDrivingDetail: "What you need at the border",
+  servicesDrivingTitle: "Getting there",
+  servicesDrivingDetail: "By road or by air",
   servicesNeedAHand: "Need a hand?",
   servicesStewards: "Stewards answer in under 2 minutes on matchday.",
 

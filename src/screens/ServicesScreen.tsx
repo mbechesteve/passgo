@@ -49,7 +49,7 @@ export function ServicesScreen() {
         </View>
 
         <Pressable
-          onPress={() => navigation.navigate("Driving")}
+          onPress={() => navigation.navigate("GettingThere")}
           className="mt-1 flex-row items-center justify-between rounded-card border border-hairline bg-canvas px-4 py-4 active:opacity-80"
         >
           <View className="flex-1">

@@ -19,7 +19,7 @@ import { WalletScreen } from "@/screens/WalletScreen";
 import { TicketOfficeScreen } from "@/screens/TicketOfficeScreen";
 import { ParkingScreen } from "@/screens/ParkingScreen";
 import { SafetyScreen } from "@/screens/SafetyScreen";
-import { DrivingScreen } from "@/screens/DrivingScreen";
+import { GettingThereScreen } from "@/screens/GettingThereScreen";
 import { ScanScreen } from "@/screens/ScanScreen";
 import { ConfirmScreen } from "@/screens/ConfirmScreen";
 import type {
@@ -86,7 +86,7 @@ function ServicesStackScreen() {
       <ServicesStack.Screen name="Confirm" component={ConfirmScreen} />
       <ServicesStack.Screen name="Parking" component={ParkingScreen} />
       <ServicesStack.Screen name="Safety" component={SafetyScreen} />
-      <ServicesStack.Screen name="Driving" component={DrivingScreen} />
+      <ServicesStack.Screen name="GettingThere" component={GettingThereScreen} />
     </ServicesStack.Navigator>
   );
 }

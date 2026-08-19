@@ -15,6 +15,7 @@ import { colors } from "@/lib/theme";
 import { S } from "@/lib/strings";
 import { fetchExplore, fetchHallMaps, fetchMatches, fetchPartners } from "@/data/repository";
 import { mapForMatch } from "@/utils/hallmap";
+import { awayCitySuffix } from "@/utils/air";
 import { daysUntilLabel, kickoffLabel, matchLabel } from "@/utils/match";
 import type { ExploreItem, HallMap, Match, Partner } from "@/types";
 
@@ -199,7 +200,7 @@ export function ExploreScreen() {
                         {matchLabel(m)}
                       </Text>
                       <Text className="mt-0.5 font-mono text-[11px] text-mute">
-                        {kickoffLabel(m)}
+                        {`${kickoffLabel(m)}${awayCitySuffix(m)}`}
                       </Text>
                     </View>
                     {onSale ? (

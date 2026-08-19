@@ -175,6 +175,33 @@ export interface ParkingZone {
 export type OriginCountry = "UG" | "TZ" | "RW" | "ET";
 
 /** Static reference content: what a driver needs at the border. */
+/**
+ * Flying to an away fixture: the city pair, the road transfer at the far end, and what
+ * a fan needs to be let in.
+ *
+ * Deliberately carries no fare and no schedule. Airlines and timetables for June 2027
+ * are not published — Jambojet served no international routes as of June 2026 and is
+ * scheduled to resume Nairobi–Entebbe from October 2026 — so a price or a frequency
+ * here would be invented. `asOf` and the screen's caveat cover what is here.
+ */
+export interface AirLink {
+  id: string;
+  /** The host country this leg reaches — the Fly view's selector. */
+  country: HostCountry;
+  countryLabel: string; // "To Uganda"
+  fromCity: string; // "Nairobi"
+  fromCode: string; // "NBO"
+  toCity: string; // "Entebbe"
+  toCode: string; // "EBB"
+  /** The road leg from the arrival airport to the ground. */
+  transferKm: number;
+  transferTo: string; // "Namboole, Kampala"
+  requirements: { label: string; detail: string }[];
+  goodToKnow: { label: string; detail: string }[];
+  /** ISO date this record was last checked against a real source. */
+  asOf: string;
+}
+
 export interface BorderCrossing {
   origin: OriginCountry;
   originLabel: string; // "From Uganda"

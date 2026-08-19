@@ -36,6 +36,9 @@ const TEAM_FLAG: Record<string, string> = {
   Senegal: "\u{1F1F8}\u{1F1F3}",
   "Côte d'Ivoire": "\u{1F1E8}\u{1F1EE}",
   Egypt: "\u{1F1EA}\u{1F1EC}",
+  Tanzania: "\u{1F1F9}\u{1F1FF}",
+  Ghana: "\u{1F1EC}\u{1F1ED}",
+  Algeria: "\u{1F1E9}\u{1F1FF}",
 };
 
 /** The flag for a nation, or "" when we do not hold one. */
@@ -52,6 +55,11 @@ const TEAM_CODE: Record<string, string> = {
   Senegal: "SEN",
   "Côte d'Ivoire": "CIV",
   Egypt: "EGY",
+  // The first-three-letters fallback happens to be right for these three. They are
+  // listed anyway: the map is the reason the codes are correct, not a coincidence.
+  Tanzania: "TAN",
+  Ghana: "GHA",
+  Algeria: "ALG",
 };
 
 export function crestCode(team: string): string {
