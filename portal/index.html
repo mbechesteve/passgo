@@ -295,8 +295,9 @@ ul { margin: 0; padding: 0; list-style: none; }
 .split-left .foot { margin-top: auto; padding-top: 28px; font-size: 10px;
                     letter-spacing: 0.08em; color: var(--grey); }
 .split-right { flex: 1 1 460px; padding: clamp(20px, 3vw, 40px); display: grid;
-               grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px;
+               grid-template-columns: repeat(3, 1fr); gap: 14px;
                align-content: start; grid-auto-rows: min-content; }
+@media (max-width: 560px) { .split-right { grid-template-columns: repeat(2, 1fr); } }
 .count { border: 1px solid var(--ink-2); border-radius: 10px; padding: 22px 20px; }
 .count:hover { border-color: var(--gold); }
 .count b { display: block; font-family: "JetBrains Mono", monospace; font-weight: 600;
@@ -650,14 +651,14 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
         <span class="credit">K. R. Gjertsen / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
-        <div class="shot"><img src="img/nairobi.jpg" alt="The Nairobi skyline."></div><div class="wash"></div>
+        <div class="shot"><img src="img/x-nairobi.jpg" alt="The Nairobi skyline seen from Uhuru Park."></div><div class="wash"></div>
         <div class="cap"><h3>Nairobi</h3><p>The only capital with a national park</p></div>
-        <span class="credit">Lmwangi / Wikimedia Commons</span>
+        <span class="credit">Jorge Láscar / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
-        <div class="shot"><img src="img/uhuru-park.jpg" alt="Uhuru Park at sunset."></div><div class="wash"></div>
-        <div class="cap"><h3>Uhuru Park</h3><p>The fan zone, in the middle of town</p></div>
-        <span class="credit">Wikimedia Commons, CC</span>
+        <div class="shot"><img src="img/x-savannah.jpg" alt="A desert date tree on the Maasai Mara plains."></div><div class="wash"></div>
+        <div class="cap"><h3>Mara Conservancies</h3><p>Quiet plains beyond the reserve</p></div>
+        <span class="credit">Wikimedia Commons</span>
       </a>
     </div>
   </section>
@@ -674,12 +675,16 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
         <p class="foot mono">Prototype figures · Pamoja never holds funds.</p>
       </div>
       <div class="split-right">
-        <div class="count"><b>1,340</b><span>Eat</span><small>Food and drink</small></div>
+        <!-- Five categories, not the board's six: these are the counts
+             spec-figures.test.ts guards as proposal figures. Sub-lines follow the
+             board's idiom — a discount where there is one to quote, a description
+             otherwise. "Up to −20%" is true of every category: DISCOUNTS cycles
+             [5, 10, 15, 20] across all of them. -->
+        <div class="count"><b>1,340</b><span>Eat</span><small>Up to −20%</small></div>
         <div class="count"><b>460</b><span>Shop</span><small>Markets to malls</small></div>
-        <div class="count"><b>210</b><span>Stay</span><small>Lodging</small></div>
-        <div class="count"><b>95</b><span>Do</span><small>Culture and tours</small></div>
-        <div class="count"><b>84</b><span>Move</span><small>Transport</small></div>
-        <div class="count"><b>−20%</b><span>Deepest</span><small>Discounts run −5% to −20%</small></div>
+        <div class="count"><b>210</b><span>Stay</span><small>Up to −20%</small></div>
+        <div class="count"><b>95</b><span>Do</span><small>Museums, parks, tours</small></div>
+        <div class="count"><b>84</b><span>Move</span><small>Shuttles and transport</small></div>
       </div>
     </div>
   </section>
