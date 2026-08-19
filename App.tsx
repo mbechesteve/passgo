@@ -6,11 +6,11 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
   useFonts,
-  Outfit_400Regular,
-  Outfit_500Medium,
-  Outfit_700Bold,
-  Outfit_800ExtraBold,
-} from "@expo-google-fonts/outfit";
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_600SemiBold,
+  DMSans_700Bold,
+} from "@expo-google-fonts/dm-sans";
 import {
   JetBrainsMono_400Regular,
   JetBrainsMono_500Medium,
@@ -30,10 +30,10 @@ import { useLayoutMode } from "@/lib/useLayout";
 export default function App() {
   const mode = useLayoutMode();
   const [fontsLoaded] = useFonts({
-    Outfit_400Regular,
-    Outfit_500Medium,
-    Outfit_700Bold,
-    Outfit_800ExtraBold,
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_600SemiBold,
+    DMSans_700Bold,
     JetBrainsMono_400Regular,
     JetBrainsMono_500Medium,
   });

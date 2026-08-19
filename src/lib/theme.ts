@@ -1,22 +1,26 @@
 // Central palette — kept in sync with tailwind.config.js. Used where raw color
 // values are needed (maps, icons, shadows) outside of className.
-// Sampled from the PAMOJA proposal artwork; exactly two hues.
+//
+// From minimax/DESIGN.md. This is no longer the Uratibu palette; see DESIGN.md for
+// what was replaced and why.
 export const colors = {
-  deep: "#04222b",
-  deepSoft: "#223c44",
-  deepGrad: "#0a3641",
-  deepDeeper: "#062b36",
-  accent: "#0e6ba8",
-  accentTint: "#e2edf4",
-  accentSoft: "#6fc2e8",
-  ondarkMute: "#8ea5ae",
-  ondarkFaint: "#7fa5b4",
-  ink: "#16181a",
-  body: "#4a565b",
-  mute: "#5a686d",
-  faint: "#8a9599",
-  hairline: "#dde3e4",
-  panel: "#eef0f0",
-  surface: "#f5f8f8",
+  deep: "#0a0a0a",
+  deepSoft: "#181e25",
+  deepGrad: "#181e25",
+  deepDeeper: "#0a0a0a",
+  accent: "#1456f0",
+  accentTint: "#bfdbfe",
+  accentSoft: "#3daeff",
+  ondarkMute: "#a8aab2",
+  ondarkFaint: "#8e8e93",
+  ink: "#0a0a0a",
+  body: "#45515e",
+  mute: "#5f5f5f",
+  faint: "#8e8e93",
+  hairline: "#e5e7eb",
+  panel: "#f2f3f5",
+  surface: "#f7f8fa",
   canvas: "#ffffff",
+  live: "#1ba673",
+  liveTint: "#e8ffea",
 } as const;

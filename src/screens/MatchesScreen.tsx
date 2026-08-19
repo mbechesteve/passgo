@@ -18,9 +18,9 @@ import { dayGroups, fixtureStatus, venueLine } from "@/utils/schedule";
 import type { FixtureStatusKind } from "@/utils/schedule";
 import type { HallMap, Match } from "@/types";
 
-/** Status is shown as depth of the one accent, never as a third colour. */
-const TONE: Record<FixtureStatusKind, "accent" | "tint" | "panel"> = {
-  live: "accent",
+/** Depth of the one accent for what can be bought; the semantic pair for live. */
+const TONE: Record<FixtureStatusKind, "accent" | "tint" | "panel" | "live"> = {
+  live: "live",
   "ticket-held": "tint",
   "on-sale": "tint",
   "sold-out": "panel",

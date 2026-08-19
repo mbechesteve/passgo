@@ -1,51 +1,75 @@
 # Pamoja Design System
 
-Pamoja is built on two hues, sampled from the PAMOJA proposal artwork. There is
-no per-category chromatic accent system: every screen draws from the same
-deep/accent pair plus a neutral ink-to-canvas ramp.
+Pamoja follows **`minimax/DESIGN.md`**, the design template added by
+`npx getdesign@latest add minimax`. That file is the reference; this one records how it
+lands on this codebase and what it replaced.
+
+## What this replaced, and the cost
+
+The previous system was derived from the PAMOJA proposal artwork and matched **Uratibu**
+exactly — Forest `#04222b`, Command Cerulean `#0e6ba8`, Paper `#f5f8f8`, Ink — with
+**Outfit** mandated by Uratibu §03, and a standing rule of *two hues only*.
+
+None of that is followed any more. It is a deliberate reversal, taken knowingly:
+
+- **Uratibu §03 is not observed.** The display and body face is now DM Sans.
+- **The two-hue rule is gone.** minimax defines twenty-eight colours.
+- **Paper, Forest and Command Cerulean are gone**, replaced by minimax's near-black and
+  brand blue.
+
+What survived, and why it survived, is set out below. If Uratibu is ever reinstated, this
+section is the list of what has to move back.
 
 ## Palette
 
-| Token | Hex | Use |
-| --- | --- | --- |
-| `deep` | `#04222b` | Pass card / dark surfaces |
-| `deep-soft` | `#223c44` | Secondary dark surface, deep-on-deep separation |
-| `deep-grad` | `#0a3641` | Second gradient stop |
-| `deep-deeper` | `#062b36` | Third gradient stop |
-| `accent` | `#0e6ba8` | The single blue — active tab, links, primary actions |
-| `accent-tint` | `#e2edf4` | Chip fill on light |
-| `accent-soft` | `#6fc2e8` | Accent text ON deep |
-| `ondark-mute` | `#8ea5ae` | Secondary text on deep |
-| `ondark-faint` | `#7fa5b4` | Tertiary text on deep |
-| `ink` | `#16181a` | Headings, primary text |
-| `body` | `#4a565b` | Default body text |
-| `mute` | `#5a686d` | Secondary / lower-priority text |
-| `faint` | `#8a9599` | Placeholder text, inactive icons |
-| `hairline` | `#dde3e4` | 1px borders, dividers |
-| `panel` | `#eef0f0` | Soft fill for pills / inset chips |
-| `surface` | `#f5f8f8` | Page background |
-| `canvas` | `#ffffff` | Card backgrounds |
+| Token | Hex | minimax name | Use |
+| --- | --- | --- | --- |
+| `deep` | `#0a0a0a` | primary | Pass card, the rail, dark surfaces |
+| `deep-soft` / `deep-grad` | `#181e25` | primary-soft | Deep-on-deep separation, gradient stop |
+| `accent` | `#1456f0` | brand-blue | The interactive colour — active tab, links, primary actions |
+| `accent-tint` | `#bfdbfe` | brand-blue-200 | Chip fill on light |
+| `accent-soft` | `#3daeff` | brand-cyan | Accent text ON deep |
+| `live` / `live-tint` | `#1ba673` / `#e8ffea` | success-text / success-bg | Live and confirmed states |
+| `ink` | `#0a0a0a` | ink | Headings, primary text |
+| `body` | `#45515e` | slate | Default body text |
+| `mute` | `#5f5f5f` | steel | Secondary text |
+| `faint` | `#8e8e93` | stone | Placeholders, inactive icons |
+| `hairline` | `#e5e7eb` | hairline | 1px borders |
+| `panel` | `#f2f3f5` | surface-soft | Soft fills |
+| `surface` | `#f7f8fa` | surface | Page background |
+| `canvas` | `#ffffff` | canvas | Card backgrounds |
 
-Two hues only — `deep` and `accent`. There is no third or fourth brand colour
-and no per-category or per-status colour coding.
+**One interactive hue.** minimax has coral, magenta and purple, and is explicit that they
+are for product identity and *"never for general buttons or text"*. This app has no
+product line to identify, so it takes the blue for interaction and nothing else. Its one
+semantic pair — success — carries live and confirmed states, which is why a live fixture
+is green and a purchasable one is blue.
 
 ## Typography
 
-Headings and body are set in **Outfit** (Uratibu §03) — Regular for body, Medium for
-emphasis, Bold for headings, ExtraBold for the large money figures. Everything
-procedural — codes, amounts, record lines, pass numbers, timestamps — is set in
-**JetBrains Mono**, uppercased for eyebrows, so a glance distinguishes narrative text
-from data the user might need to type, read aloud, or match against a physical
-document.
+**DM Sans** for every voice role — 400 body, 500 medium, 600 headings, 700 emphasis —
+which is what minimax specifies and the reason Outfit is gone.
+
+**JetBrains Mono is kept, against minimax's advice.** Its rule is *"don't introduce a
+second display typeface"*, and mono here is not a display face: it is the data register.
+Codes, amounts, record lines, pass numbers and timestamps are set in it so that a glance
+separates narrative text from data a fan might type, read aloud, or match against a
+physical document. That is a functional device this product needs and the template had no
+reason to consider. It is the one documented departure from the template.
 
 Families are addressed by semantic key (`font-sans`, `font-medium`, `font-display`,
-`font-display-heavy`, `font-mono`, `font-mono-medium`), never by weight utility — the
-faces carry the weight. Swapping the faces behind these keys re-letters the whole app
-without touching a screen.
+`font-display-heavy`, `font-mono`, `font-mono-medium`), never by weight utility. Swapping
+the faces behind these keys re-letters the whole app without touching a screen — which is
+what made this change a two-file edit rather than a fifty-screen one.
 
 ## Shape
 
-Cards use a `10px` border radius (`rounded-card`).
+minimax's radius scale, with its signature pairing: `rounded-card` is **16px** (its `xl`)
+and `rounded-hero` is **32px**, and the contrast between the two is the point. `xs` 4px,
+`sm` 6px, `md` 8px and `lg` 12px are available beneath them.
+
+Every button, pill and badge is `rounded-full`, which minimax states as a Do and treats
+as a brand signature.
 
 ## Motif
 
@@ -63,11 +87,12 @@ rather than trusting each caller to remember.
 Media only. Cards, chips and panels stay rectangular; a shape used everywhere stops
 meaning anything.
 
-## Category, without a third colour
+## Category, without a colour code
 
 Where something has tiers — the ticket office's Cat 1/2/3 blocks — the tier is shown
-as *depth of the one accent*, not as a colour code: full accent, 55%, 25%. Three
-hues would break the two-hue rule for the sake of a legend. A state that is not a
+as *depth of the one accent*: full accent, 55%, 25%. This rule predates the minimax
+template and the template agrees with it — brand hues are reserved for product identity
+and never for general use, so a legend does not get to spend three of them. A state that is not a
 tier at all, like a sold-out block, leaves the hue entirely for `panel`, so it reads
 as absent rather than as a fourth tier.
 

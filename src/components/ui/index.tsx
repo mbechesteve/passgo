@@ -54,7 +54,7 @@ export function Button({
   icon?: ReactNode;
   className?: string;
 }) {
-  // Webflow: near-black primary, white+hairline secondary, 4px radius.
+  // minimax: "apply rounded.full to every button, every pill tab, every badge".
   const styles: Record<ButtonVariant, { bg: string; text: string }> = {
     primary: { bg: "bg-deep", text: "text-white" },
     secondary: {
@@ -71,7 +71,7 @@ export function Button({
       disabled={disabled || loading}
       accessibilityRole="button"
       accessibilityState={{ disabled: !!(disabled || loading), busy: !!loading }}
-      className={`flex-row items-center justify-center rounded px-5 py-3.5 active:opacity-80 ${s.bg} ${
+      className={`flex-row items-center justify-center rounded-full px-6 py-3.5 active:opacity-80 ${s.bg} ${
         disabled ? "opacity-40" : ""
       } ${className}`}
       {...rest}
