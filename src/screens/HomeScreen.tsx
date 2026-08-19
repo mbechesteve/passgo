@@ -1,45 +1,83 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
+import { Avatar } from "@/components/pamoja/Avatar";
+import { Chip } from "@/components/pamoja/Chip";
+import { Crest } from "@/components/pamoja/Crest";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
+import { MoneyBox } from "@/components/pamoja/MoneyBox";
 import { OfferRow } from "@/components/pamoja/OfferRow";
-import { colors } from "@/lib/theme";
 import { now } from "@/lib/clock";
 import { S } from "@/lib/strings";
 import { fetchMatches } from "@/data/repository";
 import { usePartnerStore } from "@/store/usePartnerStore";
-import { useRecordStore } from "@/store/useRecordStore";
 import { usePassStore } from "@/store/usePassStore";
-import { totalSaved } from "@/utils/record";
+import { useRecordStore } from "@/store/useRecordStore";
+import { distanceKm, km } from "@/utils/format";
 import { homeVariant } from "@/utils/home";
-import { nextMatch, matchLabel, kickoffLabel } from "@/utils/match";
+import {
+  daysUntilLabel,
+  gatesOpenLabel,
+  kickoffLabel,
+  matchLabel,
+  nextMatch,
+} from "@/utils/match";
 import { nearby } from "@/utils/partners";
 import { validityLabel } from "@/utils/pass";
-import { kes } from "@/utils/format";
+import { offersUsed, savingsSeries, totalSaved, weekSavings } from "@/utils/record";
 import type { Match } from "@/types";
 
 /** Where the fan is standing. Kasarani, so Figure 2's lunch is the nearest offer. */
 const KASARANI = { lat: -1.2266, lng: 36.8899 };
 
-function SavedTile({ saved }: { saved: number }) {
+/** "SAT · 16:00" — the drawing's dot-separated form, from the derived label. */
+function kickoffChip(fixture: Match): string {
+  const [dayAndTime] = kickoffLabel(fixture).split(" · ");
+  const [weekday, time] = dayAndTime.split(" ");
+  return `${weekday.toUpperCase()} · ${time}`;
+}
+
+function FixtureCard({
+  fixture,
+  onViewPass,
+}: {
+  fixture: Match;
+  onViewPass: () => void;
+}) {
   return (
-    <View
-      className="mt-4 rounded-card px-5 py-5"
-      style={{ backgroundColor: colors.deep }}
-    >
-      <Text className="font-mono text-[11px] uppercase tracking-[1.5px] text-faint">
-        {S.homeYouveSaved}
-      </Text>
-      <Text className="mt-1.5 font-display text-[32px] tracking-[-0.5px] text-white">
-        {kes(saved)}
-      </Text>
-      {saved === 0 && (
-        <Text className="mt-2 font-mono text-[11px] leading-4 text-faint">
-          {S.homeSavedEmptyHint}
+    <View className="mt-4 rounded-card border border-hairline bg-canvas px-5 pt-5">
+      <View className="flex-row items-center justify-between">
+        <View className="flex-row items-center">
+          <Text className="font-mono text-[12px] tracking-[1.5px] text-accent">
+            {kickoffChip(fixture)}
+          </Text>
+          <View className="ml-2.5">
+            <Chip label={daysUntilLabel(fixture, now())} tone="accent" />
+          </View>
+        </View>
+        <Chip label={fixture.venue} tone="panel" />
+      </View>
+
+      <View className="mt-4 flex-row items-center justify-between">
+        <Crest team={fixture.home} tone="deep" />
+        <Text className="flex-1 px-3 text-center font-display text-[19px] text-ink">
+          {matchLabel(fixture)}
         </Text>
-      )}
+        <Crest team={fixture.away} />
+      </View>
+
+      <View className="mt-4 flex-row items-center justify-between border-t border-hairline py-4">
+        <Text className="text-[13px] text-body">
+          {`${S.homeGatesOpenPrefix} ${gatesOpenLabel(fixture)}`}
+        </Text>
+        <Pressable onPress={onViewPass}>
+          <Text className="font-medium text-[14px] text-accent">
+            {S.homeViewPass}
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -57,57 +95,81 @@ export function HomeScreen() {
     void fetchMatches().then(setMatches);
   }, [load]);
 
-  const saved = totalSaved(events);
+  const at = now();
   const variant = homeVariant(events);
-  const fixture = nextMatch(matches, now());
+  const fixture = nextMatch(matches, at);
   const offers = nearby(partners, KASARANI, 3);
   const crossing = events.find((e) => e.kind === "border");
+
+  const money = (
+    <MoneyBox
+      saved={totalSaved(events)}
+      week={weekSavings(events, at)}
+      series={savingsSeries(events, at, 7)}
+      offers={offersUsed(events)}
+      onBrowse={() => navigation.navigate("Services")}
+    />
+  );
 
   return (
     <Screen>
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
-        <Eyebrow className="mt-4">{S.homeToday}</Eyebrow>
+        <View className="mt-4 flex-row items-center justify-between">
+          <View>
+            <Eyebrow>{S.homeToday}</Eyebrow>
+            <Text className="mt-1 font-display text-[26px] tracking-[-0.5px] text-ink">
+              {S.homeMatchday}
+            </Text>
+          </View>
+          {pass ? <Avatar name={pass.holderName} /> : null}
+        </View>
 
-        {/* A fan who lives here leads with the match; a fan who flew in leads
-            with validity and the border they came through. Figure 3. */}
         {variant === "resident" ? (
           <>
-            {fixture && (
-              <View className="mt-4 rounded-card border border-hairline bg-canvas px-5 py-5">
-                <Text className="font-medium text-[22px] text-ink">
-                  {matchLabel(fixture)}
-                </Text>
-                <Text className="mt-1 font-mono text-[12px] text-mute">
-                  {kickoffLabel(fixture)}
-                </Text>
-              </View>
-            )}
-            <SavedTile saved={saved} />
+            {fixture ? (
+              <FixtureCard
+                fixture={fixture}
+                onViewPass={() => navigation.navigate("Pass")}
+              />
+            ) : null}
+            {money}
           </>
         ) : (
           <>
-            {pass && (
+            {pass ? (
               <View className="mt-4 rounded-card border border-hairline bg-canvas px-5 py-5">
                 <Text className="font-medium text-[22px] text-ink">
-                  {validityLabel(pass, now())}
+                  {validityLabel(pass, at)}
                 </Text>
-                {crossing && (
+                {crossing ? (
                   <Text className="mt-1 font-mono text-[12px] text-mute">
-                    {S.homeEnteredAtPrefix} {crossing.place.name}
+                    {`${S.homeEnteredAtPrefix} ${crossing.place.name}`}
                   </Text>
-                )}
+                ) : null}
               </View>
-            )}
-            <SavedTile saved={saved} />
+            ) : null}
+            {money}
           </>
         )}
 
-        <Eyebrow className="mt-8">{S.homeOffersNearYou}</Eyebrow>
+        <View className="mt-8 flex-row items-center justify-between">
+          <Eyebrow>{S.homeOffersNearYou}</Eyebrow>
+          <Pressable onPress={() => navigation.navigate("Services")}>
+            <Text className="font-medium text-[13px] text-accent">
+              {S.homeSeeAll}
+            </Text>
+          </Pressable>
+        </View>
         <View className="mt-2">
           {offers.map((p) => (
             <OfferRow
               key={p.id}
               partner={p}
+              subline={
+                fixture
+                  ? km(distanceKm(p.coords, fixture.coords))
+                  : undefined
+              }
               onPress={() => navigation.navigate("Partner", { partnerId: p.id })}
             />
           ))}

@@ -38,10 +38,19 @@ export const S = {
 
   // ── HomeScreen ──────────────────────────────────────────────────────────
   homeToday: "Today",
+  homeMatchday: "Matchday",
   homeYouveSaved: "You've saved",
   homeSavedEmptyHint: "Find an offer near you and your first line gets written.",
   homeEnteredAtPrefix: "Entered at",
   homeOffersNearYou: "Offers near you",
+  homeGatesOpenPrefix: "Gates open",
+  homeViewPass: "View pass",
+  homeBrowseOffers: "Browse offers",
+  homeSeeAll: "See all",
+  homeThisWeekPrefix: "+",
+  homeThisWeekSuffix: "THIS WEEK",
+  homeOfferUsedSuffix: "offer used",
+  homeOffersUsedSuffix: "offers used",
 
   // ── IssuanceScreen ──────────────────────────────────────────────────────
   issuanceCountryKenya: "Kenya",
