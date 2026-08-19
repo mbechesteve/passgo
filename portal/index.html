@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
+<script>document.documentElement.setAttribute("data-booting", "");</script>
 <style>
 /*
   A port of the "Pamoja Portal" board, transcribed from its own markup rather than
@@ -279,6 +280,21 @@
 </style>
 </head>
 <body>
+
+<div class="boot" id="boot" role="status" aria-live="polite">
+  <div class="boot-mark">
+    <!-- peakGlyphPath(160, 104) from src/utils/peaks.ts — Nelion, the Gate of the
+         Mists, then Batian, the highest point, which is why nothing sits above it. -->
+    <svg width="160" height="104" viewBox="0 0 160 104" fill="none" aria-hidden="true">
+      <path class="boot-track" pathLength="100" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" d="M 0,104 L 67.2,11.96 L 78.4,35.98 L 89.6,0 L 160,104"/>
+      <path class="boot-ridge" pathLength="100" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" d="M 0,104 L 67.2,11.96 L 78.4,35.98 L 89.6,0 L 160,104"/>
+    </svg>
+    <p class="boot-word">Pamoja</p>
+    <p class="boot-sub mono">Loading the fan pass</p>
+  </div>
+</div>
 
 <div class="utility mono m11">
   <span style="color:var(--muted)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
@@ -658,6 +674,27 @@
      and leaves the #hash in the URL. It has to happen here, before the default action:
      open, the menu makes the sticky bar 353px tall instead of 80px, so a scroll measured
      while it is still open lands 273px short. */
+  /* Lifting the boot screen. `load` rather than DOMContentLoaded, because the thing worth
+     waiting for is the hero footage, and it is the last thing to arrive. The timeout is not
+     a nicety: if one image never resolves, `load` never fires, and without a cap the curtain
+     would stay down over a page that is otherwise perfectly usable. */
+  (function () {
+    var boot = document.getElementById("boot");
+    if (!boot) return;
+    var lifted = false;
+    function lift() {
+      if (lifted) return;
+      lifted = true;
+      boot.classList.add("is-done");
+      window.setTimeout(function () {
+        document.documentElement.removeAttribute("data-booting");
+      }, 500);
+    }
+    if (document.readyState === "complete") lift();
+    else window.addEventListener("load", lift);
+    window.setTimeout(lift, 4000);
+  })();
+
   (function () {
     var toggle = document.getElementById("menu");
     if (!toggle) return;

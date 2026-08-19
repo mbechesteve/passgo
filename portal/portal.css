@@ -140,3 +140,42 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
   .desk-only { display: none; }
   .nav-cta { margin-left: auto; }
 }
+
+/* ── The boot screen ─────────────────────────────────────────────────────────
+   The Mount Kenya motif, held up while the page loads. The summit is the app's
+   own geometry — the path is `peakGlyphPath(160, 104)` from src/utils/peaks.ts,
+   generated rather than drawn by eye, so the portal's mountain and the app's tab
+   icon cannot become two different mountains. Its shoulders sit on the base line,
+   so the whole height is mountain and it survives being small.
+
+   It is an open stroke from base corner to base corner, which is what makes it
+   work as a loading indicator: tracing it is drawing the mountain. `pathLength`
+   is declared as 100 so the dash animation is in percentages and stays correct
+   whatever the box is scaled to.
+
+   Hidden unless [data-booting] is set, and only script sets it — so a reader
+   without JavaScript never meets a curtain that nothing will lift. */
+.boot { display: none; }
+html[data-booting] .boot {
+  display: grid; place-items: center; position: fixed; inset: 0; z-index: 100;
+  background: var(--primary); opacity: 1; transition: opacity 420ms ease;
+}
+html[data-booting] .boot.is-done { opacity: 0; pointer-events: none; }
+.boot-mark { display: grid; justify-items: center; gap: 22px; padding: 24px; }
+.boot-track { stroke: rgba(238, 240, 240, 0.16); }
+.boot-ridge { stroke: var(--cyan); stroke-dasharray: 100; stroke-dashoffset: 100;
+              animation: bootTrace 2.1s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+@keyframes bootTrace {
+  0%        { stroke-dashoffset: 100; }
+  55%, 70%  { stroke-dashoffset: 0; }
+  100%      { stroke-dashoffset: -100; }
+}
+.boot-word { color: var(--canvas); font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.boot-sub { color: rgba(238, 240, 240, 0.55); font-size: 10px; text-transform: uppercase;
+            letter-spacing: 0.16em; margin-top: -14px; }
+
+/* Asked for less motion, the mountain is simply drawn, not drawn repeatedly. */
+@media (prefers-reduced-motion: reduce) {
+  .boot-ridge { animation: none; stroke-dashoffset: 0; }
+  html[data-booting] .boot { transition-duration: 1ms; }
+}
