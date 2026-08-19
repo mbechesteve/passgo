@@ -69,7 +69,10 @@ export const S = {
 
   // ── LiveScreen ──────────────────────────────────────────────────────────
   liveTitle: "Live",
-  liveBadge: "LIVE",
+  liveBadge: "Live",
+  // The minute field's value — sits in the mono data register alongside "70'", not
+  // body copy, so it keeps its own caps. Its two render sites deliberately don't
+  // apply `uppercase`: one interpolates the venue name, which would shout too.
   liveHalfTime: "HALF TIME",
   liveAlsoLive: "Also live",
   livePossession: "Possession",
