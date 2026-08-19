@@ -37,7 +37,11 @@
 @keyframes tickerscroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* The nav is sticky and 80px tall, so an anchor scrolled to its own top lands underneath
+   it — every in-page link on every page arrived with its heading hidden. The padding is
+   the bar plus a little air, and it applies to keyboard-driven and address-bar #hash
+   arrivals too, not just clicks. */
+html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 body { margin: 0; background: var(--surface); color: var(--charcoal);
        font-family: 'DM Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: var(--accent); text-decoration: none; }

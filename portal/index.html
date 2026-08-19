@@ -649,6 +649,24 @@
     query.addEventListener ? query.addEventListener("change", apply)
                            : query.addListener(apply);
   })();
+
+  /* The mobile menu closes itself once it has taken you somewhere. It is a CSS checkbox, so
+     without this it stays open over the section you just asked for.
+
+     Unchecking it is the whole handler — the browser's own anchor navigation then does the
+     scrolling, which keeps the smooth behaviour and the scroll-padding from the stylesheet
+     and leaves the #hash in the URL. It has to happen here, before the default action:
+     open, the menu makes the sticky bar 353px tall instead of 80px, so a scroll measured
+     while it is still open lands 273px short. */
+  (function () {
+    var toggle = document.getElementById("menu");
+    if (!toggle) return;
+    document.querySelectorAll(".nav a[href]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        if (toggle.checked) toggle.checked = false;
+      });
+    });
+  })();
 </script>
 
 </body>
