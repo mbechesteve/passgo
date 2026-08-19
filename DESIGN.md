@@ -10,11 +10,20 @@ deep/accent pair plus a neutral ink-to-canvas ramp.
 | --- | --- | --- |
 | `deep` | `#04222b` | Pass card / dark surfaces |
 | `deep-soft` | `#223c44` | Secondary dark surface, deep-on-deep separation |
+| `deep-grad` | `#0a3641` | Second gradient stop |
+| `deep-deeper` | `#062b36` | Third gradient stop |
 | `accent` | `#0e6ba8` | The single blue — active tab, links, primary actions |
+| `accent-bright` | `#1782c4` | Pressed |
+| `accent-press` | `#0a5486` | Pressed, on text |
+| `accent-tint` | `#e2edf4` | Chip fill on light |
+| `accent-tint-strong` | `#cde2ef` | — |
+| `accent-soft` | `#6fc2e8` | Accent text ON deep |
+| `ondark-mute` | `#8ea5ae` | — |
+| `ondark-faint` | `#7fa5b4` | — |
 | `ink` | `#16181a` | Headings, primary text |
-| `body` | `#545557` | Default body text |
-| `mute` | `#676869` | Secondary / lower-priority text |
-| `faint` | `#acadae` | Placeholder text, inactive icons |
+| `body` | `#4a565b` | Default body text |
+| `mute` | `#5a686d` | Secondary / lower-priority text |
+| `faint` | `#8a9599` | Placeholder text, inactive icons |
 | `hairline` | `#dde3e4` | 1px borders, dividers |
 | `panel` | `#eef0f0` | Soft fill for pills / inset chips |
 | `surface` | `#f5f8f8` | Page background |
@@ -25,11 +34,17 @@ and no per-category or per-status colour coding.
 
 ## Typography
 
-Headings use a geometric sans with negative tracking. Everything procedural —
-codes, amounts, and record lines (pass numbers, ticket references, timestamps)
-— is set in uppercase mono, so a glance distinguishes narrative text from
-data the user might need to type, read aloud, or match against a physical
+Headings and body are set in **Outfit** (Uratibu §03) — Regular for body, Medium for
+emphasis, Bold for headings, ExtraBold for the large money figures. Everything
+procedural — codes, amounts, record lines, pass numbers, timestamps — is set in
+**JetBrains Mono**, uppercased for eyebrows, so a glance distinguishes narrative text
+from data the user might need to type, read aloud, or match against a physical
 document.
+
+Families are addressed by semantic key (`font-sans`, `font-medium`, `font-display`,
+`font-display-heavy`, `font-mono`, `font-mono-medium`), never by weight utility — the
+faces carry the weight. Swapping the faces behind these keys re-letters the whole app
+without touching a screen.
 
 ## Shape
 

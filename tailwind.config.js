@@ -9,12 +9,28 @@ module.exports = {
     extend: {
       colors: {
         // Sampled from the PAMOJA proposal artwork (Figures 1 and 3). Two hues only.
-        deep: { DEFAULT: "#04222b", soft: "#223c44" }, // Pass card / dark surfaces
-        accent: { DEFAULT: "#0e6ba8" },                 // the single blue
+        deep: {
+          DEFAULT: "#04222b",
+          soft: "#223c44",
+          grad: "#0a3641",     // second gradient stop
+          deeper: "#062b36",   // third gradient stop
+        },
+        accent: {
+          DEFAULT: "#0e6ba8",
+          bright: "#1782c4",        // pressed
+          press: "#0a5486",         // pressed, on text
+          tint: "#e2edf4",          // chip fill on light
+          "tint-strong": "#cde2ef",
+          soft: "#6fc2e8",          // accent text ON deep
+        },
+        ondark: {
+          mute: "#8ea5ae",
+          faint: "#7fa5b4",
+        },
         ink: { DEFAULT: "#16181a" },
-        body: { DEFAULT: "#545557" },
-        mute: { DEFAULT: "#676869" },
-        faint: { DEFAULT: "#acadae" },
+        body: { DEFAULT: "#4a565b" },   // was #545557 — cooler
+        mute: { DEFAULT: "#5a686d" },   // was #676869 — cooler
+        faint: { DEFAULT: "#8a9599" },  // was #acadae — cooler
         hairline: { DEFAULT: "#dde3e4" },
         panel: { DEFAULT: "#eef0f0" },
         surface: { DEFAULT: "#f5f8f8" },
@@ -25,11 +41,12 @@ module.exports = {
       // `font-bold` and clash with the built-in weight classes. Use these names,
       // and address weight through the family — the faces carry it.
       fontFamily: {
-        sans: ["SpaceGrotesk_500Medium"],
-        medium: ["SpaceGrotesk_600SemiBold"],
-        display: ["SpaceGrotesk_700Bold"],
-        mono: ["IBMPlexMono_400Regular"],
-        "mono-medium": ["IBMPlexMono_500Medium"],
+        sans: ["Outfit_400Regular"],
+        medium: ["Outfit_500Medium"],
+        display: ["Outfit_700Bold"],
+        "display-heavy": ["Outfit_800ExtraBold"],
+        mono: ["JetBrainsMono_400Regular"],
+        "mono-medium": ["JetBrainsMono_500Medium"],
       },
       borderRadius: { card: "10px" },
     },
