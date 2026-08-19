@@ -9,6 +9,7 @@
 // changes.
 
 import type {
+  BorderCrossing,
   Entitlement,
   ExploreItem,
   Match,
@@ -24,6 +25,7 @@ import { MATCHES } from "./matches";
 import { MATCH_LIVE } from "./live";
 import { ENTITLEMENTS } from "./entitlements";
 import { PARKING_ZONES } from "./parking";
+import { BORDER_CROSSINGS } from "./borders";
 
 /** Read-through cache: cached copy if present, else compute, persist, return. */
 async function cached<T>(name: string, compute: () => T): Promise<T> {
@@ -56,4 +58,8 @@ export async function fetchEntitlements(): Promise<Entitlement[]> {
 
 export async function fetchParking(): Promise<ParkingZone[]> {
   return cached("parking", () => PARKING_ZONES);
+}
+
+export async function fetchBorderCrossings(): Promise<BorderCrossing[]> {
+  return cached("borders", () => BORDER_CROSSINGS);
 }

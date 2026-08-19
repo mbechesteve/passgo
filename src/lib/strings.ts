@@ -28,6 +28,16 @@ export const S = {
     "directly, by M-Pesa, Airtel Money or card. Pamoja never holds your money — it only records that this happened.",
   confirmButton: "Confirm the discount",
 
+  // ── DrivingScreen ───────────────────────────────────────────────────────
+  drivingTitle: "Driving in",
+  drivingStandfirst: "Everything you need at the border, based on where you start.",
+  drivingYourRoute: "Your route",
+  drivingDistance: "Distance",
+  drivingDriveTime: "Drive time",
+  drivingBorderWait: "Border wait",
+  drivingNeed: "At the border you'll need",
+  drivingGoodToKnow: "Good to know",
+
   // ── ExploreScreen ───────────────────────────────────────────────────────
   exploreSegmentEvents: "Events",
   exploreSegmentPlaces: "Places",

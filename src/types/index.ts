@@ -130,3 +130,22 @@ export interface ParkingZone {
   detail: string;
   walkMinutes: number;
 }
+
+// ── Borders ──────────────────────────────────────────────────────────────────
+export type OriginCountry = "UG" | "TZ" | "RW" | "ET";
+
+/** Static reference content: what a driver needs at the border. */
+export interface BorderCrossing {
+  origin: OriginCountry;
+  originLabel: string; // "From Uganda"
+  originCity: string; // "Kampala"
+  originCode: string; // "UGA"
+  post: string; // "MALABA"
+  destinationCity: string; // "Nairobi"
+  destinationCode: string; // "KEN"
+  distanceKm: number;
+  driveHours: number;
+  waitMinutes: number;
+  requirements: { label: string; detail: string }[];
+  goodToKnow: { label: string; detail: string }[];
+}
