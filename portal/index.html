@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pamoja — the official fan pass for AFCON 2027</title>
 <meta name="description" content="One digital pass for match access, travel and city services across Kenya, Uganda and Tanzania. Pamoja never holds your money.">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="theme-color" content="#0a0a0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -29,8 +33,16 @@
 */
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .hero { position: relative; height: 760px; background: var(--primary); overflow: hidden; }
+/* The source is 4:3 in a 1.9:1 slot, so `cover` discards a third of the frame. Centred at
+   50% that crop cut the summit; 32% keeps Batian and Nelion in shot and puts the plainer
+   scree behind the headline. Greyscale and contrast are baked into the WebP — they were
+   being downloaded in colour and then thrown away by the filter. */
+.hero-shot { filter: none; }
+.hero-shot img { object-position: 50% 32%; }
+/* 0.92 at the far stop crushed the lower mountain into a flat mass. 0.76 lets the rock
+   read; the flat veil below still carries the headline's contrast, unchanged. */
 .veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
-             background: linear-gradient(160deg, rgba(72,78,84,0.55) 0%, rgba(13,14,17,0.92) 100%); }
+             background: linear-gradient(160deg, rgba(72,78,84,0.45) 0%, rgba(13,14,17,0.76) 100%); }
 .veil-screen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
                background: linear-gradient(340deg, rgba(28,30,34,0.25) 0%, rgba(0,0,0,0) 55%); }
 .veil-flat { position: absolute; inset: 0; pointer-events: none;
@@ -286,8 +298,13 @@
 <main id="top">
 
   <section class="hero">
-    <div class="ridge ridge-hero"></div>
-    <div class="shot"><img src="img/mt-kenya.jpg" alt="Batian and Nelion, the twin summits of Mount Kenya."></div>
+    <div class="shot hero-shot">
+      <picture>
+        <source srcset="img/hero-mt-kenya.webp" type="image/webp">
+        <img src="img/mt-kenya.jpg" width="2400" height="1800" fetchpriority="high" decoding="async"
+             alt="Batian and Nelion, the twin summits of Mount Kenya.">
+      </picture>
+    </div>
     <div class="veil-mult"></div>
     <div class="veil-screen"></div>
     <div class="veil-flat"></div>
@@ -512,7 +529,9 @@
         </div>
       </a>
       <a class="tile" href="#explore">
-        <div class="shot"><img src="img/mt-kenya.jpg" alt="The summits of Mount Kenya."></div><div class="wash"></div>
+        <!-- The same file the hero serves, so this tile costs no extra bytes. It is larger
+             than the tile needs, but it is already in the cache by the time this renders. -->
+        <div class="shot" style="filter:none"><img src="img/hero-mt-kenya.webp" alt="The summits of Mount Kenya."></div><div class="wash"></div>
         <div class="cap"><h3>Mount Kenya</h3><p>Batian, Nelion, the Gate of the Mists</p></div>
       </a>
       <a class="tile" href="#explore">
