@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pamoja — the official fan pass for AFCON 2027</title>
+<meta name="description" content="One digital pass for match access, travel and city services across Kenya, Uganda and Tanzania. Pamoja never holds your money.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/*
+  The portal's palette is NOT the app's.
+
+  The app is deep #04222b + accent #0e6ba8, two hues, per Uratibu. This is a public
+  marketing surface and the design canvas gives it its own language — near-black, gold
+  and green — the same split Hayya keeps between its portal and its app. The app's theme
+  is untouched; nothing here is imported by it.
+
+  Figures, on the other hand, are the app's. Where the board and the product disagreed —
+  it drew six partner categories and fixtures we do not seed — the product won.
+*/
+:root {
+  --ink:        #121316;   /* near-black ground */
+  --ink-soft:   #2A2C30;   /* raised dark surface */
+  --gold:       #F2C744;   /* the one warm accent — CTAs and eyebrows */
+  --gold-deep:  #F2C200;
+  --green:      #067647;   /* live, and confirmations */
+  --green-soft: #0A9455;
+  --paper:      #FFFFFF;
+  --paper-warm: #F7F6F3;
+  --stone:      #D6D3CC;
+  --stone-soft: #C9C5BD;
+  --body:       #4a565b;
+  --hairline:   #E4E2DD;
+  --measure:    1320px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Outfit, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { margin: 0; letter-spacing: -0.03em; line-height: 1.02; font-weight: 800; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 clamp(20px, 4vw, 56px); }
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+}
+.gold { color: var(--gold); }
+
+/* Focus is visible everywhere — a portal is keyboard-navigated more than an app is. */
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Utility bar ─────────────────────────────────────────────────────────── */
+.utility {
+  background: #000;
+  color: var(--stone-soft);
+  padding: 9px 0;
+  border-bottom: 1px solid #1e1f22;
+}
+.utility .wrap { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.utility a:hover { color: var(--gold); }
+
+/* ── Masthead ────────────────────────────────────────────────────────────── */
+.masthead { background: var(--ink); color: var(--paper); position: sticky; top: 0; z-index: 20; }
+.masthead .wrap { display: flex; align-items: center; gap: clamp(16px, 3vw, 40px); padding-top: 14px; padding-bottom: 14px; }
+.wordmark { font-size: 25px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+.wordmark span { display: block; margin-top: 3px; color: var(--stone-soft); }
+.nav { display: flex; gap: clamp(14px, 2vw, 30px); margin-left: auto; flex-wrap: wrap; }
+.nav a { font-weight: 500; font-size: 15px; padding: 6px 0; }
+.nav a:hover { color: var(--gold); }
+.masthead .actions { display: flex; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-weight: 600; font-size: 15px;
+  padding: 12px 22px; border-radius: 999px;
+  min-height: 44px;                 /* the app's touch minimum, kept here */
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-gold  { background: var(--gold); color: var(--ink); }
+.btn-gold:hover  { background: var(--gold-deep); }
+.btn-ghost { border-color: #4a4d52; color: var(--paper); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+.btn-paper { background: var(--paper); color: var(--ink); }
+.btn-link  { text-decoration: underline; text-underline-offset: 5px; font-weight: 600; padding: 12px 0; }
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.hero { position: relative; background: var(--ink); color: var(--paper); overflow: hidden; }
+.hero-media { position: absolute; inset: 0; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); opacity: 0.5; }
+.hero-media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(100deg, rgba(18,19,22,0.96) 0%, rgba(18,19,22,0.72) 46%, rgba(18,19,22,0.28) 100%);
+}
+.hero .wrap { position: relative; padding-top: clamp(56px, 9vw, 120px); padding-bottom: clamp(40px, 6vw, 84px); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: start; }
+.hero h1 { font-size: clamp(52px, 9vw, 104px); }
+.hero .kicker { margin: 14px 0 0; font-size: 13px; color: var(--stone-soft); }
+.hero .lede { margin-top: 22px; max-width: 34em; font-size: clamp(16px, 1.5vw, 19px); font-weight: 300; color: #E8E6E1; }
+.hero .cta { margin-top: 32px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.stats { display: grid; gap: 18px; text-align: right; }
+.stats b { display: block; font-family: "JetBrains Mono", monospace; font-size: clamp(26px, 3vw, 40px); font-weight: 500; letter-spacing: -0.02em; }
+.stats span { color: var(--stone-soft); }
+.credit {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 6px clamp(20px, 4vw, 56px);
+  font-size: 10px; color: rgba(255,255,255,0.5);
+  font-family: "JetBrains Mono", monospace;
+}
+.credit a { text-decoration: underline; }
+
+/* ── Ticker ──────────────────────────────────────────────────────────────── */
+.ticker { background: #000; color: var(--stone); border-top: 1px solid #1e1f22; }
+.ticker ul {
+  display: flex; gap: 34px; margin: 0; padding: 11px clamp(20px, 4vw, 56px);
+  list-style: none; overflow-x: auto; scrollbar-width: none;
+}
+.ticker ul::-webkit-scrollbar { display: none; }
+.ticker li { white-space: nowrap; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green-soft); margin-right: 8px; }
+
+/* ── Sections ────────────────────────────────────────────────────────────── */
+section { padding: clamp(56px, 8vw, 104px) 0; }
+.section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 34px; }
+.section-head h2 { font-size: clamp(30px, 4vw, 46px); }
+.warm { background: var(--paper-warm); }
+.dark { background: var(--ink); color: var(--paper); }
+.dark .section-head h2 { color: var(--paper); }
+.rule { border: 0; border-top: 1px solid var(--hairline); margin: 0; }
+
+/* Five doors */
+.doors { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 700px)  { .doors { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .doors { grid-template-columns: 2fr 1fr 1fr 1fr 1fr; } }
+.door {
+  position: relative; border-radius: 14px; overflow: hidden;
+  min-height: 340px; background: var(--ink-soft); color: var(--paper);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 22px; border: 1px solid #33363b;
+}
+.door img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: 0.42; }
+.door > * { position: relative; }
+.door h3 { font-size: 24px; margin-top: 8px; }
+.door p { margin-top: 8px; font-size: 14px; color: #D8D6D1; font-weight: 300; }
+.door .num { position: absolute; top: 18px; left: 22px; }
+
+/* Next fixture */
+.fixture { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 32px; align-items: center; }
+.fixture h3 { font-size: clamp(30px, 4vw, 44px); margin-top: 10px; }
+.fixture .when { margin-top: 12px; color: var(--stone-soft); }
+.fixture .acts { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.card { border: 1px solid var(--hairline); border-radius: 14px; overflow: hidden; background: var(--paper); }
+.card img { height: 190px; width: 100%; object-fit: cover; }
+.card-body { padding: 18px 20px 20px; }
+.card h3 { font-size: 19px; }
+.card p { margin-top: 6px; font-size: 14px; color: var(--body); }
+.card .cap { display: block; margin-top: 10px; font-size: 10px; color: #8a8a86; font-family: "JetBrains Mono", monospace; }
+.tag { display: inline-block; background: #EEF7F1; color: var(--green); border-radius: 999px; padding: 4px 11px; font-size: 11px; font-weight: 600; }
+
+/* Partner counts */
+.counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-top: 32px; }
+.count { border: 1px solid #33363b; border-radius: 14px; padding: 20px; background: var(--ink-soft); }
+.count b { display: block; font-family: "JetBrains Mono", monospace; font-size: 30px; font-weight: 500; color: var(--gold); }
+.count span { display: block; margin-top: 6px; font-weight: 600; }
+.count small { display: block; margin-top: 3px; color: var(--stone-soft); font-size: 13px; }
+
+/* Closing + footer */
+.closing { text-align: center; }
+.closing h2 { font-size: clamp(36px, 6vw, 68px); }
+.closing p { margin: 18px auto 0; max-width: 30em; color: #E8E6E1; font-weight: 300; }
+.closing .btn { margin-top: 30px; }
+footer { background: #000; color: var(--stone-soft); padding: 56px 0 40px; font-size: 14px; }
+footer .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+footer h4 { margin: 0 0 12px; color: var(--paper); font-size: 13px; font-family: "JetBrains Mono", monospace; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 500; }
+footer li { list-style: none; margin: 0 0 8px; }
+footer ul { margin: 0; padding: 0; }
+footer a:hover { color: var(--gold); }
+.caveat { margin-top: 40px; padding-top: 22px; border-top: 1px solid #1e1f22; font-size: 12px; line-height: 1.7; }
+.caveat a { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(4, 1fr); text-align: left; }
+  .fixture { grid-template-columns: 1fr; }
+  .masthead .wrap { flex-wrap: wrap; }
+  .nav { order: 3; width: 100%; margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="utility">
+  <div class="wrap">
+    <span class="mono">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+    <span class="mono"><a href="#access">Accessibility</a> &nbsp;·&nbsp; EN / SW / FR</span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <a href="#top" class="wordmark">Pamoja<span class="mono">The official fan pass</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="#pass">Get the Pass</a>
+      <a href="#matches">Matches &amp; Tickets</a>
+      <a href="#events">Events</a>
+      <a href="#explore">Explore</a>
+      <a href="#partners">Partners</a>
+    </nav>
+    <div class="actions">
+      <a class="btn btn-ghost" href="#pass">Track my Pass</a>
+      <a class="btn btn-paper" href="#pass">Log in</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero" style="padding-bottom:0">
+    <div class="hero-media">
+      <img src="img/mt-kenya.jpg" width="1800" height="1200"
+           alt="Batian and Nelion, the twin summits of Mount Kenya, under cloud.">
+    </div>
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="mono gold">One pass · Three countries · Every match</p>
+          <h1>Twende,<br>pamoja.</h1>
+          <p class="kicker mono">/ Let's go, together — your AFCON 2027 fan pass</p>
+          <p class="lede">
+            Match access, travel and city services on one digital pass.
+            <strong>Pamoja never holds your money</strong> — every payment is a direct
+            hand-off to the merchant, the seller or the airline.
+          </p>
+          <div class="cta">
+            <a class="btn btn-gold" href="#pass">Get your Pamoja Pass →</a>
+            <a class="btn btn-link" href="#matches">See the schedule</a>
+          </div>
+        </div>
+        <div class="stats mono">
+          <div><b>11</b><span>Matches</span></div>
+          <div><b>7</b><span>Venues</span></div>
+          <div><b>3</b><span>Countries</span></div>
+          <div><b>2,189</b><span>Partners</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="credit">
+      Mount Kenya — Batian &amp; Nelion ·
+      <a href="https://commons.wikimedia.org/wiki/File:Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG">Chris 73 / Wikimedia Commons, CC BY-SA 3.0</a>
+    </p>
+  </section>
+
+  <div class="ticker">
+    <ul>
+      <li><span class="dot"></span><span class="mono">Live · ZAM v MAR · 70′ · Nyayo</span></li>
+      <li><span class="mono">Live · UGA v SEN · 55′ · Kasarani</span></li>
+      <li><span class="mono">Sat 16:00 · KEN v MLI · Kasarani</span></li>
+      <li><span class="mono">Mon 19:00 · MLI v ZAM · Talanta · On sale</span></li>
+      <li><span class="mono">Tue 16:00 · UGA v GHA · Namboole · Kampala</span></li>
+      <li><span class="mono">Wed 23 Jun 2027 · 12:55 EAT</span></li>
+    </ul>
+  </div>
+
+  <section id="pass">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>One Pass. Five doors.</h2>
+        <p class="mono" style="color:var(--body)">Open a door</p>
+      </div>
+      <div class="doors">
+        <div class="door">
+          <img src="img/kasarani.jpg" alt="" aria-hidden="true">
+          <p class="num mono gold">01</p>
+          <p class="mono gold">The credential</p>
+          <h3>Match access</h3>
+          <p>Your identity, entitlements and validity in one pass — rendered from your own device, with no network call to make it work.</p>
+        </div>
+        <div class="door">
+          <img src="img/mara.jpg" alt="" aria-hidden="true">
+          <p class="num mono gold">02</p>
+          <p class="mono gold">Getting there</p>
+          <h3>Travel &amp; borders</h3>
+          <p>Road and air to every host city, with the documents each border asks for and what the journey costs.</p>
+        </div>
+        <div class="door">
+          <img src="img/nairobi.jpg" alt="" aria-hidden="true">
+          <p class="num mono gold">03</p>
+          <p class="mono gold">2,189 businesses</p>
+          <h3>Partner discounts</h3>
+          <p>Show the Pass, pay the merchant directly, keep the discount. Pamoja only writes the record line.</p>
+        </div>
+        <div class="door">
+          <img src="img/uhuru-park.jpg" alt="" aria-hidden="true">
+          <p class="num mono gold">04</p>
+          <p class="mono gold">On the ground</p>
+          <h3>City services</h3>
+          <p>Shuttles, parking zones and walk times for the ground you are going to.</p>
+        </div>
+        <div class="door">
+          <img src="img/kasarani.jpg" alt="" aria-hidden="true">
+          <p class="num mono gold">05</p>
+          <p class="mono gold">Matchday</p>
+          <h3>Help, fast</h3>
+          <p>Stewards on every concourse, and a way to report crowding or a blocked exit in one tap.</p>
+        </div>
+      </div>
+      <p class="mono" style="margin-top:26px;color:var(--body)">
+        Pamoja never holds funds — every payment is a direct hand-off to the merchant, seller or airline.
+      </p>
+    </div>
+  </section>
+
+  <section class="dark" id="matches">
+    <div class="wrap">
+      <div class="fixture">
+        <div>
+          <p class="mono gold">Next at Kasarani · Group A · Matchday 2</p>
+          <h3>Kenya v Mali</h3>
+          <p class="when mono">Sat 26 Jun · Kick-off 16:00 EAT · Gates open 14:00</p>
+          <p style="margin-top:20px;color:#D8D6D1;font-weight:300;max-width:34em">
+            Eleven fixtures across seven venues and three countries. Every one of them
+            opens a page with its tickets, how to reach it, and what is at the ground.
+          </p>
+        </div>
+        <div class="acts">
+          <a class="btn btn-gold" href="#pass">Get tickets</a>
+          <a class="btn btn-ghost" href="#pass">All 11 fixtures</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="warm" id="events">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Fan events and promotions</h2>
+        <p class="mono" style="color:var(--body)">Free with an active Pass unless marked</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <img src="img/uhuru-park.jpg" alt="A lake at Uhuru Park in Nairobi at sunset.">
+          <div class="card-body">
+            <span class="tag">Free entry with your Pass</span>
+            <h3 style="margin-top:12px">Fan Zone · Uhuru Park</h3>
+            <p>Opens 14:00, Starehe ward, Nairobi.</p>
+            <span class="cap">Photo · Wikimedia Commons</span>
+          </div>
+        </article>
+        <article class="card">
+          <img src="img/kasarani.jpg" alt="Inside Kasarani Stadium, looking across the stands.">
+          <div class="card-body">
+            <span class="tag">Ticketed</span>
+            <h3 style="margin-top:12px">Opening ceremony</h3>
+            <p>Kasarani Stadium, Nairobi.</p>
+            <span class="cap">Photo · Wikimedia Commons</span>
+          </div>
+        </article>
+        <article class="card">
+          <img src="img/nairobi.jpg" alt="The Nairobi skyline seen from Uhuru Park.">
+          <div class="card-body">
+            <span class="tag">Free entry with your Pass</span>
+            <h3 style="margin-top:12px">Nairobi Live</h3>
+            <p>Music at the fan zone, nightly.</p>
+            <span class="cap">Photo · Lmwangi / Wikimedia Commons, CC BY-SA 3.0</span>
+          </div>
+        </article>
+      </div>
+      <p class="mono" style="margin-top:26px;color:var(--body)">
+        Line-up as of 19 Aug 2026 · prototype listings — confirm before you plan.
+      </p>
+    </div>
+  </section>
+
+  <section id="explore">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Explore the host country</h2>
+        <p class="mono" style="color:var(--body)">In season · Jul–Oct</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <img src="img/mara.jpg" alt="Wildebeest crossing the plains during the migration in the Maasai Mara.">
+          <div class="card-body">
+            <h3>Maasai Mara</h3>
+            <p>The Great Migration runs right through the group stage.</p>
+            <span class="cap">Photo · Wikimedia Commons</span>
+          </div>
+        </article>
+        <article class="card">
+          <img src="img/mt-kenya.jpg" alt="The rock summits of Batian and Nelion on Mount Kenya.">
+          <div class="card-body">
+            <h3>Mount Kenya</h3>
+            <p>Batian, Nelion, and the Gate of the Mists between them — the shape the app crops every photograph to.</p>
+            <span class="cap">Photo · Chris 73 / Wikimedia Commons, CC BY-SA 3.0</span>
+          </div>
+        </article>
+        <article class="card">
+          <img src="img/lamu.jpg" alt="A dhow under sail off Lamu.">
+          <div class="card-body">
+            <h3>Lamu Old Town</h3>
+            <p>700 years of Swahili dhow country.</p>
+            <span class="cap">Photo · Wikimedia Commons</span>
+          </div>
+        </article>
+        <article class="card">
+          <img src="img/nairobi.jpg" alt="The Nairobi skyline.">
+          <div class="card-body">
+            <h3>Nairobi</h3>
+            <p>The only capital with a national park on its doorstep.</p>
+            <span class="cap">Photo · Lmwangi / Wikimedia Commons, CC BY-SA 3.0</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" id="partners">
+    <div class="wrap">
+      <p class="mono gold">With an active Pass</p>
+      <div class="section-head" style="margin-top:10px">
+        <div>
+          <h2><span style="font-family:'JetBrains Mono',monospace;font-weight:500">2,189</span> partner discounts across three countries</h2>
+          <p style="margin-top:16px;color:#D8D6D1;font-weight:300;max-width:40em">
+            Show your Pass, pay the merchant directly, and the discount is yours — Pamoja
+            only writes the record line, and it stays on your device.
+          </p>
+        </div>
+        <a class="btn btn-gold" href="#pass">Browse partners</a>
+      </div>
+      <div class="counts">
+        <div class="count"><b>1,340</b><span>Eat</span><small>Food and drink</small></div>
+        <div class="count"><b>460</b><span>Shop</span><small>Markets to malls</small></div>
+        <div class="count"><b>210</b><span>Stay</span><small>Lodging</small></div>
+        <div class="count"><b>95</b><span>Do</span><small>Culture and tours</small></div>
+        <div class="count"><b>84</b><span>Move</span><small>Transport</small></div>
+      </div>
+      <p class="mono" style="margin-top:26px;color:var(--stone-soft)">
+        Discounts run −5% to −20% · prototype figures · Pamoja never holds funds.
+      </p>
+    </div>
+  </section>
+
+  <section class="dark closing" style="padding-top:0">
+    <div class="wrap">
+      <hr class="rule" style="border-color:#1e1f22;margin-bottom:clamp(48px,7vw,88px)">
+      <p class="mono gold">Issued in under 3 minutes · no payment details needed</p>
+      <h2 style="margin-top:16px">Own the tournament.</h2>
+      <p>One pass, three countries, every match you can reach. Set it up before you fly and land ready.</p>
+      <a class="btn btn-gold" href="#pass">Get your Pamoja Pass →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer id="access">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>Pamoja</h4>
+        <p>The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never holds funds — every payment is a direct hand-off.</p>
+      </div>
+      <div>
+        <h4>The Pass</h4>
+        <ul>
+          <li><a href="#pass">Get the Pass</a></li>
+          <li><a href="#pass">Track my Pass</a></li>
+          <li><a href="#partners">Partner discounts</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Tournament</h4>
+        <ul>
+          <li><a href="#matches">Matches &amp; tickets</a></li>
+          <li><a href="#events">Fan events</a></li>
+          <li><a href="#explore">Explore</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Accessibility</h4>
+        <ul>
+          <li>Text size follows your browser</li>
+          <li>Contrast meets WCAG AA</li>
+          <li>Controls are 44px or larger</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="caveat">
+      <strong>Prototype.</strong> Fixtures, partner counts and listings are the demo
+      figures the Pamoja app is built against, and the demo clock is fixed to
+      Wed 23 June 2027, 12:55 EAT. Venues are grounds widely reported as 2027 hosts; CAF
+      has published no official venue list. Confirm anything you plan to act on.
+      <br><br>
+      <strong>Photography</strong> is from Wikimedia Commons, self-hosted here with
+      attribution:
+      <a href="https://commons.wikimedia.org/wiki/File:Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG">Mount Kenya (Chris 73, CC BY-SA 3.0)</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:Inside_the_Kasarani_Stadium.jpg">Kasarani Stadium</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:Nairobi_skyline_P1000020.jpg">Nairobi skyline (Lmwangi, CC BY-SA 3.0)</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:Wildebeest_Migration_Masai_mara.jpg">Wildebeest migration</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:Lamu_dhow_1.JPG">Lamu dhow</a>,
+      <a href="https://commons.wikimedia.org/wiki/File:A_lake_at_Uhuru_Park_in_Nairobi,_Kenya,_at_sunset.jpg">Uhuru Park</a>.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
