@@ -13,19 +13,11 @@ import {
   daysUntilLabel,
   kickoffLabel,
   liveMatches,
-  liveMinute,
   matchLabel,
-  matchPhase,
+  minuteLabel,
   nextMatch,
 } from "@/utils/match";
 import type { Match, MatchLive } from "@/types";
-
-/** "70'", or "HALF TIME" across the interval. */
-function minuteLabel(match: Match, at: Date): string {
-  if (matchPhase(match, at) === "half-time") return S.liveHalfTime;
-  const minute = liveMinute(match, at);
-  return minute == null ? "" : `${minute}'`;
-}
 
 export function LiveScreen() {
   const [matches, setMatches] = useState<Match[]>([]);
@@ -50,7 +42,7 @@ export function LiveScreen() {
           {S.liveTitle}
         </Text>
 
-        {featured && featuredScore ? (
+        {featured ? (
           <>
             <View className="mt-4 rounded-card bg-deep px-5 py-5">
               <Chip label={S.liveBadge} tone="accent" />
@@ -63,12 +55,16 @@ export function LiveScreen() {
                   </Text>
                 </View>
                 <View className="items-center">
-                  <Text className="font-display-heavy text-[34px] text-white">
-                    {`${featuredScore.home} – ${featuredScore.away}`}
-                  </Text>
-                  <Text className="mt-1 font-mono text-[12px] text-accent-soft">
-                    {minuteLabel(featured, at)}
-                  </Text>
+                  {featuredScore ? (
+                    <>
+                      <Text className="font-display-heavy text-[34px] text-white">
+                        {`${featuredScore.home} – ${featuredScore.away}`}
+                      </Text>
+                      <Text className="mt-1 font-mono text-[12px] text-accent-soft">
+                        {minuteLabel(featured, at)}
+                      </Text>
+                    </>
+                  ) : null}
                 </View>
                 <View className="items-center">
                   <Crest team={featured.away} />
@@ -78,19 +74,27 @@ export function LiveScreen() {
                 </View>
               </View>
 
-              <View className="mt-5 border-t border-deep-grad pt-1">
-                <StatTrio
-                  tone="dark"
-                  items={[
-                    {
-                      value: `${featuredScore.possession[0]}%`,
-                      label: S.livePossession,
-                    },
-                    { value: `${featuredScore.shots[0]}`, label: S.liveShots },
-                    { value: `${featuredScore.corners[0]}`, label: S.liveCorners },
-                  ]}
-                />
-              </View>
+              {featuredScore ? (
+                <View className="mt-5 border-t border-deep-grad pt-1">
+                  <StatTrio
+                    tone="dark"
+                    items={[
+                      {
+                        value: `${featuredScore.possession[0]}% – ${featuredScore.possession[1]}%`,
+                        label: S.livePossession,
+                      },
+                      {
+                        value: `${featuredScore.shots[0]} – ${featuredScore.shots[1]}`,
+                        label: S.liveShots,
+                      },
+                      {
+                        value: `${featuredScore.corners[0]} – ${featuredScore.corners[1]}`,
+                        label: S.liveCorners,
+                      },
+                    ]}
+                  />
+                </View>
+              ) : null}
             </View>
 
             {also.length > 0 ? (

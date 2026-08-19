@@ -20,7 +20,7 @@ import { homeVariant } from "@/utils/home";
 import {
   daysUntilLabel,
   gatesOpenLabel,
-  kickoffLabel,
+  kickoffChipLabel,
   matchLabel,
   nextMatch,
 } from "@/utils/match";
@@ -32,18 +32,13 @@ import type { Match } from "@/types";
 /** Where the fan is standing. Kasarani, so Figure 2's lunch is the nearest offer. */
 const KASARANI = { lat: -1.2266, lng: 36.8899 };
 
-/** "SAT · 16:00" — the drawing's dot-separated form, from the derived label. */
-function kickoffChip(fixture: Match): string {
-  const [dayAndTime] = kickoffLabel(fixture).split(" · ");
-  const [weekday, time] = dayAndTime.split(" ");
-  return `${weekday.toUpperCase()} · ${time}`;
-}
-
 function FixtureCard({
   fixture,
+  at,
   onViewPass,
 }: {
   fixture: Match;
+  at: Date;
   onViewPass: () => void;
 }) {
   return (
@@ -51,10 +46,10 @@ function FixtureCard({
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center">
           <Text className="font-mono text-[12px] tracking-[1.5px] text-accent">
-            {kickoffChip(fixture)}
+            {kickoffChipLabel(fixture)}
           </Text>
           <View className="ml-2.5">
-            <Chip label={daysUntilLabel(fixture, now())} tone="accent" />
+            <Chip label={daysUntilLabel(fixture, at)} tone="accent" />
           </View>
         </View>
         <Chip label={fixture.venue} tone="panel" />
@@ -124,11 +119,14 @@ export function HomeScreen() {
           {pass ? <Avatar name={pass.holderName} /> : null}
         </View>
 
+        {/* A fan who lives here leads with the match; a fan who flew in leads
+            with validity and the border they came through. Figure 3. */}
         {variant === "resident" ? (
           <>
             {fixture ? (
               <FixtureCard
                 fixture={fixture}
+                at={at}
                 onViewPass={() => navigation.navigate("Pass")}
               />
             ) : null}
@@ -167,7 +165,9 @@ export function HomeScreen() {
               partner={p}
               subline={
                 fixture
-                  ? km(distanceKm(p.coords, fixture.coords))
+                  ? `${km(distanceKm(p.coords, fixture.coords))} ${
+                      S.homeOfferDistanceFrom
+                    } ${fixture.venue}`
                   : undefined
               }
               onPress={() => navigation.navigate("Partner", { partnerId: p.id })}

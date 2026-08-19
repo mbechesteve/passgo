@@ -16,6 +16,7 @@ import { fetchEntitlements, fetchMatches } from "@/data/repository";
 import { usePassStore } from "@/store/usePassStore";
 import { forCountry } from "@/utils/entitlements";
 import { nextMatch } from "@/utils/match";
+import { passStatus } from "@/utils/pass";
 import { ticketSaved } from "@/utils/ticket";
 import type { Entitlement, Match } from "@/types";
 
@@ -35,19 +36,30 @@ export function PassScreen() {
   const fixture = nextMatch(matches, now());
 
   useEffect(() => {
-    if (fixture && !ticket) issueTicketFor(fixture);
+    // Re-issue when the ticket is for a fixture other than the next one — not just
+    // when there is no ticket at all. Left unguarded, a stale ticket persists past
+    // its own fixture once the clock rolls it over (reachable via setUseRealTime)
+    // and would then render alongside the new fixture's crests and venue.
+    if (fixture && ticket?.matchId !== fixture.id) issueTicketFor(fixture);
   }, [fixture, ticket, issueTicketFor]);
 
   // The navigator only renders the tabs when a Pass exists.
   if (!pass) return null;
 
   const mine = forCountry(entitlements, pass.issuedIn);
+  const status = passStatus(pass, now());
+  const statusLabel =
+    status === "suspended"
+      ? S.passSuspended
+      : status === "expired"
+        ? S.passExpired
+        : S.passActive;
 
   return (
     <Screen>
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <View className="mt-4 flex-row items-center justify-end">
-          <Chip label={`● ${S.passActive}`} tone="tint" />
+          <Chip label={`● ${statusLabel}`} tone="tint" />
         </View>
 
         <View className="mt-2">
@@ -64,7 +76,7 @@ export function PassScreen() {
           ))}
         </View>
 
-        {ticket && fixture ? (
+        {ticket && fixture && ticket.matchId === fixture.id ? (
           <>
             <View className="mt-8">
               <TicketCard ticket={ticket} match={fixture} pass={pass} />
@@ -82,7 +94,9 @@ export function PassScreen() {
                     {row.was.toLocaleString("en-US")}
                   </Text>
                   <Text className="font-mono-medium text-[14px] text-ink">
-                    {row.now === "free" ? "Free" : row.now.toLocaleString("en-US")}
+                    {row.now === "free"
+                      ? S.passTicketFree
+                      : row.now.toLocaleString("en-US")}
                   </Text>
                 </View>
               ))}

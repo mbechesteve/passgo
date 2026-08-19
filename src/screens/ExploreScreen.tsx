@@ -47,6 +47,8 @@ function matches(haystack: string, query: string): boolean {
   return haystack.toLowerCase().includes(query.trim().toLowerCase());
 }
 
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
 function Row({ item }: { item: ExploreItem }) {
   return (
     <View className="border-b border-hairline py-3.5">
@@ -82,11 +84,14 @@ export function ExploreScreen() {
     () =>
       show("fixtures")
         ? fixtures
-            .filter(
-              (m) =>
-                new Date(m.kickoff).getTime() > at.getTime() &&
+            .filter((m) => {
+              const t = new Date(m.kickoff).getTime();
+              return (
+                t > at.getTime() &&
+                t <= at.getTime() + SEVEN_DAYS_MS &&
                 (query === "" || matches(matchLabel(m) + m.venue, query))
-            )
+              );
+            })
             .sort(
               (a, b) =>
                 new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime()
@@ -96,32 +101,39 @@ export function ExploreScreen() {
     [fixtures, filter, query, at]
   );
 
+  // "Venues" excludes events — an event under a filter named Venues is its own
+  // false statement. "All" still shows both, via the events/places split below.
   const visibleItems = useMemo(
     () =>
       show("venues")
-        ? items.filter((i) => query === "" || matches(i.name + i.detail, query))
+        ? items
+            .filter((i) => filter !== "venues" || i.kind !== "event")
+            .filter((i) => query === "" || matches(i.name + i.detail, query))
         : [],
     [items, filter, query]
   );
 
-  const visibleOffers = useMemo(
+  // Search reaches every partner, not just the eat category — a lodge has to be
+  // findable by name here, the same as it is from Services.
+  const matchedOffers = useMemo(
     () =>
       show("offers")
-        ? partners
-            .filter(
-              (p) => p.category === "eat" && (query === "" || matches(p.name, query))
-            )
-            .slice(0, 6)
+        ? partners.filter((p) => query === "" || matches(p.name, query))
         : [],
     [partners, filter, query]
   );
+  const eatOffers = matchedOffers.filter((p) => p.category === "eat").slice(0, 6);
+  const otherOffers = matchedOffers
+    .filter((p) => p.category !== "eat")
+    .slice(0, 6);
 
   const events = visibleItems.filter((i) => i.kind === "event");
   const places = visibleItems.filter((i) => i.kind !== "event");
   const empty =
     visibleFixtures.length === 0 &&
     visibleItems.length === 0 &&
-    visibleOffers.length === 0;
+    eatOffers.length === 0 &&
+    otherOffers.length === 0;
 
   return (
     <Screen>
@@ -190,11 +202,29 @@ export function ExploreScreen() {
           </>
         ) : null}
 
-        {visibleOffers.length > 0 ? (
+        {eatOffers.length > 0 ? (
           <>
             <Eyebrow className="mt-8">{S.exploreEatNearby}</Eyebrow>
             <View className="mt-2">
-              {visibleOffers.map((p) => (
+              {eatOffers.map((p) => (
+                <OfferRow
+                  key={p.id}
+                  partner={p}
+                  subline={p.ward}
+                  onPress={() =>
+                    navigation.navigate("Partner", { partnerId: p.id })
+                  }
+                />
+              ))}
+            </View>
+          </>
+        ) : null}
+
+        {otherOffers.length > 0 ? (
+          <>
+            <Eyebrow className="mt-8">{S.exploreOtherOffers}</Eyebrow>
+            <View className="mt-2">
+              {otherOffers.map((p) => (
                 <OfferRow
                   key={p.id}
                   partner={p}
