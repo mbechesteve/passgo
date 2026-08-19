@@ -1,4 +1,5 @@
 import { eatParts } from "@/lib/clock";
+import { TICKET_SEED } from "@/data/ticket";
 import type { Match, MatchTicket, Pass } from "@/types";
 import { crestCode } from "@/utils/match";
 
@@ -13,23 +14,13 @@ export function ticketReference(pass: Pass, match: Match): string {
   return `${crestCode(match.home)}-${crestCode(match.away)} · ${dayOfMonth}${month}-${serial}`;
 }
 
-/**
- * The prototype seats every holder in the same place — Figure 3's Cat 2, Gate D.
- * Real allocation is an LOC ticketing concern and is not this app's to invent.
- */
+/** Ties the seeded seat and savings (@/data/ticket) to this Pass and match. */
 export function issueTicket(pass: Pass, match: Match): MatchTicket {
   return {
     id: `${pass.id}-${match.id}`,
     passId: pass.id,
     matchId: match.id,
-    category: 2,
-    gate: "D",
-    section: "214",
-    seat: "17",
-    savings: [
-      { label: "Ticket · Cat 2", was: 2000, now: 1500 },
-      { label: "Shuttle both ways", was: 600, now: "free" },
-    ],
+    ...TICKET_SEED,
   };
 }
 
@@ -39,4 +30,18 @@ export function ticketSaved(ticket: MatchTicket): number {
     (sum, row) => sum + (row.now === "free" ? row.was : row.was - row.now),
     0
   );
+}
+
+/**
+ * Deterministic true/false cells for the ticket's non-scannable code stand-in,
+ * derived straight from the reference string's own characters. A seeded PRNG was
+ * the obvious approach and the wrong one: `state * 1103515245` exceeds
+ * Number.MAX_SAFE_INTEGER, so it loses precision and stops being deterministic.
+ */
+export function codeCells(reference: string, size: number): boolean[] {
+  return Array.from({ length: size * size }, (_, i) => {
+    const a = reference.charCodeAt(i % reference.length);
+    const b = reference.charCodeAt((i * 7 + 3) % reference.length);
+    return (a * 31 + b * 17 + i * 13) % 7 < 3;
+  });
 }

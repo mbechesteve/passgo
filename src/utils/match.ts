@@ -1,4 +1,5 @@
-import { eatParts } from "@/lib/clock";
+import { daysBetweenEatDays, eatParts } from "@/lib/clock";
+import { S } from "@/lib/strings";
 import type { Match, MatchPhase } from "@/types";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -7,7 +8,7 @@ const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export function nextMatch(matches: Match[], at: Date): Match | undefined {
   return [...matches]
     .filter((m) => new Date(m.kickoff).getTime() > at.getTime())
-    .sort((a, b) => a.kickoff.localeCompare(b.kickoff))[0];
+    .sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime())[0];
 }
 
 export function matchLabel(m: Match): string {
@@ -18,7 +19,7 @@ export function matchLabel(m: Match): string {
  * Official three-letter codes. A substring rule cannot do this job: Mali is MLI, not
  * MAL, and "Côte d'Ivoire" has no sane truncation.
  */
-export const TEAM_CODE: Record<string, string> = {
+const TEAM_CODE: Record<string, string> = {
   Kenya: "KEN",
   Mali: "MLI",
   Zambia: "ZAM",
@@ -38,6 +39,18 @@ export function kickoffLabel(m: Match): string {
   const { day, time } = eatParts(m.kickoff);
   const weekday = DAYS[new Date(`${day}T00:00:00Z`).getUTCDay()];
   return `${weekday} ${time} · ${m.venue}`;
+}
+
+/**
+ * "SAT · 16:00" — the Home fixture card's chip form. Derived independently of
+ * `kickoffLabel`, not by re-parsing its output: splitting that string apart to
+ * reassemble this one was correct only by accident, and silently wrong the
+ * moment `kickoffLabel`'s format moved.
+ */
+export function kickoffChipLabel(m: Match): string {
+  const { day, time } = eatParts(m.kickoff);
+  const weekday = DAYS[new Date(`${day}T00:00:00Z`).getUTCDay()];
+  return `${weekday.toUpperCase()} · ${time}`;
 }
 
 const HALF = 45;
@@ -67,6 +80,14 @@ export function liveMinute(m: Match, at: Date): number | null {
   return wall <= HALF ? wall : wall - INTERVAL;
 }
 
+/** "70'", or "HALF TIME" across the interval. Lifted out of LiveScreen so it can be
+ *  unit-tested — a .tsx screen file cannot be, since the suite runs with no renderer. */
+export function minuteLabel(m: Match, at: Date): string {
+  if (matchPhase(m, at) === "half-time") return S.liveHalfTime;
+  const minute = liveMinute(m, at);
+  return minute == null ? "" : `${minute}'`;
+}
+
 /** In play now, most advanced first: the first is featured, the rest are "also live". */
 export function liveMatches(matches: Match[], at: Date): Match[] {
   return matches
@@ -93,10 +114,7 @@ export function gatesOpenLabel(m: Match): string {
 export function daysUntilLabel(m: Match, at: Date): string {
   const kickoffDay = eatParts(m.kickoff).day;
   const today = eatParts(at.toISOString()).day;
-  const days = Math.round(
-    (Date.parse(`${kickoffDay}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) /
-      86_400_000
-  );
+  const days = daysBetweenEatDays(today, kickoffDay);
   if (days === 0) return "TODAY";
   if (days === 1) return "TOMORROW";
   return `IN ${days} DAYS`;

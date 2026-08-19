@@ -34,7 +34,7 @@ export function ParkingScreen() {
                 <Text className="mt-0.5 text-[13px] text-body">{z.detail}</Text>
               </View>
               <Text className="font-mono text-[12px] text-mute">
-                {`${z.walkMinutes} min walk`}
+                {`${z.walkMinutes} ${S.parkingWalkSuffix}`}
               </Text>
             </View>
           ))}

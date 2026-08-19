@@ -3,10 +3,12 @@ import {
   nextMatch,
   matchLabel,
   kickoffLabel,
+  kickoffChipLabel,
   crestCode,
   liveMatches,
   liveMinute,
   matchPhase,
+  minuteLabel,
   daysUntilLabel,
   gatesOpenLabel,
 } from "@/utils/match";
@@ -89,7 +91,6 @@ describe("crestCode", () => {
 // Kickoffs are chosen so the minutes come out clean once the 15-minute interval is
 // subtracted. At the demo instant (12:55 EAT) Zambia v Morocco is 85 wall-minutes in.
 const ZAM_MAR = () => MATCHES.find((m) => m.id === "m-zam-mar")!;
-const UGA_SEN = () => MATCHES.find((m) => m.id === "m-uga-sen")!;
 
 describe("matchPhase", () => {
   const m = ZAM_MAR();
@@ -161,6 +162,35 @@ describe("liveMatches at the demo instant", () => {
 
   it("is empty once the tournament is over", () => {
     expect(liveMatches(MATCHES, new Date("2027-08-01T12:00:00+03:00"))).toEqual([]);
+  });
+});
+
+describe("kickoffChipLabel", () => {
+  it("renders the Home fixture card's chip form", () => {
+    const m = nextMatch(MATCHES, DEMO_NOW)!;
+    expect(kickoffChipLabel(m)).toBe("SAT · 16:00");
+  });
+
+  it("reads the EAT weekday across UTC midnight, same as kickoffLabel", () => {
+    expect(kickoffChipLabel(AFTER_MIDNIGHT)).toBe("SUN · 01:00");
+  });
+});
+
+describe("minuteLabel", () => {
+  const m = ZAM_MAR();
+  const at = (wall: number) =>
+    new Date(new Date(m.kickoff).getTime() + wall * 60_000);
+
+  it("reads the playing minute with a trailing apostrophe", () => {
+    expect(minuteLabel(m, at(30))).toBe("30'");
+  });
+
+  it("reads HALF TIME across the interval, not a minute count", () => {
+    expect(minuteLabel(m, at(50))).toBe("HALF TIME");
+  });
+
+  it("is blank when the match is not in play", () => {
+    expect(minuteLabel(m, at(-1))).toBe("");
   });
 });
 

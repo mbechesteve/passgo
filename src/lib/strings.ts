@@ -37,6 +37,9 @@ export const S = {
   drivingBorderWait: "Border wait",
   drivingNeed: "At the border you'll need",
   drivingGoodToKnow: "Good to know",
+  drivingAsOfPrefix: "Correct as of",
+  drivingConfirmCaveat:
+    "Confirm current requirements with the relevant embassy or border authority before you travel.",
 
   // ── ExploreScreen ───────────────────────────────────────────────────────
   exploreTitle: "Explore",
@@ -48,6 +51,7 @@ export const S = {
   exploreThisWeek: "This week",
   exploreEventsNearYou: "Events near you",
   exploreEatNearby: "Eat nearby",
+  exploreOtherOffers: "More offers",
   exploreThingsToSee: "Things to see",
   exploreNoResults: "Nothing matches that yet.",
   exploreFreeEntry: "Free entry with your Pass",
@@ -59,12 +63,13 @@ export const S = {
   homeSavedEmptyHint: "Find an offer near you and your first line gets written.",
   homeEnteredAtPrefix: "Entered at",
   homeOffersNearYou: "Offers near you",
+  homeOfferDistanceFrom: "from",
   homeGatesOpenPrefix: "Gates open",
   homeViewPass: "View pass",
   homeBrowseOffers: "Browse offers",
   homeSeeAll: "See all",
   homeThisWeekPrefix: "+",
-  homeThisWeekSuffix: "THIS WEEK",
+  homeThisWeekSuffix: "This week",
   homeOfferUsedSuffix: "offer used",
   homeOffersUsedSuffix: "offers used",
 
@@ -100,6 +105,7 @@ export const S = {
   // ── ParkingScreen ───────────────────────────────────────────────────────
   parkingTitle: "Parking",
   parkingStandfirst: "Pre-book a zone. Payment is at the gate, by M-Pesa.",
+  parkingWalkSuffix: "min walk",
 
   // ── PartnerScreen ───────────────────────────────────────────────────────
   partnerNotListed: "That partner is no longer listed.",
@@ -114,13 +120,17 @@ export const S = {
   passUnlocksHeading: "What your Pass unlocks",
   passWalletTitle: "My Wallet",
   passWalletSubtitle: "Tickets, passes, purchases",
-  passActive: "ACTIVE",
+  passActive: "Active",
+  passSuspended: "Suspended",
+  passExpired: "Expired",
   passMatchPass: "Match pass",
-  passCategoryPrefix: "CAT",
+  passCategoryPrefix: "Cat",
+  passVersus: "VS",
   passGate: "Gate",
   passSection: "Section",
   passSeat: "Seat",
   passTicketSaves: "What this ticket saves you",
+  passTicketFree: "Free",
   passTicketTotal: "Total",
   passCodeStandIn: "Show this at the gate. A steward can also read your Pass code.",
 
@@ -172,7 +182,7 @@ export const S = {
   walletYouveSaved: "You've saved",
   walletYouveSpent: "You've spent",
   walletSavedWithApp: "Saved with the app",
-  walletThisWeek: "THIS WK",
+  walletThisWeek: "This week",
   walletOfferThisTournament: "offer this tournament",
   walletOffersThisTournament: "offers this tournament",
   walletEmptyState:

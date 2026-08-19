@@ -54,9 +54,11 @@ export function MoneyBox({
         <Text className="font-display-heavy text-[36px] tracking-[-1px] text-white">
           {kes(saved)}
         </Text>
-        <View className="pb-1.5">
-          <Sparkline values={series} />
-        </View>
+        {series.some((v) => v > 0) ? (
+          <View className="pb-1.5">
+            <Sparkline values={series} />
+          </View>
+        ) : null}
       </View>
 
       {saved === 0 ? (

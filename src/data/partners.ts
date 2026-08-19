@@ -108,7 +108,9 @@ export function generatePartners(): Partner[] {
         ward: WARDS[w],
         city: "Nairobi",
         country: "KE",
-        coords: WARD_COORDS[w],
+        // Spread rather than shared: each partner gets its own coords object,
+        // not a reference every partner in the ward holds in common.
+        coords: { ...WARD_COORDS[w] },
       });
     }
   }

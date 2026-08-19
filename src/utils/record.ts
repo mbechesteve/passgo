@@ -1,4 +1,4 @@
-import { eatParts } from "@/lib/clock";
+import { daysBetweenEatDays, eatParts } from "@/lib/clock";
 import type { EventKind, PassEvent } from "@/types";
 import { kes } from "@/utils/format";
 
@@ -65,24 +65,12 @@ export function groupByDay(events: PassEvent[]): DayGroup[] {
     }));
 }
 
-/** The EAT day an event belongs to, as a sortable "2027-06-23". */
-function eatDay(iso: string): string {
-  return eatParts(iso).day;
-}
-
-/** Days between two EAT day strings. */
-function daysBetween(from: string, to: string): number {
-  return Math.round(
-    (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000
-  );
-}
-
 /** Discounts from the trailing seven days, today included. */
 export function weekSavings(events: PassEvent[], at: Date): number {
-  const today = eatDay(at.toISOString());
+  const today = dayOf(at.toISOString());
   return events
     .filter((e) => {
-      const age = daysBetween(eatDay(e.at), today);
+      const age = daysBetweenEatDays(dayOf(e.at), today);
       return age >= 0 && age < 7;
     })
     .reduce((sum, e) => sum + (e.amount?.discount ?? 0), 0);
@@ -105,10 +93,10 @@ export function savingsSeries(
   at: Date,
   days: number
 ): number[] {
-  const today = eatDay(at.toISOString());
+  const today = dayOf(at.toISOString());
   const buckets = new Array<number>(days).fill(0);
   for (const e of events) {
-    const age = daysBetween(eatDay(e.at), today);
+    const age = daysBetweenEatDays(dayOf(e.at), today);
     if (age >= 0 && age < days) {
       buckets[days - 1 - age] += e.amount?.discount ?? 0;
     }

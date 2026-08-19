@@ -54,7 +54,7 @@ export function WalletScreen() {
             <Donut value={savingsRate(events)} label={S.walletSavedWithApp} />
             <View className="ml-4 flex-1">
               <Text className="font-medium text-[15px] text-ink">
-                {`${S.walletSavedWithApp}: ${kes(totalSaved(events))}`}
+                {S.walletSavedWithApp}
               </Text>
               <Text className="mt-0.5 text-[13px] text-body">
                 {`${offers} ${

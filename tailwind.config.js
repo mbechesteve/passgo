@@ -17,10 +17,7 @@ module.exports = {
         },
         accent: {
           DEFAULT: "#0e6ba8",
-          bright: "#1782c4",        // pressed
-          press: "#0a5486",         // pressed, on text
           tint: "#e2edf4",          // chip fill on light
-          "tint-strong": "#cde2ef",
           soft: "#6fc2e8",          // accent text ON deep
         },
         ondark: {

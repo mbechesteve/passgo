@@ -15,7 +15,7 @@ export function StatTrio({
         <View
           key={item.label}
           className={`flex-1 items-center py-3 ${
-            i > 0 ? "border-l border-hairline" : ""
+            i > 0 ? `border-l ${dark ? "border-deep-grad" : "border-hairline"}` : ""
           }`}
         >
           <Text

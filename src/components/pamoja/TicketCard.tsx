@@ -6,7 +6,7 @@ import { StatTrio } from "@/components/pamoja/StatTrio";
 import { S } from "@/lib/strings";
 import type { Match, MatchTicket, Pass } from "@/types";
 import { eatParts } from "@/lib/clock";
-import { ticketReference } from "@/utils/ticket";
+import { codeCells, ticketReference } from "@/utils/ticket";
 
 /**
  * A deterministic block derived from the reference string. It is a visual STAND-IN,
@@ -15,14 +15,7 @@ import { ticketReference } from "@/utils/ticket";
  */
 function CodeBlock({ reference }: { reference: string }) {
   const size = 11;
-  // Each cell is derived straight from the reference's own characters. A seeded PRNG
-  // was the obvious approach and the wrong one: `state * 1103515245` exceeds
-  // Number.MAX_SAFE_INTEGER, so it loses precision and stops being deterministic.
-  const cells = Array.from({ length: size * size }, (_, i) => {
-    const a = reference.charCodeAt(i % reference.length);
-    const b = reference.charCodeAt((i * 7 + 3) % reference.length);
-    return (a * 31 + b * 17 + i * 13) % 7 < 3;
-  });
+  const cells = codeCells(reference, size);
 
   return (
     <View className="rounded-card bg-deep p-3">
@@ -71,7 +64,9 @@ export function TicketCard({
             <Text className="font-mono text-[11px] tracking-[1.5px] text-white">
               {time}
             </Text>
-            <Text className="mt-1 font-display text-[22px] text-white">VS</Text>
+            <Text className="mt-1 font-display text-[22px] text-white">
+              {S.passVersus}
+            </Text>
             <Text className="mt-1 text-[12px] text-white">{match.venue}</Text>
           </View>
           <Crest team={match.away} />

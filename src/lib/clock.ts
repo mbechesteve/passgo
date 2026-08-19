@@ -44,3 +44,14 @@ export function eatParts(iso: string): { day: string; time: string } {
   const shifted = new Date(new Date(iso).getTime() + EAT_OFFSET_MS).toISOString();
   return { day: shifted.slice(0, 10), time: shifted.slice(11, 16) };
 }
+
+/**
+ * Whole days between two EAT day strings ("2027-06-23"), positive when `to` is
+ * later. The one day-arithmetic implementation — record.ts and match.ts both
+ * derive their day-difference labels from this rather than re-deriving it.
+ */
+export function daysBetweenEatDays(from: string, to: string): number {
+  return Math.round(
+    (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000
+  );
+}

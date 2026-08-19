@@ -4,7 +4,7 @@ import { DEMO_NOW } from "@/lib/clock";
 import { MATCHES } from "@/data/matches";
 import { DEMO_HOLDER_NAME, issuePass } from "@/utils/issue";
 import { nextMatch } from "@/utils/match";
-import { issueTicket, ticketReference, ticketSaved } from "@/utils/ticket";
+import { codeCells, issueTicket, ticketReference, ticketSaved } from "@/utils/ticket";
 
 const pass = issuePass({
   holderName: DEMO_HOLDER_NAME,
@@ -49,5 +49,25 @@ describe("ticketSaved", () => {
     // The drawing's own rows are 2,000 → 1,500 and 600 → Free, which is 1,100 —
     // not the 950 printed beside them. The total is derived from the rows.
     expect(ticketSaved(issueTicket(pass, match))).toBe(1100);
+  });
+});
+
+describe("codeCells", () => {
+  const reference = ticketReference(pass, match);
+
+  it("is deterministic — the same reference always renders the same block", () => {
+    // The comment on the source explains what was avoided: a seeded PRNG using
+    // `state * 1103515245` overflows Number.MAX_SAFE_INTEGER and stops being
+    // reproducible. Nothing currently pinned that this stayed fixed.
+    expect(codeCells(reference, 11)).toEqual(codeCells(reference, 11));
+  });
+
+  it("sizes the grid as requested", () => {
+    expect(codeCells(reference, 11).length).toBe(121);
+  });
+
+  it("differs for a different reference", () => {
+    const other = ticketReference(pass, MATCHES.find((m) => m.id === "m-sen-egy")!);
+    expect(codeCells(reference, 11)).not.toEqual(codeCells(other, 11));
   });
 });

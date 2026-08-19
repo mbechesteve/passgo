@@ -6,7 +6,10 @@ import { colors } from "@/lib/theme";
 export function Donut({ value, label }: { value: number; label: string }) {
   const pct = Math.round(value * 100);
   return (
-    <View className="h-16 w-16 items-center justify-center" accessibilityLabel={label}>
+    <View
+      className="h-16 w-16 items-center justify-center"
+      accessibilityLabel={`${label}, ${pct}%`}
+    >
       <View
         className="absolute h-16 w-16 rounded-full"
         style={{ borderWidth: 6, borderColor: colors.panel }}

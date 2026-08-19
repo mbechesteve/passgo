@@ -13,13 +13,10 @@ deep/accent pair plus a neutral ink-to-canvas ramp.
 | `deep-grad` | `#0a3641` | Second gradient stop |
 | `deep-deeper` | `#062b36` | Third gradient stop |
 | `accent` | `#0e6ba8` | The single blue — active tab, links, primary actions |
-| `accent-bright` | `#1782c4` | Pressed |
-| `accent-press` | `#0a5486` | Pressed, on text |
 | `accent-tint` | `#e2edf4` | Chip fill on light |
-| `accent-tint-strong` | `#cde2ef` | — |
 | `accent-soft` | `#6fc2e8` | Accent text ON deep |
-| `ondark-mute` | `#8ea5ae` | — |
-| `ondark-faint` | `#7fa5b4` | — |
+| `ondark-mute` | `#8ea5ae` | Secondary text on deep |
+| `ondark-faint` | `#7fa5b4` | Tertiary text on deep |
 | `ink` | `#16181a` | Headings, primary text |
 | `body` | `#4a565b` | Default body text |
 | `mute` | `#5a686d` | Secondary / lower-priority text |
