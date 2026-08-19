@@ -102,7 +102,7 @@ export function HomeScreen() {
       week={weekSavings(events, at)}
       series={savingsSeries(events, at, 7)}
       offers={offersUsed(events)}
-      onBrowse={() => navigation.navigate("Services")}
+      onBrowse={() => navigation.navigate("ServicesTab")}
     />
   );
 
@@ -127,7 +127,7 @@ export function HomeScreen() {
               <FixtureCard
                 fixture={fixture}
                 at={at}
-                onViewPass={() => navigation.navigate("Pass")}
+                onViewPass={() => navigation.navigate("PassTab")}
               />
             ) : null}
             {money}
@@ -152,7 +152,7 @@ export function HomeScreen() {
 
         <View className="mt-8 flex-row items-center justify-between">
           <Eyebrow>{S.homeOffersNearYou}</Eyebrow>
-          <Pressable onPress={() => navigation.navigate("Services")}>
+          <Pressable onPress={() => navigation.navigate("ServicesTab")}>
             <Text className="font-medium text-[13px] text-accent">
               {S.homeSeeAll}
             </Text>

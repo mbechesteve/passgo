@@ -4,6 +4,7 @@ import { useNavigation, useRoute, type RouteProp } from "@react-navigation/nativ
 
 import { Screen } from "@/components/Screen";
 import { Button } from "@/components/ui";
+import { BackBar } from "@/components/pamoja/BackBar";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { RecordLine } from "@/components/pamoja/RecordLine";
 import { colors } from "@/lib/theme";
@@ -16,11 +17,11 @@ import { usePartnerStore } from "@/store/usePartnerStore";
 import { usePassStore } from "@/store/usePassStore";
 import { useRecordStore } from "@/store/useRecordStore";
 import type { PassEvent } from "@/types";
-import type { RootStackParamList } from "@/navigation/types";
+import type { SharedRoutes } from "@/navigation/types";
 
 export function ConfirmScreen() {
   const navigation = useNavigation<any>();
-  const { params } = useRoute<RouteProp<RootStackParamList, "Confirm">>();
+  const { params } = useRoute<RouteProp<SharedRoutes, "Confirm">>();
 
   const pass = usePassStore((s) => s.pass);
   const partners = usePartnerStore((s) => s.partners);
@@ -47,6 +48,7 @@ export function ConfirmScreen() {
   if (!pass || !partner || passStatus(pass, now()) !== "active") {
     return (
       <Screen>
+        <BackBar />
         <View className="flex-1 items-center justify-center px-5">
           <Text className="text-[15px] text-body">{S.confirmUnavailable}</Text>
         </View>
@@ -69,7 +71,7 @@ export function ConfirmScreen() {
           <Button
             title={S.confirmSeeWallet}
             className="mt-6"
-            onPress={() => navigation.navigate("Wallet")}
+            onPress={() => navigation.navigate("PassTab", { screen: "Wallet" })}
           />
         </View>
       </Screen>

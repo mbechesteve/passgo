@@ -3,18 +3,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { TabNavigator } from "./TabNavigator";
 import { IssuanceScreen } from "@/screens/IssuanceScreen";
-import { CategoryScreen } from "@/screens/CategoryScreen";
-import { PartnerScreen } from "@/screens/PartnerScreen";
-import { WalletScreen } from "@/screens/WalletScreen";
-import { ParkingScreen } from "@/screens/ParkingScreen";
-import { SafetyScreen } from "@/screens/SafetyScreen";
-import { DrivingScreen } from "@/screens/DrivingScreen";
-import { ScanScreen } from "@/screens/ScanScreen";
-import { ConfirmScreen } from "@/screens/ConfirmScreen";
 import { usePassStore } from "@/store/usePassStore";
 import type { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// The root stack holds only the two states of the app: issuing a Pass, or holding
+// one. Everything else lives inside a tab's own stack (see TabNavigator), so the
+// tab bar stays visible on every page. Issuance is the one screen with no bar —
+// it runs before a Pass exists, and the tabs it would offer cannot render yet.
 
 export function RootNavigator() {
   const pass = usePassStore((s) => s.pass);
@@ -30,22 +27,6 @@ export function RootNavigator() {
         ) : (
           <Stack.Screen name="Tabs" component={TabNavigator} />
         )}
-        <Stack.Screen name="Category" component={CategoryScreen} />
-        <Stack.Screen name="Partner" component={PartnerScreen} />
-        <Stack.Screen name="Wallet" component={WalletScreen} />
-        <Stack.Screen name="Parking" component={ParkingScreen} />
-        <Stack.Screen name="Safety" component={SafetyScreen} />
-        <Stack.Screen name="Driving" component={DrivingScreen} />
-        <Stack.Screen
-          name="Scan"
-          component={ScanScreen}
-          options={{ presentation: "modal" }}
-        />
-        <Stack.Screen
-          name="Confirm"
-          component={ConfirmScreen}
-          options={{ presentation: "modal" }}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );

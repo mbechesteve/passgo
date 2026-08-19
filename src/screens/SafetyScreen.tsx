@@ -1,6 +1,7 @@
 import { ScrollView, Text, View } from "react-native";
 
 import { Screen } from "@/components/Screen";
+import { BackBar } from "@/components/pamoja/BackBar";
 import { S } from "@/lib/strings";
 
 const ROWS = [
@@ -11,6 +12,7 @@ const ROWS = [
 export function SafetyScreen() {
   return (
     <Screen>
+      <BackBar />
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
           {S.safetyTitle}

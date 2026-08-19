@@ -3,6 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 
 import { Screen } from "@/components/Screen";
 import { Pill } from "@/components/ui";
+import { BackBar } from "@/components/pamoja/BackBar";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { RouteStrip } from "@/components/pamoja/RouteStrip";
 import { StatTrio } from "@/components/pamoja/StatTrio";
@@ -23,6 +24,7 @@ export function DrivingScreen() {
 
   return (
     <Screen>
+      <BackBar />
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
           {S.drivingTitle}

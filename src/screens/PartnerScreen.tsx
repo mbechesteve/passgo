@@ -4,15 +4,16 @@ import { useNavigation, useRoute, type RouteProp } from "@react-navigation/nativ
 
 import { Screen } from "@/components/Screen";
 import { Button } from "@/components/ui";
+import { BackBar } from "@/components/pamoja/BackBar";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { S } from "@/lib/strings";
 import { usePartnerStore } from "@/store/usePartnerStore";
 import { CATEGORY_LABEL } from "@/utils/partners";
-import type { RootStackParamList } from "@/navigation/types";
+import type { SharedRoutes } from "@/navigation/types";
 
 export function PartnerScreen() {
   const navigation = useNavigation<any>();
-  const { params } = useRoute<RouteProp<RootStackParamList, "Partner">>();
+  const { params } = useRoute<RouteProp<SharedRoutes, "Partner">>();
   const partners = usePartnerStore((s) => s.partners);
   const load = usePartnerStore((s) => s.load);
 
@@ -25,6 +26,7 @@ export function PartnerScreen() {
   if (!partner) {
     return (
       <Screen>
+        <BackBar />
         <View className="flex-1 items-center justify-center px-5">
           <Text className="text-[15px] text-body">{S.partnerNotListed}</Text>
         </View>

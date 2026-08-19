@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
 import { Button } from "@/components/ui";
+import { BackBar } from "@/components/pamoja/BackBar";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { now } from "@/lib/clock";
 import { S } from "@/lib/strings";
@@ -29,6 +30,7 @@ export function ScanScreen() {
   if (!pass || passStatus(pass, now()) !== "active") {
     return (
       <Screen>
+        <BackBar />
         <View className="flex-1 px-5 pt-8">
           <Eyebrow>{S.scanCannotRedeem}</Eyebrow>
           <Text className="mt-3 font-display text-[24px] tracking-[-0.5px] text-ink">

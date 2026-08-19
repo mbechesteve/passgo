@@ -1,6 +1,7 @@
 import { ScrollView, Text, View } from "react-native";
 
 import { Screen } from "@/components/Screen";
+import { BackBar } from "@/components/pamoja/BackBar";
 import { Chip } from "@/components/pamoja/Chip";
 import { Donut } from "@/components/pamoja/Donut";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
@@ -27,6 +28,7 @@ export function WalletScreen() {
 
   return (
     <Screen>
+      <BackBar />
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
           {S.walletTitle}

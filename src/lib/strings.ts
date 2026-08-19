@@ -9,6 +9,11 @@
  * unit "KES" rendered by the Eyebrow in the money box.
  */
 export const S = {
+  // ── Shared ──────────────────────────────────────────────────────────────
+  // Used by BackBar, which every pushed screen renders. Sits above the
+  // screen-ordered blocks below because it belongs to no single screen.
+  back: "Go back",
+
   // ── CategoryScreen ──────────────────────────────────────────────────────
   // (nothing to extract — its only text is the interpolated partner count.)
 

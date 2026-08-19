@@ -1,5 +1,6 @@
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { Icon, type IconName } from "@/components/Icon";
 import { colors } from "@/lib/theme";
@@ -8,16 +9,97 @@ import { ExploreScreen } from "@/screens/ExploreScreen";
 import { LiveScreen } from "@/screens/LiveScreen";
 import { ServicesScreen } from "@/screens/ServicesScreen";
 import { PassScreen } from "@/screens/PassScreen";
-import type { TabParamList } from "./types";
+import { CategoryScreen } from "@/screens/CategoryScreen";
+import { PartnerScreen } from "@/screens/PartnerScreen";
+import { WalletScreen } from "@/screens/WalletScreen";
+import { ParkingScreen } from "@/screens/ParkingScreen";
+import { SafetyScreen } from "@/screens/SafetyScreen";
+import { DrivingScreen } from "@/screens/DrivingScreen";
+import { ScanScreen } from "@/screens/ScanScreen";
+import { ConfirmScreen } from "@/screens/ConfirmScreen";
+import type {
+  ExploreStackParamList,
+  HomeStackParamList,
+  LiveStackParamList,
+  PassStackParamList,
+  ServicesStackParamList,
+  TabParamList,
+} from "./types";
+
+// Each tab owns a stack, so a pushed screen renders under the tab bar instead of
+// over it. Screens reachable from more than one tab (Partner, Confirm) are
+// registered in each stack that can reach them — deliberately, so every tab keeps
+// its own history: backing out of a partner found via Explore returns to Explore,
+// not to wherever another tab had been left.
 
 const Tab = createBottomTabNavigator<TabParamList>();
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const ExploreStack = createNativeStackNavigator<ExploreStackParamList>();
+const LiveStack = createNativeStackNavigator<LiveStackParamList>();
+const ServicesStack = createNativeStackNavigator<ServicesStackParamList>();
+const PassStack = createNativeStackNavigator<PassStackParamList>();
+
+/** Every screen draws its own title, so no stack shows a header. */
+const stackOptions = { headerShown: false } as const;
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={stackOptions}>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Partner" component={PartnerScreen} />
+      <HomeStack.Screen name="Confirm" component={ConfirmScreen} />
+    </HomeStack.Navigator>
+  );
+}
+
+function ExploreStackScreen() {
+  return (
+    <ExploreStack.Navigator screenOptions={stackOptions}>
+      <ExploreStack.Screen name="Explore" component={ExploreScreen} />
+      <ExploreStack.Screen name="Partner" component={PartnerScreen} />
+      <ExploreStack.Screen name="Confirm" component={ConfirmScreen} />
+    </ExploreStack.Navigator>
+  );
+}
+
+function LiveStackScreen() {
+  return (
+    <LiveStack.Navigator screenOptions={stackOptions}>
+      <LiveStack.Screen name="Live" component={LiveScreen} />
+    </LiveStack.Navigator>
+  );
+}
+
+function ServicesStackScreen() {
+  return (
+    <ServicesStack.Navigator screenOptions={stackOptions}>
+      <ServicesStack.Screen name="Services" component={ServicesScreen} />
+      <ServicesStack.Screen name="Category" component={CategoryScreen} />
+      <ServicesStack.Screen name="Partner" component={PartnerScreen} />
+      <ServicesStack.Screen name="Scan" component={ScanScreen} />
+      <ServicesStack.Screen name="Confirm" component={ConfirmScreen} />
+      <ServicesStack.Screen name="Parking" component={ParkingScreen} />
+      <ServicesStack.Screen name="Safety" component={SafetyScreen} />
+      <ServicesStack.Screen name="Driving" component={DrivingScreen} />
+    </ServicesStack.Navigator>
+  );
+}
+
+function PassStackScreen() {
+  return (
+    <PassStack.Navigator screenOptions={stackOptions}>
+      <PassStack.Screen name="Pass" component={PassScreen} />
+      <PassStack.Screen name="Wallet" component={WalletScreen} />
+    </PassStack.Navigator>
+  );
+}
 
 const ICONS: Record<keyof TabParamList, IconName> = {
-  Home: "home",
-  Explore: "compass",
-  Live: "play-circle",
-  Services: "grid",
-  Pass: "credit-card",
+  HomeTab: "home",
+  ExploreTab: "compass",
+  LiveTab: "play-circle",
+  ServicesTab: "grid",
+  PassTab: "credit-card",
 };
 
 export function TabNavigator() {
@@ -42,11 +124,31 @@ export function TabNavigator() {
         ),
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Explore" component={ExploreScreen} />
-      <Tab.Screen name="Live" component={LiveScreen} />
-      <Tab.Screen name="Services" component={ServicesScreen} />
-      <Tab.Screen name="Pass" component={PassScreen} />
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeStackScreen}
+        options={{ title: "Home" }}
+      />
+      <Tab.Screen
+        name="ExploreTab"
+        component={ExploreStackScreen}
+        options={{ title: "Explore" }}
+      />
+      <Tab.Screen
+        name="LiveTab"
+        component={LiveStackScreen}
+        options={{ title: "Live" }}
+      />
+      <Tab.Screen
+        name="ServicesTab"
+        component={ServicesStackScreen}
+        options={{ title: "Services" }}
+      />
+      <Tab.Screen
+        name="PassTab"
+        component={PassStackScreen}
+        options={{ title: "Pass" }}
+      />
     </Tab.Navigator>
   );
 }

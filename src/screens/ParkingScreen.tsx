@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import { Screen } from "@/components/Screen";
+import { BackBar } from "@/components/pamoja/BackBar";
 import { S } from "@/lib/strings";
 import { fetchParking } from "@/data/repository";
 import type { ParkingZone } from "@/types";
@@ -15,6 +16,7 @@ export function ParkingScreen() {
 
   return (
     <Screen>
+      <BackBar />
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
           {S.parkingTitle}
