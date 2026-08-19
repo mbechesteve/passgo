@@ -60,7 +60,7 @@ rather than reinvents.
 | `PassCard` | The credential itself, rendered from local state only, no network path. |
 | `RecordLine` | One line of the append-only record, set in mono. |
 | `CategoryTile` | A Services category tile, showing a derived (never stored) count. |
-| `Crest` | The three-letter team tile either side of a fixture. |
+| `TeamRow` | A fixture's two nations, each as a flag beside its name, with a slot between them for the "v", the score, or the kickoff and venue |
 | `Chip` | A small uppercase mono pill — "IN 3 DAYS", "+450 THIS WEEK", "CAT 2". |
 | `Avatar` | The holder's initials in a circle, top-right of Home. |
 | `StatTrio` | Three figures side by side — possession/shots/corners, or distance/time/wait. |

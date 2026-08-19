@@ -19,6 +19,30 @@ export function matchLabel(m: Match): string {
  * Official three-letter codes. A substring rule cannot do this job: Mali is MLI, not
  * MAL, and "Côte d'Ivoire" has no sane truncation.
  */
+/**
+ * The flag beside each country's name. Kept beside TEAM_CODE and derived the same
+ * way — from a map, not from the name — because there is no rule that turns
+ * "Côte d'Ivoire" into a regional-indicator pair.
+ *
+ * An unseeded nation returns no flag rather than a wrong one, and the row that
+ * renders it copes with an empty string.
+ */
+const TEAM_FLAG: Record<string, string> = {
+  Kenya: "\u{1F1F0}\u{1F1EA}",
+  Mali: "\u{1F1F2}\u{1F1F1}",
+  Zambia: "\u{1F1FF}\u{1F1F2}",
+  Morocco: "\u{1F1F2}\u{1F1E6}",
+  Uganda: "\u{1F1FA}\u{1F1EC}",
+  Senegal: "\u{1F1F8}\u{1F1F3}",
+  "Côte d'Ivoire": "\u{1F1E8}\u{1F1EE}",
+  Egypt: "\u{1F1EA}\u{1F1EC}",
+};
+
+/** The flag for a nation, or "" when we do not hold one. */
+export function teamFlag(team: string): string {
+  return TEAM_FLAG[team] ?? "";
+}
+
 const TEAM_CODE: Record<string, string> = {
   Kenya: "KEN",
   Mali: "MLI",

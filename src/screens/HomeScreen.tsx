@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Screen } from "@/components/Screen";
 import { Avatar } from "@/components/pamoja/Avatar";
 import { Chip } from "@/components/pamoja/Chip";
-import { Crest } from "@/components/pamoja/Crest";
+import { TeamRow } from "@/components/pamoja/TeamRow";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { MoneyBox } from "@/components/pamoja/MoneyBox";
 import { OfferRow } from "@/components/pamoja/OfferRow";
@@ -21,7 +21,6 @@ import {
   daysUntilLabel,
   gatesOpenLabel,
   kickoffChipLabel,
-  matchLabel,
   nextMatch,
 } from "@/utils/match";
 import { nearby } from "@/utils/partners";
@@ -55,12 +54,16 @@ function FixtureCard({
         <Chip label={fixture.venue} tone="panel" />
       </View>
 
-      <View className="mt-4 flex-row items-center justify-between">
-        <Crest team={fixture.home} tone="deep" />
-        <Text className="flex-1 px-3 text-center font-display text-[19px] text-ink">
-          {matchLabel(fixture)}
-        </Text>
-        <Crest team={fixture.away} />
+      <View className="mt-4">
+        <TeamRow
+          home={fixture.home}
+          away={fixture.away}
+          middle={
+            <Text className="font-display text-[15px] text-mute">
+              {S.fixtureVersus}
+            </Text>
+          }
+        />
       </View>
 
       <View className="mt-4 flex-row items-center justify-between border-t border-hairline py-4">

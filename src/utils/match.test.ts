@@ -11,6 +11,7 @@ import {
   minuteLabel,
   daysUntilLabel,
   gatesOpenLabel,
+  teamFlag,
 } from "@/utils/match";
 import { MATCHES } from "@/data/matches";
 import { DEMO_NOW } from "@/lib/clock";
@@ -214,5 +215,31 @@ describe("daysUntilLabel", () => {
 
   it("reads TOMORROW the day before", () => {
     expect(daysUntilLabel(fixture(), new Date("2027-06-25T09:00:00+03:00"))).toBe("TOMORROW");
+  });
+});
+
+describe("teamFlag", () => {
+  it("gives every seeded nation its flag", () => {
+    expect(teamFlag("Kenya")).toBe("\u{1F1F0}\u{1F1EA}");
+    expect(teamFlag("Mali")).toBe("\u{1F1F2}\u{1F1F1}");
+    expect(teamFlag("Zambia")).toBe("\u{1F1FF}\u{1F1F2}");
+    expect(teamFlag("Morocco")).toBe("\u{1F1F2}\u{1F1E6}");
+    expect(teamFlag("Uganda")).toBe("\u{1F1FA}\u{1F1EC}");
+    expect(teamFlag("Senegal")).toBe("\u{1F1F8}\u{1F1F3}");
+    expect(teamFlag("Côte d'Ivoire")).toBe("\u{1F1E8}\u{1F1EE}");
+    expect(teamFlag("Egypt")).toBe("\u{1F1EA}\u{1F1EC}");
+  });
+
+  it("covers every nation the fixtures actually seed", () => {
+    // A fixture whose nation has no flag would render a name with a gap beside
+    // it, so the map has to keep pace with the schedule.
+    for (const m of MATCHES) {
+      expect(teamFlag(m.home), `no flag for ${m.home}`).not.toBe("");
+      expect(teamFlag(m.away), `no flag for ${m.away}`).not.toBe("");
+    }
+  });
+
+  it("returns no flag for an unseeded nation rather than a wrong one", () => {
+    expect(teamFlag("Namibia")).toBe("");
   });
 });

@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 
 import { Screen } from "@/components/Screen";
 import { Chip } from "@/components/pamoja/Chip";
-import { Crest } from "@/components/pamoja/Crest";
+import { TeamRow } from "@/components/pamoja/TeamRow";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { StatTrio } from "@/components/pamoja/StatTrio";
 import { now } from "@/lib/clock";
@@ -47,31 +47,24 @@ export function LiveScreen() {
             <View className="mt-4 rounded-card bg-deep px-5 py-5">
               <Chip label={S.liveBadge} tone="accent" />
 
-              <View className="mt-4 flex-row items-center justify-between">
-                <View className="items-center">
-                  <Crest team={featured.home} />
-                  <Text className="mt-2 text-[12px] text-ondark-mute">
-                    {featured.home}
-                  </Text>
-                </View>
-                <View className="items-center">
-                  {featuredScore ? (
-                    <>
-                      <Text className="font-display-heavy text-[34px] text-white">
-                        {`${featuredScore.home} – ${featuredScore.away}`}
-                      </Text>
-                      <Text className="mt-1 font-mono text-[12px] text-accent-soft">
-                        {minuteLabel(featured, at)}
-                      </Text>
-                    </>
-                  ) : null}
-                </View>
-                <View className="items-center">
-                  <Crest team={featured.away} />
-                  <Text className="mt-2 text-[12px] text-ondark-mute">
-                    {featured.away}
-                  </Text>
-                </View>
+              <View className="mt-4">
+                <TeamRow
+                  tone="dark"
+                  home={featured.home}
+                  away={featured.away}
+                  middle={
+                    featuredScore ? (
+                      <>
+                        <Text className="font-display-heavy text-[30px] text-white">
+                          {`${featuredScore.home} – ${featuredScore.away}`}
+                        </Text>
+                        <Text className="mt-1 font-mono text-[12px] text-accent-soft">
+                          {minuteLabel(featured, at)}
+                        </Text>
+                      </>
+                    ) : null
+                  }
+                />
               </View>
 
               {featuredScore ? (

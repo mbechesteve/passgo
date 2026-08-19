@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 
 import { Chip } from "@/components/pamoja/Chip";
-import { Crest } from "@/components/pamoja/Crest";
+import { TeamRow } from "@/components/pamoja/TeamRow";
 import { StatTrio } from "@/components/pamoja/StatTrio";
 import { S } from "@/lib/strings";
 import type { Match, MatchTicket, Pass } from "@/types";
@@ -58,18 +58,23 @@ export function TicketCard({
           />
         </View>
 
-        <View className="mt-4 flex-row items-center justify-between">
-          <Crest team={match.home} />
-          <View className="items-center">
-            <Text className="font-mono text-[11px] tracking-[1.5px] text-white">
-              {time}
-            </Text>
-            <Text className="mt-1 font-display text-[22px] text-white">
-              {S.passVersus}
-            </Text>
-            <Text className="mt-1 text-[12px] text-white">{match.venue}</Text>
-          </View>
-          <Crest team={match.away} />
+        <View className="mt-4">
+          <TeamRow
+            tone="dark"
+            home={match.home}
+            away={match.away}
+            middle={
+              <>
+                <Text className="font-mono text-[11px] tracking-[1.5px] text-white">
+                  {time}
+                </Text>
+                <Text className="mt-1 font-display text-[18px] text-white">
+                  {S.passVersus}
+                </Text>
+                <Text className="mt-1 text-[11px] text-white">{match.venue}</Text>
+              </>
+            }
+          />
         </View>
       </View>
 

@@ -13,6 +13,9 @@ export const S = {
   // Used by BackBar, which every pushed screen renders. Sits above the
   // screen-ordered blocks below because it belongs to no single screen.
   back: "Go back",
+  // The separator between two nations on a fixture row. Lowercase by design: the
+  // ticket's own "VS" is a different, louder register (see passVersus).
+  fixtureVersus: "v",
 
   // ── CategoryScreen ──────────────────────────────────────────────────────
   // (nothing to extract — its only text is the interpolated partner count.)
