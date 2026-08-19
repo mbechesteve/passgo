@@ -69,6 +69,29 @@ export const S = {
   exploreNoResults: "Nothing matches that yet.",
   exploreFreeEntry: "Free entry with your Pass",
 
+  // ── TicketOfficeScreen ──────────────────────────────────────────────────
+  officeTitle: "Choose where you'll sit.",
+  officeStandfirst: "Pick a block, then how many seats. The seat itself is assigned.",
+  officeTiersHeading: "What a seat costs",
+  officeSoldOut: "Sold out",
+  officeBlockPrefix: "Block",
+  officeGatePrefix: "Gate",
+  officeSeatsHeading: "How many seats",
+  officeTotalHeading: "Your order",
+  officeSeat: "seat",
+  officeSeats: "seats",
+  // The same boundary the redemption flow states, in the same words: the app never
+  // takes the money. Rev. 2 §05 — never holds the funds, never sees a card number.
+  officeHandoffNote:
+    "Pamoja never holds your money. The seller takes the payment and issues the ticket; your Pass then carries it.",
+  officeContinue: "Continue to the seller",
+  officeHandedOff:
+    "Ticketing is handled by the tournament's official seller. This prototype stops at the hand-off rather than taking a payment.",
+  officeNotOnSale: "Tickets for this fixture are not sold through this office.",
+  officeFiguresCaveat:
+    "Prototype figures. Real allocation and pricing are the LOC's to set.",
+  officeTickets: "Tickets",
+
   // ── HomeScreen ──────────────────────────────────────────────────────────
   homeToday: "Today",
   homeMatchday: "Matchday",

@@ -63,6 +63,17 @@ rather than trusting each caller to remember.
 Media only. Cards, chips and panels stay rectangular; a shape used everywhere stops
 meaning anything.
 
+## Category, without a third colour
+
+Where something has tiers — the ticket office's Cat 1/2/3 blocks — the tier is shown
+as *depth of the one accent*, not as a colour code: full accent, 55%, 25%. Three
+hues would break the two-hue rule for the sake of a legend. A state that is not a
+tier at all, like a sold-out block, leaves the hue entirely for `panel`, so it reads
+as absent rather than as a fourth tier.
+
+Anything sitting on the faintest tier takes dark text — a label has to be readable in
+every state, or the map is decoration.
+
 ## Components
 
 All in `src/components/pamoja/`. One line each, so the next screen reuses
@@ -89,3 +100,4 @@ rather than reinvents.
 | `TicketCard` | The match ticket — crest header, gate/section/seat, and the non-scannable code stand-in. |
 | `PeakFrame` | The Mount Kenya crop every image passes through. Fills with the deep gradient until a licensed photograph of that exact place exists. |
 | `PeakIcon` | The same summit stroked at tab size — the Explore tab's icon. |
+| `HallMap` | The ticket office's bowl — blocks by stand, priced by category, sold-out blocks dropped out of the hue. |

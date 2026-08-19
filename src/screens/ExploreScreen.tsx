@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
@@ -13,9 +13,10 @@ import { PamojaMap, type MapData } from "@/components/PamojaMap";
 import { now } from "@/lib/clock";
 import { colors } from "@/lib/theme";
 import { S } from "@/lib/strings";
-import { fetchExplore, fetchMatches, fetchPartners } from "@/data/repository";
+import { fetchExplore, fetchHallMaps, fetchMatches, fetchPartners } from "@/data/repository";
+import { mapForMatch } from "@/utils/hallmap";
 import { daysUntilLabel, kickoffLabel, matchLabel } from "@/utils/match";
-import type { ExploreItem, Match, Partner } from "@/types";
+import type { ExploreItem, HallMap, Match, Partner } from "@/types";
 
 type Filter = "all" | "fixtures" | "venues" | "offers";
 
@@ -73,11 +74,13 @@ export function ExploreScreen() {
   const [items, setItems] = useState<ExploreItem[]>([]);
   const [fixtures, setFixtures] = useState<Match[]>([]);
   const [partners, setPartners] = useState<Partner[]>([]);
+  const [maps, setMaps] = useState<HallMap[]>([]);
 
   useEffect(() => {
     void fetchExplore().then(setItems);
     void fetchMatches().then(setFixtures);
     void fetchPartners().then(setPartners);
+    void fetchHallMaps().then(setMaps);
   }, []);
 
   const at = now();
@@ -175,22 +178,39 @@ export function ExploreScreen() {
           <>
             <Eyebrow className="mt-6">{S.exploreThisWeek}</Eyebrow>
             <View className="mt-2">
-              {visibleFixtures.map((m) => (
-                <View
-                  key={m.id}
-                  className="flex-row items-center justify-between border-b border-hairline py-3.5"
-                >
-                  <View className="flex-1">
-                    <Text className="font-medium text-[15px] text-ink">
-                      {matchLabel(m)}
-                    </Text>
-                    <Text className="mt-0.5 font-mono text-[11px] text-mute">
-                      {kickoffLabel(m)}
-                    </Text>
-                  </View>
-                  <Chip label={daysUntilLabel(m, at)} tone="panel" />
-                </View>
-              ))}
+              {visibleFixtures.map((m) => {
+                // Only a fixture with a hall map behind it is pressable, and it says so
+                // with a chip. A row that opened an empty office would be worse than a
+                // row that does nothing.
+                const onSale = mapForMatch(maps, m.id) !== null;
+                return (
+                  <Pressable
+                    key={m.id}
+                    disabled={!onSale}
+                    onPress={() =>
+                      navigation.navigate("TicketOffice", { matchId: m.id })
+                    }
+                    className={`flex-row items-center justify-between border-b border-hairline py-3.5 ${
+                      onSale ? "active:opacity-70" : ""
+                    }`}
+                  >
+                    <View className="flex-1">
+                      <Text className="font-medium text-[15px] text-ink">
+                        {matchLabel(m)}
+                      </Text>
+                      <Text className="mt-0.5 font-mono text-[11px] text-mute">
+                        {kickoffLabel(m)}
+                      </Text>
+                    </View>
+                    {onSale ? (
+                      <View className="mr-2">
+                        <Chip label={S.officeTickets} tone="tint" />
+                      </View>
+                    ) : null}
+                    <Chip label={daysUntilLabel(m, at)} tone="panel" />
+                  </Pressable>
+                );
+              })}
             </View>
           </>
         ) : null}

@@ -128,6 +128,29 @@ export interface MatchTicket {
   savings: { label: string; was: number; now: number | "free" }[];
 }
 
+/**
+ * A priced block of the bowl, for the ticket office's hall map. Block level, not
+ * seat level: the seat is assigned, exactly as `MatchTicket` already represents it,
+ * so no per-seat inventory has to be invented.
+ */
+export interface StadiumBlock {
+  id: string;
+  /** What is printed on the block itself — "214". */
+  label: string;
+  stand: "N" | "E" | "S" | "W";
+  category: 1 | 2 | 3;
+  gate: string;
+  /** Seats left. A block at zero is drawn, but cannot be chosen. */
+  available: number;
+}
+
+/** One fixture's bowl. Prices are per seat, in KES, by category. */
+export interface HallMap {
+  matchId: string;
+  prices: Record<1 | 2 | 3, number>;
+  blocks: StadiumBlock[];
+}
+
 export type MatchPhase = "scheduled" | "live" | "half-time" | "full-time";
 
 /** Seeded score and stats. The minute is never stored — it derives from the clock. */

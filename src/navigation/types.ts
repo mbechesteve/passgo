@@ -22,7 +22,12 @@ export type SharedRoutes = {
 
 export type HomeStackParamList = { Home: undefined } & SharedRoutes;
 
-export type ExploreStackParamList = { Explore: undefined } & SharedRoutes;
+// TicketOffice stays out of SharedRoutes: fixtures are browsed on Explore, so one
+// tab reaches it, and SharedRoutes is for screens more than one tab can reach.
+export type ExploreStackParamList = {
+  Explore: undefined;
+  TicketOffice: { matchId: string };
+} & SharedRoutes;
 
 export type LiveStackParamList = { Live: undefined };
 

@@ -24,6 +24,18 @@ export const MATCHES: Match[] = [
     venue: "Kasarani", city: "Nairobi", country: "KE",
     coords: { lat: -1.2226, lng: 36.8917 },
   },
+  // The one fixture with a ticket office behind it. The date is pinned from three
+  // sides: after Kenya v Mali, so the next fixture from the demo clock and every
+  // figure reading from it are unchanged; inside Explore's seven-day window, which is
+  // the only surface that lists fixtures, so the office is reachable at all; and
+  // before August, so `nextMatch` still runs out where the tests say it does.
+  {
+    id: "m-mli-zam",
+    home: "Mali", away: "Zambia",
+    kickoff: "2027-06-28T19:00:00+03:00",
+    venue: "Talanta", city: "Nairobi", country: "KE",
+    coords: { lat: -1.3021, lng: 36.7834 },
+  },
   {
     id: "m-sen-egy",
     home: "Senegal", away: "Egypt",

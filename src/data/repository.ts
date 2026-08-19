@@ -12,6 +12,7 @@ import type {
   BorderCrossing,
   Entitlement,
   ExploreItem,
+  HallMap,
   Match,
   MatchLive,
   ParkingZone,
@@ -26,6 +27,7 @@ import { MATCH_LIVE } from "./live";
 import { ENTITLEMENTS } from "./entitlements";
 import { PARKING_ZONES } from "./parking";
 import { BORDER_CROSSINGS } from "./borders";
+import { HALL_MAPS } from "./hallmaps";
 
 /** Read-through cache: cached copy if present, else compute, persist, return. */
 async function cached<T>(name: string, compute: () => T): Promise<T> {
@@ -58,6 +60,10 @@ export async function fetchEntitlements(): Promise<Entitlement[]> {
 
 export async function fetchParking(): Promise<ParkingZone[]> {
   return cached("parking", () => PARKING_ZONES);
+}
+
+export async function fetchHallMaps(): Promise<HallMap[]> {
+  return cached("hallmaps", () => HALL_MAPS);
 }
 
 export async function fetchBorderCrossings(): Promise<BorderCrossing[]> {

@@ -16,6 +16,7 @@ import { PassScreen } from "@/screens/PassScreen";
 import { CategoryScreen } from "@/screens/CategoryScreen";
 import { PartnerScreen } from "@/screens/PartnerScreen";
 import { WalletScreen } from "@/screens/WalletScreen";
+import { TicketOfficeScreen } from "@/screens/TicketOfficeScreen";
 import { ParkingScreen } from "@/screens/ParkingScreen";
 import { SafetyScreen } from "@/screens/SafetyScreen";
 import { DrivingScreen } from "@/screens/DrivingScreen";
@@ -62,6 +63,7 @@ function ExploreStackScreen() {
       <ExploreStack.Screen name="Explore" component={ExploreScreen} />
       <ExploreStack.Screen name="Partner" component={PartnerScreen} />
       <ExploreStack.Screen name="Confirm" component={ConfirmScreen} />
+      <ExploreStack.Screen name="TicketOffice" component={TicketOfficeScreen} />
     </ExploreStack.Navigator>
   );
 }
