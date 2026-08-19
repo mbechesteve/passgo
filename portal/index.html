@@ -249,11 +249,13 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
 .foot-cols b { color: #fff; font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
 .foot-cols a:hover { color: var(--gold); }
-/* Not on the board, and kept anyway: CC BY-SA requires attribution, and a prototype
-   should say so. Set quietly beneath the footer row rather than competing with it. */
-.legal { margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--ink-2);
-         font-size: 12px; line-height: 1.75; color: rgba(238,240,240,0.55); }
-.legal a { text-decoration: underline; }
+/* The board's footer carries no legal text and neither does this one. The one line that
+   stays is the attribution link: the photography is CC BY-SA, and "BY" is a licence term,
+   not a preference — the credits it points at are what keeps displaying the images
+   lawful. Everything else moved to credits.html. */
+.credit-link { margin-top: 36px; font-size: 12px; color: rgba(238,240,240,0.45); }
+.credit-link a { text-decoration: underline; }
+.credit-link a:hover { color: var(--gold); }
 
 @media (min-width: 760px) {
   .doors { grid-template-columns: repeat(3, 1fr); }
@@ -571,20 +573,7 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
     </div>
   </div>
 
-  <p class="legal">
-    <strong>Prototype.</strong> Fixtures, partner counts, listings and the *723# short code
-    are demo figures the Pamoja app is built against, with the demo clock fixed to
-    Wed 23 June 2027, 12:55 EAT. Venues are grounds widely reported as 2027 hosts; CAF has
-    published no official venue list. Confirm anything you plan to act on.
-    <br><br>
-    <strong>Photography</strong> from Wikimedia Commons, self-hosted here with attribution:
-    <a href="https://commons.wikimedia.org/wiki/File:Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG">Mount Kenya (Chris 73, CC BY-SA 3.0)</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:Inside_the_Kasarani_Stadium.jpg">Kasarani Stadium</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:Nairobi_skyline_P1000020.jpg">Nairobi skyline (Lmwangi, CC BY-SA 3.0)</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:Wildebeest_Migration_Masai_mara.jpg">Wildebeest migration (CC BY-SA 4.0)</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:Lamu_dhow_1.JPG">Lamu dhow (Karl Ragnar Gjertsen, CC BY-SA 3.0)</a>,
-    <a href="https://commons.wikimedia.org/wiki/File:A_lake_at_Uhuru_Park_in_Nairobi,_Kenya,_at_sunset.jpg">Uhuru Park</a>.
-  </p>
+  <p class="credit-link"><a href="credits.html">Photo credits</a></p>
 </footer>
 
 </body>

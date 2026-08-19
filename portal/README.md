@@ -58,6 +58,11 @@ the app's `PeakFrame` motif is cut from.
 
 If any image is replaced, its credit has to move with it. CC BY-SA requires attribution.
 
+Attribution lives on **`credits.html`**, linked from the footer by a single "Photo
+credits" line. The board's footer carries no legal text and neither does this one — but
+the link is not optional decoration: the "BY" in CC BY-SA is a licence term, so that page
+is what keeps displaying the photographs lawful. The prototype caveat moved there too.
+
 ## Not wired into deployment
 
 `vercel.json` and `netlify.toml` serve the app's `dist/` at the domain root. This page is
