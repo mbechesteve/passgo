@@ -6,6 +6,23 @@ board in `Karibu Kenya eTA portal.zip` (a Claude Design canvas).
 A single static page: `index.html` plus `img/`. No build step, no dependencies, nothing
 imported from the app.
 
+## The board's system, followed rather than approximated
+
+Taken from `Pamoja Portal.dc.html` itself, not eyeballed from a screenshot:
+
+| | |
+|---|---|
+| Radius | **10px** on cards and buttons; 4px on chips; 999px **only** in the nav |
+| Imagery | `grayscale(1) contrast(1.06)`, then a `multiply` gradient wash over it |
+| Sections | 88–96px vertical, 64px horizontal |
+| Heads | 42px section · 72px featured fixture · 36px feature tile · 21px small tile |
+| Gold | `#F2C744` eyebrows and numbers · `#F2C200` buttons · `#FFD427` hover |
+| Green | `#067647` carries list dates, event titles and chevrons |
+| Bands | `#eef0f0` behind events and partners |
+
+The first build got this wrong — pills everywhere, colour photography, 14px cards, no
+fixtures list — which is why it did not look like the board.
+
 ## Why it does not look like the app
 
 The app is `deep #04222b` + `accent #0e6ba8` — two hues, per Uratibu. This surface is
