@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,10 +9,16 @@ import { TabRail } from "./TabRail";
 import { RAIL_WIDTH } from "@/lib/layout";
 import { useLayoutMode } from "@/lib/useLayout";
 import { colors } from "@/lib/theme";
+import { now } from "@/lib/clock";
+import { fetchMatches } from "@/data/repository";
+import { usePassStore } from "@/store/usePassStore";
+import { nextMatch } from "@/utils/match";
+import type { Match } from "@/types";
 import { HomeScreen } from "@/screens/HomeScreen";
-import { ExploreScreen } from "@/screens/ExploreScreen";
+import { MatchesScreen } from "@/screens/MatchesScreen";
+import { FixtureScreen } from "@/screens/FixtureScreen";
+import { PartnersScreen } from "@/screens/PartnersScreen";
 import { LiveScreen } from "@/screens/LiveScreen";
-import { ServicesScreen } from "@/screens/ServicesScreen";
 import { PassScreen } from "@/screens/PassScreen";
 import { CategoryScreen } from "@/screens/CategoryScreen";
 import { PartnerScreen } from "@/screens/PartnerScreen";
@@ -24,11 +31,11 @@ import { GettingThereScreen } from "@/screens/GettingThereScreen";
 import { ScanScreen } from "@/screens/ScanScreen";
 import { ConfirmScreen } from "@/screens/ConfirmScreen";
 import type {
-  ExploreStackParamList,
   HomeStackParamList,
   LiveStackParamList,
+  MatchesStackParamList,
+  PartnersStackParamList,
   PassStackParamList,
-  ServicesStackParamList,
   TabParamList,
 } from "./types";
 
@@ -40,9 +47,9 @@ import type {
 
 const Tab = createBottomTabNavigator<TabParamList>();
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
-const ExploreStack = createNativeStackNavigator<ExploreStackParamList>();
+const MatchesStack = createNativeStackNavigator<MatchesStackParamList>();
 const LiveStack = createNativeStackNavigator<LiveStackParamList>();
-const ServicesStack = createNativeStackNavigator<ServicesStackParamList>();
+const PartnersStack = createNativeStackNavigator<PartnersStackParamList>();
 const PassStack = createNativeStackNavigator<PassStackParamList>();
 
 /** Every screen draws its own title, so no stack shows a header. */
@@ -54,18 +61,24 @@ function HomeStackScreen() {
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="Partner" component={PartnerScreen} />
       <HomeStack.Screen name="Confirm" component={ConfirmScreen} />
+      <HomeStack.Screen name="GettingThere" component={GettingThereScreen} />
+      <HomeStack.Screen name="Parking" component={ParkingScreen} />
     </HomeStack.Navigator>
   );
 }
 
-function ExploreStackScreen() {
+function MatchesStackScreen() {
   return (
-    <ExploreStack.Navigator screenOptions={stackOptions}>
-      <ExploreStack.Screen name="Explore" component={ExploreScreen} />
-      <ExploreStack.Screen name="Partner" component={PartnerScreen} />
-      <ExploreStack.Screen name="Confirm" component={ConfirmScreen} />
-      <ExploreStack.Screen name="TicketOffice" component={TicketOfficeScreen} />
-    </ExploreStack.Navigator>
+    <MatchesStack.Navigator screenOptions={stackOptions}>
+      <MatchesStack.Screen name="Matches" component={MatchesScreen} />
+      <MatchesStack.Screen name="Fixture" component={FixtureScreen} />
+      <MatchesStack.Screen name="TicketOffice" component={TicketOfficeScreen} />
+      <MatchesStack.Screen name="Parking" component={ParkingScreen} />
+      <MatchesStack.Screen name="Safety" component={SafetyScreen} />
+      <MatchesStack.Screen name="GettingThere" component={GettingThereScreen} />
+      <MatchesStack.Screen name="Partner" component={PartnerScreen} />
+      <MatchesStack.Screen name="Confirm" component={ConfirmScreen} />
+    </MatchesStack.Navigator>
   );
 }
 
@@ -77,18 +90,15 @@ function LiveStackScreen() {
   );
 }
 
-function ServicesStackScreen() {
+function PartnersStackScreen() {
   return (
-    <ServicesStack.Navigator screenOptions={stackOptions}>
-      <ServicesStack.Screen name="Services" component={ServicesScreen} />
-      <ServicesStack.Screen name="Category" component={CategoryScreen} />
-      <ServicesStack.Screen name="Partner" component={PartnerScreen} />
-      <ServicesStack.Screen name="Scan" component={ScanScreen} />
-      <ServicesStack.Screen name="Confirm" component={ConfirmScreen} />
-      <ServicesStack.Screen name="Parking" component={ParkingScreen} />
-      <ServicesStack.Screen name="Safety" component={SafetyScreen} />
-      <ServicesStack.Screen name="GettingThere" component={GettingThereScreen} />
-    </ServicesStack.Navigator>
+    <PartnersStack.Navigator screenOptions={stackOptions}>
+      <PartnersStack.Screen name="Partners" component={PartnersScreen} />
+      <PartnersStack.Screen name="Category" component={CategoryScreen} />
+      <PartnersStack.Screen name="Partner" component={PartnerScreen} />
+      <PartnersStack.Screen name="Scan" component={ScanScreen} />
+      <PartnersStack.Screen name="Confirm" component={ConfirmScreen} />
+    </PartnersStack.Navigator>
   );
 }
 
@@ -104,10 +114,10 @@ function PassStackScreen() {
 
 // Explore is drawn by PeakIcon, not Feather: it carries the Mount Kenya summit, the
 // same geometry PeakFrame crops media to. The other four stay on the shared line set.
-const ICONS: Record<Exclude<keyof TabParamList, "ExploreTab">, IconName> = {
+const ICONS: Record<Exclude<keyof TabParamList, "MatchesTab">, IconName> = {
   HomeTab: "home",
   LiveTab: "play-circle",
-  ServicesTab: "grid",
+  PartnersTab: "tag",
   PassTab: "credit-card",
 };
 
@@ -116,6 +126,26 @@ const ICONS: Record<Exclude<keyof TabParamList, "ExploreTab">, IconName> = {
 // routes and the same tabBarIcon, so nothing about the tabs is defined twice.
 export function TabNavigator() {
   const wide = useLayoutMode() === "wide";
+  const ticket = usePassStore((s) => s.ticket);
+  const issueTicketFor = usePassStore((s) => s.issueTicketFor);
+  const [matches, setMatches] = useState<Match[]>([]);
+
+  useEffect(() => {
+    void fetchMatches().then(setMatches);
+  }, []);
+
+  // Issued here rather than on the Pass screen. It used to happen in PassScreen's own
+  // effect, which meant a fan who had not yet opened that tab held no ticket as far as
+  // the rest of the app knew — the schedule showed "NOT YET ON SALE" against the very
+  // fixture their seat was for. The Pass is app-wide state, so it is settled app-wide.
+  //
+  // Re-issues when the ticket is for a fixture other than the next one, not only when
+  // there is none: an unguarded check leaves a stale ticket alive past its own fixture
+  // once the clock rolls over.
+  const fixture = nextMatch(matches, now());
+  useEffect(() => {
+    if (fixture && ticket?.matchId !== fixture.id) issueTicketFor(fixture);
+  }, [fixture, ticket, issueTicketFor]);
   return (
     <Tab.Navigator
       sceneContainerStyle={wide ? { paddingLeft: RAIL_WIDTH } : undefined}
@@ -134,7 +164,7 @@ export function TabNavigator() {
         },
         tabBarIcon: ({ color }) => (
           <View style={{ alignItems: "center", justifyContent: "center" }}>
-            {route.name === "ExploreTab" ? (
+            {route.name === "MatchesTab" ? (
               <PeakIcon size={21} color={color} />
             ) : (
               <Icon name={ICONS[route.name]} size={21} color={color} />
@@ -149,9 +179,9 @@ export function TabNavigator() {
         options={{ title: "Home" }}
       />
       <Tab.Screen
-        name="ExploreTab"
-        component={ExploreStackScreen}
-        options={{ title: "Explore" }}
+        name="MatchesTab"
+        component={MatchesStackScreen}
+        options={{ title: "Matches" }}
       />
       <Tab.Screen
         name="LiveTab"
@@ -159,9 +189,9 @@ export function TabNavigator() {
         options={{ title: "Live" }}
       />
       <Tab.Screen
-        name="ServicesTab"
-        component={ServicesStackScreen}
-        options={{ title: "Services" }}
+        name="PartnersTab"
+        component={PartnersStackScreen}
+        options={{ title: "Partners" }}
       />
       <Tab.Screen
         name="PassTab"

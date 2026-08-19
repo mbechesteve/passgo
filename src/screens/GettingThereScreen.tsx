@@ -77,7 +77,13 @@ export function GettingThereScreen() {
       key: "shuttle",
       title: S.servicesShuttles,
       detail: S.servicesShuttlesDetail,
-      onPress: () => navigation.navigate("Category", { category: "move" }),
+      // Category lives in the Partners tab; this screen is mounted in two other
+      // stacks, so it has to name the tab rather than assume a sibling route.
+      onPress: () =>
+        navigation.navigate("PartnersTab", {
+          screen: "Category",
+          params: { category: "move" },
+        }),
     },
     {
       key: "park",

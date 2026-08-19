@@ -7,6 +7,7 @@ import { BackBar } from "@/components/pamoja/BackBar";
 import { Chip } from "@/components/pamoja/Chip";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { S } from "@/lib/strings";
+import { TOUCH_MIN } from "@/lib/layout";
 import { usePaymentStore } from "@/store/usePaymentStore";
 import { KINDS, describeMethod, tailOf } from "@/utils/payment";
 import type { PaymentKind } from "@/types";
@@ -67,7 +68,8 @@ export function PaymentMethodScreen() {
                     <Pressable
                       onPress={() => choose(m.id)}
                       accessibilityRole="button"
-                      className="mr-4 active:opacity-70"
+                      style={{ minHeight: TOUCH_MIN }}
+                      className="mr-4 justify-center active:opacity-70"
                     >
                       <Text className="font-medium text-[13px] text-accent">
                         {S.payUse}
@@ -77,7 +79,8 @@ export function PaymentMethodScreen() {
                   <Pressable
                     onPress={() => forget(m.id)}
                     accessibilityRole="button"
-                    className="active:opacity-70"
+                    style={{ minHeight: TOUCH_MIN }}
+                    className="justify-center active:opacity-70"
                   >
                     <Text className="font-medium text-[13px] text-mute">
                       {S.payForget}

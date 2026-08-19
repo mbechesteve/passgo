@@ -20,23 +20,36 @@ export type SharedRoutes = {
   Confirm: { partnerId: string; channel: "qr" | "shortcode" };
 };
 
-export type HomeStackParamList = { Home: undefined } & SharedRoutes;
+export type HomeStackParamList = {
+  Home: undefined;
+  /** Arriving in Kenya belongs to a fan rather than to a fixture, so it sits here too. */
+  GettingThere: undefined;
+  /** Reached from the travel guide's last-leg band, so this stack must hold it. */
+  Parking: undefined;
+} & SharedRoutes;
 
 // TicketOffice stays out of SharedRoutes: fixtures are browsed on Explore, so one
 // tab reaches it, and SharedRoutes is for screens more than one tab can reach.
-export type ExploreStackParamList = {
-  Explore: undefined;
+/**
+ * The schedule's stack. A fixture opens here and everything about it — its ticket
+ * office, the ground's parking and safety, the travel guide — is pushed onto the same
+ * stack, so a fan never leaves the match in order to act on it.
+ */
+export type MatchesStackParamList = {
+  Matches: undefined;
+  Fixture: { matchId: string };
   TicketOffice: { matchId: string };
+  Parking: undefined;
+  Safety: undefined;
+  GettingThere: undefined;
 } & SharedRoutes;
 
 export type LiveStackParamList = { Live: undefined };
 
-export type ServicesStackParamList = {
-  Services: undefined;
+/** The discount network, which no longer shares a tab with matchday logistics. */
+export type PartnersStackParamList = {
+  Partners: undefined;
   Category: { category: PartnerCategory };
-  Parking: undefined;
-  Safety: undefined;
-  GettingThere: undefined;
   Scan: undefined;
 } & SharedRoutes;
 
@@ -48,9 +61,9 @@ export type PassStackParamList = {
 
 export type TabParamList = {
   HomeTab: undefined;
-  ExploreTab: undefined;
+  MatchesTab: undefined;
   LiveTab: undefined;
-  ServicesTab: undefined;
+  PartnersTab: undefined;
   PassTab: undefined;
 };
 

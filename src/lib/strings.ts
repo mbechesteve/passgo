@@ -123,6 +123,36 @@ export const S = {
     "Prototype figures. Real allocation and pricing are the LOC's to set.",
   officeTickets: "Tickets",
 
+  // ── MatchesScreen ───────────────────────────────────────────────────────
+  matchesTitle: "The whole tournament.",
+  matchesFixtures: "fixtures",
+  matchesVenues: "venues",
+
+  // ── FixtureScreen ───────────────────────────────────────────────────────
+  fixtureNotFound: "That fixture is no longer listed.",
+  fixtureOverview: "Overview",
+  fixtureTickets: "Tickets",
+  // Short, so all four section pills sit on one row on a phone — the same treatment the
+  // design canvas uses on its mobile board. "Getting there" is still the name of the
+  // fuller travel screen this section links into.
+  fixtureTravel: "Travel",
+  fixtureGround: "Ground",
+  fixtureStatusHeading: "Status",
+  fixtureVenueHeading: "Venue",
+  fixtureYourSeat: "Your seat",
+  fixtureFrom: "Seats from",
+  fixtureChooseSeat: "Choose where you'll sit",
+  legShuttle: "Shuttle",
+  legRoad: "Road",
+  legAir: "Air",
+  // One caveat for the whole band, since every figure on it is an estimate or an
+  // interval rather than a quote.
+  fixtureTravelCaveat:
+    "Estimates, not quotes. Fares and schedules for June 2027 are not published — confirm with the operator before you travel.",
+
+  // ── PartnersScreen ──────────────────────────────────────────────────────
+  partnersTitle: "Every discount, in one place.",
+
   // ── HomeScreen ──────────────────────────────────────────────────────────
   homeToday: "Today",
   homeMatchday: "Matchday",

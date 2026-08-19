@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Icon } from "@/components/Icon";
 import { colors } from "@/lib/theme";
+import { TOUCH_MIN } from "@/lib/layout";
 import { S } from "@/lib/strings";
 
 /**
@@ -25,7 +26,8 @@ export function BackBar() {
       onPress={() => navigation.goBack()}
       accessibilityRole="button"
       accessibilityLabel={S.back}
-      className="ml-5 mt-4 h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas active:opacity-70"
+      style={{ minHeight: TOUCH_MIN, minWidth: TOUCH_MIN }}
+      className="ml-5 mt-4 self-start items-center justify-center rounded-full border border-hairline bg-canvas active:opacity-70"
     >
       <Icon name="chevron-left" size={18} color={colors.ink} />
     </Pressable>

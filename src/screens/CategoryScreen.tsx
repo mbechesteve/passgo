@@ -8,11 +8,11 @@ import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { colors } from "@/lib/theme";
 import { usePartnerStore } from "@/store/usePartnerStore";
 import { CATEGORY_LABEL, byCategory } from "@/utils/partners";
-import type { ServicesStackParamList } from "@/navigation/types";
+import type { PartnersStackParamList } from "@/navigation/types";
 
 export function CategoryScreen() {
   const navigation = useNavigation<any>();
-  const { params } = useRoute<RouteProp<ServicesStackParamList, "Category">>();
+  const { params } = useRoute<RouteProp<PartnersStackParamList, "Category">>();
   const partners = usePartnerStore((s) => s.partners);
   const load = usePartnerStore((s) => s.load);
 

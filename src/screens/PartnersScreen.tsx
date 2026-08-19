@@ -7,25 +7,23 @@ import { type IconName } from "@/components/Icon";
 import { Pill } from "@/components/ui";
 import { Chip } from "@/components/pamoja/Chip";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
+import { CategoryTile } from "@/components/pamoja/CategoryTile";
 import { OfferRow } from "@/components/pamoja/OfferRow";
 import { SearchField } from "@/components/pamoja/SearchField";
 import { PamojaMap, type MapData } from "@/components/PamojaMap";
 import { now } from "@/lib/clock";
 import { colors } from "@/lib/theme";
 import { S } from "@/lib/strings";
-import { fetchExplore, fetchHallMaps, fetchMatches, fetchPartners } from "@/data/repository";
-import { mapForMatch } from "@/utils/hallmap";
-import { awayCitySuffix } from "@/utils/air";
-import { daysUntilLabel, kickoffLabel, matchLabel } from "@/utils/match";
-import type { ExploreItem, HallMap, Match, Partner } from "@/types";
+import { CATEGORIES, countsByCategory } from "@/utils/partners";
+import { fetchExplore, fetchPartners } from "@/data/repository";
+import type { ExploreItem, Partner } from "@/types";
 
-type Filter = "all" | "fixtures" | "venues" | "offers";
+type Filter = "all" | "venues" | "offers";
 
 // Each filter carries a Feather glyph, as the reference's filter row does. "All" is
 // given one too — a row where one pill alone has no icon reads as a mistake.
 const FILTERS: { key: Filter; label: string; icon: IconName }[] = [
   { key: "all", label: S.exploreFilterAll, icon: "list" },
-  { key: "fixtures", label: S.exploreFilterFixtures, icon: "calendar" },
   { key: "venues", label: S.exploreFilterVenues, icon: "map-pin" },
   { key: "offers", label: S.exploreFilterOffers, icon: "tag" },
 ];
@@ -68,45 +66,19 @@ function Row({ item }: { item: ExploreItem }) {
   );
 }
 
-export function ExploreScreen() {
+export function PartnersScreen() {
   const navigation = useNavigation<any>();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
   const [items, setItems] = useState<ExploreItem[]>([]);
-  const [fixtures, setFixtures] = useState<Match[]>([]);
   const [partners, setPartners] = useState<Partner[]>([]);
-  const [maps, setMaps] = useState<HallMap[]>([]);
 
   useEffect(() => {
     void fetchExplore().then(setItems);
-    void fetchMatches().then(setFixtures);
     void fetchPartners().then(setPartners);
-    void fetchHallMaps().then(setMaps);
   }, []);
 
-  const at = now();
   const show = (f: Filter) => filter === "all" || filter === f;
-
-  const visibleFixtures = useMemo(
-    () =>
-      show("fixtures")
-        ? fixtures
-            .filter((m) => {
-              const t = new Date(m.kickoff).getTime();
-              return (
-                t > at.getTime() &&
-                t <= at.getTime() + SEVEN_DAYS_MS &&
-                (query === "" || matches(matchLabel(m) + m.venue, query))
-              );
-            })
-            .sort(
-              (a, b) =>
-                new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime()
-            )
-            .slice(0, 5)
-        : [],
-    [fixtures, filter, query, at]
-  );
 
   // "Venues" excludes events — an event under a filter named Venues is its own
   // false statement. "All" still shows both, via the events/places split below.
@@ -134,10 +106,10 @@ export function ExploreScreen() {
     .filter((p) => p.category !== "eat")
     .slice(0, 6);
 
+  const counts = countsByCategory(partners);
   const events = visibleItems.filter((i) => i.kind === "event");
   const places = visibleItems.filter((i) => i.kind !== "event");
   const empty =
-    visibleFixtures.length === 0 &&
     visibleItems.length === 0 &&
     eatOffers.length === 0 &&
     otherOffers.length === 0;
@@ -146,7 +118,7 @@ export function ExploreScreen() {
     <Screen>
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
-          {S.exploreTitle}
+          {S.partnersTitle}
         </Text>
 
         <View className="mt-3">
@@ -169,53 +141,28 @@ export function ExploreScreen() {
           ))}
         </View>
 
+        {/* The network's own surface. This band and its counts are why the
+            2,189-partner dataset exists, and they came here when Services split —
+            without it the split would have quietly dropped a proposal figure. */}
+        <Eyebrow className="mt-8">
+          {`${partners.length.toLocaleString("en-US")} partner businesses`}
+        </Eyebrow>
+        <View className="mt-4 flex-row flex-wrap justify-between">
+          {CATEGORIES.map((c) => (
+            <View key={c} className="w-[48%]">
+              <CategoryTile
+                category={c}
+                count={counts[c]}
+                onPress={() => navigation.navigate("Category", { category: c })}
+              />
+            </View>
+          ))}
+        </View>
+
         {empty ? (
           <Text className="mt-8 text-[15px] leading-6 text-body">
             {S.exploreNoResults}
           </Text>
-        ) : null}
-
-        {visibleFixtures.length > 0 ? (
-          <>
-            <Eyebrow className="mt-6">{S.exploreThisWeek}</Eyebrow>
-            <View className="mt-2">
-              {visibleFixtures.map((m) => {
-                // Only a fixture with a hall map behind it is pressable, and it says so
-                // with a chip. A row that opened an empty office would be worse than a
-                // row that does nothing.
-                const onSale = mapForMatch(maps, m.id) !== null;
-                return (
-                  <Pressable
-                    key={m.id}
-                    disabled={!onSale}
-                    onPress={() =>
-                      navigation.navigate("TicketOffice", { matchId: m.id })
-                    }
-                    accessibilityRole="button"
-                    accessibilityState={{ disabled: !onSale }}
-                    className={`flex-row items-center justify-between border-b border-hairline py-3.5 ${
-                      onSale ? "active:opacity-70" : ""
-                    }`}
-                  >
-                    <View className="flex-1">
-                      <Text className="font-medium text-[15px] text-ink">
-                        {matchLabel(m)}
-                      </Text>
-                      <Text className="mt-0.5 font-mono text-[11px] text-mute">
-                        {`${kickoffLabel(m)}${awayCitySuffix(m)}`}
-                      </Text>
-                    </View>
-                    {onSale ? (
-                      <View className="mr-2">
-                        <Chip label={S.officeTickets} tone="tint" />
-                      </View>
-                    ) : null}
-                    <Chip label={daysUntilLabel(m, at)} tone="panel" />
-                  </Pressable>
-                );
-              })}
-            </View>
-          </>
         ) : null}
 
         {events.length > 0 ? (

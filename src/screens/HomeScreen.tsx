@@ -11,6 +11,7 @@ import { MoneyBox } from "@/components/pamoja/MoneyBox";
 import { OfferRow } from "@/components/pamoja/OfferRow";
 import { now } from "@/lib/clock";
 import { S } from "@/lib/strings";
+import { TOUCH_MIN } from "@/lib/layout";
 import { fetchMatches } from "@/data/repository";
 import { usePartnerStore } from "@/store/usePartnerStore";
 import { usePassStore } from "@/store/usePassStore";
@@ -70,7 +71,12 @@ function FixtureCard({
         <Text className="text-[13px] text-body">
           {`${S.homeGatesOpenPrefix} ${gatesOpenLabel(fixture)}`}
         </Text>
-        <Pressable onPress={onViewPass} accessibilityRole="button">
+        <Pressable
+          onPress={onViewPass}
+          accessibilityRole="button"
+          style={{ minHeight: TOUCH_MIN }}
+          className="justify-center"
+        >
           <Text className="font-medium text-[14px] text-accent">
             {S.homeViewPass}
           </Text>
@@ -105,7 +111,7 @@ export function HomeScreen() {
       week={weekSavings(events, at)}
       series={savingsSeries(events, at, 7)}
       offers={offersUsed(events)}
-      onBrowse={() => navigation.navigate("ServicesTab")}
+      onBrowse={() => navigation.navigate("PartnersTab")}
     />
   );
 
@@ -156,8 +162,10 @@ export function HomeScreen() {
         <View className="mt-8 flex-row items-center justify-between">
           <Eyebrow>{S.homeOffersNearYou}</Eyebrow>
           <Pressable
-            onPress={() => navigation.navigate("ServicesTab")}
+            onPress={() => navigation.navigate("PartnersTab")}
             accessibilityRole="button"
+            style={{ minHeight: TOUCH_MIN }}
+            className="justify-center"
           >
             <Text className="font-medium text-[13px] text-accent">
               {S.homeSeeAll}

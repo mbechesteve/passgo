@@ -24,7 +24,6 @@ export function PassScreen() {
   const navigation = useNavigation<any>();
   const pass = usePassStore((s) => s.pass);
   const ticket = usePassStore((s) => s.ticket);
-  const issueTicketFor = usePassStore((s) => s.issueTicketFor);
   const [entitlements, setEntitlements] = useState<Entitlement[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
 
@@ -34,14 +33,6 @@ export function PassScreen() {
   }, []);
 
   const fixture = nextMatch(matches, now());
-
-  useEffect(() => {
-    // Re-issue when the ticket is for a fixture other than the next one — not just
-    // when there is no ticket at all. Left unguarded, a stale ticket persists past
-    // its own fixture once the clock rolls it over (reachable via setUseRealTime)
-    // and would then render alongside the new fixture's crests and venue.
-    if (fixture && ticket?.matchId !== fixture.id) issueTicketFor(fixture);
-  }, [fixture, ticket, issueTicketFor]);
 
   // The navigator only renders the tabs when a Pass exists.
   if (!pass) return null;

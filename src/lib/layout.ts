@@ -24,6 +24,20 @@ export const RAIL_WIDTH = 96;
 /** How wide the content column is allowed to grow beside the rail. */
 export const CONTENT_MAX = 640;
 
+/**
+ * The smallest a tappable control may be, in either direction.
+ *
+ * 44 is the floor Apple, Android and WCAG 2.5.5 all land on. Several controls here were
+ * 36 — the back button, the seat stepper, the filter pills — which is comfortable with a
+ * mouse and not with a thumb. Applied as a minimum rather than a fixed size, so a
+ * control that is already larger is left alone.
+ *
+ * One documented exception: the ticket office's hall-map blocks are sized by the bowl's
+ * geometry, and WCAG allows it where the presentation is essential. Distorting a stadium
+ * map to hit a target size would make it a worse map.
+ */
+export const TOUCH_MIN = 44;
+
 export function layoutMode(width: number): LayoutMode {
   return width >= WIDE_MIN ? "wide" : "phone";
 }

@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { CONTENT_MAX, PHONE_FRAME_WIDTH, RAIL_WIDTH, WIDE_MIN, layoutMode } from "./layout";
+import {
+  CONTENT_MAX,
+  PHONE_FRAME_WIDTH,
+  RAIL_WIDTH,
+  TOUCH_MIN,
+  WIDE_MIN,
+  layoutMode,
+} from "./layout";
 
 describe("layoutMode", () => {
   it("treats a phone as a phone", () => {
@@ -35,5 +42,11 @@ describe("the layout constants", () => {
 
   it("gives the wide column more room than the phone frame, or it is pointless", () => {
     expect(CONTENT_MAX).toBeGreaterThan(PHONE_FRAME_WIDTH);
+  });
+
+  it("never lets the touch minimum drop below the platform floor", () => {
+    // Apple, Android and WCAG 2.5.5 all land on 44. Guarding the constant because
+    // shrinking it is exactly the sort of thing that looks like a tidy-up.
+    expect(TOUCH_MIN).toBeGreaterThanOrEqual(44);
   });
 });

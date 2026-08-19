@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 import { colors } from "@/lib/theme";
+import { TOUCH_MIN } from "@/lib/layout";
 import { Icon, type IconName } from "@/components/Icon";
 
 // ── Card ──────────────────────────────────────────────────────────────────────
@@ -104,6 +105,7 @@ export function Pill({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={{ selected: !!active }}
+      style={{ minHeight: TOUCH_MIN }}
       className={`mr-2 flex-row items-center rounded-full border px-3.5 py-2 ${
         active
           ? "bg-deep border-deep"

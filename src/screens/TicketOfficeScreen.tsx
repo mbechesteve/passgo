@@ -10,6 +10,7 @@ import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { HallMap } from "@/components/pamoja/HallMap";
 import { TeamRow } from "@/components/pamoja/TeamRow";
 import { colors } from "@/lib/theme";
+import { TOUCH_MIN } from "@/lib/layout";
 import { S } from "@/lib/strings";
 import { fetchHallMaps, fetchMatches } from "@/data/repository";
 import { kes } from "@/utils/format";
@@ -23,7 +24,7 @@ import {
   tiers,
 } from "@/utils/hallmap";
 import type { HallMap as HallMapData, Match, StadiumBlock } from "@/types";
-import type { ExploreStackParamList } from "@/navigation/types";
+import type { MatchesStackParamList } from "@/navigation/types";
 
 const MAP_WIDTH = 320;
 const MAP_HEIGHT = 260;
@@ -42,7 +43,7 @@ const MAP_HEIGHT = 260;
  * countdown pretending to reserve something no backend is holding.
  */
 export function TicketOfficeScreen() {
-  const { params } = useRoute<RouteProp<ExploreStackParamList, "TicketOffice">>();
+  const { params } = useRoute<RouteProp<MatchesStackParamList, "TicketOffice">>();
   const [matches, setMatches] = useState<Match[]>([]);
   const [maps, setMaps] = useState<HallMapData[]>([]);
   const [selected, setSelected] = useState<StadiumBlock | null>(null);
@@ -213,7 +214,8 @@ function Stepper({
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={label === "+" ? "One more seat" : "One fewer seat"}
-      className={`h-9 w-9 items-center justify-center rounded-full border border-hairline ${
+      style={{ minHeight: TOUCH_MIN, minWidth: TOUCH_MIN }}
+      className={`self-center items-center justify-center rounded-full border border-hairline ${
         disabled ? "opacity-40" : "active:opacity-70"
       }`}
     >
