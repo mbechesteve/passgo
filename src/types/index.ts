@@ -110,3 +110,15 @@ export interface Match {
   /** Venue centre — "400m from Gate D" and the route screen both read this. */
   coords: { lat: number; lng: number };
 }
+
+export type MatchPhase = "scheduled" | "live" | "half-time" | "full-time";
+
+/** Seeded score and stats. The minute is never stored — it derives from the clock. */
+export interface MatchLive {
+  matchId: string;
+  home: number; // goals
+  away: number;
+  possession: [number, number];
+  shots: [number, number];
+  corners: [number, number];
+}

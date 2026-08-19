@@ -31,4 +31,21 @@ export const MATCHES: Match[] = [
     venue: "Kasarani", city: "Nairobi", country: "KE",
     coords: { lat: -1.2226, lng: 36.8917 },
   },
+  // In play at the demo instant. Kickoffs are chosen so that once the 15-minute
+  // interval is subtracted the minutes read 70' and 55' — the app derives them, so
+  // the drawing's 71' and 58' were never reachable from a round kickoff.
+  {
+    id: "m-zam-mar",
+    home: "Zambia", away: "Morocco",
+    kickoff: "2027-06-23T11:30:00+03:00",
+    venue: "Nyayo", city: "Nairobi", country: "KE",
+    coords: { lat: -1.3044, lng: 36.8264 },
+  },
+  {
+    id: "m-uga-sen",
+    home: "Uganda", away: "Senegal",
+    kickoff: "2027-06-23T11:45:00+03:00",
+    venue: "Kasarani", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2226, lng: 36.8917 },
+  },
 ];

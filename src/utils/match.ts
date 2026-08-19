@@ -1,5 +1,5 @@
 import { eatParts } from "@/lib/clock";
-import type { Match } from "@/types";
+import type { Match, MatchPhase } from "@/types";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -38,4 +38,43 @@ export function kickoffLabel(m: Match): string {
   const { day, time } = eatParts(m.kickoff);
   const weekday = DAYS[new Date(`${day}T00:00:00Z`).getUTCDay()];
   return `${weekday} ${time} · ${m.venue}`;
+}
+
+const HALF = 45;
+const INTERVAL = 15;
+const FULL = HALF * 2 + INTERVAL; // 105 wall-minutes from kickoff to full time
+
+/** Whole minutes of wall clock since kickoff. Negative before it starts. */
+function wallMinutes(m: Match, at: Date): number {
+  return Math.floor((at.getTime() - new Date(m.kickoff).getTime()) / 60_000);
+}
+
+export function matchPhase(m: Match, at: Date): MatchPhase {
+  const wall = wallMinutes(m, at);
+  if (wall < 0) return "scheduled";
+  if (wall <= HALF) return "live";
+  if (wall <= HALF + INTERVAL) return "half-time";
+  if (wall <= FULL) return "live";
+  return "full-time";
+}
+
+/** Playing minute, or null when the match is not in play. */
+export function liveMinute(m: Match, at: Date): number | null {
+  const phase = matchPhase(m, at);
+  if (phase === "scheduled" || phase === "full-time") return null;
+  if (phase === "half-time") return HALF;
+  const wall = wallMinutes(m, at);
+  return wall <= HALF ? wall : wall - INTERVAL;
+}
+
+/** In play now, most advanced first: the first is featured, the rest are "also live". */
+export function liveMatches(matches: Match[], at: Date): Match[] {
+  return matches
+    .filter((m) => {
+      const phase = matchPhase(m, at);
+      return phase === "live" || phase === "half-time";
+    })
+    .sort(
+      (a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime()
+    );
 }

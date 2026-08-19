@@ -8,12 +8,13 @@
 // When a real backend lands it replaces the bodies of these functions. No screen
 // changes.
 
-import type { Entitlement, ExploreItem, Match, Partner } from "@/types";
+import type { Entitlement, ExploreItem, Match, MatchLive, Partner } from "@/types";
 import { cacheKey, storage } from "@/lib/storage";
 
 import { generatePartners } from "./partners";
 import { EXPLORE_ITEMS } from "./explore";
 import { MATCHES } from "./matches";
+import { MATCH_LIVE } from "./live";
 import { ENTITLEMENTS } from "./entitlements";
 
 /** Read-through cache: cached copy if present, else compute, persist, return. */
@@ -35,6 +36,10 @@ export async function fetchExplore(): Promise<ExploreItem[]> {
 
 export async function fetchMatches(): Promise<Match[]> {
   return cached("matches", () => MATCHES);
+}
+
+export async function fetchMatchLive(): Promise<MatchLive[]> {
+  return cached("live", () => MATCH_LIVE);
 }
 
 export async function fetchEntitlements(): Promise<Entitlement[]> {

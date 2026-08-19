@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { nextMatch, matchLabel, kickoffLabel, crestCode } from "@/utils/match";
+import {
+  nextMatch,
+  matchLabel,
+  kickoffLabel,
+  crestCode,
+  liveMatches,
+  liveMinute,
+  matchPhase,
+} from "@/utils/match";
 import { MATCHES } from "@/data/matches";
 import { DEMO_NOW } from "@/lib/clock";
 import type { Match } from "@/types";
@@ -73,5 +81,83 @@ describe("crestCode", () => {
 
   it("falls back to the first three letters for an unseeded name", () => {
     expect(crestCode("Namibia")).toBe("NAM");
+  });
+});
+
+// Kickoffs are chosen so the minutes come out clean once the 15-minute interval is
+// subtracted. At the demo instant (12:55 EAT) Zambia v Morocco is 85 wall-minutes in.
+const ZAM_MAR = () => MATCHES.find((m) => m.id === "m-zam-mar")!;
+const UGA_SEN = () => MATCHES.find((m) => m.id === "m-uga-sen")!;
+
+describe("matchPhase", () => {
+  const m = ZAM_MAR();
+  const at = (wall: number) =>
+    new Date(new Date(m.kickoff).getTime() + wall * 60_000);
+
+  it("is scheduled before kickoff", () => {
+    expect(matchPhase(m, at(-1))).toBe("scheduled");
+  });
+
+  it("is live through the first half", () => {
+    expect(matchPhase(m, at(0))).toBe("live");
+    expect(matchPhase(m, at(45))).toBe("live");
+  });
+
+  it("is half-time across the interval", () => {
+    expect(matchPhase(m, at(46))).toBe("half-time");
+    expect(matchPhase(m, at(60))).toBe("half-time");
+  });
+
+  it("is live again through the second half", () => {
+    expect(matchPhase(m, at(61))).toBe("live");
+    expect(matchPhase(m, at(105))).toBe("live");
+  });
+
+  it("is full-time after 105 wall-minutes", () => {
+    expect(matchPhase(m, at(106))).toBe("full-time");
+  });
+});
+
+describe("liveMinute", () => {
+  const m = ZAM_MAR();
+  const at = (wall: number) =>
+    new Date(new Date(m.kickoff).getTime() + wall * 60_000);
+
+  it("counts wall-minutes in the first half", () => {
+    expect(liveMinute(m, at(30))).toBe(30);
+  });
+
+  it("holds at 45 through the interval", () => {
+    expect(liveMinute(m, at(52))).toBe(45);
+  });
+
+  it("subtracts the interval in the second half", () => {
+    expect(liveMinute(m, at(85))).toBe(70);
+  });
+
+  it("is null when the match is not in play", () => {
+    expect(liveMinute(m, at(-1))).toBeNull();
+    expect(liveMinute(m, at(200))).toBeNull();
+  });
+});
+
+describe("liveMatches at the demo instant", () => {
+  it("returns both Wednesday fixtures, most advanced first", () => {
+    const live = liveMatches(MATCHES, DEMO_NOW);
+    expect(live.map((m) => m.id)).toEqual(["m-zam-mar", "m-uga-sen"]);
+  });
+
+  it("reads 70' and 55'", () => {
+    const [featured, also] = liveMatches(MATCHES, DEMO_NOW);
+    expect(liveMinute(featured, DEMO_NOW)).toBe(70);
+    expect(liveMinute(also, DEMO_NOW)).toBe(55);
+  });
+
+  it("leaves the next fixture alone — Home still reads Kenya v Mali", () => {
+    expect(nextMatch(MATCHES, DEMO_NOW)?.id).toBe("m-ken-mli");
+  });
+
+  it("is empty once the tournament is over", () => {
+    expect(liveMatches(MATCHES, new Date("2027-08-01T12:00:00+03:00"))).toEqual([]);
   });
 });
