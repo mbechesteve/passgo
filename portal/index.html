@@ -7,7 +7,7 @@
 <meta name="description" content="One digital pass for match access, travel and city services across Kenya, Uganda and Tanzania. Pamoja never holds your money.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
 <style>
 /*
@@ -28,7 +28,7 @@
   Uratibu). Nothing here is imported by src/.
 */
 /* ── Hero ────────────────────────────────────────────────────────────────── */
-.hero { position: relative; height: 760px; background: var(--ink-deep); overflow: hidden; }
+.hero { position: relative; height: 760px; background: var(--primary); overflow: hidden; }
 .veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
              background: linear-gradient(160deg, rgba(72,78,84,0.55) 0%, rgba(13,14,17,0.92) 100%); }
 .veil-screen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
@@ -38,55 +38,55 @@
 .hero-inner { position: relative; z-index: 2; padding: 116px var(--pad-x) 0; pointer-events: none;
               display: flex; justify-content: space-between; gap: 48px; }
 .hero-copy { max-width: 860px; }
-.hero .eyebrow { font-size: 12px; letter-spacing: 0.16em; color: var(--gold); margin-bottom: 24px; }
+.hero .eyebrow { font-size: 12px; letter-spacing: 0.16em; color: var(--cyan); margin-bottom: 24px; }
 .hero h1 { font-size: clamp(52px, 9vw, 96px); line-height: 0.9; letter-spacing: -0.04em;
-           color: var(--white); margin-bottom: 10px; }
-.hero .slash { font-size: 13px; letter-spacing: 0.12em; color: var(--stone-2); margin-bottom: 30px; }
+           color: var(--canvas); margin-bottom: 10px; }
+.hero .slash { font-size: 13px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 30px; }
 .hero .lede { font-size: 19px; line-height: 1.55; color: rgba(245,248,248,0.92); font-weight: 300;
               margin-bottom: 38px; max-width: 540px; }
 .hero .acts { display: flex; align-items: center; gap: 24px; pointer-events: auto; flex-wrap: wrap; }
 .stats { display: flex; flex-direction: column; gap: 26px; padding-top: 14px; flex: 0 0 auto;
-         text-align: right; color: var(--stone-2); font-size: 11px; letter-spacing: 0.12em; }
-.stats b { display: block; color: var(--white); font-size: 30px; font-weight: 600; margin-bottom: 4px; }
+         text-align: right; color: var(--muted); font-size: 11px; letter-spacing: 0.12em; }
+.stats b { display: block; color: var(--canvas); font-size: 30px; font-weight: 600; margin-bottom: 4px; }
 
 /* ── Ticker ──────────────────────────────────────────────────────────────── */
-.ticker { background: var(--ink-3); border-top: 1px solid var(--ink-2);
-          border-bottom: 1px solid var(--ink-2); padding: 12px 0; overflow: hidden;
+.ticker { background: var(--charcoal); border-top: 1px solid var(--primary-soft);
+          border-bottom: 1px solid var(--primary-soft); padding: 12px 0; overflow: hidden;
           white-space: nowrap; font-family: "JetBrains Mono", ui-monospace, monospace;
-          font-size: 12px; letter-spacing: 0.08em; color: var(--stone); }
+          font-size: 12px; letter-spacing: 0.08em; color: var(--muted); }
 .ticker-track { display: inline-flex; align-items: center; animation: tickerscroll 32s linear infinite; }
 .ticker-run { display: inline-flex; align-items: center; gap: 36px; padding-right: 36px; }
-.ticker .live { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); }
-.ticker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red);
+.ticker .live { display: inline-flex; align-items: center; gap: 8px; color: var(--cyan); }
+.ticker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success);
                animation: livedot 1.6s infinite; }
-.ticker .sep { color: var(--body); }
-.ticker .clock { color: var(--stone-2); }
+.ticker .sep { color: var(--slate); }
+.ticker .clock { color: var(--muted); }
 
 /* ── Sections ────────────────────────────────────────────────────────────── */
 .sec { padding: clamp(56px, 8vw, 104px) var(--pad-x) 40px; }
 .sec-tight { padding: clamp(56px, 8vw, 96px) var(--pad-x) 56px; }
-.sec-band { background: var(--band); padding: clamp(56px, 8vw, 88px) var(--pad-x) 96px; }
+.sec-band { background: var(--surface-soft); padding: clamp(56px, 8vw, 88px) var(--pad-x) 96px; }
 .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;
         margin-bottom: 44px; flex-wrap: wrap; }
-.head h2 { font-size: clamp(28px, 4.2vw, 42px); color: var(--ink); }
-.head .meta { font-size: 16px; font-weight: 300; color: var(--body); flex: 0 1 auto; }
-.head .meta-mono { font-size: 12px; letter-spacing: 0.1em; color: var(--body); flex: 0 1 auto; }
-.note { font-size: 10px; letter-spacing: 0.08em; color: var(--body); margin-top: 18px; }
+.head h2 { font-size: clamp(28px, 4.2vw, 42px); color: var(--primary); }
+.head .meta { font-size: 16px; font-weight: 300; color: var(--slate); flex: 0 1 auto; }
+.head .meta-mono { font-size: 12px; letter-spacing: 0.1em; color: var(--slate); flex: 0 1 auto; }
+.note { font-size: 10px; letter-spacing: 0.08em; color: var(--slate); margin-top: 18px; }
 
 /* ── Five doors: the accordion ───────────────────────────────────────────── */
 .doors { display: flex; gap: 14px; height: 440px; }
 .doors input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; margin: 0; }
-.door { position: relative; overflow: hidden; border-radius: 10px; background: var(--ink);
-        flex: 0.55 1 0%; min-width: 0; cursor: pointer; color: var(--paper);
+.door { position: relative; overflow: hidden; border-radius: 32px; background: var(--primary);
+        flex: 0.55 1 0%; min-width: 0; cursor: pointer; color: var(--surface);
         transition: flex 420ms cubic-bezier(0.2, 0, 0, 1); }
 .doors input:checked + .door { flex: 3.2 1 0%; }
-.doors input:focus-visible + .door { outline: 2px solid var(--green-mid); outline-offset: 2px; }
+.doors input:focus-visible + .door { outline: 2px solid var(--accent-mid); outline-offset: 2px; }
 .door .wash { background: linear-gradient(160deg, rgba(72,78,84,0.55) 0%, rgba(28,30,34,0.96) 100%); }
 .door .num { position: absolute; top: 18px; left: 20px; font-family: "JetBrains Mono", monospace;
-             font-size: 13px; letter-spacing: 0.1em; color: var(--gold); }
+             font-size: 13px; letter-spacing: 0.1em; color: var(--cyan); }
 /* Collapsed: the title, turned on its side, and nothing else. */
 .d-shut { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
-          writing-mode: vertical-rl; font-weight: 600; font-size: 16px; color: var(--stone);
+          writing-mode: vertical-rl; font-weight: 600; font-size: 16px; color: var(--muted);
           white-space: nowrap; pointer-events: none; opacity: 1;
           transition: opacity 250ms cubic-bezier(0.2, 0, 0, 1); }
 .d-open { position: absolute; left: 26px; right: 26px; bottom: 24px; pointer-events: none;
@@ -94,47 +94,48 @@
 .doors input:checked + .door .d-shut { opacity: 0; }
 .doors input:checked + .door .d-open { opacity: 1; }
 .d-open .eyebrow { display: block; font-family: "JetBrains Mono", monospace; font-size: 10px;
-                   letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold);
+                   letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan);
                    margin-bottom: 10px; }
-.d-open h3 { font-size: 30px; letter-spacing: -0.02em; color: var(--white); margin-bottom: 10px; }
-.d-open p { font-size: 15px; font-weight: 300; color: var(--stone); line-height: 1.55; max-width: 420px; }
+.d-open h3 { font-size: 30px; letter-spacing: -0.02em; color: var(--canvas); margin-bottom: 10px; }
+.d-open p { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.55; max-width: 420px; }
 /* The board prints each photo's credit on the card itself. */
 
 /* ── Featured fixture + fixtures list ────────────────────────────────────── */
-.featured { position: relative; border-radius: 10px; overflow: hidden; background: var(--ink);
+.featured { position: relative; border-radius: 32px; overflow: hidden; background: var(--primary);
             min-height: 440px; display: flex; align-items: flex-end; }
 .featured .veil { position: absolute; inset: 0; pointer-events: none;
                   background: linear-gradient(90deg, rgba(10,11,13,0.9) 0%, rgba(10,11,13,0.5) 55%, rgba(10,11,13,0.1) 100%); }
-.countdown { position: absolute; top: 28px; right: 28px; z-index: 2; color: var(--gold);
-             border: 1px solid rgba(242,199,68,0.5); border-radius: 999px; padding: 8px 16px;
+.countdown { position: absolute; top: 28px; right: 28px; z-index: 2; color: var(--cyan);
+             border: 1px solid rgba(61,174,255,0.5); border-radius: 999px; padding: 8px 16px;
              font-size: 12px; letter-spacing: 0.12em; }
 .featured-body { position: relative; z-index: 2; padding: clamp(28px, 5vw, 56px); max-width: 820px; }
-.featured-body .eyebrow { font-size: 12px; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 16px; }
+.featured-body .eyebrow { font-size: 12px; letter-spacing: 0.14em; color: var(--cyan); margin-bottom: 16px; }
 .featured-body h2 { font-size: clamp(38px, 6.5vw, 72px); letter-spacing: -0.04em;
-                    color: var(--white); line-height: 0.95; }
-.featured-body .when { font-size: 13px; letter-spacing: 0.1em; color: var(--stone-2); margin: 18px 0 30px; }
+                    color: var(--canvas); line-height: 0.95; }
+.featured-body .when { font-size: 13px; letter-spacing: 0.1em; color: var(--muted); margin: 18px 0 30px; }
 .featured-body .acts { display: flex; gap: 12px; flex-wrap: wrap; }
 
 .list-head { display: flex; justify-content: space-between; align-items: baseline;
              margin: 48px 0 8px; gap: 24px; flex-wrap: wrap; }
-.list-head h3 { font-size: clamp(24px, 3vw, 28px); color: var(--ink); }
+.list-head h3 { font-size: clamp(24px, 3vw, 28px); color: var(--primary); }
 .fixtures { border-top: 1px solid var(--hairline); }
 .fx { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); padding: 22px 12px;
       border-bottom: 1px solid var(--hairline); color: inherit; }
-.fx:hover { background: var(--green-bg); color: inherit; }
+/* A neutral band on hover: minimax keeps the success pair for state, not for pointing. */
+.fx:hover { background: var(--surface-soft); color: inherit; }
 .fx .date { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 15px;
-            color: var(--green); flex: 0 0 88px; }
+            color: var(--accent); flex: 0 0 88px; }
 .fx .who { flex: 1; min-width: 0; }
-.fx .who b { display: block; font-size: 20px; font-weight: 700; color: var(--ink); }
-.fx .who span { display: block; font-size: 14px; font-weight: 300; color: var(--body); margin-top: 2px; }
+.fx .who b { display: block; font-size: 20px; font-weight: 700; color: var(--primary); }
+.fx .who span { display: block; font-size: 14px; font-weight: 300; color: var(--slate); margin-top: 2px; }
 .fx .venue { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.1em;
-             color: var(--body); flex: 0 0 auto; }
+             color: var(--slate); flex: 0 0 auto; }
 .chip { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.1em;
         text-transform: uppercase; font-weight: 600; padding: 5px 11px; border-radius: 4px; flex: 0 0 auto; }
-.chip-ft   { background: var(--band); color: var(--body); }
-.chip-live { background: var(--green-bg); color: var(--green); }
-.chip-sale { background: #FDF3D4; color: #8A6B00; }
-.chip-held { background: var(--ink); color: var(--gold); }
+.chip-ft   { background: var(--surface-soft); color: var(--slate); }
+.chip-live { background: var(--success-bg); color: var(--success); }
+.chip-sale { background: var(--accent-200); color: var(--accent-deep); }
+.chip-held { background: var(--primary); color: var(--cyan); }
 
 /* ── Fan events rail ─────────────────────────────────────────────────────── */
 .rail { display: flex; gap: 24px; overflow-x: auto; scroll-behavior: smooth;
@@ -142,77 +143,77 @@
 .rail::-webkit-scrollbar { display: none; }
 .ev { flex: 0 0 320px; color: inherit; }
 .ev:hover { color: inherit; }
-.ev .frame { position: relative; aspect-ratio: 1 / 1.02; border-radius: 10px;
-             overflow: hidden; background: var(--ink); }
+.ev .frame { position: relative; aspect-ratio: 1 / 1.02; border-radius: 16px;
+             overflow: hidden; background: var(--primary); }
 /* The rail's wash is lighter than the page's: rgba(13,14,17,0.8), not 0.9 of --ink-2. */
 .ev .wash { background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(13,14,17,0.8) 100%); }
-.ev h3 { font-size: 20px; font-weight: 700; color: var(--green); margin: 16px 0 6px; }
+.ev h3 { font-size: 20px; font-weight: 700; color: var(--primary); margin: 16px 0 6px; }
 .ev .meta { font-family: "JetBrains Mono", monospace; font-size: 12px;
-            letter-spacing: 0.08em; color: var(--body); }
+            letter-spacing: 0.08em; color: var(--slate); }
 .rail-foot { display: flex; justify-content: space-between; align-items: center;
              margin-top: 22px; gap: 24px; flex-wrap: wrap; }
 .rail-nav { display: flex; gap: 12px; }
 .round { width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
          display: flex; align-items: center; justify-content: center; }
-.round-ghost { border: 1px solid var(--hairline); background: var(--white); color: var(--body); }
-.round-ghost:hover { border-color: var(--green); color: var(--green); }
-.round-solid { border: none; background: var(--green); color: var(--white); }
-.round-solid:hover { background: var(--green-mid); }
+.round-ghost { border: 1px solid var(--hairline); background: var(--canvas); color: var(--slate); }
+.round-ghost:hover { border-color: var(--primary); color: var(--primary); }
+.round-solid { border: none; background: var(--primary); color: var(--canvas); }
+.round-solid:hover { background: var(--charcoal); }
 
 /* ── Explore broken grid ─────────────────────────────────────────────────── */
 .broken { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; gap: 18px; }
-.tile { position: relative; border-radius: 10px; overflow: hidden; background: var(--ink);
+.tile { position: relative; border-radius: 16px; overflow: hidden; background: var(--primary);
         display: block; color: inherit; }
 .tile:hover { color: inherit; }
 .tile .cap { position: absolute; left: 22px; right: 22px; bottom: 20px; pointer-events: none; }
-.tile h3 { font-size: 21px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-.tile p { font-size: 13px; font-weight: 300; color: var(--stone); }
-.tile.feature { grid-column: span 2; grid-row: span 2; }
+.tile h3 { font-size: 21px; font-weight: 700; color: var(--canvas); margin-bottom: 4px; }
+.tile p { font-size: 13px; font-weight: 300; color: var(--muted); }
+.tile.feature { grid-column: span 2; grid-row: span 2; border-radius: 32px; }
 .tile.feature .cap { left: 28px; right: 28px; bottom: 26px; }
 .tile.feature h3 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 800; margin: 14px 0 6px; }
 .tile.feature p { font-size: 16px; }
-.season { display: inline-block; background: var(--gold-btn); color: var(--ink);
+.season { display: inline-block; background: var(--accent); color: var(--canvas);
           padding: 4px 10px; border-radius: 4px; font-size: 10px; letter-spacing: 0.12em; }
 
 /* ── Partners split card ─────────────────────────────────────────────────── */
-.split { display: flex; background: var(--ink); border-radius: 10px; overflow: hidden; flex-wrap: wrap; }
+.split { display: flex; background: var(--primary); border-radius: 32px; overflow: hidden; flex-wrap: wrap; }
 .split-left { flex: 1 1 340px; padding: clamp(32px, 4vw, 52px) clamp(26px, 3.5vw, 48px);
-              display: flex; flex-direction: column; border-right: 1px solid var(--ink-2); }
-.split-left .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 20px; }
+              display: flex; flex-direction: column; border-right: 1px solid var(--primary-soft); }
+.split-left .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--cyan); margin-bottom: 20px; }
 .split-left .big { font-family: "JetBrains Mono", monospace; font-weight: 600;
-                   font-size: clamp(52px, 7vw, 76px); line-height: 0.9; color: var(--white); }
-.split-left h2 { font-size: clamp(24px, 2.6vw, 30px); color: var(--white); margin: 14px 0 12px; line-height: 1; }
-.split-left p { font-size: 15px; font-weight: 300; color: var(--stone); line-height: 1.55; margin-bottom: 28px; }
+                   font-size: clamp(52px, 7vw, 76px); line-height: 0.9; color: var(--canvas); }
+.split-left h2 { font-size: clamp(24px, 2.6vw, 30px); color: var(--canvas); margin: 14px 0 12px; line-height: 1; }
+.split-left p { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.55; margin-bottom: 28px; }
 .split-left .btn { align-self: flex-start; }
 .split-left .foot { margin-top: auto; padding-top: 28px; font-size: 10px;
-                    letter-spacing: 0.08em; color: var(--grey); }
+                    letter-spacing: 0.08em; color: var(--stone); }
 .split-right { flex: 1 1 460px; padding: clamp(20px, 3vw, 40px); display: grid;
                grid-template-columns: repeat(3, 1fr); gap: 14px;
                align-content: start; grid-auto-rows: min-content; }
 @media (max-width: 560px) { .split-right { grid-template-columns: repeat(2, 1fr); } }
-.count { border: 1px solid var(--ink-2); border-radius: 10px; padding: 22px 20px; }
-.count:hover { border-color: var(--gold); }
+.count { border: 1px solid var(--primary-soft); border-radius: 16px; padding: 22px 20px; }
+.count:hover { border-color: var(--cyan); }
 .count b { display: block; font-family: "JetBrains Mono", monospace; font-weight: 600;
-           font-size: 30px; color: var(--gold); }
-.count span { display: block; font-weight: 600; font-size: 17px; color: var(--white); margin-top: 8px; }
-.count small { display: block; font-size: 13px; font-weight: 300; color: var(--stone-2); margin-top: 3px; }
+           font-size: 30px; color: var(--cyan); }
+.count span { display: block; font-weight: 600; font-size: 17px; color: var(--canvas); margin-top: 8px; }
+.count small { display: block; font-size: 13px; font-weight: 300; color: var(--muted); margin-top: 3px; }
 
 /* ── CTA band + footer ───────────────────────────────────────────────────── */
-.cta-band { background: var(--ink); position: relative; overflow: hidden; }
+.cta-band { background: var(--primary); position: relative; overflow: hidden; }
 .cta-inner { position: relative; z-index: 2; padding: clamp(56px, 8vw, 88px) var(--pad-x);
              display: flex; justify-content: space-between; align-items: center; gap: 48px; }
-.cta-inner .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--stone-2); margin-bottom: 14px; }
-.cta-band h2 { font-size: clamp(30px, 4.4vw, 44px); color: var(--white); line-height: 1; }
-.cta-band p { font-size: 17px; font-weight: 300; color: var(--stone); margin-top: 14px; max-width: 520px; }
+.cta-inner .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px; }
+.cta-band h2 { font-size: clamp(30px, 4.4vw, 44px); color: var(--canvas); line-height: 1; }
+.cta-band p { font-size: 17px; font-weight: 300; color: var(--muted); margin-top: 14px; max-width: 520px; }
 .cta-band .btn { flex: 0 0 auto; }
 
             gap: 48px; flex-wrap: wrap; }
-.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); }
+.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--canvas); }
 .foot-row p.foot-copy { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
                         max-width: 360px; line-height: 1.6; margin-top: 12px; }
 .foot-cols { display: flex; gap: clamp(32px, 5vw, 64px); font-size: 14px; }
 .foot-cols ul { display: flex; flex-direction: column; gap: 11px; }
-.foot-cols b { color: var(--white); font-weight: 700; margin-bottom: 2px; }
+.foot-cols b { color: var(--canvas); font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
 
 /* Motion the board runs continuously, stopped for anyone who asks for less of it. */
@@ -235,11 +236,11 @@
 @media (max-width: 860px) {
   .nav { flex-wrap: wrap; gap: 12px; }
   .nav-links { display: none; order: 3; flex-basis: 100%; flex-direction: column; gap: 0;
-               margin: 6px 0 4px; border-top: 1px solid var(--ink-2); }
-  .nav-links a { padding: 14px 2px; border-bottom: 1px solid var(--ink-2); }
+               margin: 6px 0 4px; border-top: 1px solid var(--primary-soft); }
+  .nav-links a { padding: 14px 2px; border-bottom: 1px solid var(--primary-soft); }
   .menu-toggle:checked ~ .nav-links { display: flex; }
   .burger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
-            border: 1px solid rgba(255,255,255,0.55); border-radius: 999px; color: var(--white);
+            border: 1px solid rgba(255,255,255,0.55); border-radius: 999px; color: var(--canvas);
             font-size: 18px; cursor: pointer; letter-spacing: 2px; }
   .mob-only { display: inline-flex; }
   .desk-only { display: none; }
@@ -249,7 +250,7 @@
   .stats { flex-direction: row; flex-wrap: wrap; gap: 20px 32px; text-align: left; }
   .fx { flex-wrap: wrap; }
   .fx .date { flex-basis: 100%; }
-  .split-left { border-right: 0; border-bottom: 1px solid var(--ink-2); }
+  .split-left { border-right: 0; border-bottom: 1px solid var(--primary-soft); }
 }
 @media (max-width: 700px) {
   .cta-inner { flex-direction: column; align-items: stretch; gap: 28px; }
@@ -259,7 +260,7 @@
 <body>
 
 <div class="utility mono m11">
-  <span style="color:var(--stone-2)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+  <span style="color:var(--muted)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
 </div>
 
 <nav class="nav" aria-label="Main">
@@ -276,8 +277,8 @@
     <a href="#partners">Partners</a>
   </div>
   <div class="nav-cta">
-    <a class="btn btn-pill-white desk-only" href="login.html">Log in</a>
-    <a class="btn btn-pill-white mob-only" href="signup.html" style="font-size:13px;padding:11px 18px">Get the Pass</a>
+    <a class="btn btn-on-dark desk-only" href="login.html">Log in</a>
+    <a class="btn btn-on-dark mob-only" href="signup.html">Get the Pass</a>
     <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
   </div>
 </nav>
@@ -298,7 +299,7 @@
         <p class="lede">Match access, travel and city services on one digital pass. Pamoja never
           holds your money — every payment is a direct hand-off.</p>
         <div class="acts">
-          <a class="btn btn-gold" href="signup.html">Get your Pamoja Pass
+          <a class="btn btn-on-dark" href="signup.html">Get your Pamoja Pass
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
           </a>
           <a class="underline-link" href="#matches">See the schedule</a>
@@ -421,8 +422,8 @@
         <h2>Kenya v Mali</h2>
         <p class="when mono">Sat 26 Jun · Kick-off 16:00 EAT · Gates open 14:00</p>
         <div class="acts">
-          <a class="btn btn-gold" href="signup.html">Get tickets</a>
-          <a class="btn btn-outline" href="#pass">Getting there · shuttle every 15 min</a>
+          <a class="btn btn-on-dark" href="signup.html">Get tickets</a>
+          <a class="btn btn-ghost-dark" href="#pass">Getting there · shuttle every 15 min</a>
         </div>
       </div>
     </div>
@@ -432,17 +433,17 @@
       <span class="meta-mono mono">All 11 fixtures · 7 venues · 3 countries</span>
     </div>
     <div class="fixtures">
-      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Zambia v Morocco</b><span>Group C, Matchday 2 · In play, 70′</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Uganda v Senegal</b><span>Group B, Matchday 2 · In play, 55′</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">26 Jun</span><span class="who"><b>Kenya v Mali</b><span>Group A, Matchday 2 · Your seat is held</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-held">Ticket held</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">28 Jun</span><span class="who"><b>Mali v Zambia</b><span>Group C, Matchday 3 · Seats from KES 1,000</span></span><span class="venue mono">Talanta · Nairobi</span><span class="chip chip-sale">On sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Uganda v Ghana</b><span>Group B, Matchday 3</span></span><span class="venue mono">Namboole · Kampala</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Côte d'Ivoire v Zambia</b><span>Group C, Matchday 3</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">1 Jul</span><span class="who"><b>Tanzania v Algeria</b><span>Group D · Dar es Salaam</span></span><span class="venue mono">Benjamin Mkapa · Dar</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">2 Jul</span><span class="who"><b>Egypt v Senegal</b><span>Group B · Eldoret</span></span><span class="venue mono">Kipchoge Keino · Eldoret</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">3 Jul</span><span class="who"><b>Kenya v Morocco</b><span>Group A, Matchday 3</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">4 Jul</span><span class="who"><b>Morocco v Ghana</b><span>Group C · Kakamega</span></span><span class="venue mono">Bukhungu · Kakamega</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">10 Jul</span><span class="who"><b>Senegal v Egypt</b><span>Knockout round</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Zambia v Morocco</b><span>Group C, Matchday 2 · In play, 70′</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Uganda v Senegal</b><span>Group B, Matchday 2 · In play, 55′</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">26 Jun</span><span class="who"><b>Kenya v Mali</b><span>Group A, Matchday 2 · Your seat is held</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-held">Ticket held</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">28 Jun</span><span class="who"><b>Mali v Zambia</b><span>Group C, Matchday 3 · Seats from KES 1,000</span></span><span class="venue mono">Talanta · Nairobi</span><span class="chip chip-sale">On sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Uganda v Ghana</b><span>Group B, Matchday 3</span></span><span class="venue mono">Namboole · Kampala</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Côte d'Ivoire v Zambia</b><span>Group C, Matchday 3</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">1 Jul</span><span class="who"><b>Tanzania v Algeria</b><span>Group D · Dar es Salaam</span></span><span class="venue mono">Benjamin Mkapa · Dar</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">2 Jul</span><span class="who"><b>Egypt v Senegal</b><span>Group B · Eldoret</span></span><span class="venue mono">Kipchoge Keino · Eldoret</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">3 Jul</span><span class="who"><b>Kenya v Morocco</b><span>Group A, Matchday 3</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">4 Jul</span><span class="who"><b>Morocco v Ghana</b><span>Group C · Kakamega</span></span><span class="venue mono">Bukhungu · Kakamega</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">10 Jul</span><span class="who"><b>Senegal v Egypt</b><span>Knockout round</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
     </div>
   </section>
 
@@ -537,7 +538,7 @@
         <h2>Partner discounts across three countries</h2>
         <p>Show your Pass, pay the merchant directly, and the discount is yours — Pamoja only
           writes the record line on your device.</p>
-        <a class="btn btn-gold" href="#partners" style="font-size:16px;padding:14px 28px">Browse partners</a>
+        <a class="btn btn-on-dark" href="#partners">Browse partners</a>
         <p class="foot mono">Prototype figures · Pamoja never holds funds.</p>
       </div>
       <div class="split-right">
@@ -563,7 +564,7 @@
         <h2>Own the tournament.</h2>
         <p>One pass, three countries, every match you can reach. Set it up before you fly and land ready.</p>
       </div>
-      <a class="btn btn-white" href="signup.html">Get your Pamoja Pass</a>
+      <a class="btn btn-on-dark" href="signup.html">Get your Pamoja Pass</a>
     </div>
   </section>
 

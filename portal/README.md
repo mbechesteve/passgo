@@ -37,7 +37,37 @@ fixtures list — which is why it did not look like the board.
 Only the rail buttons need script. Everything else is CSS, so the page works with
 JavaScript disabled, and all of it stops under `prefers-reduced-motion`.
 
-## Why it does not look like the app
+## It now follows minimax, like the app
+
+The portal was built to the canvas board — near-black, gold `#F2C744`, green `#067647`,
+10px radii, Outfit. It now follows **`minimax/DESIGN.md`**, the same template the app was
+re-skinned to, so the two surfaces are one product again.
+
+| | Board | Now (minimax) |
+|---|---|---|
+| Interactive | gold `#F2C744` | brand-blue `#1456f0` |
+| On dark text | gold | brand-cyan `#3daeff` |
+| Live / confirmed | green `#067647` | success `#1ba673` on `#e8ffea` |
+| Ground | `#f5f8f8` | `#f7f8fa` |
+| Faces | Outfit | DM Sans |
+| Buttons | 10px, gold fill | pills, black primary — white on dark |
+| Cards | 10px | 16px, with 32px on the photo-hero surfaces |
+| Inputs | 10px | 8px, 2px `#1d4ed8` when focused |
+
+Variables were **renamed**, not repointed: `--gold` became `--accent`, `--green` became
+`--success`, `--paper` became `--surface`. A variable called `--gold` holding blue is worse
+than a rename.
+
+Three departures from the template, each deliberate:
+
+- **JetBrains Mono stays.** The template says not to add a second display face; mono here
+  is the data register, not display. Same reasoning as the app.
+- **Hovers stay.** The template documents none — "per the no-hover policy" — which suits a
+  product UI and not a marketing page a mouse visits.
+- **Circular buttons are 44px, not the template's 36px.** 44 is the floor Apple, Android
+  and WCAG 2.5.5 agree on.
+
+## Why the board's palette is gone
 
 The app is `deep #04222b` + `accent #0e6ba8` — two hues, per Uratibu. This surface is
 near-black `#121316`, gold `#F2C744` and green `#067647`, which is what the board draws
