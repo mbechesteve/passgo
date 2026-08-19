@@ -10,143 +10,198 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /*
-  A faithful build of the "Pamoja Portal" board from the design canvas.
-  Its system, taken from the board rather than invented here:
+  A port of the "Pamoja Portal" board, transcribed from its own markup rather than
+  approximated from a screenshot: every value, transition and interaction below is the one
+  written there.
 
-    radius      10px on everything — cards, buttons, chips are 4px, nothing is a pill
-    imagery     grayscale(1) contrast(1.06), then a multiply gradient over it
-    section     88–96px vertical, 64px horizontal
-    heads       42px section, 72px featured fixture, 36px feature card, 21px small card
-    gold        #F2C744 for eyebrows and numbers, #F2C200 for buttons
-    green       #067647 carries list dates, event titles and chevrons
-    bands       #eef0f0 behind events and partners
+  Two deliberate departures, both recorded in portal/README.md:
 
-  The palette is NOT the app's — the app is deep #04222b + accent #0e6ba8, two hues per
-  Uratibu. This is a public marketing surface with its own language, the same split Hayya
-  keeps between its portal and its product. Nothing here is imported by src/.
+  1. The board is a fixed 1200px canvas. This is a real page, so the desktop rendering is
+     ported 1:1 and media queries carry everything narrower. No desktop value was changed
+     to make that work.
+  2. Figures are the product's, not the board's — 7 venues not 6, the five partner
+     categories spec-figures.test.ts guards, and the seeded fixtures. That was an explicit
+     earlier decision: the board's numbers contradict the proposal the app is judged on.
 
-  Figures ARE the app's. Where the board and the product disagreed — six partner
-  categories, fixtures we do not seed, a 38-minute rail figure we hold no data for — the
-  product won. See portal/README.md.
+  The palette is the board's and is NOT the app's (deep #04222b + accent #0e6ba8, per
+  Uratibu). Nothing here is imported by src/.
 */
 :root {
-  --ink:       #121316;
-  --ink-2:     #2A2C30;
-  --ink-deep:  #0A0B0D;
-  --gold:      #F2C744;
-  --gold-btn:  #F2C200;
-  --gold-hot:  #FFD427;
-  --green:     #067647;
-  --green-bg:  #E4F1E0;
-  --paper:     #ffffff;
-  --band:      #eef0f0;
-  --stone:     #D6D3CC;
-  --stone-2:   #C9C5BD;
-  --grey:      #8A8D91;
-  --body:      #4a565b;
-  --hairline:  #dde3e4;
-  --pad-x:     clamp(20px, 5vw, 64px);
+  --ink:        #121316;   /* nav, cards, CTA band */
+  --ink-2:      #2A2C30;   /* ridges, hairlines on dark */
+  --ink-3:      #16181a;   /* utility bar, ticker */
+  --ink-deep:   #0A0B0D;   /* hero base */
+  --gold:       #F2C744;   /* eyebrows, numbers, hovers */
+  --gold-btn:   #F2C200;   /* buttons */
+  --gold-hot:   #FFD427;   /* button hover */
+  --green:      #067647;   /* links, list dates, event titles */
+  --green-mid:  #0A9455;   /* link hover, focus rings, next-button hover */
+  --green-bg:   #E4F1E0;   /* row hover, live chip */
+  --red:        #E8412F;   /* the live dot, and nothing else */
+  --band:       #eef0f0;
+  --paper:      #f5f8f8;   /* the page ground — not white */
+  --white:      #ffffff;
+  --stone:      #D6D3CC;
+  --stone-2:    #C9C5BD;
+  --grey:       #8A8D91;
+  --body:       #4a565b;
+  --hairline:   #dde3e4;
+  --pad-x:      clamp(20px, 5vw, 64px);
 }
+@keyframes livedot { 0%, 100% { opacity: 1 } 50% { opacity: 0.35 } }
+@keyframes tickerscroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
-  margin: 0; background: var(--paper); color: var(--ink);
-  font-family: Outfit, system-ui, sans-serif; line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-}
-h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+body { margin: 0; background: var(--paper); color: var(--ink-3);
+       font-family: Outfit, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--green); text-decoration: none; }
+a:hover { color: var(--green-mid); }
+::selection { background: #06764733; }
+h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; }
 p { margin: 0; }
-a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 ul { margin: 0; padding: 0; list-style: none; }
 
-.mono { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; }
-.mono-sm { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.1em; font-size: 11px; }
-.mono-xs { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
-.gold { color: var(--gold); }
-.light { font-weight: 300; }
-.sec { padding: clamp(56px, 8vw, 88px) var(--pad-x) clamp(64px, 9vw, 104px); }
-.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 44px; flex-wrap: wrap; }
-.head h2 { font-size: clamp(28px, 4.2vw, 42px); }
-/* `0 1 auto` not `0 0 auto`: at its natural size on a wide head, but allowed to
-   shrink and wrap on a phone. With no-shrink, "All 11 fixtures · 7 venues · 3
-   countries" stayed 464px wide in a 390px viewport and pushed the page sideways. */
-.head span { font-size: 16px; font-weight: 300; color: var(--body); flex: 0 1 auto; }
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; }
+.m11  { font-size: 11px; letter-spacing: 0.1em; }
 
-a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.dark a:focus-visible, .dark button:focus-visible { outline-color: #fff; }
+/* Focus rings: green on light, white on dark — as the board sets them. */
+:focus-visible { outline: 2px solid var(--green-mid); outline-offset: 2px; }
+.hero :focus-visible, .cta-band :focus-visible, .nav :focus-visible { outline-color: var(--white); }
 
-/* Every framed image: grey, then a multiply wash. */
+/* Framed photography: grey, then a multiply wash. Every image on the page. */
 .shot { position: absolute; inset: 0; filter: grayscale(1) contrast(1.06); }
 .shot img { width: 100%; height: 100%; object-fit: cover; }
 .wash { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
-        background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(13,14,17,0.85) 100%); }
+        background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(28,30,34,0.9) 100%); }
+/* The ridge line, drawn twice on the board: behind the hero, and across the CTA band. */
+.ridge { position: absolute; inset: 0; background: var(--ink-2); }
+.ridge-hero { clip-path: polygon(0 30%, 14% 30%, 27% 8%, 35% 22%, 43% 13%, 49% 26%,
+                                 57% 2%, 70% 24%, 82% 17%, 100% 32%, 100% 100%, 0 100%); }
+.ridge-cta  { clip-path: polygon(0 58%, 14% 58%, 27% 34%, 35% 50%, 43% 40%, 49% 54%,
+                                 57% 26%, 70% 52%, 82% 44%, 100% 60%, 100% 100%, 0 100%); }
 
-.btn { font-family: Outfit, sans-serif; font-size: 16px; font-weight: 700; padding: 14px 30px;
-       border-radius: 10px; border: none; cursor: pointer; display: inline-block; min-height: 46px; }
-.btn-gold { background: var(--gold-btn); color: var(--ink); }
-.btn-gold:hover { background: var(--gold-hot); }
-.btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.5); font-weight: 600; }
+.btn { font-family: Outfit, sans-serif; border: none; cursor: pointer; display: inline-flex;
+       align-items: center; justify-content: center; gap: 12px; min-height: 46px; }
+.btn-gold { background: var(--gold-btn); color: var(--ink); font-size: 17px; font-weight: 700;
+            padding: 17px 32px; border-radius: 10px; }
+.btn-gold:hover { background: var(--gold-hot); color: var(--ink); }
+.btn-gold:active { filter: brightness(0.95); }
+.btn-pill-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.55);
+                  color: var(--white); font-size: 15px; font-weight: 500;
+                  padding: 11px 26px; border-radius: 999px; }
+.btn-pill-ghost:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.btn-pill-white { background: var(--white); color: var(--ink); font-size: 15px; font-weight: 700;
+                  padding: 12px 30px; border-radius: 999px; }
+.btn-pill-white:hover { opacity: 0.92; color: var(--ink); }
+.btn-pill-white:active { filter: brightness(0.95); }
+.btn-white { background: var(--white); color: var(--ink); font-size: 17px; font-weight: 700;
+             padding: 18px 36px; border-radius: 10px; }
+.btn-white:hover { opacity: 0.92; color: var(--ink); }
+.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: var(--white);
+               font-size: 16px; font-weight: 600; padding: 14px 30px; border-radius: 10px; }
 .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
-.btn-dark { background: var(--ink); color: #fff; }
+.underline-link { color: var(--white); font-size: 16px; font-weight: 600;
+                  border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 3px; }
+.underline-link:hover { color: var(--gold); }
 
-/* ── Utility + nav ───────────────────────────────────────────────────────── */
-.utility { background: #0A0B0D; color: var(--stone-2); padding: 10px var(--pad-x);
-           display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.utility a:hover { color: var(--gold); }
-.nav { background: var(--ink); color: #fff; padding: 16px var(--pad-x);
-       display: flex; align-items: center; gap: clamp(16px, 3vw, 44px); position: sticky; top: 0; z-index: 30; }
-.brand { font-size: 26px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
-.brand span { display: block; margin-top: 4px; color: var(--stone-2); }
-.nav-links { display: flex; gap: clamp(14px, 2vw, 32px); margin-left: auto; flex-wrap: wrap; }
-.nav-links a { font-size: 15px; font-weight: 500; }
+/* ── Utility bar ─────────────────────────────────────────────────────────── */
+.utility { background: var(--ink-3); color: var(--band); display: flex; align-items: center;
+           justify-content: space-between; gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
+.utility .set { display: flex; gap: 28px; }
+.utility .set span { cursor: pointer; opacity: 0.85; }
+.utility .set span:hover { opacity: 1; }
+
+/* ── Nav ─────────────────────────────────────────────────────────────────── */
+.nav { background: var(--ink); display: flex; align-items: center; gap: clamp(16px, 3vw, 44px);
+       padding: 18px var(--pad-x); position: sticky; top: 0; z-index: 30; }
+.brand-name { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); line-height: 1; }
+.brand-sub { display: block; margin-top: 3px; font-size: 9px; letter-spacing: 0.14em; color: var(--stone-2); }
+.nav-links { display: flex; gap: 34px; align-items: center; flex: 1; }
+.nav-links a { color: var(--white); font-size: 16px; font-weight: 500; }
 .nav-links a:hover { color: var(--gold); }
-.nav-cta { display: flex; gap: 10px; }
-/* The nav is the one place the board uses pills — 999px there, 10px everywhere else.
-   "Log in" is white on the dark bar, not gold; gold is reserved for the page's own
-   calls to action so the masthead does not compete with them. */
-.nav-cta .btn { padding: 12px 28px; font-size: 15px; min-height: 44px; border-radius: 999px; }
-.btn-paper { background: #fff; color: var(--ink); }
-.btn-paper:hover { opacity: 0.92; }
-.nav-cta .btn-outline { border-color: rgba(255,255,255,0.55); font-weight: 500; }
-.nav-cta .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.55); color: #fff; }
+.nav-cta { display: flex; gap: 12px; align-items: center; }
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
-.hero { position: relative; background: var(--ink-deep); color: #fff; overflow: hidden; }
-.hero .shot img { opacity: 1; }
-.hero .veil { position: absolute; inset: 0; pointer-events: none;
-              background: linear-gradient(90deg, rgba(10,11,13,0.94) 0%, rgba(10,11,13,0.6) 55%, rgba(10,11,13,0.15) 100%); }
-.hero-inner { position: relative; padding: clamp(56px, 9vw, 116px) var(--pad-x) clamp(48px, 7vw, 92px);
-              display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 48px; align-items: start; }
-.hero h1 { font-size: clamp(48px, 8.5vw, 96px); line-height: 0.95; letter-spacing: -0.04em; }
-.hero .slash { margin-top: 16px; color: var(--stone-2); }
-.hero .lede { margin-top: 22px; max-width: 32em; font-size: clamp(16px, 1.4vw, 18px); font-weight: 300; color: #E8E6E1; }
-.hero .acts { margin-top: 32px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.stats { display: grid; gap: 22px; text-align: right; }
-.stats b { display: block; font-family: "JetBrains Mono", monospace; font-weight: 600;
-           font-size: clamp(28px, 3.2vw, 44px); line-height: 0.9; }
-.stats span { color: var(--stone-2); }
-.hero-credit { position: absolute; bottom: 8px; left: var(--pad-x); font-size: 10px;
-               font-family: "JetBrains Mono", monospace; color: rgba(255,255,255,0.45); }
-.hero-credit a { text-decoration: underline; }
+.hero { position: relative; height: 760px; background: var(--ink-deep); overflow: hidden; }
+.veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
+             background: linear-gradient(160deg, rgba(72,78,84,0.55) 0%, rgba(13,14,17,0.92) 100%); }
+.veil-screen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+               background: linear-gradient(340deg, rgba(28,30,34,0.25) 0%, rgba(0,0,0,0) 55%); }
+.veil-flat { position: absolute; inset: 0; pointer-events: none;
+             background: linear-gradient(90deg, rgba(13,14,17,0.62) 0%, rgba(13,14,17,0.25) 55%, rgba(13,14,17,0) 100%); }
+.hero-inner { position: relative; z-index: 2; padding: 116px var(--pad-x) 0; pointer-events: none;
+              display: flex; justify-content: space-between; gap: 48px; }
+.hero-copy { max-width: 860px; }
+.hero .eyebrow { font-size: 12px; letter-spacing: 0.16em; color: var(--gold); margin-bottom: 24px; }
+.hero h1 { font-size: clamp(52px, 9vw, 96px); line-height: 0.9; letter-spacing: -0.04em;
+           color: var(--white); margin-bottom: 10px; }
+.hero .slash { font-size: 13px; letter-spacing: 0.12em; color: var(--stone-2); margin-bottom: 30px; }
+.hero .lede { font-size: 19px; line-height: 1.55; color: rgba(245,248,248,0.92); font-weight: 300;
+              margin-bottom: 38px; max-width: 540px; }
+.hero .acts { display: flex; align-items: center; gap: 24px; pointer-events: auto; flex-wrap: wrap; }
+.stats { display: flex; flex-direction: column; gap: 26px; padding-top: 14px; flex: 0 0 auto;
+         text-align: right; color: var(--stone-2); font-size: 11px; letter-spacing: 0.12em; }
+.stats b { display: block; color: var(--white); font-size: 30px; font-weight: 600; margin-bottom: 4px; }
 
 /* ── Ticker ──────────────────────────────────────────────────────────────── */
-.ticker { background: #16181a; color: var(--stone-2); padding: 10px 0; }
-.ticker ul { display: flex; gap: 40px; padding: 0 var(--pad-x); overflow-x: auto; scrollbar-width: none; }
-.ticker ul::-webkit-scrollbar { display: none; }
-.ticker li { white-space: nowrap; }
-.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-            background: var(--green); margin-right: 8px; vertical-align: middle; }
+.ticker { background: var(--ink-3); border-top: 1px solid var(--ink-2);
+          border-bottom: 1px solid var(--ink-2); padding: 12px 0; overflow: hidden;
+          white-space: nowrap; font-family: "JetBrains Mono", ui-monospace, monospace;
+          font-size: 12px; letter-spacing: 0.08em; color: var(--stone); }
+.ticker-track { display: inline-flex; align-items: center; animation: tickerscroll 32s linear infinite; }
+.ticker-run { display: inline-flex; align-items: center; gap: 36px; padding-right: 36px; }
+.ticker .live { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); }
+.ticker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red);
+               animation: livedot 1.6s infinite; }
+.ticker .sep { color: var(--body); }
+.ticker .clock { color: var(--stone-2); }
 
-/* ── Five doors ──────────────────────────────────────────────────────────── */
-.doors { display: grid; grid-template-columns: 1fr; gap: 16px; }
-.door { position: relative; border-radius: 10px; overflow: hidden; background: var(--ink);
-        min-height: 300px; display: flex; flex-direction: column; justify-content: flex-end;
-        padding: 26px; color: #fff; }
-.door > * { position: relative; }
-.door .num { position: absolute; top: 22px; left: 26px; }
-.door h3 { font-size: 24px; font-weight: 700; margin: 10px 0 6px; }
-.door p { font-size: 14px; font-weight: 300; color: var(--stone); }
+/* ── Sections ────────────────────────────────────────────────────────────── */
+.sec { padding: clamp(56px, 8vw, 104px) var(--pad-x) 40px; }
+.sec-tight { padding: clamp(56px, 8vw, 96px) var(--pad-x) 56px; }
+.sec-band { background: var(--band); padding: clamp(56px, 8vw, 88px) var(--pad-x) 96px; }
+.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;
+        margin-bottom: 44px; flex-wrap: wrap; }
+.head h2 { font-size: clamp(28px, 4.2vw, 42px); color: var(--ink); }
+.head .meta { font-size: 16px; font-weight: 300; color: var(--body); flex: 0 1 auto; }
+.head .meta-mono { font-size: 12px; letter-spacing: 0.1em; color: var(--body); flex: 0 1 auto; }
+.note { font-size: 10px; letter-spacing: 0.08em; color: var(--body); margin-top: 18px; }
+
+/* ── Five doors: the accordion ───────────────────────────────────────────── */
+.doors { display: flex; gap: 14px; height: 440px; }
+.doors input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; margin: 0; }
+.door { position: relative; overflow: hidden; border-radius: 10px; background: var(--ink);
+        flex: 0.55 1 0%; min-width: 0; cursor: pointer; color: var(--paper);
+        transition: flex 420ms cubic-bezier(0.2, 0, 0, 1); }
+.doors input:checked + .door { flex: 3.2 1 0%; }
+.doors input:focus-visible + .door { outline: 2px solid var(--green-mid); outline-offset: 2px; }
+.door .wash { background: linear-gradient(160deg, rgba(72,78,84,0.55) 0%, rgba(28,30,34,0.96) 100%); }
+.door .num { position: absolute; top: 18px; left: 20px; font-family: "JetBrains Mono", monospace;
+             font-size: 13px; letter-spacing: 0.1em; color: var(--gold); }
+/* Collapsed: the title, turned on its side, and nothing else. */
+/* Lifted clear of the credit strip: at 22px the rotated title ran straight through it. */
+.d-shut { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+          writing-mode: vertical-rl; font-weight: 600; font-size: 16px; color: var(--stone);
+          white-space: nowrap; pointer-events: none; opacity: 1;
+          transition: opacity 250ms cubic-bezier(0.2, 0, 0, 1); }
+.d-open { position: absolute; left: 26px; right: 26px; bottom: 24px; pointer-events: none;
+          opacity: 0; transition: opacity 300ms cubic-bezier(0.2, 0, 0, 1) 150ms; }
+.doors input:checked + .door .d-shut { opacity: 0; }
+.doors input:checked + .door .d-open { opacity: 1; }
+.d-open .eyebrow { display: block; font-family: "JetBrains Mono", monospace; font-size: 10px;
+                   letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold);
+                   margin-bottom: 10px; }
+.d-open h3 { font-size: 30px; letter-spacing: -0.02em; color: var(--white); margin-bottom: 10px; }
+.d-open p { font-size: 15px; font-weight: 300; color: var(--stone); line-height: 1.55; max-width: 420px; }
+/* The board prints each photo's credit on the card itself. */
+/* One line, truncated — a sliver is 128px wide and a long credit wrapped across three
+   lines and over the title. The board's own 04 credit is cut off the same way. */
+.d-credit { position: absolute; bottom: 6px; left: 14px; right: 14px;
+            font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: 0.05em;
+            color: rgba(245,248,248,0.45); pointer-events: none;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ── Featured fixture + fixtures list ────────────────────────────────────── */
 .featured { position: relative; border-radius: 10px; overflow: hidden; background: var(--ink);
@@ -154,163 +209,184 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-o
 .featured .veil { position: absolute; inset: 0; pointer-events: none;
                   background: linear-gradient(90deg, rgba(10,11,13,0.9) 0%, rgba(10,11,13,0.5) 55%, rgba(10,11,13,0.1) 100%); }
 .countdown { position: absolute; top: 28px; right: 28px; z-index: 2; color: var(--gold);
-             border: 1px solid rgba(242,199,68,0.5); border-radius: 999px; padding: 8px 16px; }
-.featured-body { position: relative; z-index: 2; padding: clamp(28px, 5vw, 56px); max-width: 820px; color: #fff; }
-.featured-body h2 { font-size: clamp(38px, 6.5vw, 72px); line-height: 0.95; letter-spacing: -0.04em; }
-.featured-body .when { margin: 18px 0 30px; color: var(--stone-2); font-size: 13px; }
+             border: 1px solid rgba(242,199,68,0.5); border-radius: 999px; padding: 8px 16px;
+             font-size: 12px; letter-spacing: 0.12em; }
+.featured-body { position: relative; z-index: 2; padding: clamp(28px, 5vw, 56px); max-width: 820px; }
+.featured-body .eyebrow { font-size: 12px; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 16px; }
+.featured-body h2 { font-size: clamp(38px, 6.5vw, 72px); letter-spacing: -0.04em;
+                    color: var(--white); line-height: 0.95; }
+.featured-body .when { font-size: 13px; letter-spacing: 0.1em; color: var(--stone-2); margin: 18px 0 30px; }
 .featured-body .acts { display: flex; gap: 12px; flex-wrap: wrap; }
+.featured .credit { position: absolute; bottom: 6px; right: 14px; z-index: 2;
+                    font-family: "JetBrains Mono", monospace; font-size: 9px;
+                    color: rgba(245,248,248,0.45); }
 
+.list-head { display: flex; justify-content: space-between; align-items: baseline;
+             margin: 48px 0 8px; gap: 24px; flex-wrap: wrap; }
+.list-head h3 { font-size: clamp(24px, 3vw, 28px); color: var(--ink); }
 .fixtures { border-top: 1px solid var(--hairline); }
-.fx { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px);
-      padding: 22px 12px; border-bottom: 1px solid var(--hairline); }
-.fx:hover { background: var(--green-bg); }
+.fx { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); padding: 22px 12px;
+      border-bottom: 1px solid var(--hairline); color: inherit; }
+.fx:hover { background: var(--green-bg); color: inherit; }
 .fx .date { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 15px;
             color: var(--green); flex: 0 0 88px; }
 .fx .who { flex: 1; min-width: 0; }
-.fx .who b { display: block; font-size: 20px; font-weight: 700; }
+.fx .who b { display: block; font-size: 20px; font-weight: 700; color: var(--ink); }
 .fx .who span { display: block; font-size: 14px; font-weight: 300; color: var(--body); margin-top: 2px; }
-.fx .venue { flex: 0 0 auto; color: var(--body); }
+.fx .venue { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.1em;
+             color: var(--body); flex: 0 0 auto; }
 .chip { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.1em;
-        text-transform: uppercase; padding: 5px 11px; border-radius: 4px; flex: 0 0 auto; }
+        text-transform: uppercase; font-weight: 600; padding: 5px 11px; border-radius: 4px; flex: 0 0 auto; }
 .chip-ft   { background: var(--band); color: var(--body); }
 .chip-live { background: var(--green-bg); color: var(--green); }
 .chip-sale { background: #FDF3D4; color: #8A6B00; }
 .chip-held { background: var(--ink); color: var(--gold); }
-.fx svg { flex: 0 0 auto; }
 
 /* ── Fan events rail ─────────────────────────────────────────────────────── */
-.rail { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.rail { display: flex; gap: 24px; overflow-x: auto; scroll-behavior: smooth;
+        padding-bottom: 10px; scrollbar-width: none; }
 .rail::-webkit-scrollbar { display: none; }
-.ev { flex: 0 0 300px; }
-.ev .frame { position: relative; aspect-ratio: 1 / 1.02; border-radius: 10px; overflow: hidden; background: var(--ink); }
+.ev { flex: 0 0 320px; color: inherit; }
+.ev:hover { color: inherit; }
+.ev .frame { position: relative; aspect-ratio: 1 / 1.02; border-radius: 10px;
+             overflow: hidden; background: var(--ink); }
 .ev h3 { font-size: 20px; font-weight: 700; color: var(--green); margin: 16px 0 6px; }
-.ev .meta { color: var(--body); }
+.ev .meta { font-family: "JetBrains Mono", monospace; font-size: 12px;
+            letter-spacing: 0.08em; color: var(--body); }
+.rail-foot { display: flex; justify-content: space-between; align-items: center;
+             margin-top: 22px; gap: 24px; flex-wrap: wrap; }
+.rail-nav { display: flex; gap: 12px; }
+.round { width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
+         display: flex; align-items: center; justify-content: center; }
+.round-ghost { border: 1px solid var(--hairline); background: var(--white); color: var(--body); }
+.round-ghost:hover { border-color: var(--green); color: var(--green); }
+.round-solid { border: none; background: var(--green); color: var(--white); }
+.round-solid:hover { background: var(--green-mid); }
 
 /* ── Explore broken grid ─────────────────────────────────────────────────── */
 .broken { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; gap: 18px; }
-.tile { position: relative; border-radius: 10px; overflow: hidden; background: var(--ink); display: block; }
-.tile .cap { position: absolute; left: 22px; right: 22px; bottom: 20px; pointer-events: none; color: #fff; }
-.tile h3 { font-size: 21px; font-weight: 700; margin-bottom: 4px; }
+.tile { position: relative; border-radius: 10px; overflow: hidden; background: var(--ink);
+        display: block; color: inherit; }
+.tile:hover { color: inherit; }
+.tile .cap { position: absolute; left: 22px; right: 22px; bottom: 20px; pointer-events: none; }
+.tile h3 { font-size: 21px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
 .tile p { font-size: 13px; font-weight: 300; color: var(--stone); }
+.tile .credit { position: absolute; bottom: 4px; right: 12px; font-family: "JetBrains Mono", monospace;
+                font-size: 9px; color: rgba(245,248,248,0.4); pointer-events: none; }
 .tile.feature { grid-column: span 2; grid-row: span 2; }
 .tile.feature .cap { left: 28px; right: 28px; bottom: 26px; }
 .tile.feature h3 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 800; margin: 14px 0 6px; }
 .tile.feature p { font-size: 16px; }
 .season { display: inline-block; background: var(--gold-btn); color: var(--ink);
-          padding: 4px 10px; border-radius: 4px; font-size: 10px; }
+          padding: 4px 10px; border-radius: 4px; font-size: 10px; letter-spacing: 0.12em; }
 
 /* ── Partners split card ─────────────────────────────────────────────────── */
 .split { display: flex; background: var(--ink); border-radius: 10px; overflow: hidden; flex-wrap: wrap; }
 .split-left { flex: 1 1 340px; padding: clamp(32px, 4vw, 52px) clamp(26px, 3.5vw, 48px);
-              display: flex; flex-direction: column; color: #fff; border-right: 1px solid var(--ink-2); }
+              display: flex; flex-direction: column; border-right: 1px solid var(--ink-2); }
+.split-left .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 20px; }
 .split-left .big { font-family: "JetBrains Mono", monospace; font-weight: 600;
-                   font-size: clamp(52px, 7vw, 76px); line-height: 0.9; }
-.split-left h2 { font-size: clamp(24px, 2.6vw, 30px); margin: 14px 0 12px; }
-.split-left p { font-size: 15px; font-weight: 300; color: var(--stone); margin-bottom: 28px; }
+                   font-size: clamp(52px, 7vw, 76px); line-height: 0.9; color: var(--white); }
+.split-left h2 { font-size: clamp(24px, 2.6vw, 30px); color: var(--white); margin: 14px 0 12px; line-height: 1; }
+.split-left p { font-size: 15px; font-weight: 300; color: var(--stone); line-height: 1.55; margin-bottom: 28px; }
 .split-left .btn { align-self: flex-start; }
-.split-left .foot { margin-top: auto; padding-top: 28px; color: var(--grey); }
-.split-right { flex: 1 1 460px; padding: clamp(20px, 3vw, 40px);
-               display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-               gap: 14px; align-content: start; grid-auto-rows: min-content; }
-.count { border: 1px solid var(--ink-2); border-radius: 10px; padding: 22px 20px; color: #fff; }
+.split-left .foot { margin-top: auto; padding-top: 28px; font-size: 10px;
+                    letter-spacing: 0.08em; color: var(--grey); }
+.split-right { flex: 1 1 460px; padding: clamp(20px, 3vw, 40px); display: grid;
+               grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px;
+               align-content: start; grid-auto-rows: min-content; }
+.count { border: 1px solid var(--ink-2); border-radius: 10px; padding: 22px 20px; }
 .count:hover { border-color: var(--gold); }
 .count b { display: block; font-family: "JetBrains Mono", monospace; font-weight: 600;
            font-size: 30px; color: var(--gold); }
-.count span { display: block; font-weight: 600; font-size: 17px; margin-top: 8px; }
+.count span { display: block; font-weight: 600; font-size: 17px; color: var(--white); margin-top: 8px; }
 .count small { display: block; font-size: 13px; font-weight: 300; color: var(--stone-2); margin-top: 3px; }
 
 /* ── CTA band + footer ───────────────────────────────────────────────────── */
-.cta-band { background: var(--ink); color: #fff; position: relative; overflow: hidden; }
-/* A mountain range across the band, as the board draws it: one raised panel clipped to
-   a ridge line. Same idea as the app's PeakFrame — the motif, at landscape width. */
-.ridge {
-  position: absolute; inset: 0; background: var(--ink-2);
-  clip-path: polygon(0 58%, 14% 58%, 27% 34%, 35% 50%, 43% 40%, 49% 54%,
-                     57% 26%, 70% 52%, 82% 44%, 100% 60%, 100% 100%, 0 100%);
-}
+.cta-band { background: var(--ink); position: relative; overflow: hidden; }
 .cta-inner { position: relative; z-index: 2; padding: clamp(56px, 8vw, 88px) var(--pad-x);
              display: flex; justify-content: space-between; align-items: center; gap: 48px; }
-.cta-band h2 { font-size: clamp(30px, 4.4vw, 44px); }
+.cta-inner .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--stone-2); margin-bottom: 14px; }
+.cta-band h2 { font-size: clamp(30px, 4.4vw, 44px); color: var(--white); line-height: 1; }
 .cta-band p { font-size: 17px; font-weight: 300; color: var(--stone); margin-top: 14px; max-width: 520px; }
-.cta-band .btn { flex: 0 0 auto; font-size: 17px; padding: 18px 36px; }
+.cta-band .btn { flex: 0 0 auto; }
 
 footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(--band);
          padding: clamp(40px, 6vw, 64px) var(--pad-x); }
-.foot-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; flex-wrap: wrap; }
-/* `p.foot-brand`, not `.foot-brand`: the sibling rule below is `.foot-row p`, which is a
-   class plus a type and therefore wins against a bare class — the wordmark was rendering
-   at 14px light grey. */
-.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
-                         color: #fff; max-width: none; margin-top: 0; }
-.foot-row p { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
-              max-width: 360px; line-height: 1.6; margin-top: 12px; }
+.foot-row { display: flex; justify-content: space-between; align-items: flex-start;
+            gap: 48px; flex-wrap: wrap; }
+.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); }
+.foot-row p.foot-copy { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
+                        max-width: 360px; line-height: 1.6; margin-top: 12px; }
 .foot-cols { display: flex; gap: clamp(32px, 5vw, 64px); font-size: 14px; }
 .foot-cols ul { display: flex; flex-direction: column; gap: 11px; }
-.foot-cols b { color: #fff; font-weight: 700; margin-bottom: 2px; }
+.foot-cols b { color: var(--white); font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
 .foot-cols a:hover { color: var(--gold); }
-/* The board's footer carries no legal text and neither does this one. The one line that
-   stays is the attribution link: the photography is CC BY-SA, and "BY" is a licence term,
-   not a preference — the credits it points at are what keeps displaying the images
-   lawful. Everything else moved to credits.html. */
-.credit-link { margin-top: 36px; font-size: 12px; color: rgba(238,240,240,0.45); }
-.credit-link a { text-decoration: underline; }
+.credit-link { margin-top: 36px; font-size: 12px; }
+.credit-link a { color: rgba(238,240,240,0.45); text-decoration: underline; }
 .credit-link a:hover { color: var(--gold); }
 
-@media (min-width: 760px) {
-  .doors { grid-template-columns: repeat(3, 1fr); }
-  .broken { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 250px; }
+/* Motion the board runs continuously, stopped for anyone who asks for less of it. */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track, .ticker .dot { animation: none; }
+  .door, .d-shut, .d-open { transition: none; }
+  html, .rail { scroll-behavior: auto; }
 }
-@media (min-width: 1100px) {
-  .doors { grid-template-columns: 2fr 1fr 1fr 1fr 1fr; }
-  .broken { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 280px; gap: 24px; }
-}
-/* The mobile masthead, per the board's own 390 mockup: wordmark, a gold Get the Pass,
-   and a menu. The desktop link row and Track my Pass are hidden rather than allowed to
-   wrap — left to wrap they stacked five links into a tall column and squeezed the pills
-   into circles. The toggle is a checkbox, so the menu works with no JavaScript. */
-.menu-toggle, .burger, .mob-only { display: none; }
-@media (max-width: 700px) {
-  /* Text beside a button needs room for both. Below this the band stacks and the button
-     goes full width, as the board's own mobile mockup has it. */
-  .cta-inner { flex-direction: column; align-items: stretch; gap: 28px; }
-  .cta-band .btn { text-align: center; }
+
+/* ── Narrower than the board's 1200px canvas ─────────────────────────────── */
+.burger, .mob-only { display: none; }
+.menu-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+@media (min-width: 760px)  { .broken { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 250px; } }
+@media (min-width: 1100px) { .broken { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 280px; gap: 24px; } }
+@media (max-width: 1100px) {
+  /* Five doors need width to be five doors. Below this they stack, all open. */
+  .doors { flex-direction: column; height: auto; }
+  .door { flex: 1 1 auto !important; min-height: 250px; }
+  .d-shut { display: none; }
+  .d-open { position: static; opacity: 1 !important; padding: 90px 26px 8px; }
+  .d-credit { position: static; padding: 0 26px 16px; }
 }
 @media (max-width: 860px) {
   .nav { flex-wrap: wrap; gap: 12px; }
-  .nav-links { display: none; order: 3; width: 100%; flex-direction: column; gap: 0;
+  .nav-links { display: none; order: 3; flex-basis: 100%; flex-direction: column; gap: 0;
                margin: 6px 0 4px; border-top: 1px solid var(--ink-2); }
-  .nav-links a { padding: 14px 2px; border-bottom: 1px solid var(--ink-2); font-size: 16px; }
+  .nav-links a { padding: 14px 2px; border-bottom: 1px solid var(--ink-2); }
   .menu-toggle:checked ~ .nav-links { display: flex; }
-  .burger { display: flex; align-items: center; justify-content: center;
-            width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.55);
-            border-radius: 999px; color: #fff; font-size: 18px; cursor: pointer;
-            letter-spacing: 2px; }
-  .mob-only { display: inline-block; }
+  .burger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+            border: 1px solid rgba(255,255,255,0.55); border-radius: 999px; color: var(--white);
+            font-size: 18px; cursor: pointer; letter-spacing: 2px; }
+  .mob-only { display: inline-flex; }
   .desk-only { display: none; }
-  .nav-cta { margin-left: auto; align-items: center; }
-  .nav-cta .btn { padding: 11px 18px; font-size: 13px; }
-
-  /* Room for the absolutely-positioned photo credit, which on a short mobile hero
-     otherwise lands on top of the stat rail. */
-  .hero-inner { grid-template-columns: 1fr; padding-bottom: 56px; }
-  .stats { grid-template-columns: repeat(2, 1fr); text-align: left; }
+  .nav-cta { margin-left: auto; }
+  .hero { height: auto; }
+  .hero-inner { flex-direction: column; padding-bottom: 56px; }
+  .stats { flex-direction: row; flex-wrap: wrap; gap: 20px 32px; text-align: left; }
   .fx { flex-wrap: wrap; }
   .fx .date { flex-basis: 100%; }
   .split-left { border-right: 0; border-bottom: 1px solid var(--ink-2); }
+}
+@media (max-width: 700px) {
+  .cta-inner { flex-direction: column; align-items: stretch; gap: 28px; }
 }
 </style>
 </head>
 <body>
 
-<div class="utility mono-sm">
-  <span>AFCON 2027 · Kenya · Uganda · Tanzania</span>
-  <span><a href="#access">Accessibility ▾</a> &nbsp; EN / SW / FR ▾</span>
+<div class="utility mono m11">
+  <span style="color:var(--stone-2)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+  <span class="set">
+    <span>Accessibility ▾</span>
+    <span>EN / SW / FR ▾</span>
+  </span>
 </div>
 
 <nav class="nav" aria-label="Main">
   <input class="menu-toggle" type="checkbox" id="menu">
-  <a href="#top" class="brand">Pamoja<span class="mono-xs">The official fan pass</span></a>
+  <a href="#top" style="color:inherit">
+    <span class="brand-name">Pamoja</span>
+    <span class="brand-sub mono">The official fan pass</span>
+  </a>
   <div class="nav-links">
     <a href="#pass">Get the Pass</a>
     <a href="#matches">Matches &amp; Tickets</a>
@@ -319,211 +395,271 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
     <a href="#partners">Partners</a>
   </div>
   <div class="nav-cta">
-    <a class="btn btn-outline desk-only" href="#pass">Track my Pass</a>
-    <a class="btn btn-paper desk-only" href="#pass">Log in</a>
-    <a class="btn btn-gold mob-only" href="#pass">Get the Pass</a>
-    <label class="burger" for="menu" role="button" aria-label="Open the menu">&#8801;</label>
+    <a class="btn btn-pill-ghost desk-only" href="#pass">Track my Pass</a>
+    <a class="btn btn-pill-white desk-only" href="#pass">Log in</a>
+    <a class="btn btn-pill-white mob-only" href="#pass" style="font-size:13px;padding:11px 18px">Get the Pass</a>
+    <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
   </div>
 </nav>
 
 <main id="top">
 
   <section class="hero">
+    <div class="ridge ridge-hero"></div>
     <div class="shot"><img src="img/mt-kenya.jpg" alt="Batian and Nelion, the twin summits of Mount Kenya."></div>
-    <div class="wash"></div>
-    <div class="veil"></div>
+    <div class="veil-mult"></div>
+    <div class="veil-screen"></div>
+    <div class="veil-flat"></div>
     <div class="hero-inner">
-      <div>
-        <p class="mono gold">One pass · Three countries · Every match</p>
-        <h1 style="margin-top:16px">Twende,<br>pamoja.</h1>
-        <p class="slash mono-sm">/ Let's go, together — your AFCON 2027 fan pass</p>
-        <p class="lede">Match access, travel and city services on one digital pass.
-          Pamoja never holds your money — every payment is a direct hand-off.</p>
+      <div class="hero-copy">
+        <p class="eyebrow mono">One pass · Three countries · Every match</p>
+        <h1>Twende,<br>pamoja.</h1>
+        <p class="slash mono">/ Let's go, together — your AFCON 2027 fan pass</p>
+        <p class="lede">Match access, travel and city services on one digital pass. Pamoja never
+          holds your money — every payment is a direct hand-off.</p>
         <div class="acts">
-          <a class="btn btn-gold" href="#pass">Get your Pamoja Pass</a>
-          <a class="btn btn-outline" href="#matches">See the schedule</a>
+          <a class="btn btn-gold" href="#pass">Get your Pamoja Pass
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </a>
+          <a class="underline-link" href="#matches">See the schedule</a>
         </div>
       </div>
-      <div class="stats mono-sm">
-        <div><b>11</b><span>Matches</span></div>
-        <div><b>7</b><span>Venues</span></div>
-        <div><b>3</b><span>Countries</span></div>
-        <div><b>2,189</b><span>Partners</span></div>
+      <div class="stats mono">
+        <span><b>11</b>Matches</span>
+        <span><b>7</b>Venues</span>
+        <span><b>3</b>Countries</span>
+        <span><b>2,189</b>Partners</span>
       </div>
     </div>
-    <p class="hero-credit">Mount Kenya — Batian &amp; Nelion ·
-      <a href="https://commons.wikimedia.org/wiki/File:Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG">Chris 73 / Wikimedia Commons, CC BY-SA 3.0</a></p>
   </section>
 
-  <div class="ticker">
-    <ul class="mono-sm">
-      <li><span class="live-dot"></span>Live · ZAM v MAR · 70′ · Nyayo</li>
-      <li>Live · UGA v SEN · 55′ · Kasarani</li>
-      <li>Sat 16:00 · KEN v MLI · Kasarani</li>
-      <li>Mon 19:00 · MLI v ZAM · Talanta · On sale</li>
-      <li>Tue 16:00 · UGA v GHA · Namboole · Kampala</li>
-      <li>Wed 23 Jun 2027 · 12:55 EAT</li>
-    </ul>
+  <div class="ticker" aria-label="Live scores and fixtures">
+    <div class="ticker-track">
+      <span class="ticker-run">
+        <span class="live"><span class="dot"></span>Live · ZAM v MAR · 70′ · Nyayo</span>
+        <span class="sep">●</span><span>Live · UGA v SEN · 55′ · Kasarani</span>
+        <span class="sep">●</span><span>Sat 16:00 · KEN v MLI · Kasarani</span>
+        <span class="sep">●</span><span>Mon 19:00 · MLI v ZAM · Talanta · On sale</span>
+        <span class="sep">●</span><span>Tue 16:00 · UGA v GHA · Namboole</span>
+        <span class="sep">●</span><span class="clock">Wed 23 Jun 2027 · 12:55 EAT</span>
+        <span class="sep">●</span>
+      </span>
+      <span class="ticker-run" aria-hidden="true">
+        <span class="live"><span class="dot"></span>Live · ZAM v MAR · 70′ · Nyayo</span>
+        <span class="sep">●</span><span>Live · UGA v SEN · 55′ · Kasarani</span>
+        <span class="sep">●</span><span>Sat 16:00 · KEN v MLI · Kasarani</span>
+        <span class="sep">●</span><span>Mon 19:00 · MLI v ZAM · Talanta · On sale</span>
+        <span class="sep">●</span><span>Tue 16:00 · UGA v GHA · Namboole</span>
+        <span class="sep">●</span><span class="clock">Wed 23 Jun 2027 · 12:55 EAT</span>
+        <span class="sep">●</span>
+      </span>
+    </div>
   </div>
 
   <section class="sec" id="pass">
     <div class="head">
       <h2>One Pass. Five doors.</h2>
-      <span class="mono-sm">Open a door</span>
+      <span class="meta-mono mono">Open a door</span>
     </div>
     <div class="doors">
-      <a class="door" href="#pass">
-        <div class="shot"><img src="img/kasarani.jpg" alt="" aria-hidden="true"></div><div class="wash"></div>
-        <p class="num mono-sm gold">01</p>
-        <p class="mono-xs gold">The credential</p>
-        <h3>Match access</h3>
-        <p>Identity, entitlements and validity in one pass — rendered from your own device, with no network call to make it work.</p>
-      </a>
-      <a class="door" href="#matches">
-        <div class="shot"><img src="img/mara.jpg" alt="" aria-hidden="true"></div><div class="wash"></div>
-        <p class="num mono-sm gold">02</p>
-        <p class="mono-xs gold">Getting there</p>
-        <h3>Travel &amp; borders</h3>
-        <p>Road and air to every host city, with the documents each border asks for.</p>
-      </a>
-      <a class="door" href="#partners">
-        <div class="shot"><img src="img/nairobi.jpg" alt="" aria-hidden="true"></div><div class="wash"></div>
-        <p class="num mono-sm gold">03</p>
-        <p class="mono-xs gold">2,189 businesses</p>
-        <h3>Partner discounts</h3>
-        <p>Show the Pass, pay the merchant, keep the discount.</p>
-      </a>
-      <a class="door" href="#matches">
-        <div class="shot"><img src="img/uhuru-park.jpg" alt="" aria-hidden="true"></div><div class="wash"></div>
-        <p class="num mono-sm gold">04</p>
-        <p class="mono-xs gold">On the ground</p>
-        <h3>City services</h3>
-        <p>Shuttles, parking zones and walk times for your ground.</p>
-      </a>
-      <a class="door" href="#matches">
-        <div class="shot"><img src="img/lamu.jpg" alt="" aria-hidden="true"></div><div class="wash"></div>
-        <p class="num mono-sm gold">05</p>
-        <p class="mono-xs gold">Matchday</p>
-        <h3>Help, fast</h3>
-        <p>Stewards on every concourse, and a way to report anything unsafe.</p>
-      </a>
+      <input type="radio" name="door" id="door-1" checked>
+      <label class="door" for="door-1">
+        <span class="shot"><img src="img/door-access.jpg" alt="Supporters outside Kasarani before kick-off."></span>
+        <span class="wash"></span>
+        <span class="num">01</span>
+        <span class="d-shut">Match access</span>
+        <span class="d-open">
+          <span class="eyebrow">The credential</span>
+          <h3>Match access</h3>
+          <p>Your identity, entitlements and validity in one QR. Rendered on your device — never a network call at the gate.</p>
+        </span>
+        <span class="d-credit">Wikimedia Commons, CC</span>
+      </label>
+
+      <input type="radio" name="door" id="door-2">
+      <label class="door" for="door-2">
+        <span class="shot"><img src="img/door-travel.jpg" alt="Jomo Kenyatta International Airport from the air."></span>
+        <span class="wash"></span>
+        <span class="num">02</span>
+        <span class="d-shut">Travel &amp; borders</span>
+        <span class="d-open">
+          <span class="eyebrow">Across three countries</span>
+          <h3>Travel &amp; borders</h3>
+          <p>Road and air routes to every venue, crossing requirements and documents — with as-of dates on every figure.</p>
+        </span>
+        <span class="d-credit">Wikimedia Commons, CC</span>
+      </label>
+
+      <input type="radio" name="door" id="door-3">
+      <label class="door" for="door-3">
+        <span class="shot"><img src="img/door-market.jpg" alt="Market stalls in Stone Town."></span>
+        <span class="wash"></span>
+        <span class="num">03</span>
+        <span class="d-shut">Partner discounts</span>
+        <span class="d-open">
+          <span class="eyebrow">2,189 businesses</span>
+          <h3>Partner discounts</h3>
+          <p>Food, lodging, transport, retail, culture and essentials. You pay the merchant directly; the Pass writes the record.</p>
+        </span>
+        <span class="d-credit">Wikimedia Commons, CC</span>
+      </label>
+
+      <input type="radio" name="door" id="door-4">
+      <label class="door" for="door-4">
+        <span class="shot"><img src="img/nairobi.jpg" alt="The Nairobi skyline."></span>
+        <span class="wash"></span>
+        <span class="num">04</span>
+        <span class="d-shut">City services</span>
+        <span class="d-open">
+          <span class="eyebrow">In the host cities</span>
+          <h3>City services</h3>
+          <p>Parking zones, stadium walking times and matchday transit laid over Nairobi, Kampala and Dar.</p>
+        </span>
+        <span class="d-credit">Lmwangi / Wikimedia Commons, CC BY-SA 3.0</span>
+      </label>
+
+      <input type="radio" name="door" id="door-5">
+      <label class="door" for="door-5">
+        <span class="shot"><img src="img/door-security.jpg" alt="Police officers marching on arrival at an airport."></span>
+        <span class="wash"></span>
+        <span class="num">05</span>
+        <span class="d-shut">Security</span>
+        <span class="d-open">
+          <span class="eyebrow">At the ground</span>
+          <h3>Security</h3>
+          <p>Steward help line and problem reporting from any screen — *723# from any network in the three countries.</p>
+        </span>
+        <span class="d-credit">AMISOM / Wikimedia Commons</span>
+      </label>
     </div>
-    <p class="mono-xs" style="margin-top:18px;color:var(--body)">
-      Pamoja never holds funds — every payment is a direct hand-off to the merchant, seller or airline.
-    </p>
+    <p class="note mono">Pamoja never holds funds — every payment is a direct hand-off to the merchant, seller or airline.</p>
   </section>
 
-  <section class="sec" id="matches" style="padding-top:clamp(48px,7vw,96px)">
+  <section class="sec-tight" id="matches">
     <div class="featured">
       <div class="shot"><img src="img/kasarani.jpg" alt="Inside Kasarani Stadium."></div>
       <div class="wash"></div>
       <div class="veil"></div>
       <span class="countdown mono">Kick-off in 3 d 03 h 05 min</span>
       <div class="featured-body">
-        <p class="mono gold">Next at Kasarani · Group A · Matchday 2</p>
-        <h2 style="margin-top:16px">Kenya v Mali</h2>
-        <p class="when mono-sm">Sat 26 Jun · Kick-off 16:00 EAT · Gates open 14:00</p>
+        <p class="eyebrow mono">Next at Kasarani · Group A · Matchday 2</p>
+        <h2>Kenya v Mali</h2>
+        <p class="when mono">Sat 26 Jun · Kick-off 16:00 EAT · Gates open 14:00</p>
         <div class="acts">
           <a class="btn btn-gold" href="#pass">Get tickets</a>
           <a class="btn btn-outline" href="#pass">Getting there · shuttle every 15 min</a>
         </div>
       </div>
+      <span class="credit">Wikimedia Commons, CC</span>
     </div>
 
-    <div class="head" style="margin:48px 0 8px">
-      <h3 style="font-size:clamp(24px,3vw,28px)">All fixtures</h3>
-      <span class="mono-sm">All 11 fixtures · 7 venues · 3 countries</span>
+    <div class="list-head">
+      <h3>All fixtures</h3>
+      <span class="meta-mono mono">All 11 fixtures · 7 venues · 3 countries</span>
     </div>
     <div class="fixtures">
-      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Zambia v Morocco</b><span>Group C, Matchday 2 · In play, 70′</span></span><span class="venue mono-sm">Nyayo · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Uganda v Senegal</b><span>Group B, Matchday 2 · In play, 55′</span></span><span class="venue mono-sm">Kasarani · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">26 Jun</span><span class="who"><b>Kenya v Mali</b><span>Group A, Matchday 2 · Your seat is held</span></span><span class="venue mono-sm">Kasarani · Nairobi</span><span class="chip chip-held">Ticket held</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">28 Jun</span><span class="who"><b>Mali v Zambia</b><span>Group C, Matchday 3 · Seats from KES 1,000</span></span><span class="venue mono-sm">Talanta · Nairobi</span><span class="chip chip-sale">On sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Uganda v Ghana</b><span>Group B, Matchday 3</span></span><span class="venue mono-sm">Namboole · Kampala</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Côte d'Ivoire v Zambia</b><span>Group C, Matchday 3</span></span><span class="venue mono-sm">Nyayo · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">1 Jul</span><span class="who"><b>Tanzania v Algeria</b><span>Group D · Dar es Salaam</span></span><span class="venue mono-sm">Benjamin Mkapa · Dar</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">2 Jul</span><span class="who"><b>Egypt v Senegal</b><span>Group B · Eldoret</span></span><span class="venue mono-sm">Kipchoge Keino · Eldoret</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">3 Jul</span><span class="who"><b>Kenya v Morocco</b><span>Group A, Matchday 3</span></span><span class="venue mono-sm">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">4 Jul</span><span class="who"><b>Morocco v Ghana</b><span>Group C · Kakamega</span></span><span class="venue mono-sm">Bukhungu · Kakamega</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">10 Jul</span><span class="who"><b>Senegal v Egypt</b><span>Knockout round</span></span><span class="venue mono-sm">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Zambia v Morocco</b><span>Group C, Matchday 2 · In play, 70′</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Uganda v Senegal</b><span>Group B, Matchday 2 · In play, 55′</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">26 Jun</span><span class="who"><b>Kenya v Mali</b><span>Group A, Matchday 2 · Your seat is held</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-held">Ticket held</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">28 Jun</span><span class="who"><b>Mali v Zambia</b><span>Group C, Matchday 3 · Seats from KES 1,000</span></span><span class="venue mono">Talanta · Nairobi</span><span class="chip chip-sale">On sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Uganda v Ghana</b><span>Group B, Matchday 3</span></span><span class="venue mono">Namboole · Kampala</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Côte d'Ivoire v Zambia</b><span>Group C, Matchday 3</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">1 Jul</span><span class="who"><b>Tanzania v Algeria</b><span>Group D · Dar es Salaam</span></span><span class="venue mono">Benjamin Mkapa · Dar</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">2 Jul</span><span class="who"><b>Egypt v Senegal</b><span>Group B · Eldoret</span></span><span class="venue mono">Kipchoge Keino · Eldoret</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">3 Jul</span><span class="who"><b>Kenya v Morocco</b><span>Group A, Matchday 3</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">4 Jul</span><span class="who"><b>Morocco v Ghana</b><span>Group C · Kakamega</span></span><span class="venue mono">Bukhungu · Kakamega</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">10 Jul</span><span class="who"><b>Senegal v Egypt</b><span>Knockout round</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
     </div>
   </section>
 
-  <section class="sec" id="events" style="background:var(--band)">
+  <section class="sec-band" id="events">
     <div class="head">
       <h2>Fan events and promotions</h2>
-      <span>Free with an active Pass unless marked</span>
+      <span class="meta">Free with an active Pass unless marked</span>
     </div>
-    <div class="rail">
+    <div class="rail" id="ev-rail">
       <a class="ev" href="#events">
         <div class="frame"><div class="shot"><img src="img/uhuru-park.jpg" alt="A lake at Uhuru Park at sunset."></div><div class="wash"></div></div>
         <h3>Fan Zone · Uhuru Park</h3>
-        <span class="meta mono-sm">Starehe ward · Nairobi · Opens 14:00 · Free</span>
+        <span class="meta mono">Starehe ward · Nairobi · Opens 14:00 · Free</span>
       </a>
       <a class="ev" href="#events">
         <div class="frame"><div class="shot"><img src="img/kasarani.jpg" alt="Inside Kasarani Stadium."></div><div class="wash"></div></div>
         <h3>Opening ceremony</h3>
-        <span class="meta mono-sm">Kasarani Stadium · Nairobi · Ticketed</span>
+        <span class="meta mono">Kasarani Stadium · Nairobi · Ticketed</span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/nairobi.jpg" alt="The Nairobi skyline."></div><div class="wash"></div></div>
+        <div class="frame"><div class="shot"><img src="img/door-market.jpg" alt="Market stalls at night."></div><div class="wash"></div></div>
         <h3>Nairobi Live</h3>
-        <span class="meta mono-sm">Fan zone · Nightly · Free with your Pass</span>
+        <span class="meta mono">Fan zone · Nightly · Free with your Pass</span>
       </a>
       <a class="ev" href="#events">
         <div class="frame"><div class="shot"><img src="img/lamu.jpg" alt="A dhow under sail off Lamu."></div><div class="wash"></div></div>
         <h3>Fan Zone · Kasarani</h3>
-        <span class="meta mono-sm">Kasarani ward · Opens 12:00 · Free</span>
+        <span class="meta mono">Kasarani ward · Opens 12:00 · Free</span>
       </a>
     </div>
-    <p class="mono-xs" style="margin-top:22px;color:var(--body)">
-      Line-up as of 19 Aug 2026 · prototype listings — confirm before you plan.
-    </p>
+    <div class="rail-foot">
+      <p class="note mono" style="margin:0">Line-up as of 19 Aug 2026 · prototype listings — confirm before you plan.</p>
+      <div class="rail-nav">
+        <button class="round round-ghost" data-scroll="-364" aria-label="Previous events">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <button class="round round-solid" data-scroll="364" aria-label="Next events">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
   </section>
 
-  <section class="sec" id="explore">
+  <section class="sec" id="explore" style="padding-bottom:clamp(64px,9vw,104px)">
     <div class="head">
       <h2>Explore the host country</h2>
-      <span>Partner discounts apply at 2,189 businesses</span>
+      <span class="meta">Partner discounts apply at 2,189 businesses</span>
     </div>
     <div class="broken">
       <a class="tile feature" href="#explore">
         <div class="shot"><img src="img/mara.jpg" alt="Wildebeest crossing the plains in the Maasai Mara."></div><div class="wash"></div>
         <div class="cap">
-          <span class="season mono-xs">In season · Jul–Oct</span>
+          <span class="season mono">In season · Jul–Oct</span>
           <h3>Maasai Mara</h3>
           <p>The Great Migration runs right through the group stage.</p>
         </div>
+        <span class="credit">Wikimedia Commons, CC BY-SA 4.0</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/mt-kenya.jpg" alt="The summits of Mount Kenya."></div><div class="wash"></div>
         <div class="cap"><h3>Mount Kenya</h3><p>Batian, Nelion, the Gate of the Mists</p></div>
+        <span class="credit">Chris 73 / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/lamu.jpg" alt="A dhow off Lamu."></div><div class="wash"></div>
         <div class="cap"><h3>Lamu Old Town</h3><p>700 years of Swahili dhow country</p></div>
+        <span class="credit">K. R. Gjertsen / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/nairobi.jpg" alt="The Nairobi skyline."></div><div class="wash"></div>
         <div class="cap"><h3>Nairobi</h3><p>The only capital with a national park</p></div>
+        <span class="credit">Lmwangi / Wikimedia Commons</span>
       </a>
       <a class="tile" href="#explore">
         <div class="shot"><img src="img/uhuru-park.jpg" alt="Uhuru Park at sunset."></div><div class="wash"></div>
         <div class="cap"><h3>Uhuru Park</h3><p>The fan zone, in the middle of town</p></div>
+        <span class="credit">Wikimedia Commons, CC</span>
       </a>
     </div>
   </section>
 
-  <section class="sec" id="partners" style="background:var(--band)">
+  <section class="sec-band" id="partners">
     <div class="split">
       <div class="split-left">
-        <p class="mono-sm gold" style="margin-bottom:20px">With an active Pass</p>
+        <p class="eyebrow mono">With an active Pass</p>
         <p class="big">2,189</p>
         <h2>Partner discounts across three countries</h2>
-        <p>Show your Pass, pay the merchant directly, and the discount is yours — Pamoja
-          only writes the record line on your device.</p>
-        <a class="btn btn-gold" href="#partners">Browse partners</a>
-        <p class="foot mono-xs">Prototype figures · Pamoja never holds funds.</p>
+        <p>Show your Pass, pay the merchant directly, and the discount is yours — Pamoja only
+          writes the record line on your device.</p>
+        <a class="btn btn-gold" href="#partners" style="font-size:16px;padding:14px 28px">Browse partners</a>
+        <p class="foot mono">Prototype figures · Pamoja never holds funds.</p>
       </div>
       <div class="split-right">
         <div class="count"><b>1,340</b><span>Eat</span><small>Food and drink</small></div>
@@ -537,14 +673,14 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
   </section>
 
   <section class="cta-band">
-    <div class="ridge"></div>
+    <div class="ridge ridge-cta"></div>
     <div class="cta-inner">
       <div>
-        <p class="mono-sm" style="color:var(--stone-2)">Issued in under 3 minutes · no payment details needed</p>
-        <h2 style="margin-top:14px">Own the tournament.</h2>
+        <p class="eyebrow mono">Issued in under 3 minutes · no payment details needed</p>
+        <h2>Own the tournament.</h2>
         <p>One pass, three countries, every match you can reach. Set it up before you fly and land ready.</p>
       </div>
-      <a class="btn btn-paper" href="#pass">Get your Pamoja Pass</a>
+      <a class="btn btn-white" href="#pass">Get your Pamoja Pass</a>
     </div>
   </section>
 
@@ -554,8 +690,8 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
   <div class="foot-row">
     <div>
       <p class="foot-brand">Pamoja</p>
-      <p>The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never holds funds —
-        every payment is a direct hand-off.</p>
+      <p class="foot-copy">The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never
+        holds funds — every payment is a direct hand-off.</p>
     </div>
     <div class="foot-cols">
       <ul>
@@ -572,9 +708,19 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
       </ul>
     </div>
   </div>
-
   <p class="credit-link"><a href="credits.html">Photo credits</a></p>
 </footer>
+
+<script>
+  /* The events rail's prev/next, scrolling by the board's own 364px. Everything else that
+     moves — the doors accordion, the ticker, every hover and focus state — is CSS. */
+  document.querySelectorAll("[data-scroll]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      document.getElementById("ev-rail")
+        .scrollBy({ left: Number(button.dataset.scroll), behavior: "smooth" });
+    });
+  });
+</script>
 
 </body>
 </html>

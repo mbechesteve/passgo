@@ -23,6 +23,20 @@ Taken from `Pamoja Portal.dc.html` itself, not eyeballed from a screenshot:
 The first build got this wrong — pills everywhere, colour photography, 14px cards, no
 fixtures list — which is why it did not look like the board.
 
+## The interactions, ported too
+
+| Board | Here |
+|---|---|
+| Doors accordion (`activeDoor` state, `flex` 3.2 open / 0.55 shut, 420ms) | radio inputs + `input:checked + .door`, same flex values and easing |
+| Collapsed door titles turned on their side | `writing-mode: vertical-rl`, faded by the same 250ms |
+| `tickerscroll` marquee, `translateX(-50%)`, 32s linear | same, with the run duplicated so the loop is seamless |
+| `livedot`, 1.6s, red `#E8412F` | same |
+| Events rail `scrollBy(±364)` buttons | same, the only JavaScript on the page |
+| `style-hover` / `style-active` / `style-focus` (11 / 1 / 3 variants) | CSS `:hover`, `:active`, `:focus-visible` |
+
+Only the rail buttons need script. Everything else is CSS, so the page works with
+JavaScript disabled, and all of it stops under `prefers-reduced-motion`.
+
 ## Why it does not look like the app
 
 The app is `deep #04222b` + `accent #0e6ba8` — two hues, per Uratibu. This surface is
