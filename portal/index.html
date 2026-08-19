@@ -34,21 +34,24 @@
 */
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .hero { position: relative; height: 760px; background: var(--primary); overflow: hidden; }
-/* Real footage, not a still panned to imitate one. Commons does hold Maasai Mara video —
-   an earlier note here said it held none, which was wrong: the searches behind that claim
-   used the wrong syntax (`filetype:video`; `filemime:video/webm` is what finds them).
+/* Football, and honest about which football. AFCON broadcast footage is CAF's and cannot
+   be used here; the only AFCON video on Commons is a 2021 opening-ceremony rehearsal at
+   Stade d'Olembé, which is an empty bowl carrying Cameroon's crest and CAMEROUN on the
+   tunnel — behind a headline about Kenya, Uganda and Tanzania in 2027 that would be
+   telling a viewer something untrue.
    
-   This is an 11s cut from Regina Hart's 91s "Elephants at Naibosho Conservancy, Kenya"
-   (CC BY 2.0), taken from 30.5s in — the clip opens on a pillarboxed title card with a
-   burned-in caption, and only reaches full 16:9 frame after ~14s. Re-encoded to 1600x900
-   VP9 at 1.7MB by decoding the Commons transcode in a canvas: WebM is the one video
-   format this machine can both decode and encode.
+   So this is a 10s cut of Evworo's "Girls football training" (CC BY-SA 3.0): a women's
+   team working with the ball, in HD, on the continent, wearing nobody else's badge. It is
+   training rather than a match, which is the honest limit of what is licensable.
+   Re-encoded to 1440x810 VP9 at 1.8MB by decoding it in a canvas and recording it back
+   out at 0.85x, so the loop breathes and the cut comes round less often.
    
-   There is no scale-and-pan over it. The herd already moves, and a Ken Burns drift on top
-   of real motion reads as a swim. The poster is the clip's own first frame, so the still
-   that paints before the stream starts is the frame the stream starts on. */
+   No scale-and-pan over it — the players already move, and a Ken Burns drift on top of
+   real motion reads as a swim. The poster is the clip's own first frame, so the still that
+   paints before the stream starts is the frame the stream starts on. The crop sits low:
+   the sky is blown out and the pitch is where the football is. */
 .hero-shot { filter: none; }
-.hero-shot video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; }
+.hero-shot video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 72%; }
 /* 0.92 at the far stop crushed the lower mountain into a flat mass. 0.76 lets the rock
    read; the flat veil below still carries the headline's contrast, unchanged. */
 .veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
@@ -270,8 +273,16 @@
   .hero { height: auto; }
   .hero-inner { flex-direction: column; padding-bottom: 56px; }
   .stats { flex-direction: row; flex-wrap: wrap; gap: 20px 32px; text-align: left; }
-  .fx { flex-wrap: wrap; }
+  /* Every child of a fixture row kept its own line here, and `.who` was the only one that
+     could give: it carries min-width: 0, while the venue and the chip hold their content
+     width. So the title was squeezed into a column a few characters wide and "Kenya v Mali"
+     came down the page one word per line. Three lines instead — the date, then the fixture,
+     then where it is and what state it is in. */
+  .fx { flex-wrap: wrap; row-gap: 8px; padding: 18px 12px; }
   .fx .date { flex-basis: 100%; }
+  .fx .who { flex: 1 1 100%; }
+  .fx .venue { flex: 0 1 auto; margin-right: auto; }
+  .fx .chip { flex: 0 0 auto; }
   .split-left { border-right: 0; border-bottom: 1px solid var(--primary-soft); }
 }
 @media (max-width: 700px) {
@@ -324,10 +335,10 @@
 
   <section class="hero">
     <div class="shot hero-shot">
-      <video id="hero-video" width="1600" height="900" autoplay muted loop playsinline preload="auto"
+      <video id="hero-video" width="1440" height="810" autoplay muted loop playsinline preload="auto"
              poster="img/hero-poster.webp" role="img"
-             aria-label="Elephants moving across the grassland under a storm sky, Maasai Mara, Kenya.">
-        <source src="img/hero-mara.webm" type="video/webm">
+             aria-label="A women's team training with the ball on a floodlit pitch.">
+        <source src="img/hero-football.webm" type="video/webm">
       </video>
     </div>
     <div class="veil-mult"></div>
@@ -674,27 +685,6 @@
      and leaves the #hash in the URL. It has to happen here, before the default action:
      open, the menu makes the sticky bar 353px tall instead of 80px, so a scroll measured
      while it is still open lands 273px short. */
-  /* Lifting the boot screen. `load` rather than DOMContentLoaded, because the thing worth
-     waiting for is the hero footage, and it is the last thing to arrive. The timeout is not
-     a nicety: if one image never resolves, `load` never fires, and without a cap the curtain
-     would stay down over a page that is otherwise perfectly usable. */
-  (function () {
-    var boot = document.getElementById("boot");
-    if (!boot) return;
-    var lifted = false;
-    function lift() {
-      if (lifted) return;
-      lifted = true;
-      boot.classList.add("is-done");
-      window.setTimeout(function () {
-        document.documentElement.removeAttribute("data-booting");
-      }, 500);
-    }
-    if (document.readyState === "complete") lift();
-    else window.addEventListener("load", lift);
-    window.setTimeout(lift, 4000);
-  })();
-
   (function () {
     var toggle = document.getElementById("menu");
     if (!toggle) return;
@@ -705,6 +695,7 @@
     });
   })();
 </script>
+<script src="boot.js"></script>
 
 </body>
 </html>
