@@ -47,6 +47,22 @@ without touching a screen.
 
 Cards use a `10px` border radius (`rounded-card`).
 
+## Motif
+
+One landmark shape, used one way: **Mount Kenya's split summit** — Batian, the Gate
+of the Mists, and Nelion — is the crop all media is framed by. Its geometry lives in
+`src/utils/peaks.ts` as fractions, and both the media mask (`peakMaskPath`) and the
+22px Explore tab icon (`peakGlyphPath`) read from that one table, so the frame and
+the icon cannot drift into two different mountains.
+
+The mask takes the top `0.26` of a frame, which leaves the bottom three-quarters
+uncropped — where captions sit. The crown is the only angular form in the app, so
+nothing is set across it: `PeakFrame` lays its children into the bottom third
+rather than trusting each caller to remember.
+
+Media only. Cards, chips and panels stay rectangular; a shape used everywhere stops
+meaning anything.
+
 ## Components
 
 All in `src/components/pamoja/`. One line each, so the next screen reuses
@@ -71,3 +87,5 @@ rather than reinvents.
 | `TileGrid` | The two-column matchday services band. |
 | `RouteStrip` | A border crossing's route — origin city/code, the post, destination city/code. |
 | `TicketCard` | The match ticket — crest header, gate/section/seat, and the non-scannable code stand-in. |
+| `PeakFrame` | The Mount Kenya crop every image passes through. Fills with the deep gradient until a licensed photograph of that exact place exists. |
+| `PeakIcon` | The same summit stroked at tab size — the Explore tab's icon. |

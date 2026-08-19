@@ -43,9 +43,6 @@ export function ServicesScreen() {
         <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
           {S.servicesTitle}
         </Text>
-        <Text className="mt-2 text-[15px] leading-6 text-body">
-          {S.servicesStandfirst}
-        </Text>
 
         <View className="mt-5">
           <TileGrid tiles={tiles} />

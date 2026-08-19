@@ -89,21 +89,28 @@ export function Button({
 export function Pill({
   label,
   active,
+  icon,
   onPress,
 }: {
   label: string;
   active?: boolean;
+  icon?: IconName;
   onPress?: () => void;
 }) {
   return (
     <Pressable
       onPress={onPress}
-      className={`mr-2 rounded-full border px-3.5 py-2 ${
+      className={`mr-2 flex-row items-center rounded-full border px-3.5 py-2 ${
         active
           ? "bg-deep border-deep"
           : "bg-canvas border-hairline"
       }`}
     >
+      {icon ? (
+        <View className="mr-1.5">
+          <Icon name={icon} size={14} color={active ? colors.canvas : colors.body} />
+        </View>
+      ) : null}
       <Text
         className={`font-medium text-[13px] ${
           active ? "text-white" : "text-body"

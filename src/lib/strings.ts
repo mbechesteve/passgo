@@ -50,7 +50,7 @@ export const S = {
     "Confirm current requirements with the relevant embassy or border authority before you travel.",
 
   // ── ExploreScreen ───────────────────────────────────────────────────────
-  exploreTitle: "Explore",
+  exploreTitle: "Go and see Nairobi.",
   explorePlaceholder: "Search fixtures, venues, offers",
   exploreFilterAll: "All",
   exploreFilterFixtures: "Fixtures",
@@ -97,7 +97,7 @@ export const S = {
   issuanceCreateButton: "Create my Pass",
 
   // ── LiveScreen ──────────────────────────────────────────────────────────
-  liveTitle: "Live",
+  liveTitle: "The match, as it happens.",
   liveBadge: "Live",
   // The minute field's value — sits in the mono data register alongside "70'", not
   // body copy, so it keeps its own caps. Its two render sites deliberately don't
@@ -111,8 +111,8 @@ export const S = {
   liveNextUp: "Next up",
 
   // ── ParkingScreen ───────────────────────────────────────────────────────
-  parkingTitle: "Parking",
-  parkingStandfirst: "Pre-book a zone. Payment is at the gate, by M-Pesa.",
+  parkingTitle: "Pre-book a zone.",
+  parkingStandfirst: "Payment is at the gate, by M-Pesa.",
   parkingWalkSuffix: "min walk",
 
   // ── PartnerScreen ───────────────────────────────────────────────────────
@@ -143,8 +143,7 @@ export const S = {
   passCodeStandIn: "Show this at the gate. A steward can also read your Pass code.",
 
   // ── SafetyScreen ────────────────────────────────────────────────────────
-  safetyTitle: "Safety",
-  safetyStandfirst: "Stewards are on every concourse.",
+  safetyTitle: "Stewards are on every concourse.",
   safetyHelpLine: "Steward help line",
   safetyHelpLineDetail: "Free from any Kenyan number on matchday",
   safetyReport: "Report a problem",
@@ -164,8 +163,7 @@ export const S = {
   scanContinue: "Continue",
 
   // ── ServicesScreen ──────────────────────────────────────────────────────
-  servicesTitle: "Services",
-  servicesStandfirst: "Everything around the match, sorted.",
+  servicesTitle: "Everything around the match, sorted.",
   servicesShuttles: "Shuttles",
   servicesShuttlesDetail: "CBD to the stadium, every 15 minutes",
   servicesFood: "Food",
@@ -184,7 +182,7 @@ export const S = {
   servicesStewards: "Stewards answer in under 2 minutes on matchday.",
 
   // ── WalletScreen ────────────────────────────────────────────────────────
-  walletTitle: "Wallet",
+  walletTitle: "Every line your Pass has written.",
   walletStorageError:
     "Your record could not be saved to this device. Recent lines may be missing.",
   walletYouveSaved: "You've saved",

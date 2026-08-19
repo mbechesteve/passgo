@@ -17,9 +17,6 @@ export function SafetyScreen() {
         <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
           {S.safetyTitle}
         </Text>
-        <Text className="mt-2 text-[15px] leading-6 text-body">
-          {S.safetyStandfirst}
-        </Text>
 
         <View className="mt-6">
           {ROWS.map((r) => (

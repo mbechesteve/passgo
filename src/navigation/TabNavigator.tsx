@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { Icon, type IconName } from "@/components/Icon";
+import { PeakIcon } from "@/components/pamoja/PeakIcon";
 import { colors } from "@/lib/theme";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ExploreScreen } from "@/screens/ExploreScreen";
@@ -94,9 +95,10 @@ function PassStackScreen() {
   );
 }
 
-const ICONS: Record<keyof TabParamList, IconName> = {
+// Explore is drawn by PeakIcon, not Feather: it carries the Mount Kenya summit, the
+// same geometry PeakFrame crops media to. The other four stay on the shared line set.
+const ICONS: Record<Exclude<keyof TabParamList, "ExploreTab">, IconName> = {
   HomeTab: "home",
-  ExploreTab: "compass",
   LiveTab: "play-circle",
   ServicesTab: "grid",
   PassTab: "credit-card",
@@ -119,7 +121,11 @@ export function TabNavigator() {
         },
         tabBarIcon: ({ color }) => (
           <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <Icon name={ICONS[route.name]} size={21} color={color} />
+            {route.name === "ExploreTab" ? (
+              <PeakIcon size={21} color={color} />
+            ) : (
+              <Icon name={ICONS[route.name]} size={21} color={color} />
+            )}
           </View>
         ),
       })}

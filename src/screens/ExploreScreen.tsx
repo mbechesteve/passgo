@@ -3,6 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
+import { type IconName } from "@/components/Icon";
 import { Pill } from "@/components/ui";
 import { Chip } from "@/components/pamoja/Chip";
 import { Eyebrow } from "@/components/pamoja/Eyebrow";
@@ -18,11 +19,13 @@ import type { ExploreItem, Match, Partner } from "@/types";
 
 type Filter = "all" | "fixtures" | "venues" | "offers";
 
-const FILTERS: { key: Filter; label: string }[] = [
-  { key: "all", label: S.exploreFilterAll },
-  { key: "fixtures", label: S.exploreFilterFixtures },
-  { key: "venues", label: S.exploreFilterVenues },
-  { key: "offers", label: S.exploreFilterOffers },
+// Each filter carries a Feather glyph, as the reference's filter row does. "All" is
+// given one too — a row where one pill alone has no icon reads as a mistake.
+const FILTERS: { key: Filter; label: string; icon: IconName }[] = [
+  { key: "all", label: S.exploreFilterAll, icon: "list" },
+  { key: "fixtures", label: S.exploreFilterFixtures, icon: "calendar" },
+  { key: "venues", label: S.exploreFilterVenues, icon: "map-pin" },
+  { key: "offers", label: S.exploreFilterOffers, icon: "tag" },
 ];
 
 /** Nairobi's centre — every seeded item sits in the city, so the map gets one
@@ -155,6 +158,7 @@ export function ExploreScreen() {
             <Pill
               key={f.key}
               label={f.label}
+              icon={f.icon}
               active={filter === f.key}
               onPress={() => setFilter(f.key)}
             />
