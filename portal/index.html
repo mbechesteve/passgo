@@ -33,12 +33,23 @@
 */
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .hero { position: relative; height: 760px; background: var(--primary); overflow: hidden; }
-/* The source is 4:3 in a 1.9:1 slot, so `cover` discards a third of the frame. Centred at
-   50% that crop cut the summit; 32% keeps Batian and Nelion in shot and puts the plainer
-   scree behind the headline. Greyscale and contrast are baked into the WebP — they were
-   being downloaded in colour and then thrown away by the filter. */
+/* Greyscale and contrast are baked into the file — they were being downloaded in colour
+   and then thrown away by `filter: grayscale(1)`. The crop sits low: the crossing and the
+   herd are in the lower half of the frame, and the far bank carries the headline.
+   
+   The drift is the closest thing to footage available here. Commons holds no Maasai Mara
+   video at all — every search returns nothing — and this machine has no ffmpeg, cwebp or
+   ImageMagick to trim one with if it did. A slow scale-and-pan on a 2400px still reads as
+   slow-panning footage at hero scale, costs one image instead of a stream, and needs no
+   autoplay policy to cooperate. 32s, and it never returns to the same frame twice in a
+   cycle because it alternates. */
 .hero-shot { filter: none; }
-.hero-shot img { object-position: 50% 32%; }
+.hero-shot img { object-position: 50% 62%; animation: heroDrift 32s ease-in-out infinite alternate;
+                 will-change: transform; }
+@keyframes heroDrift {
+  from { transform: scale(1.04) translate3d(0, 0, 0); }
+  to   { transform: scale(1.13) translate3d(-1.5%, -1%, 0); }
+}
 /* 0.92 at the far stop crushed the lower mountain into a flat mass. 0.76 lets the rock
    read; the flat veil below still carries the headline's contrast, unchanged. */
 .veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
@@ -230,7 +241,7 @@
 
 /* Motion the board runs continuously, stopped for anyone who asks for less of it. */
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track, .ticker .dot { animation: none; }
+  .ticker-track, .ticker .dot, .hero-shot img { animation: none; }
   .door, .d-shut, .d-open { transition: none; }
   html, .rail { scroll-behavior: auto; }
 }
@@ -300,9 +311,9 @@
   <section class="hero">
     <div class="shot hero-shot">
       <picture>
-        <source srcset="img/hero-mt-kenya.webp" type="image/webp">
-        <img src="img/mt-kenya.jpg" width="2400" height="1800" fetchpriority="high" decoding="async"
-             alt="Batian and Nelion, the twin summits of Mount Kenya.">
+        <source srcset="img/hero-mara.webp" type="image/webp">
+        <img src="img/hero-mara.jpg" width="2400" height="1600" fetchpriority="high" decoding="async"
+             alt="Zebra crossing the Mara river in the Maasai Mara.">
       </picture>
     </div>
     <div class="veil-mult"></div>
@@ -529,9 +540,10 @@
         </div>
       </a>
       <a class="tile" href="#explore">
-        <!-- The same file the hero serves, so this tile costs no extra bytes. It is larger
-             than the tile needs, but it is already in the cache by the time this renders. -->
-        <div class="shot" style="filter:none"><img src="img/hero-mt-kenya.webp" alt="The summits of Mount Kenya."></div><div class="wash"></div>
+        <!-- 800px, which is what a 340px tile needs. It shared the hero's 2400px file while
+             the hero was Mount Kenya; now that the hero is the Mara, that would be 1 MB for
+             a thumbnail. -->
+        <div class="shot" style="filter:none"><img src="img/tile-mt-kenya.webp" alt="The summits of Mount Kenya."></div><div class="wash"></div>
         <div class="cap"><h3>Mount Kenya</h3><p>Batian, Nelion, the Gate of the Mists</p></div>
       </a>
       <a class="tile" href="#explore">
