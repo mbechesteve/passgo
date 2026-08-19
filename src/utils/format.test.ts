@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { kes, daysUntil } from "@/utils/format";
+import { kes, daysUntil, initials } from "@/utils/format";
 
 describe("kes", () => {
   it("formats whole numbers with thousands separators", () => {
@@ -35,8 +35,6 @@ describe("daysUntil", () => {
     expect(() => daysUntil("2026-07-01T00:00:00Z")).toThrow();
   });
 });
-
-import { initials } from "@/utils/format";
 
 describe("initials", () => {
   it("takes the first two words", () => {

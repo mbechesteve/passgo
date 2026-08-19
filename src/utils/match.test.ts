@@ -7,6 +7,8 @@ import {
   liveMatches,
   liveMinute,
   matchPhase,
+  daysUntilLabel,
+  gatesOpenLabel,
 } from "@/utils/match";
 import { MATCHES } from "@/data/matches";
 import { DEMO_NOW } from "@/lib/clock";
@@ -161,8 +163,6 @@ describe("liveMatches at the demo instant", () => {
     expect(liveMatches(MATCHES, new Date("2027-08-01T12:00:00+03:00"))).toEqual([]);
   });
 });
-
-import { daysUntilLabel, gatesOpenLabel } from "@/utils/match";
 
 describe("gatesOpenLabel", () => {
   it("opens two hours before kickoff, in EAT", () => {

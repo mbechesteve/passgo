@@ -5,8 +5,13 @@ import {
   hasBorderEvent,
   recordLine,
   groupByDay,
+  offersUsed,
+  savingsRate,
+  savingsSeries,
+  weekSavings,
 } from "@/utils/record";
 import type { PassEvent } from "@/types";
+import { DEMO_NOW } from "@/lib/clock";
 
 const lunch: PassEvent = {
   id: "e1",
@@ -99,9 +104,6 @@ describe("groupByDay", () => {
   });
 });
 
-import { offersUsed, savingsRate, savingsSeries, weekSavings } from "@/utils/record";
-import { DEMO_NOW } from "@/lib/clock";
-
 /** A purchase on a given EAT day, saving `discount` off `gross`. */
 function purchase(day: string, gross: number, discount: number, seq: number): PassEvent {
   return {
@@ -127,6 +129,14 @@ describe("weekSavings", () => {
 
   it("is zero on an empty record", () => {
     expect(weekSavings([], DEMO_NOW)).toBe(0);
+  });
+
+  it("includes a purchase exactly 6 days back", () => {
+    expect(weekSavings([purchase("2027-06-17", 500, 70, 4)], DEMO_NOW)).toBe(70);
+  });
+
+  it("excludes a purchase exactly 7 days back", () => {
+    expect(weekSavings([purchase("2027-06-16", 500, 70, 5)], DEMO_NOW)).toBe(0);
   });
 });
 
@@ -170,5 +180,16 @@ describe("savingsSeries", () => {
       at: new Date("2027-06-23T01:30:00+03:00").toISOString(),
     };
     expect(savingsSeries([late], DEMO_NOW, 7)[6]).toBe(20);
+  });
+
+  it("places a purchase exactly 6 days back in the oldest in-window bucket", () => {
+    const series = savingsSeries([purchase("2027-06-17", 500, 70, 6)], DEMO_NOW, 7);
+    expect(series[0]).toBe(70);
+    expect(series.slice(1)).toEqual([0, 0, 0, 0, 0, 0]);
+  });
+
+  it("excludes a purchase exactly 7 days back from every bucket", () => {
+    const series = savingsSeries([purchase("2027-06-16", 500, 70, 7)], DEMO_NOW, 7);
+    expect(series).toEqual([0, 0, 0, 0, 0, 0, 0]);
   });
 });
