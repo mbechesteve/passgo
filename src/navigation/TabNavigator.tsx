@@ -4,6 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { Icon, type IconName } from "@/components/Icon";
 import { PeakIcon } from "@/components/pamoja/PeakIcon";
+import { TabRail } from "./TabRail";
+import { RAIL_WIDTH } from "@/lib/layout";
+import { useLayoutMode } from "@/lib/useLayout";
 import { colors } from "@/lib/theme";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ExploreScreen } from "@/screens/ExploreScreen";
@@ -104,9 +107,15 @@ const ICONS: Record<Exclude<keyof TabParamList, "ExploreTab">, IconName> = {
   PassTab: "credit-card",
 };
 
+// One navigator, two arrangements. Below 1024px the library's own bottom bar; above
+// it, TabRail down the left with the scene held clear of it. Both read the same
+// routes and the same tabBarIcon, so nothing about the tabs is defined twice.
 export function TabNavigator() {
+  const wide = useLayoutMode() === "wide";
   return (
     <Tab.Navigator
+      sceneContainerStyle={wide ? { paddingLeft: RAIL_WIDTH } : undefined}
+      tabBar={wide ? (props) => <TabRail {...props} /> : undefined}
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarActiveTintColor: colors.accent,
