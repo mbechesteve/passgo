@@ -6,6 +6,8 @@ import { IssuanceScreen } from "@/screens/IssuanceScreen";
 import { CategoryScreen } from "@/screens/CategoryScreen";
 import { PartnerScreen } from "@/screens/PartnerScreen";
 import { WalletScreen } from "@/screens/WalletScreen";
+import { ParkingScreen } from "@/screens/ParkingScreen";
+import { SafetyScreen } from "@/screens/SafetyScreen";
 import { ScanScreen } from "@/screens/ScanScreen";
 import { ConfirmScreen } from "@/screens/ConfirmScreen";
 import { usePassStore } from "@/store/usePassStore";
@@ -30,6 +32,8 @@ export function RootNavigator() {
         <Stack.Screen name="Category" component={CategoryScreen} />
         <Stack.Screen name="Partner" component={PartnerScreen} />
         <Stack.Screen name="Wallet" component={WalletScreen} />
+        <Stack.Screen name="Parking" component={ParkingScreen} />
+        <Stack.Screen name="Safety" component={SafetyScreen} />
         <Stack.Screen
           name="Scan"
           component={ScanScreen}

@@ -16,6 +16,7 @@ import { EXPLORE_ITEMS } from "./explore";
 import { MATCHES } from "./matches";
 import { MATCH_LIVE } from "./live";
 import { ENTITLEMENTS } from "./entitlements";
+import { PARKING_ZONES, type ParkingZone } from "./parking";
 
 /** Read-through cache: cached copy if present, else compute, persist, return. */
 async function cached<T>(name: string, compute: () => T): Promise<T> {
@@ -44,4 +45,8 @@ export async function fetchMatchLive(): Promise<MatchLive[]> {
 
 export async function fetchEntitlements(): Promise<Entitlement[]> {
   return cached("entitlements", () => ENTITLEMENTS);
+}
+
+export async function fetchParking(): Promise<ParkingZone[]> {
+  return cached("parking", () => PARKING_ZONES);
 }

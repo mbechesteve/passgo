@@ -16,4 +16,7 @@ export type RootStackParamList = {
   Wallet: undefined;
   Scan: undefined;
   Confirm: { partnerId: string; channel: "qr" | "shortcode" };
+  Driving: undefined;
+  Parking: undefined;
+  Safety: undefined;
 };

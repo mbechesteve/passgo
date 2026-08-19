@@ -109,7 +109,36 @@ export const S = {
   scanContinue: "Continue",
 
   // ── ServicesScreen ──────────────────────────────────────────────────────
-  // (nothing to extract — its only text is the interpolated partner count.)
+  servicesTitle: "Services",
+  servicesStandfirst: "Everything around the match, sorted.",
+  servicesShuttles: "Shuttles",
+  servicesShuttlesDetail: "CBD to the stadium, every 15 minutes",
+  servicesFood: "Food",
+  servicesFoodDetail: "Order to your seat block",
+  servicesParking: "Parking",
+  servicesParkingDetail: "Pre-book zones A–D",
+  servicesMerch: "Merch",
+  servicesMerchDetail: "Official kit, gate pickup",
+  servicesSafety: "Safety",
+  servicesSafetyDetail: "Report or get help fast",
+  servicesStays: "Stays",
+  servicesStaysDetail: "Verified lodges near the ground",
+  servicesDrivingTitle: "Driving in",
+  servicesDrivingDetail: "What you need at the border",
+  servicesNeedAHand: "Need a hand?",
+  servicesStewards: "Stewards answer in under 2 minutes on matchday.",
+
+  // ── ParkingScreen ───────────────────────────────────────────────────────
+  parkingTitle: "Parking",
+  parkingStandfirst: "Pre-book a zone. Payment is at the gate, by M-Pesa.",
+
+  // ── SafetyScreen ────────────────────────────────────────────────────────
+  safetyTitle: "Safety",
+  safetyStandfirst: "Stewards are on every concourse.",
+  safetyHelpLine: "Steward help line",
+  safetyHelpLineDetail: "Free from any Kenyan number on matchday",
+  safetyReport: "Report a problem",
+  safetyReportDetail: "Crowding, a blocked exit, anything unsafe",
 
   // ── WalletScreen ────────────────────────────────────────────────────────
   walletStorageError:
