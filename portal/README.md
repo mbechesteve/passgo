@@ -1,6 +1,6 @@
 # Pamoja portal
 
-The public marketing site — "Twende, pamoja." Built from the **`Pamoja Portal.dc.html`**
+The public marketing site — "Karibu, pamoja." Built from the **`Pamoja Portal.dc.html`**
 board in `Karibu Kenya eTA portal.zip` (a Claude Design canvas).
 
 A single static page: `index.html` plus `img/`. No build step, no dependencies, nothing
