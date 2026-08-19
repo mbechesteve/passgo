@@ -165,4 +165,6 @@ export interface BorderCrossing {
   waitMinutes: number;
   requirements: { label: string; detail: string }[];
   goodToKnow: { label: string; detail: string }[];
+  /** ISO date this record was last checked against a real source. */
+  asOf: string;
 }

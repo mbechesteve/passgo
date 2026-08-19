@@ -39,6 +39,21 @@ export const daysUntil = (iso: string | undefined, now: Date): number | null => 
   return Math.round((end - start) / MS);
 };
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+/**
+ * "19 August 2026" from an ISO date string, e.g. content provenance dates.
+ * Parsed by hand rather than through a Date object: this formats static
+ * content dates, not a wall-clock instant, and the one time seam is `now()`.
+ */
+export function dateLabel(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]} ${y}`;
+}
+
 /** "Amina Nakato" → "AN". The avatar disc on Home. */
 export function initials(name: string): string {
   return name

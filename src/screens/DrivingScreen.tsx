@@ -8,6 +8,7 @@ import { RouteStrip } from "@/components/pamoja/RouteStrip";
 import { StatTrio } from "@/components/pamoja/StatTrio";
 import { S } from "@/lib/strings";
 import { fetchBorderCrossings } from "@/data/repository";
+import { dateLabel } from "@/utils/format";
 import type { BorderCrossing, OriginCountry } from "@/types";
 
 export function DrivingScreen() {
@@ -51,7 +52,7 @@ export function DrivingScreen() {
                 <StatTrio
                   items={[
                     {
-                      value: `${crossing.distanceKm.toLocaleString("en-US")} km`,
+                      value: `~${crossing.distanceKm.toLocaleString("en-US")} km`,
                       label: S.drivingDistance,
                     },
                     { value: `~${crossing.driveHours} h`, label: S.drivingDriveTime },
@@ -92,6 +93,10 @@ export function DrivingScreen() {
                 </View>
               ))}
             </View>
+
+            <Text className="mt-6 font-mono text-[11px] leading-4 text-mute">
+              {`${S.drivingAsOfPrefix} ${dateLabel(crossing.asOf)}. ${S.drivingConfirmCaveat}`}
+            </Text>
           </>
         ) : null}
       </ScrollView>
