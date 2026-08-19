@@ -250,6 +250,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 .ev:hover { color: inherit; }
 .ev .frame { position: relative; aspect-ratio: 1 / 1.02; border-radius: 10px;
              overflow: hidden; background: var(--ink); }
+/* The rail's wash is lighter than the page's: rgba(13,14,17,0.8), not 0.9 of --ink-2. */
+.ev .wash { background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(13,14,17,0.8) 100%); }
 .ev h3 { font-size: 20px; font-weight: 700; color: var(--green); margin: 16px 0 6px; }
 .ev .meta { font-family: "JetBrains Mono", monospace; font-size: 12px;
             letter-spacing: 0.08em; color: var(--body); }
@@ -580,23 +582,33 @@ footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(
     <div class="rail" id="ev-rail">
       <a class="ev" href="#events">
         <div class="frame"><div class="shot"><img src="img/uhuru-park.jpg" alt="A lake at Uhuru Park at sunset."></div><div class="wash"></div></div>
-        <h3>Fan Zone · Uhuru Park</h3>
-        <span class="meta mono">Starehe ward · Nairobi · Opens 14:00 · Free</span>
+        <h3>Opening Fan Festival</h3>
+        <span class="meta mono">Uhuru Park · Nairobi, Kenya · 20 Jun · Free</span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/kasarani.jpg" alt="Inside Kasarani Stadium."></div><div class="wash"></div></div>
-        <h3>Opening ceremony</h3>
-        <span class="meta mono">Kasarani Stadium · Nairobi · Ticketed</span>
+        <div class="frame"><div class="shot"><img src="img/ev-bongo.jpg" alt="Musicians performing on an outdoor stage at night."></div><div class="wash"></div></div>
+        <h3>Bongo Flava Live</h3>
+        <span class="meta mono">Coco Beach · Dar es Salaam, Tanzania · 24 Jun</span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/door-market.jpg" alt="Market stalls at night."></div><div class="wash"></div></div>
-        <h3>Nairobi Live</h3>
-        <span class="meta mono">Fan zone · Nightly · Free with your Pass</span>
+        <div class="frame"><div class="shot"><img src="img/ev-kampala.jpg" alt="Kampala Road."></div><div class="wash"></div></div>
+        <h3>Kampala Fan Parade &amp; Concert</h3>
+        <span class="meta mono">Kampala Road · Kampala, Uganda · 25 Jun · Free</span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/lamu.jpg" alt="A dhow under sail off Lamu."></div><div class="wash"></div></div>
-        <h3>Fan Zone · Kasarani</h3>
-        <span class="meta mono">Kasarani ward · Opens 12:00 · Free</span>
+        <div class="frame"><div class="shot"><img src="img/ev-koroga.jpg" alt="A night concert under stage lights."></div><div class="wash"></div></div>
+        <h3>Koroga Festival · AFCON Edition</h3>
+        <span class="meta mono">Carnivore Grounds · Nairobi, Kenya · 27 Jun</span>
+      </a>
+      <a class="ev" href="#events">
+        <div class="frame"><div class="shot"><img src="img/ev-zanzibar.jpg" alt="Forodhani Gardens seafront at sunset."></div><div class="wash"></div></div>
+        <h3>Zanzibar Beach Fan Fest</h3>
+        <span class="meta mono">Forodhani Gardens · Zanzibar, Tanzania · 28 Jun</span>
+      </a>
+      <a class="ev" href="#events">
+        <div class="frame"><div class="shot"><img src="img/ev-closing.jpg" alt="A music festival at Kasarani."></div><div class="wash"></div></div>
+        <h3>Closing Concert</h3>
+        <span class="meta mono">Kasarani · Nairobi, Kenya · 17 Jul</span>
       </a>
     </div>
     <div class="rail-foot">
