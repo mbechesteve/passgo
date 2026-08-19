@@ -81,6 +81,10 @@ export const S = {
   liveNothingOn: "Nothing is kicking off right now.",
   liveNextUp: "Next up",
 
+  // ── ParkingScreen ───────────────────────────────────────────────────────
+  parkingTitle: "Parking",
+  parkingStandfirst: "Pre-book a zone. Payment is at the gate, by M-Pesa.",
+
   // ── PartnerScreen ───────────────────────────────────────────────────────
   partnerNotListed: "That partner is no longer listed.",
   partnerDiscountHeading: "Your discount",
@@ -94,6 +98,14 @@ export const S = {
   passUnlocksHeading: "What your Pass unlocks",
   passWalletTitle: "My Wallet",
   passWalletSubtitle: "Tickets, passes, purchases",
+
+  // ── SafetyScreen ────────────────────────────────────────────────────────
+  safetyTitle: "Safety",
+  safetyStandfirst: "Stewards are on every concourse.",
+  safetyHelpLine: "Steward help line",
+  safetyHelpLineDetail: "Free from any Kenyan number on matchday",
+  safetyReport: "Report a problem",
+  safetyReportDetail: "Crowding, a blocked exit, anything unsafe",
 
   // ── ScanScreen ──────────────────────────────────────────────────────────
   scanCannotRedeem: "Cannot redeem",
@@ -127,18 +139,6 @@ export const S = {
   servicesDrivingDetail: "What you need at the border",
   servicesNeedAHand: "Need a hand?",
   servicesStewards: "Stewards answer in under 2 minutes on matchday.",
-
-  // ── ParkingScreen ───────────────────────────────────────────────────────
-  parkingTitle: "Parking",
-  parkingStandfirst: "Pre-book a zone. Payment is at the gate, by M-Pesa.",
-
-  // ── SafetyScreen ────────────────────────────────────────────────────────
-  safetyTitle: "Safety",
-  safetyStandfirst: "Stewards are on every concourse.",
-  safetyHelpLine: "Steward help line",
-  safetyHelpLineDetail: "Free from any Kenyan number on matchday",
-  safetyReport: "Report a problem",
-  safetyReportDetail: "Crowding, a blocked exit, anything unsafe",
 
   // ── WalletScreen ────────────────────────────────────────────────────────
   walletStorageError:

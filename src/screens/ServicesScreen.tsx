@@ -11,6 +11,7 @@ import { colors } from "@/lib/theme";
 import { S } from "@/lib/strings";
 import { usePartnerStore } from "@/store/usePartnerStore";
 import { CATEGORIES, countsByCategory } from "@/utils/partners";
+import type { PartnerCategory } from "@/types";
 
 export function ServicesScreen() {
   const navigation = useNavigation<any>();
@@ -24,7 +25,7 @@ export function ServicesScreen() {
   // Derived, never stored — a tile can never show a number it cannot fill.
   const counts = countsByCategory(partners);
 
-  const category = (c: "stay" | "move" | "eat" | "shop" | "do") => () =>
+  const category = (c: PartnerCategory) => () =>
     navigation.navigate("Category", { category: c });
 
   const tiles: Tile[] = [

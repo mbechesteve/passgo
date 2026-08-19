@@ -8,7 +8,14 @@
 // When a real backend lands it replaces the bodies of these functions. No screen
 // changes.
 
-import type { Entitlement, ExploreItem, Match, MatchLive, Partner } from "@/types";
+import type {
+  Entitlement,
+  ExploreItem,
+  Match,
+  MatchLive,
+  ParkingZone,
+  Partner,
+} from "@/types";
 import { cacheKey, storage } from "@/lib/storage";
 
 import { generatePartners } from "./partners";
@@ -16,7 +23,7 @@ import { EXPLORE_ITEMS } from "./explore";
 import { MATCHES } from "./matches";
 import { MATCH_LIVE } from "./live";
 import { ENTITLEMENTS } from "./entitlements";
-import { PARKING_ZONES, type ParkingZone } from "./parking";
+import { PARKING_ZONES } from "./parking";
 
 /** Read-through cache: cached copy if present, else compute, persist, return. */
 async function cached<T>(name: string, compute: () => T): Promise<T> {

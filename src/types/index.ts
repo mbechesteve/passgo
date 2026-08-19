@@ -122,3 +122,11 @@ export interface MatchLive {
   shots: [number, number];
   corners: [number, number];
 }
+
+// ── Parking ──────────────────────────────────────────────────────────────────
+export interface ParkingZone {
+  id: string;
+  zone: string;
+  detail: string;
+  walkMinutes: number;
+}

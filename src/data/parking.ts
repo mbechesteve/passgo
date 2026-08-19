@@ -1,9 +1,4 @@
-export interface ParkingZone {
-  id: string;
-  zone: string;
-  detail: string;
-  walkMinutes: number;
-}
+import type { ParkingZone } from "@/types";
 
 export const PARKING_ZONES: ParkingZone[] = [
   { id: "pz-a", zone: "Zone A", detail: "Kasarani, north gate", walkMinutes: 4 },

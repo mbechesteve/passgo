@@ -4,7 +4,7 @@ import { ScrollView, Text, View } from "react-native";
 import { Screen } from "@/components/Screen";
 import { S } from "@/lib/strings";
 import { fetchParking } from "@/data/repository";
-import type { ParkingZone } from "@/data/parking";
+import type { ParkingZone } from "@/types";
 
 export function ParkingScreen() {
   const [zones, setZones] = useState<ParkingZone[]>([]);
