@@ -219,18 +219,40 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-o
 .count span { display: block; font-weight: 600; font-size: 17px; margin-top: 8px; }
 .count small { display: block; font-size: 13px; font-weight: 300; color: var(--stone-2); margin-top: 3px; }
 
-/* ── CTA + footer ────────────────────────────────────────────────────────── */
-.cta-band { background: var(--ink); color: #fff; text-align: center;
-            padding: clamp(64px, 9vw, 104px) var(--pad-x); }
-.cta-band h2 { font-size: clamp(38px, 6.5vw, 68px); margin-top: 16px; }
-.cta-band p { max-width: 30em; margin: 18px auto 30px; font-weight: 300; color: var(--stone); }
-footer { background: var(--ink-deep); color: var(--stone-2); padding: 60px var(--pad-x) 44px; font-size: 14px; }
-.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 32px; }
-.cols h4 { margin: 0 0 14px; color: #fff; font-family: "JetBrains Mono", monospace;
-           text-transform: uppercase; letter-spacing: 0.14em; font-size: 11px; font-weight: 500; }
-.cols li { margin-bottom: 9px; }
-.cols a:hover { color: var(--gold); }
-.legal { margin-top: 44px; padding-top: 24px; border-top: 1px solid #1e1f22; font-size: 12px; line-height: 1.75; }
+/* ── CTA band + footer ───────────────────────────────────────────────────── */
+.cta-band { background: var(--ink); color: #fff; position: relative; overflow: hidden; }
+/* A mountain range across the band, as the board draws it: one raised panel clipped to
+   a ridge line. Same idea as the app's PeakFrame — the motif, at landscape width. */
+.ridge {
+  position: absolute; inset: 0; background: var(--ink-2);
+  clip-path: polygon(0 58%, 14% 58%, 27% 34%, 35% 50%, 43% 40%, 49% 54%,
+                     57% 26%, 70% 52%, 82% 44%, 100% 60%, 100% 100%, 0 100%);
+}
+.cta-inner { position: relative; z-index: 2; padding: clamp(56px, 8vw, 88px) var(--pad-x);
+             display: flex; justify-content: space-between; align-items: center; gap: 48px; }
+.cta-band h2 { font-size: clamp(30px, 4.4vw, 44px); }
+.cta-band p { font-size: 17px; font-weight: 300; color: var(--stone); margin-top: 14px; max-width: 520px; }
+.cta-band .btn { flex: 0 0 auto; font-size: 17px; padding: 18px 36px; }
+
+footer { border-top: 1px solid var(--ink-2); background: var(--ink); color: var(--band);
+         padding: clamp(40px, 6vw, 64px) var(--pad-x); }
+.foot-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; flex-wrap: wrap; }
+/* `p.foot-brand`, not `.foot-brand`: the sibling rule below is `.foot-row p`, which is a
+   class plus a type and therefore wins against a bare class — the wordmark was rendering
+   at 14px light grey. */
+.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
+                         color: #fff; max-width: none; margin-top: 0; }
+.foot-row p { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
+              max-width: 360px; line-height: 1.6; margin-top: 12px; }
+.foot-cols { display: flex; gap: clamp(32px, 5vw, 64px); font-size: 14px; }
+.foot-cols ul { display: flex; flex-direction: column; gap: 11px; }
+.foot-cols b { color: #fff; font-weight: 700; margin-bottom: 2px; }
+.foot-cols a { color: rgba(238,240,240,0.75); }
+.foot-cols a:hover { color: var(--gold); }
+/* Not on the board, and kept anyway: CC BY-SA requires attribution, and a prototype
+   should say so. Set quietly beneath the footer row rather than competing with it. */
+.legal { margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--ink-2);
+         font-size: 12px; line-height: 1.75; color: rgba(238,240,240,0.55); }
 .legal a { text-decoration: underline; }
 
 @media (min-width: 760px) {
@@ -246,6 +268,12 @@ footer { background: var(--ink-deep); color: var(--stone-2); padding: 60px var(-
    wrap — left to wrap they stacked five links into a tall column and squeezed the pills
    into circles. The toggle is a checkbox, so the menu works with no JavaScript. */
 .menu-toggle, .burger, .mob-only { display: none; }
+@media (max-width: 700px) {
+  /* Text beside a button needs room for both. Below this the band stacks and the button
+     goes full width, as the board's own mobile mockup has it. */
+  .cta-inner { flex-direction: column; align-items: stretch; gap: 28px; }
+  .cta-band .btn { text-align: center; }
+}
 @media (max-width: 860px) {
   .nav { flex-wrap: wrap; gap: 12px; }
   .nav-links { display: none; order: 3; width: 100%; flex-direction: column; gap: 0;
@@ -507,51 +535,47 @@ footer { background: var(--ink-deep); color: var(--stone-2); padding: 60px var(-
   </section>
 
   <section class="cta-band">
-    <p class="mono gold">Issued in under 3 minutes · no payment details needed</p>
-    <h2>Own the tournament.</h2>
-    <p>One pass, three countries, every match you can reach. Set it up before you fly and land ready.</p>
-    <a class="btn btn-gold" href="#pass">Get your Pamoja Pass</a>
+    <div class="ridge"></div>
+    <div class="cta-inner">
+      <div>
+        <p class="mono-sm" style="color:var(--stone-2)">Issued in under 3 minutes · no payment details needed</p>
+        <h2 style="margin-top:14px">Own the tournament.</h2>
+        <p>One pass, three countries, every match you can reach. Set it up before you fly and land ready.</p>
+      </div>
+      <a class="btn btn-paper" href="#pass">Get your Pamoja Pass</a>
+    </div>
   </section>
 
 </main>
 
 <footer id="access">
-  <div class="cols">
+  <div class="foot-row">
     <div>
-      <h4>Pamoja</h4>
-      <p>The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never holds funds — every payment is a direct hand-off.</p>
+      <p class="foot-brand">Pamoja</p>
+      <p>The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never holds funds —
+        every payment is a direct hand-off.</p>
     </div>
-    <div>
-      <h4>The Pass</h4>
+    <div class="foot-cols">
       <ul>
+        <li><b>The Pass</b></li>
         <li><a href="#pass">Get the Pass</a></li>
         <li><a href="#pass">Track my Pass</a></li>
-        <li><a href="#partners">Partner discounts</a></li>
+        <li><a href="#partners">Partners</a></li>
       </ul>
-    </div>
-    <div>
-      <h4>Tournament</h4>
       <ul>
-        <li><a href="#matches">Matches &amp; tickets</a></li>
+        <li><b>Matchday</b></li>
+        <li><a href="#matches">Schedule</a></li>
         <li><a href="#events">Fan events</a></li>
-        <li><a href="#explore">Explore</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Accessibility</h4>
-      <ul>
-        <li>Text size follows your browser</li>
-        <li>Contrast meets WCAG AA</li>
-        <li>Controls are 44px or larger</li>
+        <li><a href="#pass">Security · *723#</a></li>
       </ul>
     </div>
   </div>
 
   <p class="legal">
-    <strong>Prototype.</strong> Fixtures, partner counts and listings are the demo figures
-    the Pamoja app is built against, with the demo clock fixed to Wed 23 June 2027,
-    12:55 EAT. Venues are grounds widely reported as 2027 hosts; CAF has published no
-    official venue list. Confirm anything you plan to act on.
+    <strong>Prototype.</strong> Fixtures, partner counts, listings and the *723# short code
+    are demo figures the Pamoja app is built against, with the demo clock fixed to
+    Wed 23 June 2027, 12:55 EAT. Venues are grounds widely reported as 2027 hosts; CAF has
+    published no official venue list. Confirm anything you plan to act on.
     <br><br>
     <strong>Photography</strong> from Wikimedia Commons, self-hosted here with attribution:
     <a href="https://commons.wikimedia.org/wiki/File:Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG">Mount Kenya (Chris 73, CC BY-SA 3.0)</a>,
