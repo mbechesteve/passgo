@@ -46,6 +46,11 @@ export const S = {
   drivingNeed: "At the border you'll need",
   drivingGoodToKnow: "Good to know",
   drivingAsOfPrefix: "Correct as of",
+  // The last leg, once the border is behind you. Deliberately not called
+  // "how else to arrive": these are not alternatives to the crossing, they are
+  // what happens after it, and they are the same whichever border you used.
+  drivingOnceInNairobi: "Once you're in Nairobi",
+  drivingParkAndWalk: "Park and walk",
   drivingConfirmCaveat:
     "Confirm current requirements with the relevant embassy or border authority before you travel.",
 

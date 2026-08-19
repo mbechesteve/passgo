@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
 import { Pill } from "@/components/ui";
@@ -8,19 +9,46 @@ import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { RouteStrip } from "@/components/pamoja/RouteStrip";
 import { StatTrio } from "@/components/pamoja/StatTrio";
 import { S } from "@/lib/strings";
-import { fetchBorderCrossings } from "@/data/repository";
+import { Icon } from "@/components/Icon";
+import { colors } from "@/lib/theme";
+import { fetchBorderCrossings, fetchParking } from "@/data/repository";
 import { dateLabel } from "@/utils/format";
-import type { BorderCrossing, OriginCountry } from "@/types";
+import { walkRangeLabel } from "@/utils/parking";
+import type { BorderCrossing, OriginCountry, ParkingZone } from "@/types";
 
 export function DrivingScreen() {
+  const navigation = useNavigation<any>();
   const [crossings, setCrossings] = useState<BorderCrossing[]>([]);
+  const [zones, setZones] = useState<ParkingZone[]>([]);
   const [origin, setOrigin] = useState<OriginCountry>("UG");
 
   useEffect(() => {
     void fetchBorderCrossings().then(setCrossings);
+    void fetchParking().then(setZones);
   }, []);
 
   const crossing = crossings.find((c) => c.origin === origin);
+  const walk = walkRangeLabel(zones);
+
+  // Both rows carry figures the app already stands behind elsewhere — the shuttle
+  // interval as Services words it, the walk range derived from the very zones the
+  // Parking screen lists. Nothing here is a new claim about Nairobi transport.
+  const legs = [
+    {
+      key: "shuttle",
+      title: S.servicesShuttles,
+      detail: S.servicesShuttlesDetail,
+      onPress: () => navigation.navigate("Category", { category: "move" }),
+    },
+    {
+      key: "park",
+      title: S.drivingParkAndWalk,
+      detail: walk
+        ? `${S.servicesParkingDetail} · ${walk} ${S.parkingWalkSuffix}`
+        : S.servicesParkingDetail,
+      onPress: () => navigation.navigate("Parking"),
+    },
+  ];
 
   return (
     <Screen>
@@ -101,6 +129,25 @@ export function DrivingScreen() {
             </Text>
           </>
         ) : null}
+
+        <Eyebrow className="mt-8">{S.drivingOnceInNairobi}</Eyebrow>
+        <View className="mt-2">
+          {legs.map((leg) => (
+            <Pressable
+              key={leg.key}
+              onPress={leg.onPress}
+              className="flex-row items-center border-b border-hairline py-3.5 active:opacity-70"
+            >
+              <View className="flex-1 pr-3">
+                <Text className="font-medium text-[15px] text-ink">{leg.title}</Text>
+                <Text className="mt-0.5 text-[13px] leading-5 text-body">
+                  {leg.detail}
+                </Text>
+              </View>
+              <Icon name="chevron-right" size={18} color={colors.mute} />
+            </Pressable>
+          ))}
+        </View>
       </ScrollView>
     </Screen>
   );
