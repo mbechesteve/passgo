@@ -33,23 +33,21 @@
 */
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .hero { position: relative; height: 760px; background: var(--primary); overflow: hidden; }
-/* Greyscale and contrast are baked into the file — they were being downloaded in colour
-   and then thrown away by `filter: grayscale(1)`. The crop sits low: the crossing and the
-   herd are in the lower half of the frame, and the far bank carries the headline.
+/* Real footage, not a still panned to imitate one. Commons does hold Maasai Mara video —
+   an earlier note here said it held none, which was wrong: the searches behind that claim
+   used the wrong syntax (`filetype:video`; `filemime:video/webm` is what finds them).
    
-   The drift is the closest thing to footage available here. Commons holds no Maasai Mara
-   video at all — every search returns nothing — and this machine has no ffmpeg, cwebp or
-   ImageMagick to trim one with if it did. A slow scale-and-pan on a 2400px still reads as
-   slow-panning footage at hero scale, costs one image instead of a stream, and needs no
-   autoplay policy to cooperate. 32s, and it never returns to the same frame twice in a
-   cycle because it alternates. */
+   This is an 11s cut from Regina Hart's 91s "Elephants at Naibosho Conservancy, Kenya"
+   (CC BY 2.0), taken from 30.5s in — the clip opens on a pillarboxed title card with a
+   burned-in caption, and only reaches full 16:9 frame after ~14s. Re-encoded to 1600x900
+   VP9 at 1.7MB by decoding the Commons transcode in a canvas: WebM is the one video
+   format this machine can both decode and encode.
+   
+   There is no scale-and-pan over it. The herd already moves, and a Ken Burns drift on top
+   of real motion reads as a swim. The poster is the clip's own first frame, so the still
+   that paints before the stream starts is the frame the stream starts on. */
 .hero-shot { filter: none; }
-.hero-shot img { object-position: 50% 62%; animation: heroDrift 32s ease-in-out infinite alternate;
-                 will-change: transform; }
-@keyframes heroDrift {
-  from { transform: scale(1.04) translate3d(0, 0, 0); }
-  to   { transform: scale(1.13) translate3d(-1.5%, -1%, 0); }
-}
+.hero-shot video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; }
 /* 0.92 at the far stop crushed the lower mountain into a flat mass. 0.76 lets the rock
    read; the flat veil below still carries the headline's contrast, unchanged. */
 .veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
@@ -241,7 +239,7 @@
 
 /* Motion the board runs continuously, stopped for anyone who asks for less of it. */
 @media (prefers-reduced-motion: reduce) {
-  .ticker-track, .ticker .dot, .hero-shot img { animation: none; }
+  .ticker-track, .ticker .dot { animation: none; }
   .door, .d-shut, .d-open { transition: none; }
   html, .rail { scroll-behavior: auto; }
 }
@@ -310,11 +308,11 @@
 
   <section class="hero">
     <div class="shot hero-shot">
-      <picture>
-        <source srcset="img/hero-mara.webp" type="image/webp">
-        <img src="img/hero-mara.jpg" width="2400" height="1600" fetchpriority="high" decoding="async"
-             alt="Zebra crossing the Mara river in the Maasai Mara.">
-      </picture>
+      <video id="hero-video" width="1600" height="900" autoplay muted loop playsinline preload="auto"
+             poster="img/hero-poster.webp" role="img"
+             aria-label="Elephants moving across the grassland under a storm sky, Maasai Mara, Kenya.">
+        <source src="img/hero-mara.webm" type="video/webm">
+      </video>
     </div>
     <div class="veil-mult"></div>
     <div class="veil-screen"></div>
@@ -633,6 +631,24 @@
         .scrollBy({ left: Number(button.dataset.scroll), behavior: "smooth" });
     });
   });
+
+  /* The hero footage, held to the same promise the CSS makes for every other moving thing:
+     it stops for anyone who asks for less motion. `animation: none` cannot do this — a
+     playing video is not an animation — so it is the one piece of motion here that needs
+     script. Paused rather than removed, so the poster frame still carries the hero, and
+     re-checked live because the setting can change while the page is open. */
+  (function () {
+    var video = document.getElementById("hero-video");
+    if (!video) return;
+    var query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    function apply() {
+      if (query.matches) { video.pause(); video.removeAttribute("autoplay"); }
+      else { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
+    }
+    apply();
+    query.addEventListener ? query.addEventListener("change", apply)
+                           : query.addListener(apply);
+  })();
 </script>
 
 </body>
