@@ -35,3 +35,19 @@ describe("daysUntil", () => {
     expect(() => daysUntil("2026-07-01T00:00:00Z")).toThrow();
   });
 });
+
+import { initials } from "@/utils/format";
+
+describe("initials", () => {
+  it("takes the first two words", () => {
+    expect(initials("Amina Nakato")).toBe("AN");
+  });
+
+  it("handles a single name", () => {
+    expect(initials("Amina")).toBe("A");
+  });
+
+  it("ignores extra words and stray spacing", () => {
+    expect(initials("  amina grace nakato ")).toBe("AG");
+  });
+});

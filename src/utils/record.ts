@@ -64,3 +64,54 @@ export function groupByDay(events: PassEvent[]): DayGroup[] {
       events: [...list].sort((a, b) => b.at.localeCompare(a.at)),
     }));
 }
+
+/** The EAT day an event belongs to, as a sortable "2027-06-23". */
+function eatDay(iso: string): string {
+  return eatParts(iso).day;
+}
+
+/** Days between two EAT day strings. */
+function daysBetween(from: string, to: string): number {
+  return Math.round(
+    (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000
+  );
+}
+
+/** Discounts from the trailing seven days, today included. */
+export function weekSavings(events: PassEvent[], at: Date): number {
+  const today = eatDay(at.toISOString());
+  return events
+    .filter((e) => {
+      const age = daysBetween(eatDay(e.at), today);
+      return age >= 0 && age < 7;
+    })
+    .reduce((sum, e) => sum + (e.amount?.discount ?? 0), 0);
+}
+
+/** Saved as a share of gross. Zero on an empty record, never NaN. */
+export function savingsRate(events: PassEvent[]): number {
+  const gross = totalSaved(events) + totalSpent(events);
+  return gross === 0 ? 0 : totalSaved(events) / gross;
+}
+
+/** How many offers the fan has actually used. */
+export function offersUsed(events: PassEvent[]): number {
+  return events.filter((e) => e.kind === "purchase").length;
+}
+
+/** Savings per EAT day for the last `days` days, oldest first — the sparkline. */
+export function savingsSeries(
+  events: PassEvent[],
+  at: Date,
+  days: number
+): number[] {
+  const today = eatDay(at.toISOString());
+  const buckets = new Array<number>(days).fill(0);
+  for (const e of events) {
+    const age = daysBetween(eatDay(e.at), today);
+    if (age >= 0 && age < days) {
+      buckets[days - 1 - age] += e.amount?.discount ?? 0;
+    }
+  }
+  return buckets;
+}

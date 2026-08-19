@@ -161,3 +161,28 @@ describe("liveMatches at the demo instant", () => {
     expect(liveMatches(MATCHES, new Date("2027-08-01T12:00:00+03:00"))).toEqual([]);
   });
 });
+
+import { daysUntilLabel, gatesOpenLabel } from "@/utils/match";
+
+describe("gatesOpenLabel", () => {
+  it("opens two hours before kickoff, in EAT", () => {
+    expect(gatesOpenLabel(nextMatch(MATCHES, DEMO_NOW)!)).toBe("14:00");
+  });
+});
+
+describe("daysUntilLabel", () => {
+  const fixture = () => nextMatch(MATCHES, DEMO_NOW)!;
+
+  it("reads IN 3 DAYS from Wednesday to Saturday", () => {
+    // The drawing says IN 2 DAYS; from the demo instant that is wrong by a day.
+    expect(daysUntilLabel(fixture(), DEMO_NOW)).toBe("IN 3 DAYS");
+  });
+
+  it("reads TODAY on the day itself", () => {
+    expect(daysUntilLabel(fixture(), new Date("2027-06-26T09:00:00+03:00"))).toBe("TODAY");
+  });
+
+  it("reads TOMORROW the day before", () => {
+    expect(daysUntilLabel(fixture(), new Date("2027-06-25T09:00:00+03:00"))).toBe("TOMORROW");
+  });
+});

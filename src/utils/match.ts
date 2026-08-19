@@ -78,3 +78,26 @@ export function liveMatches(matches: Match[], at: Date): Match[] {
       (a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime()
     );
 }
+
+const GATES_OPEN_BEFORE_MS = 2 * 60 * 60 * 1000;
+
+/** "14:00" — when the turnstiles open, two hours before kickoff, in EAT. */
+export function gatesOpenLabel(m: Match): string {
+  const opens = new Date(
+    new Date(m.kickoff).getTime() - GATES_OPEN_BEFORE_MS
+  ).toISOString();
+  return eatParts(opens).time;
+}
+
+/** "TODAY", "TOMORROW", "IN 3 DAYS" — counted in EAT days, never hard-coded. */
+export function daysUntilLabel(m: Match, at: Date): string {
+  const kickoffDay = eatParts(m.kickoff).day;
+  const today = eatParts(at.toISOString()).day;
+  const days = Math.round(
+    (Date.parse(`${kickoffDay}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) /
+      86_400_000
+  );
+  if (days === 0) return "TODAY";
+  if (days === 1) return "TOMORROW";
+  return `IN ${days} DAYS`;
+}

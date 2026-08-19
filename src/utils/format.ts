@@ -38,3 +38,13 @@ export const daysUntil = (iso: string | undefined, now: Date): number | null => 
   );
   return Math.round((end - start) / MS);
 };
+
+/** "Amina Nakato" → "AN". The avatar disc on Home. */
+export function initials(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
+}
