@@ -16,6 +16,8 @@ import { buildRedemption, computeMoney } from "@/utils/redeem";
 import { usePartnerStore } from "@/store/usePartnerStore";
 import { usePassStore } from "@/store/usePassStore";
 import { useRecordStore } from "@/store/useRecordStore";
+import { usePaymentStore } from "@/store/usePaymentStore";
+import { defaultMethod, describeMethod } from "@/utils/payment";
 import type { PassEvent } from "@/types";
 import type { SharedRoutes } from "@/navigation/types";
 
@@ -29,6 +31,7 @@ export function ConfirmScreen() {
   const events = useRecordStore((s) => s.events);
   const append = useRecordStore((s) => s.append);
   const ingestShortCode = useRecordStore((s) => s.ingestShortCode);
+  const method = defaultMethod(usePaymentStore((s) => s.methods));
 
   const [amount, setAmount] = useState("1000");
   const [written, setWritten] = useState<PassEvent | null>(null);
@@ -143,8 +146,11 @@ export function ConfirmScreen() {
         </View>
 
         <Text className="mt-4 font-mono text-[11px] leading-4 text-mute">
-          {S.confirmPayPrefix} {partner.name} {kes(money.net)}{" "}
-          {S.confirmPaySuffix}
+          {`${S.confirmPayPrefix} ${partner.name} ${kes(money.net)} ${
+            S.confirmPayDirectlyBy
+          } ${method ? describeMethod(method) : S.confirmPayAnyMethod}. ${
+            S.confirmPayNeverHolds
+          }`}
         </Text>
 
         <Button

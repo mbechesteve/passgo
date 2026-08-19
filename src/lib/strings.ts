@@ -32,8 +32,13 @@ export const S = {
   confirmChannelScanned: "Scanned",
   confirmBillHeading: "What the bill comes to",
   confirmPayPrefix: "You pay",
-  confirmPaySuffix:
-    "directly, by M-Pesa, Airtel Money or card. Pamoja never holds your money — it only records that this happened.",
+  // Split in three so the middle clause can name the fan's own method when she has
+  // saved one. With none saved the three parts read exactly as the single string they
+  // replaced, so the verified sentence is unchanged for a fan who never sets one.
+  confirmPayDirectlyBy: "directly, by",
+  confirmPayAnyMethod: "M-Pesa, Airtel Money or card",
+  confirmPayNeverHolds:
+    "Pamoja never holds your money — it only records that this happened.",
   confirmButton: "Confirm the discount",
 
   // ── GettingThereScreen ──────────────────────────────────────────────────
@@ -177,6 +182,28 @@ export const S = {
   partnerShortCodeButton: "I read my card code at the counter",
   partnerDisclaimer:
     "You pay the merchant directly by M-Pesa, Airtel Money or card. Pamoja never holds your money.",
+
+  // ── PaymentMethodScreen ─────────────────────────────────────────────────
+  payAddTitle: "How will you pay?",
+  payAddStandfirst:
+    "Name the method you'll use at a counter. There is nothing to fund — Pamoja holds no balance.",
+  payKindHeading: "Method",
+  payPhoneHeading: "Phone number",
+  payPhonePlaceholder: "e.g. 0712 345 789",
+  payCardHeading: "Card number",
+  payCardPlaceholder: "e.g. 4111 1111 1111 4921",
+  // Said plainly, because a fan typing a card number deserves to know where it goes.
+  payDiscardNote:
+    "Only the last few digits are kept, so you can tell your methods apart. The number you type is not stored and never leaves this device.",
+  payAddButton: "Save this method",
+  payHowYouPay: "How you pay",
+  payDefault: "Default",
+  payAddAnother: "Add a method",
+  payNoneYet:
+    "No method saved. Add one and it will be named when you claim a discount.",
+  payUse: "Use this one",
+  payNoneSaved: "No method saved",
+  payForget: "Forget",
 
   // ── PassScreen ──────────────────────────────────────────────────────────
   passUnlocksHeading: "What your Pass unlocks",

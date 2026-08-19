@@ -151,6 +151,26 @@ export interface HallMap {
   blocks: StadiumBlock[];
 }
 
+/**
+ * How a fan pays. A preference, not an account: Pamoja holds no balance and stores no
+ * number — only enough of a tail to recognise which method is which.
+ *
+ * A top-up wallet was asked for and declined. Rev. 2 §05 — "never holds the funds,
+ * never sees a card number, and needs no banking licence in any of the three
+ * countries" — means stored value would need an e-money licence in Kenya, Uganda and
+ * Tanzania, and card handling would bring PCI scope. Naming the method a fan will pay
+ * with gives the same convenience and reverses nothing.
+ */
+export type PaymentKind = "mpesa" | "airtel" | "card";
+
+export interface PaymentMethod {
+  id: string;
+  kind: PaymentKind;
+  /** Last 3 digits for mobile money, last 4 for a card. Never the whole number. */
+  tail: string;
+  isDefault: boolean;
+}
+
 export type MatchPhase = "scheduled" | "live" | "half-time" | "full-time";
 
 /** Seeded score and stats. The minute is never stored — it derives from the clock. */

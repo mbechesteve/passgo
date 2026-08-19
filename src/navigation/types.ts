@@ -40,7 +40,11 @@ export type ServicesStackParamList = {
   Scan: undefined;
 } & SharedRoutes;
 
-export type PassStackParamList = { Pass: undefined; Wallet: undefined };
+export type PassStackParamList = {
+  Pass: undefined;
+  Wallet: undefined;
+  PaymentMethod: undefined;
+};
 
 export type TabParamList = {
   HomeTab: undefined;

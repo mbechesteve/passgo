@@ -1,4 +1,5 @@
-import { ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { Screen } from "@/components/Screen";
 import { BackBar } from "@/components/pamoja/BackBar";
@@ -10,6 +11,10 @@ import { RecordLine } from "@/components/pamoja/RecordLine";
 import { now } from "@/lib/clock";
 import { S } from "@/lib/strings";
 import { useRecordStore } from "@/store/useRecordStore";
+import { usePaymentStore } from "@/store/usePaymentStore";
+import { Icon } from "@/components/Icon";
+import { colors } from "@/lib/theme";
+import { defaultMethod, describeMethod } from "@/utils/payment";
 import { kes } from "@/utils/format";
 import {
   groupByDay,
@@ -21,7 +26,10 @@ import {
 } from "@/utils/record";
 
 export function WalletScreen() {
+  const navigation = useNavigation<any>();
   const events = useRecordStore((s) => s.events);
+  const methods = usePaymentStore((s) => s.methods);
+  const method = defaultMethod(methods);
   const storageError = useRecordStore((s) => s.storageError);
   const groups = groupByDay(events);
   const offers = offersUsed(events);
@@ -74,6 +82,22 @@ export function WalletScreen() {
             ) : null}
           </View>
         ) : null}
+
+        {/* A preference, not a balance. There is nothing to top up here — see the
+            note on PaymentMethod in @/types for why that is a product rule. */}
+        <Pressable
+          onPress={() => navigation.navigate("PaymentMethod")}
+          accessibilityRole="button"
+          className="mt-6 flex-row items-center justify-between rounded-card border border-hairline bg-canvas px-5 py-4 active:opacity-80"
+        >
+          <View className="flex-1 pr-3">
+            <Text className="font-medium text-[15px] text-ink">{S.payHowYouPay}</Text>
+            <Text className="mt-0.5 font-mono text-[12px] text-mute">
+              {method ? describeMethod(method) : S.payNoneSaved}
+            </Text>
+          </View>
+          <Icon name="chevron-right" size={18} color={colors.mute} />
+        </Pressable>
 
         {groups.length === 0 ? (
           <Text className="mt-10 text-[15px] leading-6 text-body">

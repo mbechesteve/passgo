@@ -17,6 +17,7 @@ import { CategoryScreen } from "@/screens/CategoryScreen";
 import { PartnerScreen } from "@/screens/PartnerScreen";
 import { WalletScreen } from "@/screens/WalletScreen";
 import { TicketOfficeScreen } from "@/screens/TicketOfficeScreen";
+import { PaymentMethodScreen } from "@/screens/PaymentMethodScreen";
 import { ParkingScreen } from "@/screens/ParkingScreen";
 import { SafetyScreen } from "@/screens/SafetyScreen";
 import { GettingThereScreen } from "@/screens/GettingThereScreen";
@@ -96,6 +97,7 @@ function PassStackScreen() {
     <PassStack.Navigator screenOptions={stackOptions}>
       <PassStack.Screen name="Pass" component={PassScreen} />
       <PassStack.Screen name="Wallet" component={WalletScreen} />
+      <PassStack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
     </PassStack.Navigator>
   );
 }
