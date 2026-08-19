@@ -103,8 +103,10 @@ export interface Match {
   id: string;
   home: string;
   away: string;
-  kickoff: string; // ISO
+  kickoff: string; // ISO, with the venue's own +03:00 offset
   venue: string;
   city: string;
   country: HostCountry;
+  /** Venue centre — "400m from Gate D" and the route screen both read this. */
+  coords: { lat: number; lng: number };
 }

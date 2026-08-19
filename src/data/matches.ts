@@ -8,23 +8,27 @@ export const MATCHES: Match[] = [
     home: "Kenya", away: "Mali",
     kickoff: "2027-06-26T16:00:00+03:00",
     venue: "Kasarani", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2226, lng: 36.8917 },
   },
   {
     id: "m-civ-zam",
     home: "Côte d'Ivoire", away: "Zambia",
     kickoff: "2027-06-29T19:00:00+03:00",
     venue: "Nyayo", city: "Nairobi", country: "KE",
+    coords: { lat: -1.3044, lng: 36.8264 },
   },
   {
     id: "m-ken-mar",
     home: "Kenya", away: "Morocco",
     kickoff: "2027-07-03T16:00:00+03:00",
     venue: "Kasarani", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2226, lng: 36.8917 },
   },
   {
     id: "m-sen-egy",
     home: "Senegal", away: "Egypt",
     kickoff: "2027-07-10T19:00:00+03:00",
     venue: "Kasarani", city: "Nairobi", country: "KE",
+    coords: { lat: -1.2226, lng: 36.8917 },
   },
 ];

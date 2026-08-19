@@ -1,3 +1,4 @@
+import { eatParts } from "@/lib/clock";
 import type { Match } from "@/types";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -13,9 +14,28 @@ export function matchLabel(m: Match): string {
   return `${m.home} v ${m.away}`;
 }
 
-/** "Sat 16:00 · Kasarani", read from the fixture's own offset. */
+/**
+ * Official three-letter codes. A substring rule cannot do this job: Mali is MLI, not
+ * MAL, and "Côte d'Ivoire" has no sane truncation.
+ */
+export const TEAM_CODE: Record<string, string> = {
+  Kenya: "KEN",
+  Mali: "MLI",
+  Zambia: "ZAM",
+  Morocco: "MAR",
+  Uganda: "UGA",
+  Senegal: "SEN",
+  "Côte d'Ivoire": "CIV",
+  Egypt: "EGY",
+};
+
+export function crestCode(team: string): string {
+  return TEAM_CODE[team] ?? team.slice(0, 3).toUpperCase();
+}
+
+/** "Sat 16:00 · Kasarani" — the day and time as East Africa reads them. */
 export function kickoffLabel(m: Match): string {
-  const day = DAYS[new Date(m.kickoff).getUTCDay()];
-  const time = m.kickoff.match(/T(\d{2}:\d{2})/)?.[1] ?? "";
-  return `${day} ${time} · ${m.venue}`;
+  const { day, time } = eatParts(m.kickoff);
+  const weekday = DAYS[new Date(`${day}T00:00:00Z`).getUTCDay()];
+  return `${weekday} ${time} · ${m.venue}`;
 }
