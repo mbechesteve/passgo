@@ -76,6 +76,7 @@ export const AIR_LINKS: AirLink[] = [
     toCode: "EDL",
     transferKm: 18,
     transferTo: "Kipchoge Keino, Eldoret",
+    fareEstimate: { low: 6000, high: 12000 },
     requirements: DOMESTIC_REQUIREMENTS,
     goodToKnow: DOMESTIC_GOOD_TO_KNOW,
     asOf: "2026-08-19",
@@ -92,6 +93,7 @@ export const AIR_LINKS: AirLink[] = [
     toCode: "KIS",
     transferKm: 50,
     transferTo: "Bukhungu, Kakamega",
+    fareEstimate: { low: 6000, high: 12000 },
     requirements: DOMESTIC_REQUIREMENTS,
     goodToKnow: DOMESTIC_GOOD_TO_KNOW,
     asOf: "2026-08-19",
@@ -106,6 +108,7 @@ export const AIR_LINKS: AirLink[] = [
     toCode: "EBB",
     transferKm: 50,
     transferTo: "Namboole, Kampala",
+    fareEstimate: { low: 14000, high: 26000 },
     requirements: INTERNATIONAL_REQUIREMENTS,
     goodToKnow: [
       TIME_ZONE_GOOD_TO_KNOW,
@@ -125,6 +128,7 @@ export const AIR_LINKS: AirLink[] = [
     toCode: "DAR",
     transferKm: 15,
     transferTo: "Benjamin Mkapa, Dar es Salaam",
+    fareEstimate: { low: 16000, high: 32000 },
     requirements: INTERNATIONAL_REQUIREMENTS,
     goodToKnow: [
       TIME_ZONE_GOOD_TO_KNOW,

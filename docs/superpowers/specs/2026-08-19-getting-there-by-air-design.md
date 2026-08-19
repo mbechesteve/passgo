@@ -118,6 +118,41 @@ near-identical ones. `DESIGN.md`'s entry is updated.
 | Placement | Folded into Driving as Getting there | A separate Flights screen; inline per fixture |
 | Leg key | The city served | The host country |
 
+## Amendment — the road runs both ways, and both modes cost something
+
+Two gaps surfaced after the air view shipped.
+
+**Drive was inbound only.** Every border record ended at Nairobi, so one heading
+answered two different questions: Drive told a fan how to reach Kenya while Fly told
+them how to leave it. A fan wanting to drive to Dar had nowhere to look. `BorderCrossing`
+now carries `direction`, an `id` and a `label`, the Drive view has an
+Arriving / Leaving toggle, and two outbound routes exist — Nairobi → Dar es Salaam via
+Namanga and Nairobi → Kampala via Malaba.
+
+Their documents are **not the inbound ones reversed**: these are for entering Tanzania
+and Uganda, so the insurance instrument, the currency and the roaming position all
+change sides. Written out rather than derived for that reason, and a test now asserts no
+Tanzanian route ever names a COMESA Yellow Card — Tanzania left COMESA in 2000, `d5d6797`
+fixed that once, and the outbound record was a second chance to get it wrong.
+
+**Dar es Salaam is its own origin.** "From Tanzania" started at Arusha, 273 km out. A fan
+in Dar was being shown a five-hour drive that is really two days, so there are now two
+Tanzanian inbound records — 273 km and 900 km — sharing one set of documents, because it
+is the same crossing either way. A test keeps the two directions of that road the same
+length.
+
+**Costs, on two different footings.** A drive cost is arithmetic: `fuelEstimate` is
+distance × consumption × pump price, rounded to the nearest 100 KES so it cannot read as
+a quote, and the screen prints the assumptions beside the figure — `fuelAssumptionLabel`
+is built from the same object the arithmetic uses, so the stated assumption cannot drift
+from the number it explains. Border fees, insurance and tolls are named as excluded.
+
+An air fare is not arithmetic. No June 2027 fare is published by anyone, so
+`AirLink.fareEstimate` is an indicative range in the seed, labelled as such on screen —
+the same footing as the ticket office's Cat 1 and Cat 3 prices. A test holds the
+structural invariant (no international leg priced below a domestic one) without claiming
+any particular fare is right.
+
 ## Not included
 
 - **No booking, no payment.** Same boundary as the ticket office and redemption:

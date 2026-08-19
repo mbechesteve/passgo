@@ -42,6 +42,8 @@ export const S = {
     "What you need to reach the ground, by road or by air.",
   modeDrive: "Drive",
   modeFly: "Fly",
+  driveArriving: "Arriving in Nairobi",
+  driveLeaving: "Leaving Nairobi",
   drivingYourRoute: "Your route",
   drivingDistance: "Distance",
   drivingDriveTime: "Drive time",
@@ -57,6 +59,13 @@ export const S = {
   drivingConfirmCaveat:
     "Confirm current requirements with the relevant embassy or border authority before you travel.",
   flyVia: "FLY",
+  costFuelPrefix: "Fuel",
+  costAssumesPrefix: "assumes",
+  costExcludesNote: "Border fees, insurance and tolls are not included.",
+  costFarePrefix: "Fare",
+  // The fare is the one money figure on this screen with nothing behind it: the fuel
+  // estimate is arithmetic a fan can check, and this is not.
+  costFareIndicative: "indicative — no June 2027 fare is published",
   flyTransferPrefix: "Then",
   flyTransferMiddle: "by road to",
   flyNeed: "At the airport you'll need",

@@ -201,6 +201,12 @@ export interface AirLink {
   /** The road leg from the arrival airport to the ground. */
   transferKm: number;
   transferTo: string; // "Namboole, Kampala"
+  /**
+   * An indicative one-way fare range, in KES. Not derived and not quoted: no June 2027
+   * fare is published by anyone, so this is a prototype figure on the same footing as
+   * the ticket office's Cat 1 and Cat 3 prices, and the screen labels it as such.
+   */
+  fareEstimate: { low: number; high: number };
   requirements: { label: string; detail: string }[];
   goodToKnow: { label: string; detail: string }[];
   /** ISO date this record was last checked against a real source. */
@@ -208,8 +214,16 @@ export interface AirLink {
 }
 
 export interface BorderCrossing {
-  origin: OriginCountry;
-  originLabel: string; // "From Uganda"
+  id: string;
+  /**
+   * "in" arrives in Nairobi; "out" leaves it for an away fixture. The screen carried
+   * only inbound routes at first, which made one heading answer two different
+   * questions — Drive told a fan how to reach Kenya while Fly told them how to leave it.
+   */
+  direction: "in" | "out";
+  /** The country at the far end, whichever way the journey runs. */
+  country: OriginCountry;
+  label: string; // "From Uganda", "To Dar es Salaam"
   originCity: string; // "Kampala"
   originCode: string; // "UGA"
   post: string; // "MALABA"

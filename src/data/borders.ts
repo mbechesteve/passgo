@@ -12,10 +12,41 @@ const CURRENCY_GOOD_TO_KNOW = {
   detail: "KES · pay by M-Pesa almost everywhere",
 };
 
+// Entering Kenya from Tanzania is the same crossing whether a fan sets off from Arusha
+// or from Dar es Salaam — only the distance differs — so the documents are written once.
+const TZ_TO_KENYA_REQUIREMENTS = [
+  {
+    label: "Passport or EA national ID",
+    detail: "EAC citizens can cross on ID — no visa needed",
+  },
+  {
+    // Tanzania withdrew from COMESA in 2000 (it's EAC/SADC instead), so it
+    // does not hold a COMESA Yellow Card. Keep the insurance requirement —
+    // dropping it could read as "no cover needed" — but don't name a
+    // scheme we haven't verified applies here.
+    label: "Third-party insurance",
+    detail: "Valid in Kenya — buy cover at Namanga if you do not hold regional insurance",
+  },
+  { label: "Vehicle logbook", detail: "Original, in the driver's name" },
+  { label: "Temporary import permit", detail: "Issued at Namanga" },
+];
+
+const TZ_TO_KENYA_GOOD_TO_KNOW = [
+  { label: "Drive side", detail: "Left — same as Tanzania" },
+  CURRENCY_GOOD_TO_KNOW,
+  {
+    label: "SIM and data",
+    detail: "EAC roaming is capped — or pick up a local SIM at the border",
+  },
+  { label: "Fuel", detail: "Fuel is available at Namanga" },
+];
+
 export const BORDER_CROSSINGS: BorderCrossing[] = [
   {
-    origin: "UG",
-    originLabel: "From Uganda",
+    id: "bx-in-ug",
+    direction: "in",
+    country: "UG",
+    label: "From Uganda",
     originCity: "Kampala",
     originCode: "UGA",
     post: "MALABA",
@@ -55,8 +86,10 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     asOf: "2026-08-19",
   },
   {
-    origin: "TZ",
-    originLabel: "From Tanzania",
+    id: "bx-in-tz-arusha",
+    direction: "in",
+    country: "TZ",
+    label: "From Arusha",
     originCity: "Arusha",
     originCode: "TZA",
     post: "NAMANGA",
@@ -65,36 +98,15 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     distanceKm: 273,
     driveHours: 5,
     waitMinutes: 30,
-    requirements: [
-      {
-        label: "Passport or EA national ID",
-        detail: "EAC citizens can cross on ID — no visa needed",
-      },
-      {
-        // Tanzania withdrew from COMESA in 2000 (it's EAC/SADC instead), so it
-        // does not hold a COMESA Yellow Card. Keep the insurance requirement —
-        // dropping it could read as "no cover needed" — but don't name a
-        // scheme we haven't verified applies here.
-        label: "Third-party insurance",
-        detail: "Valid in Kenya — buy cover at Namanga if you do not hold regional insurance",
-      },
-      { label: "Vehicle logbook", detail: "Original, in the driver's name" },
-      { label: "Temporary import permit", detail: "Issued at Namanga" },
-    ],
-    goodToKnow: [
-      { label: "Drive side", detail: "Left — same as Tanzania" },
-      CURRENCY_GOOD_TO_KNOW,
-      {
-        label: "SIM and data",
-        detail: "EAC roaming is capped — or pick up a local SIM at the border",
-      },
-      { label: "Fuel", detail: "Fuel is available at Namanga" },
-    ],
+    requirements: TZ_TO_KENYA_REQUIREMENTS,
+    goodToKnow: TZ_TO_KENYA_GOOD_TO_KNOW,
     asOf: "2026-08-19",
   },
   {
-    origin: "RW",
-    originLabel: "From Rwanda",
+    id: "bx-in-rw",
+    direction: "in",
+    country: "RW",
+    label: "From Rwanda",
     originCity: "Kigali",
     originCode: "RWA",
     post: "MALABA",
@@ -141,8 +153,10 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
     asOf: "2026-08-19",
   },
   {
-    origin: "ET",
-    originLabel: "From Ethiopia",
+    id: "bx-in-et",
+    direction: "in",
+    country: "ET",
+    label: "From Ethiopia",
     originCity: "Addis Ababa",
     originCode: "ETH",
     post: "MOYALE",
@@ -182,6 +196,108 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
       // advice is to buy local, unlike the EAC-origin records above.
       { label: "SIM and data", detail: "No EAC roaming benefit — buy a local SIM at Moyale" },
       { label: "Fuel", detail: "Long gaps north of Isiolo — fill whenever you can" },
+    ],
+    asOf: "2026-08-19",
+  },
+  {
+    // Arusha is 273 km out; Dar es Salaam is the far end of the same road. One record
+    // per country would have shown a fan in Dar a five-hour drive that is really two days.
+    id: "bx-in-tz-dar",
+    direction: "in",
+    country: "TZ",
+    label: "From Dar es Salaam",
+    originCity: "Dar es Salaam",
+    originCode: "TZA",
+    post: "NAMANGA",
+    destinationCity: "Nairobi",
+    destinationCode: "KEN",
+    distanceKm: 900,
+    driveHours: 16,
+    waitMinutes: 30,
+    requirements: TZ_TO_KENYA_REQUIREMENTS,
+    goodToKnow: TZ_TO_KENYA_GOOD_TO_KNOW,
+    asOf: "2026-08-19",
+  },
+  // ── Leaving Nairobi ────────────────────────────────────────────────────────
+  // The documents are not the inbound ones reversed: these are for entering Tanzania
+  // and Uganda, so the insurance instrument, the currency and the roaming position all
+  // change sides. Written out rather than derived for exactly that reason.
+  {
+    id: "bx-out-tz",
+    direction: "out",
+    country: "TZ",
+    label: "To Dar es Salaam",
+    originCity: "Nairobi",
+    originCode: "KEN",
+    post: "NAMANGA",
+    destinationCity: "Dar es Salaam",
+    destinationCode: "TZA",
+    distanceKm: 900,
+    driveHours: 16,
+    waitMinutes: 45,
+    requirements: [
+      {
+        label: "Passport or EA national ID",
+        detail: "EAC citizens can cross on ID — no visa needed",
+      },
+      {
+        // Same reasoning as the inbound Tanzanian record: Tanzania left COMESA in
+        // 2000, so a Yellow Card is not the instrument here. Keep the requirement,
+        // name no scheme we have not verified.
+        label: "Third-party insurance",
+        detail: "Valid in Tanzania — buy cover at Namanga if you do not hold regional insurance",
+      },
+      { label: "Vehicle logbook", detail: "Original, in the driver's name" },
+      { label: "Temporary import permit", detail: "Issued at Namanga" },
+      { label: "Yellow fever certificate", detail: "Checked at the health desk" },
+    ],
+    goodToKnow: [
+      { label: "Drive side", detail: "Left — same as Kenya" },
+      { label: "Currency", detail: "TZS — Kenyan shillings are not accepted" },
+      {
+        label: "SIM and data",
+        detail: "EAC roaming is capped — or pick up a local SIM at the border",
+      },
+      { label: "Fuel", detail: "Fuel is available at Namanga" },
+    ],
+    asOf: "2026-08-19",
+  },
+  {
+    id: "bx-out-ug",
+    direction: "out",
+    country: "UG",
+    label: "To Kampala",
+    originCity: "Nairobi",
+    originCode: "KEN",
+    post: "MALABA",
+    destinationCity: "Kampala",
+    destinationCode: "UGA",
+    distanceKm: 653,
+    driveHours: 11,
+    waitMinutes: 45,
+    requirements: [
+      {
+        label: "Passport or EA national ID",
+        detail: "EAC citizens can cross on ID — no visa needed",
+      },
+      {
+        // Uganda is a COMESA member, so unlike Tanzania the Yellow Card is the
+        // right instrument to name here.
+        label: "COMESA Yellow Card",
+        detail: "Third-party insurance valid across the region",
+      },
+      { label: "Vehicle logbook", detail: "Original, in the driver's name" },
+      { label: "Temporary import permit", detail: "Issued at Malaba" },
+      { label: "Yellow fever certificate", detail: "Checked at the health desk" },
+    ],
+    goodToKnow: [
+      { label: "Drive side", detail: "Left — same as Kenya" },
+      { label: "Currency", detail: "UGX — Kenyan shillings are not accepted" },
+      {
+        label: "SIM and data",
+        detail: "EAC roaming is capped — or pick up a local SIM at the border",
+      },
+      { label: "Fuel", detail: "Fuel is available at Eldoret" },
     ],
     asOf: "2026-08-19",
   },

@@ -18,17 +18,12 @@ import {
   fetchMatches,
   fetchParking,
 } from "@/data/repository";
-import { dateLabel } from "@/utils/format";
+import { dateLabel, kes } from "@/utils/format";
 import { awayCitySuffix, fixturesInCity, linkById } from "@/utils/air";
 import { kickoffLabel, matchLabel } from "@/utils/match";
 import { walkRangeLabel } from "@/utils/parking";
-import type {
-  AirLink,
-  BorderCrossing,
-  Match,
-  OriginCountry,
-  ParkingZone,
-} from "@/types";
+import { fuelAssumptionLabel, fuelEstimate } from "@/utils/cost";
+import type { AirLink, BorderCrossing, Match, ParkingZone } from "@/types";
 
 type Mode = "drive" | "fly";
 
@@ -51,7 +46,10 @@ export function GettingThereScreen() {
   const [zones, setZones] = useState<ParkingZone[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
   const [mode, setMode] = useState<Mode>("drive");
-  const [origin, setOrigin] = useState<OriginCountry>("UG");
+  // Which way the road runs, then which road. Kept apart because the same country can
+  // appear in both directions and a fan is asking a different question in each.
+  const [heading, setHeading] = useState<"in" | "out">("in");
+  const [crossingId, setCrossingId] = useState("bx-in-ug");
   // The leg, by id — a fan picks a city to travel to, and two of them are inside Kenya.
   const [legId, setLegId] = useState("air-eldoret");
 
@@ -63,7 +61,12 @@ export function GettingThereScreen() {
   }, []);
 
   const at = now();
-  const crossing = crossings.find((c) => c.origin === origin);
+  const sameHeading = crossings.filter((c) => c.direction === heading);
+  // A selection made in one direction does not survive a switch to the other, so fall
+  // back to the first route of the new heading rather than showing nothing.
+  const picked = crossings.find((c) => c.id === crossingId);
+  const crossing =
+    picked && picked.direction === heading ? picked : sameHeading[0];
   const link = linkById(links, legId);
   const walk = walkRangeLabel(zones);
 
@@ -115,12 +118,29 @@ export function GettingThereScreen() {
         {mode === "drive" ? (
           <>
             <View className="mt-4 flex-row flex-wrap">
-              {crossings.map((c) => (
-                <View key={c.origin} className="mb-2">
+              <View className="mb-2">
+                <Pill
+                  label={S.driveArriving}
+                  active={heading === "in"}
+                  onPress={() => setHeading("in")}
+                />
+              </View>
+              <View className="mb-2">
+                <Pill
+                  label={S.driveLeaving}
+                  active={heading === "out"}
+                  onPress={() => setHeading("out")}
+                />
+              </View>
+            </View>
+
+            <View className="flex-row flex-wrap">
+              {sameHeading.map((c) => (
+                <View key={c.id} className="mb-2">
                   <Pill
-                    label={c.originLabel}
-                    active={c.origin === origin}
-                    onPress={() => setOrigin(c.origin)}
+                    label={c.label}
+                    active={c.id === crossing?.id}
+                    onPress={() => setCrossingId(c.id)}
                   />
                 </View>
               ))}
@@ -154,6 +174,15 @@ export function GettingThereScreen() {
                         },
                       ]}
                     />
+                  </View>
+
+                  <View className="mt-4 border-t border-hairline pt-3">
+                    <Text className="font-mono-medium text-[15px] text-ink">
+                      {`${S.costFuelPrefix} ~${kes(fuelEstimate(crossing.distanceKm))}`}
+                    </Text>
+                    <Text className="mt-1 font-mono text-[11px] leading-4 text-mute">
+                      {`${S.costAssumesPrefix} ${fuelAssumptionLabel()}. ${S.costExcludesNote}`}
+                    </Text>
                   </View>
                 </View>
 
@@ -220,6 +249,12 @@ export function GettingThereScreen() {
                   <View className="mt-4 border-t border-hairline pt-3">
                     <Text className="text-[13px] leading-5 text-body">
                       {`${S.flyTransferPrefix} ~${link.transferKm} km ${S.flyTransferMiddle} ${link.transferTo}.`}
+                    </Text>
+                    <Text className="mt-3 font-mono-medium text-[15px] text-ink">
+                      {`${S.costFarePrefix} ~${kes(link.fareEstimate.low)}–${link.fareEstimate.high.toLocaleString("en-US")}`}
+                    </Text>
+                    <Text className="mt-1 font-mono text-[11px] leading-4 text-mute">
+                      {S.costFareIndicative}
                     </Text>
                   </View>
                 </View>
