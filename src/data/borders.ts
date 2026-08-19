@@ -1,13 +1,12 @@
 import type { BorderCrossing } from "@/types";
 
-// "Good to know" facts are kept per-record, not shared, except for currency —
-// the one fact genuinely true regardless of origin. Drive side and SIM/roaming
-// depend on the origin's own traffic rule and EAC membership, so an earlier
-// version that spread a shared array of them into every record produced two
-// factual errors (Rwanda/Ethiopia told they drive on the left when they drive
-// on the right at home; Ethiopia told about EAC roaming despite not being an
-// EAC member). Keep this constant to exactly the entries that hold for all
-// four origins — if that ever drops to one, inline it and delete the constant.
+// Origin-dependent "good to know" facts (drive side, SIM and roaming) are
+// written per-record, not shared: an earlier version shared them and produced
+// two factual errors — Rwanda and Ethiopia were told they drive on the left
+// when they drive on the right at home, and Ethiopia was told about EAC
+// roaming despite not being an EAC member. Currency is shared here because,
+// unlike those, it genuinely is the same for every origin — everyone pays
+// KES in Kenya.
 const CURRENCY_GOOD_TO_KNOW = {
   label: "Currency",
   detail: "KES · pay by M-Pesa almost everywhere",
