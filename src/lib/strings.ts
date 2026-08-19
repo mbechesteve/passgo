@@ -67,6 +67,17 @@ export const S = {
     "Your Pass is created with your ticket, and works at the border, at the turnstile, on transport and at every partner business.",
   issuanceCreateButton: "Create my Pass",
 
+  // ── LiveScreen ──────────────────────────────────────────────────────────
+  liveTitle: "Live",
+  liveBadge: "LIVE",
+  liveHalfTime: "HALF TIME",
+  liveAlsoLive: "Also live",
+  livePossession: "Possession",
+  liveShots: "Shots",
+  liveCorners: "Corners",
+  liveNothingOn: "Nothing is kicking off right now.",
+  liveNextUp: "Next up",
+
   // ── PartnerScreen ───────────────────────────────────────────────────────
   partnerNotListed: "That partner is no longer listed.",
   partnerDiscountHeading: "Your discount",

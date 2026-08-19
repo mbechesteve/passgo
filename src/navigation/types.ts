@@ -3,6 +3,7 @@ import type { PartnerCategory } from "@/types";
 export type TabParamList = {
   Home: undefined;
   Explore: undefined;
+  Live: undefined;
   Services: undefined;
   Pass: undefined;
 };

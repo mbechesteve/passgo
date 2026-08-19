@@ -5,6 +5,7 @@ import { Icon, type IconName } from "@/components/Icon";
 import { colors } from "@/lib/theme";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ExploreScreen } from "@/screens/ExploreScreen";
+import { LiveScreen } from "@/screens/LiveScreen";
 import { ServicesScreen } from "@/screens/ServicesScreen";
 import { PassScreen } from "@/screens/PassScreen";
 import type { TabParamList } from "./types";
@@ -14,6 +15,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 const ICONS: Record<keyof TabParamList, IconName> = {
   Home: "home",
   Explore: "compass",
+  Live: "play-circle",
   Services: "grid",
   Pass: "credit-card",
 };
@@ -42,6 +44,7 @@ export function TabNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Explore" component={ExploreScreen} />
+      <Tab.Screen name="Live" component={LiveScreen} />
       <Tab.Screen name="Services" component={ServicesScreen} />
       <Tab.Screen name="Pass" component={PassScreen} />
     </Tab.Navigator>
