@@ -159,10 +159,14 @@ export const S = {
   servicesStewards: "Stewards answer in under 2 minutes on matchday.",
 
   // ── WalletScreen ────────────────────────────────────────────────────────
+  walletTitle: "Wallet",
   walletStorageError:
     "Your record could not be saved to this device. Recent lines may be missing.",
   walletYouveSaved: "You've saved",
   walletYouveSpent: "You've spent",
+  walletSavedWithApp: "Saved with the app",
+  walletThisWeek: "THIS WK",
+  walletOffersThisTournament: "offers this tournament",
   walletEmptyState:
     "Nothing yet. Every time you use your Pass, one line is written here — and nowhere else.",
   walletClosingNote:
