@@ -39,12 +39,18 @@ export const S = {
   drivingGoodToKnow: "Good to know",
 
   // ── ExploreScreen ───────────────────────────────────────────────────────
-  exploreSegmentEvents: "Events",
-  exploreSegmentPlaces: "Places",
-  exploreSegmentFanZones: "Fan Zones",
+  exploreTitle: "Explore",
+  explorePlaceholder: "Search fixtures, venues, offers",
+  exploreFilterAll: "All",
+  exploreFilterFixtures: "Fixtures",
+  exploreFilterVenues: "Venues",
+  exploreFilterOffers: "Offers",
+  exploreThisWeek: "This week",
+  exploreEventsNearYou: "Events near you",
+  exploreEatNearby: "Eat nearby",
+  exploreThingsToSee: "Things to see",
+  exploreNoResults: "Nothing matches that yet.",
   exploreFreeEntry: "Free entry with your Pass",
-  exploreComingUp: "Coming up",
-  exploreNearYou: "Near you",
 
   // ── HomeScreen ──────────────────────────────────────────────────────────
   homeToday: "Today",
