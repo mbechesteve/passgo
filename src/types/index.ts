@@ -111,6 +111,23 @@ export interface Match {
   coords: { lat: number; lng: number };
 }
 
+/** The seat, distinct from the credential. One per match, tied to a Pass. */
+export interface MatchTicket {
+  id: string;
+  passId: string;
+  matchId: string;
+  category: 1 | 2 | 3;
+  gate: string;
+  section: string;
+  seat: string;
+  /**
+   * What the ticket itself is worth. This is an entitlement's stated value, NOT
+   * something that happened, so it is never written to the record and never added
+   * into `YOU'VE SAVED`.
+   */
+  savings: { label: string; was: number; now: number | "free" }[];
+}
+
 export type MatchPhase = "scheduled" | "live" | "half-time" | "full-time";
 
 /** Seeded score and stats. The minute is never stored — it derives from the clock. */

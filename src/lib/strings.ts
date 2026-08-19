@@ -108,6 +108,14 @@ export const S = {
   passUnlocksHeading: "What your Pass unlocks",
   passWalletTitle: "My Wallet",
   passWalletSubtitle: "Tickets, passes, purchases",
+  passActive: "ACTIVE",
+  passMatchPass: "Match pass",
+  passCategoryPrefix: "CAT",
+  passGate: "Gate",
+  passSection: "Section",
+  passSeat: "Seat",
+  passTicketSaves: "What this ticket saves you",
+  passCodeStandIn: "Show this at the gate. A steward can also read your Pass code.",
 
   // ── SafetyScreen ────────────────────────────────────────────────────────
   safetyTitle: "Safety",
