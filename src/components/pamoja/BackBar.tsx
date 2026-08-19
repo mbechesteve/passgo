@@ -12,6 +12,10 @@ import { S } from "@/lib/strings";
  *
  * It hides itself at the root of a stack, where there is nothing to go back to, so
  * it can be dropped into a screen without the screen knowing how it was reached.
+ *
+ * Every screen mounts it as a direct child of `Screen`, outside its own padded
+ * column, so it carries its own `ml-5` to land on the same gutter as the content.
+ * Without it the circle sits at x=0 and the chevron is clipped by the screen edge.
  */
 export function BackBar() {
   const navigation = useNavigation();
@@ -21,7 +25,7 @@ export function BackBar() {
       onPress={() => navigation.goBack()}
       accessibilityRole="button"
       accessibilityLabel={S.back}
-      className="mt-4 h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas active:opacity-70"
+      className="ml-5 mt-4 h-9 w-9 items-center justify-center rounded-full border border-hairline bg-canvas active:opacity-70"
     >
       <Icon name="chevron-left" size={18} color={colors.ink} />
     </Pressable>

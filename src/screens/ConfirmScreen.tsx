@@ -60,6 +60,7 @@ export function ConfirmScreen() {
   if (written) {
     return (
       <Screen>
+        <BackBar />
         <View className="flex-1 px-5 pt-8">
           <Eyebrow>{S.confirmStepWritten}</Eyebrow>
           <View className="mt-3">
@@ -102,6 +103,7 @@ export function ConfirmScreen() {
 
   return (
     <Screen>
+      <BackBar />
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <Eyebrow className="mt-8">{S.confirmStepConfirm}</Eyebrow>
         <Text className="mt-3 font-display text-[26px] tracking-[-0.5px] text-ink">

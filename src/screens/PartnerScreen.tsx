@@ -36,6 +36,7 @@ export function PartnerScreen() {
 
   return (
     <Screen>
+      <BackBar />
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
         <Eyebrow className="mt-4">{CATEGORY_LABEL[partner.category]}</Eyebrow>
         <Text className="mt-1 font-display text-[28px] tracking-[-0.5px] text-ink">

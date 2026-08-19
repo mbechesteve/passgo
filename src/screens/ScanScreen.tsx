@@ -56,6 +56,7 @@ export function ScanScreen() {
 
   return (
     <Screen>
+      <BackBar />
       <View className="flex-1 px-5 pt-8">
         <Eyebrow>{S.scanStep}</Eyebrow>
         <Text className="mt-3 font-display text-[26px] tracking-[-0.5px] text-ink">
