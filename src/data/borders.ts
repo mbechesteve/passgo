@@ -88,7 +88,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
         label: "SIM and data",
         detail: "EAC roaming is capped — or pick up a local SIM at the border",
       },
-      { label: "Fuel", detail: "Fill at Namanga — cheaper on the Kenyan side" },
+      { label: "Fuel", detail: "Fuel is available at Namanga" },
     ],
     asOf: "2026-08-19",
   },
