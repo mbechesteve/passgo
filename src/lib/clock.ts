@@ -28,3 +28,19 @@ export function isRealTime(): boolean {
 export function now(): Date {
   return realTime ? new Date() : new Date(DEMO_NOW.getTime());
 }
+
+// Kenya, Tanzania and Uganda all keep UTC+3 year-round with no daylight saving,
+// so one fixed offset renders every event correctly in all three host countries.
+// A fixed offset also survives engines shipped without full ICU data, which rules
+// out Intl time zones on React Native.
+export const EAT_OFFSET_MS = 3 * 60 * 60 * 1000;
+
+/**
+ * The wall-clock day and time of an instant, as East Africa reads them.
+ * `PassEvent.at` is stored as a UTC instant, so the record must convert before it
+ * prints — otherwise a use at 12:55 EAT reads 09:55.
+ */
+export function eatParts(iso: string): { day: string; time: string } {
+  const shifted = new Date(new Date(iso).getTime() + EAT_OFFSET_MS).toISOString();
+  return { day: shifted.slice(0, 10), time: shifted.slice(11, 16) };
+}

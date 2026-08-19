@@ -1,3 +1,4 @@
+import { eatParts } from "@/lib/clock";
 import type { EventKind, PassEvent } from "@/types";
 import { kes } from "@/utils/format";
 
@@ -23,15 +24,14 @@ export function hasBorderEvent(events: PassEvent[]): boolean {
   return events.some((e) => e.kind === "border");
 }
 
-/** "12:55" in the event's own offset, as written. */
+/** "12:55" — the wall-clock time in EAT, the zone all three host countries keep. */
 function timeOf(iso: string): string {
-  const m = iso.match(/T(\d{2}):(\d{2})/);
-  return m ? `${m[1]}:${m[2]}` : "";
+  return eatParts(iso).time;
 }
 
-/** "2027-06-23" in the event's own offset. */
+/** "2027-06-23" — the EAT day, so a use after midnight is filed as the fan lived it. */
 function dayOf(iso: string): string {
-  return iso.slice(0, 10);
+  return eatParts(iso).day;
 }
 
 /** One line of the record, in the proposal's own format. */

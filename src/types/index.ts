@@ -59,7 +59,7 @@ export interface PassEvent {
   id: string;
   passId: string;
   kind: EventKind;
-  at: string; // ISO
+  at: string; // ISO instant in UTC — render through `eatParts` in @/lib/clock
   place: Place;
   channel: Channel;
   partnerId?: string;
