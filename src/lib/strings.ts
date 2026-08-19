@@ -121,6 +121,7 @@ export const S = {
   passSection: "Section",
   passSeat: "Seat",
   passTicketSaves: "What this ticket saves you",
+  passTicketTotal: "Total",
   passCodeStandIn: "Show this at the gate. A steward can also read your Pass code.",
 
   // ── SafetyScreen ────────────────────────────────────────────────────────
@@ -172,6 +173,7 @@ export const S = {
   walletYouveSpent: "You've spent",
   walletSavedWithApp: "Saved with the app",
   walletThisWeek: "THIS WK",
+  walletOfferThisTournament: "offer this tournament",
   walletOffersThisTournament: "offers this tournament",
   walletEmptyState:
     "Nothing yet. Every time you use your Pass, one line is written here — and nowhere else.",

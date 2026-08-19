@@ -49,3 +49,28 @@ without touching a screen.
 ## Shape
 
 Cards use a `10px` border radius (`rounded-card`).
+
+## Components
+
+All in `src/components/pamoja/`. One line each, so the next screen reuses
+rather than reinvents.
+
+| Component | For |
+| --- | --- |
+| `Eyebrow` | The uppercase mono section label — "SECTION 03 / 10", "OFFERS NEAR YOU". |
+| `Figure` | A headline number with its `Eyebrow` label above it. |
+| `OfferRow` | One partner in a list — initial tile, name, optional subline, discount. |
+| `PassCard` | The credential itself, rendered from local state only, no network path. |
+| `RecordLine` | One line of the append-only record, set in mono. |
+| `CategoryTile` | A Services category tile, showing a derived (never stored) count. |
+| `Crest` | The three-letter team tile either side of a fixture. |
+| `Chip` | A small uppercase mono pill — "IN 3 DAYS", "+450 THIS WEEK", "CAT 2". |
+| `Avatar` | The holder's initials in a circle, top-right of Home. |
+| `StatTrio` | Three figures side by side — possession/shots/corners, or distance/time/wait. |
+| `Sparkline` | Daily savings as bars, oldest left, today's bar in accent. |
+| `Donut` | The savings-rate ring on the Wallet. |
+| `SearchField` | The search box atop Services and category lists. |
+| `MoneyBox` | The Home savings panel — the record's own total, nothing else moves it. |
+| `TileGrid` | The two-column matchday services band. |
+| `RouteStrip` | A border crossing's route — origin city/code, the post, destination city/code. |
+| `TicketCard` | The match ticket — crest header, gate/section/seat, and the non-scannable code stand-in. |

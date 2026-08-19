@@ -23,10 +23,15 @@ export function WalletScreen() {
   const events = useRecordStore((s) => s.events);
   const storageError = useRecordStore((s) => s.storageError);
   const groups = groupByDay(events);
+  const offers = offersUsed(events);
 
   return (
     <Screen>
       <ScrollView className="flex-1 px-5" contentContainerClassName="pb-10">
+        <Text className="mt-4 font-display text-[26px] tracking-[-0.5px] text-ink">
+          {S.walletTitle}
+        </Text>
+
         {storageError ? (
           <View className="mt-4 rounded-card border border-hairline bg-panel px-4 py-3">
             <Text className="text-[13px] leading-5 text-ink">
@@ -52,7 +57,11 @@ export function WalletScreen() {
                 {`${S.walletSavedWithApp}: ${kes(totalSaved(events))}`}
               </Text>
               <Text className="mt-0.5 text-[13px] text-body">
-                {`${offersUsed(events)} ${S.walletOffersThisTournament}`}
+                {`${offers} ${
+                  offers === 1
+                    ? S.walletOfferThisTournament
+                    : S.walletOffersThisTournament
+                }`}
               </Text>
             </View>
             {weekSavings(events, now()) > 0 ? (

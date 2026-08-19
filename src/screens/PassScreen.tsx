@@ -88,7 +88,7 @@ export function PassScreen() {
               ))}
               <View className="flex-row items-center justify-between py-3">
                 <Text className="font-medium text-[14px] text-ink">
-                  {S.passTicketSaves}
+                  {S.passTicketTotal}
                 </Text>
                 <Text className="font-mono-medium text-[15px] text-accent">
                   {kes(ticketSaved(ticket))}
