@@ -137,13 +137,28 @@
 /* The three questions the app asks, answered here, issuing the same Pass the app
    would issue — issuePass() is the app's, so the serial is the app's (KE-PM-8842
    for the first on a device, per Figure 1). The form still navigates by GET; this
-   only makes sure there is something to navigate to. */
+   only makes sure there is something to navigate to.
+
+   `submitted` guards a double-click the way pages/partners.js's own `submitted`
+   flag does: a plain closure var, read and set synchronously within the submit
+   handler, so a second click arriving before the first's ready() promise settles
+   sees the first click's write immediately rather than racing a stale value.
+   Without it two rapid clicks would call issue() twice and the device's first
+   Pass would come out KE-PM-8843, not the KE-PM-8842 Figure 1 requires. */
+var submitted = false;
 document.querySelector("form").addEventListener("submit", function (e) {
+  // No PamojaState means app-data.js/state.js did not load — a 404 in production,
+  // say. Degrade to the plain GET rather than throw and trap the fan on the page.
+  if (!window.PamojaState) return;
   var data = new FormData(e.target);
   var holderName = String(data.get("name") || "").trim();
   var issuedIn = String(data.get("country") || "KE");
   if (!holderName) return;               // let the browser's own validation speak
   e.preventDefault();
+  if (submitted) return;                 // a double-click must issue once, not twice
+  submitted = true;
+  var button = e.target.querySelector("button[type=submit]");
+  if (button) button.disabled = true;
   window.PamojaState.ready().then(function () {
     window.PamojaState.issue({ holderName: holderName, issuedIn: issuedIn });
     window.location.href = "dashboard.html";

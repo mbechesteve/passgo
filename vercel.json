@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "expo export --platform web --output-dir dist/app && node scripts/copy-portal.mjs && node scripts/inject-pwa.mjs",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/app", "destination": "/app/index.html" },

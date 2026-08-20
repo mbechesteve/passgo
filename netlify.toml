@@ -1,5 +1,5 @@
 [build]
-  command = "expo export --platform web --output-dir dist/app && node scripts/copy-portal.mjs && node scripts/inject-pwa.mjs"
+  command = "npm run build"
   publish = "dist"
 
 # SPA fallback, scoped to the app. The portal owns the domain root and is made of

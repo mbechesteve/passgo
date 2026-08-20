@@ -2,9 +2,13 @@
 //
 // The portal is the domain root and the app lives under /app, so the build is
 // two independent trees stacked into one directory: `expo export` writes
-// dist/app, and this copies portal/ on top of dist/ itself. Nothing is shared
-// between them — the portal imports nothing from src/ and has no build step of
-// its own, which is why a copy is the whole of it.
+// dist/app, and this copies portal/ on top of dist/ itself. The portal's own
+// build step (build:portal-bundle, run earlier in npm run build) already wrote
+// portal/app-data.js by the time this runs, so it is just another file in the
+// tree being copied — the markup and CSS are the portal's own, but the figures
+// and logic in that bundle are imported from src/ (see portal/README.md, "The
+// boundary with the app"). This script itself stays a plain copy; nothing here
+// needs to know that distinction.
 //
 // Deliberately not a wipe-and-copy: dist/app already exists by the time this
 // runs, and removing dist/ here would delete the export we just made.
