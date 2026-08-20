@@ -9,11 +9,7 @@
   "use strict";
   var P = window.Pamoja, S = window.PamojaState, C = window.PamojaChrome;
 
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
+  var esc = C.esc;
 
   function render() {
     var now = S.now();

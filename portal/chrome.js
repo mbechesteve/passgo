@@ -42,5 +42,14 @@
     };
   }
 
-  global.PamojaChrome = { mount: mount, dialog: dialog, TABS: TABS };
+  /* Every page interpolates store data — a holder's name, a merchant's, a fixture's —
+     into innerHTML. `esc` lives here rather than once per page because five copies of
+     the same four replacements is five chances for one page to drift from the rest. */
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  global.PamojaChrome = { mount: mount, dialog: dialog, esc: esc, TABS: TABS };
 })(window);

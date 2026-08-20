@@ -13,17 +13,25 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
 <link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="app.css">
+<script>document.documentElement.setAttribute("data-booting", "");</script>
 </head>
 <body>
 
-<!--
-  The inside of the app, on the web.
-
-  Every figure below is the app's own, not written for this page: the holder, the serial,
-  the validity, the seat, the record line and its two totals, and the partner counts are
-  the ones src/utils/spec-figures.test.ts guards as proposal specifications. If the app's
-  figures change, this page is wrong and the test is what will say so.
--->
+<div class="boot" id="boot" role="status" aria-live="polite">
+  <div class="boot-mark">
+    <!-- peakGlyphPath(160, 104) from src/utils/peaks.ts — Nelion, the Gate of the
+         Mists, then Batian, the highest point, which is why nothing sits above it. -->
+    <svg width="160" height="104" viewBox="0 0 160 104" fill="none" aria-hidden="true">
+      <path class="boot-track" pathLength="100" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" d="M 0,104 L 67.2,11.96 L 78.4,35.98 L 89.6,0 L 160,104"/>
+      <path class="boot-ridge" pathLength="100" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" d="M 0,104 L 67.2,11.96 L 78.4,35.98 L 89.6,0 L 160,104"/>
+    </svg>
+    <p class="boot-word">Pamoja</p>
+    <p class="boot-sub mono">Loading the fan pass</p>
+  </div>
+</div>
 
 <div class="utility mono m11">
   <span style="color:var(--muted)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
@@ -36,11 +44,11 @@
     <span class="brand-sub mono">The official fan pass</span>
   </a>
   <div class="nav-links">
-    <a href="dashboard.html">My Pass</a>
-    <a href="index.html#matches">Matches &amp; Tickets</a>
-    <a href="index.html#events">Events</a>
-    <a href="index.html#explore">Explore</a>
-    <a href="index.html#partners">Partners</a>
+    <a href="dashboard.html">Home</a>
+    <a href="matches.html">Matches</a>
+    <a href="live.html">Live</a>
+    <a href="partners.html">Partners</a>
+    <a href="pass.html">Pass</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-ghost-dark desk-only" href="index.html">Log out</a>
@@ -48,134 +56,53 @@
   </div>
 </nav>
 
-<main class="dash">
+<main class="appmain" id="page">
   <div class="dash-head">
     <div>
-      <p class="eyebrow mono" style="color:var(--slate);font-family:'JetBrains Mono',monospace;text-transform:uppercase;font-size:11px;letter-spacing:0.12em">Wed 23 Jun 2027 · 12:55 EAT</p>
-      <h1 style="margin-top:10px">Karibu, Amina.</h1>
+      <p class="eyebrow mono" id="clock"></p>
+      <h1 style="margin-top:10px" id="greeting"></h1>
     </div>
-    <span class="pill-tag">Pass active · 24 days left</span>
+    <span class="pill-tag" id="validity"></span>
   </div>
 
-  <div class="grid">
+  <section class="panel" aria-labelledby="next-h">
+    <h2 id="next-h">Your next match</h2>
+    <div id="next-match"></div>
+    <button class="btn btn-ghost" id="open-travel">Getting there</button>
+    <button class="btn btn-ghost" id="open-parking">Parking</button>
+  </section>
 
-    <!-- The credential -->
-    <section class="panel dark c5">
-      <p class="eyebrow">The credential</p>
-      <p class="figure" style="font-size:30px;letter-spacing:0.04em">KE-PM-8842</p>
-      <p class="muted" style="margin-top:10px">Amina Nakato · issued in Kenya</p>
-      <p class="mono" style="margin-top:18px;font-size:10px;letter-spacing:0.12em;color:var(--cyan)">Valid in all three countries</p>
-      <div style="margin-top:22px">
-        <div class="rowline"><span>Match access</span><span class="mono-val">One tap at the turnstile</span></div>
-        <div class="rowline"><span>Reduced transport fares</span><span class="mono-val">Kenya</span></div>
-        <div class="rowline"><span>Partner discounts</span><span class="mono-val">2,189 businesses</span></div>
-      </div>
-      <p class="muted" style="margin-top:20px;font-size:13px">Rendered from your own device. No
-        network call is needed to make it work, and no dashboard anywhere assembles this view
-        of you but this one.</p>
-    </section>
+  <section class="panel" aria-labelledby="net-h">
+    <h2 id="net-h">The network</h2>
+    <ul class="rowline" id="categories"></ul>
+    <p class="muted" id="network-total"></p>
+  </section>
 
-    <!-- Next match and the seat -->
-    <section class="panel c7">
-      <p class="eyebrow">Your next match</p>
-      <h2 style="font-size:30px;letter-spacing:-0.03em">Kenya v Mali</h2>
-      <p class="muted" style="margin-top:8px">Sat 26 Jun · Kick-off 16:00 EAT · Gates open 14:00 ·
-        Kasarani, Nairobi</p>
-      <div style="margin-top:20px">
-        <div class="rowline"><span>Your seat</span><span class="mono-val">Cat 2 · Gate D · Section 214 · Seat 17</span></div>
-        <div class="rowline"><span>Ticket · Cat 2</span><span class="mono-val">KES 2,000 → KES 1,500</span></div>
-        <div class="rowline"><span>Shuttle both ways</span><span class="mono-val">KES 600 → free</span></div>
-      </div>
-      <p class="muted" style="margin-top:18px;font-size:13px">What the ticket is worth is an
-        entitlement's stated value, so it is never added to what you have saved.</p>
-      <div style="display:flex;gap:12px;margin-top:22px;flex-wrap:wrap">
-        <a class="btn btn-primary" href="index.html#matches">Getting there</a>
-        <a class="btn btn-tertiary" href="index.html#matches">All 11 fixtures</a>
-      </div>
-    </section>
-
-    <!-- The record -->
-    <section class="panel c8">
-      <p class="eyebrow">Your record</p>
-      <div style="display:flex;gap:48px;flex-wrap:wrap">
-        <div>
-          <p class="figure">KES 150</p>
-          <p class="muted" style="margin-top:6px">You've saved</p>
-        </div>
-        <div>
-          <p class="figure" style="color:var(--slate)">KES 850</p>
-          <p class="muted" style="margin-top:6px">You've spent</p>
-        </div>
-      </div>
-      <div style="margin-top:24px">
-        <div class="rowline">
-          <span>Mama Oliech · food and drink</span>
-          <span class="mono-val">KES 850 · Kasarani ward · 12:55</span>
-        </div>
-      </div>
-      <p class="muted" style="margin-top:18px;font-size:13px">Append-only, and held on your device.
-        You paid the merchant directly — Pamoja only wrote the line.</p>
-    </section>
-
-    <!-- Partner network -->
-    <section class="panel c4">
-      <p class="eyebrow">Partner discounts</p>
-      <p class="figure">2,189</p>
-      <p class="muted" style="margin-top:6px">businesses, three countries</p>
-      <div style="margin-top:20px">
-        <div class="rowline"><span>Eat</span><span class="mono-val">1,340</span></div>
-        <div class="rowline"><span>Shop</span><span class="mono-val">460</span></div>
-        <div class="rowline"><span>Stay</span><span class="mono-val">210</span></div>
-        <div class="rowline"><span>Do</span><span class="mono-val">95</span></div>
-        <div class="rowline"><span>Move</span><span class="mono-val">84</span></div>
-      </div>
-    </section>
-
-    <!-- Into the app itself -->
-    <section class="panel dark c12">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap">
-        <div>
-          <p class="eyebrow">The app</p>
-          <h2 style="font-size:26px;letter-spacing:-0.03em;color:var(--canvas)">Open the Pass on your phone.</h2>
-          <p class="muted" style="margin-top:10px;max-width:52ch">This dashboard is the web view.
-            The app is where the Pass is actually held — the schedule, the ticket office, travel
-            to every venue, and the record, all on the device.</p>
-        </div>
-        <a class="btn btn-on-dark" href="http://localhost:8931/">Open the app</a>
-      </div>
-    </section>
-
-  </div>
-
-  <p class="prototype" style="border-color:var(--hairline)">Prototype. Nothing here is
-    authenticated — the login form opens this page whatever you type. The holder, serial,
-    validity, seat, record line and partner counts are the app's own demo figures, with the
-    clock fixed to Wed 23 June 2027, 12:55 EAT. Pamoja holds no funds and stores no payment
-    details, so there is no balance on this page and nothing to top up.</p>
+  <section class="panel" aria-labelledby="rec-h">
+    <h2 id="rec-h">Recent</h2>
+    <ul class="rowline" id="record"></ul>
+  </section>
 </main>
 
-<footer>
-  <div class="foot-row">
-    <div>
-      <p class="foot-brand">Pamoja</p>
-      <p class="foot-copy">The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never
-        holds funds — every payment is a direct hand-off.</p>
-    </div>
-    <div class="foot-cols">
-      <ul>
-        <li><b>The Pass</b></li>
-        <li><a href="dashboard.html">My Pass</a></li>
-        <li><a href="index.html#partners">Partners</a></li>
-      </ul>
-      <ul>
-        <li><b>Matchday</b></li>
-        <li><a href="index.html#matches">Schedule</a></li>
-        <li><a href="index.html#events">Fan events</a></li>
-        <li><a href="dashboard.html">Security · *723#</a></li>
-      </ul>
-    </div>
-  </div>
-</footer>
+<nav class="tabbar"></nav>
+
+<dialog class="sheet" id="travel">
+  <div class="sheet-head"><h2 style="margin:0;font-size:20px">Getting there</h2>
+    <button class="sheet-close" aria-label="Close">&times;</button></div>
+  <div class="sheet-body"><ul class="rowline" id="travel-list"></ul></div>
+</dialog>
+
+<dialog class="sheet" id="parking">
+  <div class="sheet-head"><h2 style="margin:0;font-size:20px">Parking</h2>
+    <button class="sheet-close" aria-label="Close">&times;</button></div>
+  <div class="sheet-body"><ul class="rowline" id="parking-list"></ul></div>
+</dialog>
+
+<script src="app-data.js"></script>
+<script src="state.js"></script>
+<script src="chrome.js"></script>
+<script src="pages/home.js"></script>
+<script src="boot.js"></script>
 
 </body>
 </html>
