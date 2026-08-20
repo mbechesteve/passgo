@@ -10,3 +10,4 @@ web-build/
 ios/
 android/
 .superpowers/
+portal/app-data.js
