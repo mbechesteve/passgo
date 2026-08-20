@@ -8,7 +8,9 @@
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="favicon-512.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="favicon-180.png">
-<meta name="theme-color" content="#0a0a0a">
+<!-- The browser paints its chrome with this before a stylesheet exists, so it cannot be
+     var(--primary). It is --primary's value, and it moves when --primary moves. -->
+<meta name="theme-color" content="#23276b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,21 +18,21 @@
 <script>document.documentElement.setAttribute("data-booting", "");</script>
 <style>
 /*
-  A port of the "Pamoja Portal" board, transcribed from its own markup rather than
-  approximated from a screenshot: every value, transition and interaction below is the one
-  written there.
+  The page-specific half of the Pamoja Landing v6 board — the hero, the five doors, the
+  fixtures, the events rail, the explore grid, the partner panel and the closing band.
+  Everything shared with login, sign-up and the dashboard lives in portal.css: the tokens,
+  the type scale, the buttons, the utility bar, the nav and the footer.
 
-  Two deliberate departures, both recorded in portal/README.md:
+  Colour here is always a token. There is no hex literal in this file except the
+  theme-color meta, which the browser reads before any stylesheet exists.
 
-  1. The board is a fixed 1200px canvas. This is a real page, so the desktop rendering is
-     ported 1:1 and media queries carry everything narrower. No desktop value was changed
-     to make that work.
-  2. Figures are the product's, not the board's — 7 venues not 6, the five partner
-     categories spec-figures.test.ts guards, and the seeded fixtures. That was an explicit
-     earlier decision: the board's numbers contradict the proposal the app is judged on.
-
-  The palette is the board's and is NOT the app's (deep #04222b + accent #0e6ba8, per
-  Uratibu). Nothing here is imported by src/.
+  Departures from the board are recorded in
+  .superpowers/sdd/2026-08-20-portal-v6-redesign/task-4-report.md and, where the reason is
+  local to one rule, in the comment above that rule. The two standing ones from the
+  earlier port still hold: the board is a fixed canvas and this is a real page, so the
+  desktop rendering is the board's and media queries carry everything narrower; and the
+  figures are the product's, not the board's — 7 venues, the five partner categories
+  spec-figures.test.ts guards, and the seeded fixtures.
 */
 /* ── Hero ──────────────────────────────────────────────────── */
 /* v6 turns the hero the right way up. The old one was white type over a darkened
@@ -348,17 +350,9 @@
   .d-open { position: static; opacity: 1 !important; padding: 90px 24px 8px; }
 }
 @media (max-width: 860px) {
-  .nav { flex-wrap: wrap; gap: 12px; }
-  .nav-links { display: none; order: 3; flex-basis: 100%; flex-direction: column; gap: 0;
-               margin: 6px 0 4px; border-top: 1px solid var(--primary-soft); }
-  .nav-links a { padding: 14px 2px; border-bottom: 1px solid var(--primary-soft); }
-  .menu-toggle:checked ~ .nav-links { display: flex; }
-  .burger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
-            border: 1px solid rgba(255,255,255,0.55); border-radius: 999px; color: var(--canvas);
-            font-size: 18px; cursor: pointer; letter-spacing: 2px; }
-  .mob-only { display: inline-flex; }
-  .desk-only { display: none; }
-  .nav-cta { margin-left: auto; }
+  /* The mobile nav used to be restated here, byte for byte, over the copy portal.css
+     already carries — except for a burger a pixel larger, which is how a shared component
+     drifts. It is gone; portal.css owns the nav on every page. */
   /* One column, and the figure row folds to the 2x2 the Mobile board draws. */
   .hero-inner { grid-template-columns: 1fr; gap: 26px; }
   .stats { grid-template-columns: 1fr 1fr; }
@@ -402,7 +396,7 @@
 </div>
 
 <div class="utility mono m11">
-  <span style="color:var(--muted)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+  <span><span style="color:var(--on-dark)">AFCON 2027</span> · Kenya · Uganda · Tanzania</span>
 </div>
 
 <nav class="nav" aria-label="Main">
@@ -421,7 +415,7 @@
   <div class="nav-cta">
     <a class="btn btn-on-dark desk-only" href="login.html">Log in</a>
     <a class="btn btn-on-dark mob-only" href="signup.html">Get the Pass</a>
-    <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
+    <label class="burger" for="menu" aria-label="Open the menu">&equiv;</label>
   </div>
 </nav>
 
