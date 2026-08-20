@@ -28,10 +28,10 @@
     var counts = P.countsByCategory(partners);
     document.getElementById("categories").innerHTML = P.CATEGORIES.map(function (c) {
       return "<li>" + esc(P.CATEGORY_LABEL[c]) + " <strong>" +
-             (counts[c] || 0).toLocaleString("en-KE") + "</strong></li>";
+             (counts[c] || 0).toLocaleString("en-US") + "</strong></li>";
     }).join("");
     document.getElementById("network-total").textContent =
-      partners.length.toLocaleString("en-KE") + " partners across three countries";
+      partners.length.toLocaleString("en-US") + " partners across three countries";
 
     document.getElementById("record").innerHTML = events.length
       ? events.slice(0, 3).map(function (e) {
