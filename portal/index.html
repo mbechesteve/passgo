@@ -32,47 +32,66 @@
   The palette is the board's and is NOT the app's (deep #04222b + accent #0e6ba8, per
   Uratibu). Nothing here is imported by src/.
 */
-/* ── Hero ────────────────────────────────────────────────────────────────── */
-.hero { position: relative; height: 760px; background: var(--primary); overflow: hidden; }
-/* Football, and honest about which football. AFCON broadcast footage is CAF's and cannot
-   be used here; the only AFCON video on Commons is a 2021 opening-ceremony rehearsal at
-   Stade d'Olembé, which is an empty bowl carrying Cameroon's crest and CAMEROUN on the
-   tunnel — behind a headline about Kenya, Uganda and Tanzania in 2027 that would be
-   telling a viewer something untrue.
-   
-   So this is a 10s cut of Evworo's "Girls football training" (CC BY-SA 3.0): a women's
-   team working with the ball, in HD, on the continent, wearing nobody else's badge. It is
-   training rather than a match, which is the honest limit of what is licensable.
-   Re-encoded to 1440x810 VP9 at 1.8MB by decoding it in a canvas and recording it back
-   out at 0.85x, so the loop breathes and the cut comes round less often.
-   
-   No scale-and-pan over it — the players already move, and a Ken Burns drift on top of
-   real motion reads as a swim. The poster is the clip's own first frame, so the still that
-   paints before the stream starts is the frame the stream starts on. The crop sits low:
-   the sky is blown out and the pitch is where the football is. */
+/* ── Hero ──────────────────────────────────────────────────── */
+/* v6 turns the hero the right way up. The old one was white type over a darkened
+   photograph; the board puts the words on white, in indigo and orange, with the picture
+   beside them instead of behind them. That inversion is what makes the wordmark possible
+   at all — "Karibu," in --ink and "pamoja." in --brand only read on paper. */
+.hero { position: relative; background: var(--canvas); padding: clamp(36px, 5vw, 64px) var(--pad-x) 0; }
+.hero-inner { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(32px, 4.5vw, 56px);
+              align-items: center; }
+/* portal.css rings the hero in white, which was right over a dark photo and is invisible
+   now that the ground is paper. Put the ring back to the page default here. */
+.hero :focus-visible { outline-color: var(--accent-mid); }
+
+/* The eyebrow is three pills, as the board draws it: filled, marked, outlined. Same three
+   phrases the old single eyebrow line carried — one pass, three countries, every match. */
+.hero-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: clamp(20px, 2.4vw, 30px); }
+.pill { display: inline-flex; align-items: center; font-size: var(--fs-micro); font-weight: 700;
+        letter-spacing: 0.14em; padding: 7px 14px; border-radius: 999px; }
+.pill-solid { background: var(--primary); color: var(--canvas); }
+.pill-mark  { background: var(--highlight); color: var(--primary); font-weight: 800; }
+.pill-line  { border: 1px solid var(--hairline); color: var(--primary); }
+
+.hero-title {
+  font-size: var(--fs-display);
+  font-weight: 800;
+  line-height: 0.82;          /* the board's, at display size */
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin: 0;
+}
+/* The one legitimate use of --brand on text: --fs-display is 52-96px, far above the
+   large-text threshold, and the board draws the wordmark exactly this way. Anywhere
+   smaller and this would fail at 2.79 on white. */
+.hero-title-brand { color: var(--brand); }
+
+.hero .slash { font-size: var(--fs-micro); letter-spacing: 0.14em; color: var(--steel);
+               margin: 20px 0 18px; }
+.hero .lede { font-size: var(--fs-body); line-height: 1.55; color: var(--slate); font-weight: 300;
+              margin-bottom: 34px; max-width: 440px; }
+.hero .acts { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+/* The board's hero picture is a trophy illustration that does not exist in this repo. The
+   page's own hero visual — the licensed training footage — takes the slot instead, framed
+   on the card radius rather than bled behind the type. */
+.hero-figure { position: relative; height: clamp(260px, 33vw, 460px); border-radius: var(--radius-card);
+               overflow: hidden; background: var(--primary);
+               box-shadow: 0 24px 44px rgba(var(--ink-rgb), 0.18); }
 .hero-shot { filter: none; }
-.hero-shot video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 72%; }
-/* 0.92 at the far stop crushed the lower mountain into a flat mass. 0.76 lets the rock
-   read; the flat veil below still carries the headline's contrast, unchanged. */
-.veil-mult { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
-             background: linear-gradient(160deg, rgba(72,78,84,0.45) 0%, rgba(13,14,17,0.76) 100%); }
-.veil-screen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
-               background: linear-gradient(340deg, rgba(28,30,34,0.25) 0%, rgba(0,0,0,0) 55%); }
-.veil-flat { position: absolute; inset: 0; pointer-events: none;
-             background: linear-gradient(90deg, rgba(13,14,17,0.62) 0%, rgba(13,14,17,0.25) 55%, rgba(13,14,17,0) 100%); }
-.hero-inner { position: relative; z-index: 2; padding: 116px var(--pad-x) 0; pointer-events: none;
-              display: flex; justify-content: space-between; gap: 48px; }
-.hero-copy { max-width: 860px; }
-.hero .eyebrow { font-size: 12px; letter-spacing: 0.16em; color: var(--on-dark); margin-bottom: 24px; }
-.hero h1 { font-size: clamp(52px, 9vw, 96px); line-height: 0.9; letter-spacing: -0.04em;
-           color: var(--canvas); margin-bottom: 10px; }
-.hero .slash { font-size: 13px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 30px; }
-.hero .lede { font-size: 19px; line-height: 1.55; color: rgba(245,248,248,0.92); font-weight: 300;
-              margin-bottom: 38px; max-width: 540px; }
-.hero .acts { display: flex; align-items: center; gap: 24px; pointer-events: auto; flex-wrap: wrap; }
-.stats { display: flex; flex-direction: column; gap: 26px; padding-top: 14px; flex: 0 0 auto;
-         text-align: right; color: var(--muted); font-size: 11px; letter-spacing: 0.12em; }
-.stats b { display: block; color: var(--canvas); font-size: 30px; font-weight: 600; margin-bottom: 4px; }
+.hero-shot video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; }
+
+/* The figure row: four columns divided by rules, the number and its label on one line. */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr);
+         border-top: 1px solid var(--hairline); margin-top: clamp(36px, 4.5vw, 56px); }
+.stats > span { display: flex; align-items: baseline; gap: 12px; padding: 26px 0 26px 32px;
+                border-right: 1px solid var(--hairline); font-size: var(--fs-micro);
+                letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); }
+.stats > span:first-child { padding-left: 0; }
+.stats > span:last-child { border-right: 0; }
+/* The board sets these in orange, indigo, cyan, indigo. Orange is 2.79 on white and the
+   cyan is gone from the palette, so all four are --ink: one figure row, one colour. */
+.stats b { font-size: var(--fs-head); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
 
 /* ── Ticker ──────────────────────────────────────────────────────────────── */
 .ticker { background: var(--charcoal); border-top: 1px solid var(--primary-soft);
@@ -276,9 +295,13 @@
   .mob-only { display: inline-flex; }
   .desk-only { display: none; }
   .nav-cta { margin-left: auto; }
-  .hero { height: auto; }
-  .hero-inner { flex-direction: column; padding-bottom: 56px; }
-  .stats { flex-direction: row; flex-wrap: wrap; gap: 20px 32px; text-align: left; }
+  /* One column, and the figure row folds to the 2x2 the Mobile board draws. */
+  .hero-inner { grid-template-columns: 1fr; gap: 26px; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stats > span { padding: 15px 0 15px 16px; border-bottom: 1px solid var(--hairline); }
+  .stats > span:nth-child(odd) { padding-left: 0; }
+  .stats > span:nth-child(even) { border-right: 0; }
+  .stats > span:nth-child(n+3) { border-bottom: 0; }
   /* Every child of a fixture row kept its own line here, and `.who` was the only one that
      could give: it carries min-width: 0, while the venue and the chip hold their content
      width. So the title was squeezed into a column a few characters wide and "Kenya v Mali"
@@ -291,8 +314,9 @@
   .fx .chip { flex: 0 0 auto; }
   .split-left { border-right: 0; border-bottom: 1px solid var(--primary-soft); }
 }
-@media (max-width: 700px) {
-  .cta-inner { flex-direction: column; align-items: stretch; gap: 28px; }
+@media (max-width: 560px) {
+  /* Both hero calls to action go full width, stacked, as the Mobile board stacks them. */
+  .hero .acts { display: grid; gap: 10px; }
 }
 </style>
 </head>
@@ -340,36 +364,41 @@
 <main id="top">
 
   <section class="hero">
-    <div class="shot hero-shot">
-      <video id="hero-video" width="1440" height="810" autoplay muted loop playsinline preload="auto"
-             poster="img/hero-poster.webp" role="img"
-             aria-label="A women's team training with the ball on a floodlit pitch.">
-        <source src="img/hero-football.webm" type="video/webm">
-      </video>
-    </div>
-    <div class="veil-mult"></div>
-    <div class="veil-screen"></div>
-    <div class="veil-flat"></div>
     <div class="hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow mono">One pass · Three countries · Every match</p>
-        <h1>Karibu,<br>pamoja.</h1>
+        <p class="hero-chips">
+          <span class="pill pill-solid mono">One pass</span>
+          <span class="pill pill-mark mono">Three countries</span>
+          <span class="pill pill-line mono">Every match</span>
+        </p>
+        <h1 class="hero-title">
+          Karibu,<br><span class="hero-title-brand">pamoja.</span>
+        </h1>
         <p class="slash mono">/ Welcome, together — your AFCON 2027 fan pass</p>
         <p class="lede">Match access, travel and city services on one digital pass. Pamoja never
           holds your money — every payment is a direct hand-off.</p>
         <div class="acts">
-          <a class="btn btn-on-dark" href="signup.html">Get your Pamoja Pass
+          <a class="btn btn-primary" href="signup.html">Get your Pamoja Pass
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
           </a>
-          <a class="underline-link" href="#matches">See the schedule</a>
+          <a class="btn btn-secondary" href="#matches">See the schedule</a>
         </div>
       </div>
-      <div class="stats mono">
-        <span><b>11</b>Matches</span>
-        <span><b>7</b>Venues</span>
-        <span><b>3</b>Countries</span>
-        <span><b>2,189</b>Partners</span>
+      <div class="hero-figure">
+        <div class="shot hero-shot">
+          <video id="hero-video" width="1440" height="810" autoplay muted loop playsinline preload="auto"
+                 poster="img/hero-poster.webp" role="img"
+                 aria-label="A women's team training with the ball on a floodlit pitch.">
+            <source src="img/hero-football.webm" type="video/webm">
+          </video>
+        </div>
       </div>
+    </div>
+    <div class="stats">
+      <span><b>11</b>Matches</span>
+      <span><b>7</b>Venues</span>
+      <span><b>3</b>Countries</span>
+      <span><b>2,189</b>Partners</span>
     </div>
   </section>
 
