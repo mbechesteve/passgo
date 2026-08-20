@@ -45,3 +45,24 @@ from the board's system (type scale, radii, spacing, colour roles), not invented
 portal/README.md records the portal being migrated TO minimax — DM Sans, brand-blue
 #1456f0, grayscale photography. This goes back to Outfit and colour. Deliberate, and the
 README has to say so rather than be contradicted.
+
+## The IA is unchanged — this is a re-skin, not a rebuild
+
+v6's sections map almost one-to-one onto the current `index.html`:
+
+| v6 heading | current section |
+|---|---|
+| Karibu, pamoja. | hero |
+| One Pass. Five doors. | `#pass` (the doors accordion) |
+| All fixtures | `#matches` |
+| Fan events and promotions | `#events` |
+| Explore the host country | `#explore` |
+| Own the tournament. | closing CTA / `#partners` |
+
+So the work is tokens, type, imagery and component form — not information architecture.
+The doors accordion, the ticker and the fixtures rail all survive as concepts.
+
+One copy note: **"Own the tournament."** echoes the Craydel brand bible's rallying cry
+("Own it with Craydel"), which is bundled in the same zip. It reads fine for a fan pass,
+but it arrived from a study-abroad brand's verbal DNA rather than from Pamoja's, so it is
+worth a deliberate keep-or-change rather than adopting by inheritance.
