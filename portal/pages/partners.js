@@ -15,17 +15,38 @@
   var money = P.kes;
 
   var sheet, current = null;
+  // Guards a double-tap of Confirm the way ConfirmScreen.tsx's `submitted` ref
+  // does: a plain closure var, not React state, so the second click's read sees
+  // the first click's write immediately rather than a stale value from before
+  // either click re-rendered. Reset whenever a fresh redemption sheet opens.
+  var submitted = false;
+
+  // Mirrors ConfirmScreen.tsx's own parse: Number.parseInt (not Number()) plus
+  // an isFinite-and-positive check. A run of digits long enough to overflow a
+  // double parses to Infinity, which isFinite correctly rejects, same as "abc",
+  // "", "-500" and "0" — none of these may ever reach buildRedemption.
+  function parsedGross() {
+    return Number.parseInt(document.getElementById("gross").value, 10);
+  }
+  function validGross(gross) {
+    return Number.isFinite(gross) && gross > 0;
+  }
 
   function preview() {
-    var gross = Number(document.getElementById("gross").value || 0);
-    var m = P.computeMoney(gross, current ? current.discountPct : 0);
-    // Money is { currency, gross, discount, net } — there is no `saved` field.
+    var gross = parsedGross();
+    var valid = validGross(gross);
+    // Invalid input still needs a sensible preview rather than "KES NaN", so —
+    // as ConfirmScreen does — compute against 0 when the typed amount doesn't
+    // parse, and disable Confirm so that figure can never be written.
+    var m = P.computeMoney(valid ? gross : 0, current ? current.discountPct : 0);
     document.getElementById("redeem-preview").textContent =
       money(m.net) + " to pay · " + money(m.discount) + " saved";
+    document.getElementById("confirm-redeem").disabled = !valid;
   }
 
   function openRedeem(partner) {
     current = partner;
+    submitted = false;
     document.getElementById("redeem-title").textContent = partner.name;
     document.getElementById("gross").value = 1000;
     preview();
@@ -60,10 +81,17 @@
     sheet = C.dialog("redeem");
     document.getElementById("gross").addEventListener("input", preview);
     document.getElementById("confirm-redeem").addEventListener("click", function () {
+      if (submitted) return; // a double-tap must write once, not twice
       if (!S.pass()) { window.location.href = "signup.html"; return; }
+      var gross = parsedGross();
+      // The button is disabled whenever this is false, but a disabled button can
+      // still receive a synthetic or queued click in some embedders — so check
+      // again here. Invalid input must be unable to reach buildRedemption.
+      if (!validGross(gross)) return;
+      submitted = true;
       S.redeem({
         partner: current,
-        gross: Number(document.getElementById("gross").value || 0),
+        gross: gross,
         // Channel is "nfc" | "qr" | "shortcode". This sheet is the counter path —
         // the fan reads her card code aloud — so it is shortcode, which state.js
         // routes through ingestShortCode rather than append.

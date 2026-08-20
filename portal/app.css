@@ -33,6 +33,32 @@
   .nav-links { display: none; }
 }
 
+/* --- the pass credential, as a compact card rather than one giant figure --- */
+
+/* `.figure` (portal.css) is built for a single big stat — a 40px mono number —
+   so four dt/dd rows inheriting it all became that size, stacked full-width and
+   wrapping mid-value on a phone ("Pass number" / "KE-PM-8842" on their own huge
+   lines). A grid pairs each label with its value on one row instead: the label
+   stays small and quiet, the value reads clearly without taking over the card. */
+.credential {
+  display: grid; grid-template-columns: max-content 1fr;
+  column-gap: 18px; row-gap: 12px; align-items: baseline; margin: 0;
+}
+.credential dt {
+  font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.08em; font-weight: 500; color: var(--slate);
+  white-space: nowrap; margin: 0;
+}
+.credential dd {
+  font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 16px;
+  font-weight: 600; color: var(--primary); margin: 0; overflow-wrap: anywhere;
+}
+/* The no-Pass state renders one bare <dd> (a sign-up link) with no <dt> beside
+   it — let that row claim the full width rather than sitting in the label column. */
+.credential dd:only-child { grid-column: 1 / -1; }
+.panel.dark .credential dt { color: var(--muted); }
+.panel.dark .credential dd { color: var(--canvas); }
+
 /* --- detail, as a dialog rather than a destination -------------------------- */
 
 dialog.sheet {
