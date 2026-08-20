@@ -261,13 +261,21 @@
 /* Both layers indigo now, as the board's are: one gathering from the foot, one raking in
    from the left so the copy has a ground wherever the photograph is bright.
 
-   The veil's floor was 0 at 100% — fine while kasarani.jpg was greyscale-filtered, but
-   colour restores a blown-out floodlight highlight right of centre, and on a narrow
-   viewport the eyebrow line ("Next at Kasarani...") is long enough to reach it: measured
-   with the veil and wash both off, that spot is pure white behind the yellow eyebrow text,
-   which is the worst case a photograph can offer. Solving ink-multiply-over-white for the
-   eyebrow's 4.5:1 floor needs alpha ≥ 0.78; 0.82 was chosen for headroom, measured at
-   5.32:1 on that exact pixel. The raking fade stays, just doesn't fade all the way out. */
+   The veil's floor was 0 at 100% — fine while the card held a greyscale-filtered photograph,
+   but colour restored a blown-out floodlight highlight right of centre, and on a narrow
+   viewport the eyebrow line ("Next at Kasarani...") is long enough to reach it: with the
+   veil and wash both off, that spot was pure white behind the yellow eyebrow text, the
+   worst case a photograph can offer. Solving ink-multiply-over-white for the eyebrow's
+   4.5:1 floor needs alpha >= 0.78; 0.82 was chosen for headroom, and measured 5.32:1 on
+   that exact pixel.
+
+   stadium-interior.jpg is the photograph on the card now, and it is the case the 0.82 was
+   chosen for: a bright daylight stand under open sky, the eyebrow line crossing it left to
+   right. Re-measured on the rendered pixels behind each run of glyphs, that alpha holds
+   every line on the card — eyebrow 5.81:1 at 375px, 5.93 at 860, 6.45 at 1440, 6.76 at
+   1920 against a 4.5 floor; "Kenya v Mali" 8.28 and 9.09 against 3.0; the kick-off line
+   5.45 and 6.96 against 4.5. Nothing here needed relaxing or tightening, which is what a
+   veil chosen for the worst case a photograph can offer is supposed to do. */
 .featured .wash { background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 45%, rgba(var(--ink-rgb), 0.9) 100%); }
 .featured .veil { position: absolute; inset: 0; pointer-events: none;
                   background: linear-gradient(95deg, rgba(var(--ink-rgb), 0.9) 0%, rgba(var(--ink-rgb), 0.84) 40%, rgba(var(--ink-rgb), 0.82) 100%); }
@@ -675,7 +683,8 @@
     <div class="doors">
       <input type="radio" name="door" id="door-1" checked>
       <label class="door" for="door-1">
-        <span class="shot"><img src="img/door-access.jpg" alt="Supporters outside Kasarani before kick-off."></span>
+        <span class="shot"><img src="img/stadium-night.jpg" width="1088" height="726"
+              alt="A stadium lit red at night, seen from the air, a Kenyan shield picked out in white light on its facade."></span>
         <span class="wash"></span>
         <span class="panel"></span>
         <span class="num">01</span>
@@ -689,7 +698,8 @@
 
       <input type="radio" name="door" id="door-2">
       <label class="door" for="door-2">
-        <span class="shot"><img src="img/door-travel.jpg" alt="Jomo Kenyatta International Airport from the air."></span>
+        <span class="shot"><img src="img/expressway.jpg" width="991" height="746"
+              alt="The Nairobi Expressway curving past a toll gantry, the city's towers behind it."></span>
         <span class="wash"></span>
         <span class="panel"></span>
         <span class="num">02</span>
@@ -703,7 +713,8 @@
 
       <input type="radio" name="door" id="door-3">
       <label class="door" for="door-3">
-        <span class="shot"><img src="img/door-market.jpg" alt="Market stalls in Stone Town."></span>
+        <span class="shot"><img src="img/towers-dusk.jpg" width="1190" height="1600"
+              alt="Hotel and apartment towers lit at dusk, seen from above."></span>
         <span class="wash"></span>
         <span class="panel"></span>
         <span class="num">03</span>
@@ -731,7 +742,8 @@
 
       <input type="radio" name="door" id="door-5">
       <label class="door" for="door-5">
-        <span class="shot"><img src="img/door-security.jpg" alt="Police officers marching on arrival at an airport."></span>
+        <span class="shot"><img src="img/police-vehicles.jpg" width="1080" height="1080"
+              alt="Kenya Police patrol vehicles lined up outside a station."></span>
         <span class="wash"></span>
         <span class="panel"></span>
         <span class="num">05</span>
@@ -748,7 +760,8 @@
 
   <section class="sec-tight" id="matches">
     <div class="featured">
-      <div class="shot"><img src="img/kasarani.jpg" alt="Inside Kasarani Stadium."></div>
+      <div class="shot"><img src="img/stadium-interior.jpg" width="687" height="827"
+             alt="A stadium's stands and pitch under a clear sky, seen from the upper tier."></div>
       <div class="wash"></div>
       <div class="veil"></div>
       <span class="countdown mono">Kick-off in 3 d 03 h 05 min</span>

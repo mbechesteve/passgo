@@ -235,9 +235,24 @@ grey out the top third still left two of them under 3. `.door .num` was given it
 `--primary` ground instead, which is 9.22 by construction and does not have to be
 re-measured when someone swaps a photograph.
 
-Every *photograph*, from Wikimedia Commons and **self-hosted** in `img/` rather than
-hotlinked — Wikimedia asks not to be used as a CDN — carries a credit in the page: a
-caption on the card, or a listing in the footer's attribution table, or both.
+Every *photograph* is **self-hosted** in `img/` rather than hotlinked — Wikimedia asks not
+to be used as a CDN — and carries a credit in the page: a caption on the card, or a listing
+in the footer's attribution table, or both.
+
+Most come from Wikimedia Commons. **Five do not**, and they are the exception that has to be
+closed rather than absorbed: `stadium-interior.jpg` (featured fixture), `stadium-night.jpg`
+(Doors 01), `expressway.jpg` (Doors 02), `towers-dusk.jpg` (Doors 03) and
+`police-vehicles.jpg` (Doors 05) were supplied for this prototype with no photographer and
+no licence recorded. They hold rows on
+`credits.html` that say exactly that, because an image on the page with no row at all is the
+one state that table exists to prevent — but a row reading "source not recorded" is a note
+to whoever clears them, not a licence. None of the four is cleared for publication.
+
+Two of them carry a further problem no crop fixes. `towers-dusk.jpg` shows a legible
+**JW MARRIOTT** sign, sitting under a door captioned *Partner discounts* — a real hotel
+brand presented as a Pamoja partner, which is a claim the prototype is not entitled to
+make. `police-vehicles.jpg` shows Kenya Police liveries and a readable plate under
+*Security*, which reads as official endorsement the same way.
 
 Two files in `img/` are not photographs and raise no attribution at all:
 `trophy-doodle.png`, the hero, and `panel-strip.png`, the closed doors' line art. Both are
