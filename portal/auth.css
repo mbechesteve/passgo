@@ -46,10 +46,41 @@ input:focus-visible { outline: none; border: 2px solid var(--accent-deep); }
 .choices input:checked + label { background: var(--primary); border-color: var(--primary); color: var(--canvas); }
 .choices input:focus-visible + label { outline: 2px solid var(--accent-mid); outline-offset: 2px; }
 .form-card .btn { width: 100%; margin-top: 30px; }
+
 .form-card .alt { margin-top: 22px; font-size: var(--fs-body-sm); color: var(--slate); }
 .prototype { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--hairline);
              font-family: "JetBrains Mono", ui-monospace, monospace; font-size: var(--fs-micro);
              line-height: 1.7; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate); }
+/* ── The split, stacked ──────────────────────────────────────────────────────
+   The 46/54 split had no breakpoint of its own, so it held at every width: at 375px
+   the photograph was a 173px vertical strip and the form beside it got a 203px column,
+   which put the text inputs at 163px — narrow enough to clip their own default values
+   ("KEN-MLI · 2606-8842"), stack the three country pills one per row, and break "Log
+   in →" across two lines. A form cannot be the narrower half of a phone screen.
+
+   So below the width where the nav also folds, the two halves stack and the form takes
+   the full column. The photograph stays — it carries the page's pull-quote, and it is
+   the licensed image the footer attributes — but as a banner over the form rather than
+   a column beside it, capped short enough that the first field is still reachable
+   without a scroll. The quote is positioned against .split-media, so it rides along
+   into the band with no rule of its own. */
+@media (max-width: 860px) {
+  .split-page { flex-direction: column; min-height: 0; }
+  .split-media { flex: 0 0 auto; height: clamp(180px, 34vw, 260px); }
+  /* The 200deg veil reaches 0.92 only in the far corner of a tall column. Over a 180px
+     band that corner is off to the side of where the quote sits, so the caption — set in
+     --muted, the palette's quietest type — landed on lit stadium and lost its contrast.
+     Turned vertical it darkens the bottom two-thirds the quote actually occupies, which
+     is the same correction the stacked doors accordion makes to its own wash. */
+  .split-media .veil {
+    background: linear-gradient(180deg, rgba(10,11,13,0.30) 0%, rgba(10,11,13,0.90) 72%); }
+  .split-media .quote { bottom: clamp(20px, 5vw, 28px); }
+  /* The desktop card is centred in a tall column; stacked it opens directly under the
+     photograph, so the form starts where the eye already is instead of half a screen
+     below it. */
+  .split-form { flex: 1 1 auto; align-items: stretch; padding: clamp(28px, 7vw, 44px) var(--pad-x); }
+  .form-card { margin: 0 auto; }
+}
 
 /* ── Dashboard ───────────────────────────────────────────────────────────── */
 .dash { padding: clamp(32px, 5vw, 56px) var(--pad-x) clamp(56px, 8vw, 88px); }
