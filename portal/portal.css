@@ -235,8 +235,13 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
 .menu-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 @media (max-width: 860px) {
   .nav { flex-wrap: wrap; gap: 12px; }
+  /* align-items: center comes from the desktop row, where it centres five links against
+     each other vertically. Turned upright it centres them horizontally instead, which
+     shrink-wraps every row to its own text — so the rules below each link spanned the
+     word rather than the menu, five stubs of different lengths down the middle. Stretch
+     puts the rules back across the panel and the labels back on the brand's left edge. */
   .nav-links { display: none; order: 3; flex-basis: 100%; flex-direction: column; gap: 0;
-               margin: 6px 0 4px; border-top: 1px solid var(--primary-soft); }
+               align-items: stretch; margin: 6px 0 4px; border-top: 1px solid var(--primary-soft); }
   .nav-links a { padding: 14px 2px; border-bottom: 1px solid var(--primary-soft); }
   .menu-toggle:checked ~ .nav-links { display: flex; }
   .burger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
@@ -245,6 +250,14 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
   .mob-only { display: inline-flex; }
   .desk-only { display: none; }
   .nav-cta { margin-left: auto; }
+}
+/* Below this the wordmark, the CTA and the burger stop fitting on one line — 179px of
+   brand plus 190px of actions against 335px of content width at 375px — so .nav wrapped,
+   the actions dropped to a second row and the sticky bar stood 137px tall with a hole
+   under the brand. The tagline is the only thing in the bar that is not an action, so it
+   is what gives: "Pamoja" alone still names the page, and the bar is 80px again. */
+@media (max-width: 560px) {
+  .brand-sub { display: none; }
 }
 
 /* ── The boot screen ─────────────────────────────────────────────────────────
