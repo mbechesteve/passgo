@@ -457,7 +457,7 @@ git commit -m "feat: bundle the app's data and logic for the portal"
 
 **Interfaces:**
 - Consumes: `window.Pamoja` from Task 2.
-- Produces: `window.PamojaState` with `ready(): Promise<void>`, `pass()`, `ticket()`, `events()`, `issue({holderName, issuedIn})`, `redeem({partner, gross, channel})`, `reorderWallet(from, to)`, `walletOrder()`, `reset()`, and `now()`. Tasks 4–9 call only these.
+- Produces: `window.PamojaState` with `ready(): Promise<void>`, `now()`, `pass()`, `ticket()`, `events()`, `issue({holderName, issuedIn})`, `redeem({partner, gross, channel})`, `methods()`, `chooseMethod(id)`, `reset()`, and `subscribe(fn)`. Tasks 4–9 call only these. There is no wallet reorder — the app has none.
 
 - [ ] **Step 1: Write the state layer**
 
