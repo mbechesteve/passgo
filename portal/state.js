@@ -12,8 +12,20 @@
 (function (global) {
   "use strict";
 
+  /* app-data.js is build output and gitignored, so "it isn't there" is a real state
+     a fresh clone can reach, not a broken install. Say what to run and stand down:
+     PamojaState is left undefined, every page script checks for it, and the reader
+     gets a navigable page instead of an exception and a blank one. */
   var P = global.Pamoja;
-  if (!P) throw new Error("state.js loaded before app-data.js");
+  if (!P) {
+    if (global.console) {
+      global.console.error(
+        "portal: app-data.js has not been built — run `npm run build:portal-bundle`. " +
+        "The pages will navigate but show no figures."
+      );
+    }
+    return;
+  }
 
   var pass = P.usePassStore;
   var record = P.useRecordStore;

@@ -5,7 +5,19 @@
    page lists all of MATCHES deliberately. */
 (function () {
   "use strict";
-  var P = window.Pamoja, S = window.PamojaState, C = window.PamojaChrome;
+  var C = window.PamojaChrome;
+
+  /* The chrome first, and before the state gate below. chrome.js needs nothing from
+     the bundle, so there is no reason to make navigation wait on it — and every
+     reason not to. When portal/app-data.js is absent, which is what a fresh clone's
+     dev server used to serve, mounting inside the gate left a phone with no tab bar
+     at all and .nav-links hidden below 860px: a page with no way off it. */
+  C.mount("matches");
+
+  var P = window.Pamoja, S = window.PamojaState;
+  // No bundle, no figures, no stores. The page stays navigable and simply renders
+  // nothing rather than throwing its way to a blank screen.
+  if (!P || !S) return;
 
   var esc = C.esc;
 
@@ -41,7 +53,6 @@
   }
 
   S.ready().then(function () {
-    C.mount("matches");
     sheet = C.dialog("fixture");
     render();
   });

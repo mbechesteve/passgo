@@ -6,8 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "node scripts/dev-server.mjs",
-    "dev": "node scripts/dev-server.mjs",
+    "dev": "npm run build:portal-bundle && node scripts/dev-server.mjs",
+    "web": "npm run dev",
     "build:portal-bundle": "node scripts/build-portal-bundle.mjs",
     "build": "npm run build:portal-bundle && expo export --platform web --output-dir dist/app && node scripts/copy-portal.mjs && node scripts/inject-pwa.mjs",
     "verify:bundle": "node scripts/verify-bundle.mjs",
@@ -15,7 +15,7 @@
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "web:app": "expo start --web",
-    "portal": "python3 -m http.server 8080 --directory portal"
+    "portal": "npm run build:portal-bundle && python3 -m http.server 8080 --directory portal"
   },
   "dependencies": {
     "@expo-google-fonts/dm-sans": "^0.4.2",

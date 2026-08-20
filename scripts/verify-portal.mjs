@@ -128,18 +128,29 @@ async function waitForServer(deadlineMs = 15000) {
 // so that the count is asserted in both directions: a page that quietly loses a
 // dialog fails, and so does one that grows an undeclared one. live.html has none
 // on purpose — the loop must tolerate zero, not assume at least one.
+//
+// `rendered` names one element the page's own script fills from the bundle. It is
+// the signal that hydration finished and the first paint happened. The tab bar
+// cannot be that signal any more: chrome.js needs nothing from the bundle and now
+// mounts before the state gate, precisely so a page with no app-data.js is still
+// navigable — which means a mounted tab bar no longer says anything about whether
+// the figures have arrived.
 const PAGES = [
   {
     file: "dashboard.html",
+    rendered: "#clock",
     dialogs: [
       { id: "travel", trigger: "#open-travel" },
       { id: "parking", trigger: "#open-parking" },
     ],
   },
-  { file: "matches.html", dialogs: [{ id: "fixture", trigger: '#fixtures button[data-i="0"]' }] },
-  { file: "live.html", dialogs: [] },
-  { file: "partners.html", dialogs: [{ id: "redeem", trigger: '#nearby button[data-i="0"]' }] },
-  { file: "pass.html", dialogs: [{ id: "wallet", trigger: "#open-wallet" }] },
+  { file: "matches.html", rendered: "#fixtures li",
+    dialogs: [{ id: "fixture", trigger: '#fixtures button[data-i="0"]' }] },
+  { file: "live.html", rendered: "#state", dialogs: [] },
+  { file: "partners.html", rendered: "#nearby li",
+    dialogs: [{ id: "redeem", trigger: '#nearby button[data-i="0"]' }] },
+  { file: "pass.html", rendered: "#record li",
+    dialogs: [{ id: "wallet", trigger: "#open-wallet" }] },
 ];
 
 // Both the phone width the tab bar is built for and a desktop width where the tab
@@ -356,7 +367,7 @@ async function check(label, fn) {
 }
 
 for (const { w, h } of WIDTHS) {
-  for (const { file, dialogs } of PAGES) {
+  for (const { file, rendered: renderedSel, dialogs } of PAGES) {
     for (const state of STATES) {
       const label = `${file} @ ${w}px [${state.name}]`;
       // newPage() opens its own browser context, so every run starts from a
@@ -381,13 +392,14 @@ for (const { w, h } of WIDTHS) {
       // timeouts. boot.js holds a Mount Kenya curtain over the page until load
       // plus the ridge finishing its trace; assert before it lifts and you are
       // testing the curtain. And the page itself paints only after
-      // PamojaState.ready() resolves — chrome.mount() runs in that callback — so
-      // a mounted tab bar is the signal that the store has hydrated and the
-      // first render has happened.
+      // PamojaState.ready() resolves, so the page's own `rendered` element having
+      // text is the signal that the store has hydrated and the first render has
+      // happened.
       const booted = await check(`${label} boot`, () => page.waitForFunction(
         () => !document.documentElement.hasAttribute("data-booting"), null, { timeout: 20000 }));
       const rendered = booted && await check(`${label} first render`, () => page.waitForFunction(
-        () => document.querySelectorAll("nav.tabbar a").length > 0, null, { timeout: 20000 }));
+        (sel) => (document.querySelector(sel)?.textContent ?? "").trim().length > 0,
+        renderedSel, { timeout: 20000 }));
       if (!rendered) { console.error(`  FAIL ${label}`); await page.close(); continue; }
 
       if (state.populated) {
