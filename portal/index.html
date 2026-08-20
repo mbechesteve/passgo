@@ -406,11 +406,24 @@
                align-content: center; grid-auto-rows: min-content; }
 @media (max-width: 560px) { .split-right { grid-template-columns: repeat(2, 1fr); } }
 /* The board draws these as bare columns, not boxes, so the borders go. Its five figures
-   are five different colours — yellow, orange, cyan, green, red. Three of those are not
-   in the palette at all and the orange is display-only, so all five are --highlight:
-   9.22 on the panel, and one category does not get to look more important than another. */
+   are five different colours, and now so are these. The panel is --primary, which is a
+   dark ground and therefore a generous one: everything below clears the 3.0 that a 28px
+   figure at weight 800 needs, and the five are far enough apart to read as five.
+
+   The classes name the category rather than the colour, so the binding between "Stay" and
+   its hue is stated once, here, and a category that is renamed or reordered in the markup
+   cannot silently take another's colour the way :nth-child would let it.
+
+   Measured on --primary: Eat 9.22, Shop 4.78, Stay 3.67, Do 4.29, Move 3.62. Two are not
+   the board's exact hue — Stay is --display-tint-alt, the one cyan this palette carries,
+   and Do is --success rather than a second green — and both are noted at the token. */
 .count b { display: block; font-weight: 800; font-size: var(--fs-head);
            letter-spacing: -0.02em; color: var(--on-dark); }
+.count-eat  b { color: var(--highlight); }
+.count-shop b { color: var(--brand); }
+.count-stay b { color: var(--display-tint-alt); }
+.count-do   b { color: var(--success); }
+.count-move b { color: var(--marker); }
 .count span { display: block; font-weight: 700; font-size: var(--fs-body-sm); color: var(--canvas); margin-top: 6px; }
 .count small { display: block; font-size: var(--fs-small); font-weight: 300; color: var(--hairline); margin-top: 2px; }
 
@@ -826,11 +839,11 @@
              board's idiom — a discount where there is one to quote, a description
              otherwise. "Up to −20%" is true of every category: DISCOUNTS cycles
              [5, 10, 15, 20] across all of them. -->
-        <div class="count"><b>1,340</b><span>Eat</span><small>Up to −20%</small></div>
-        <div class="count"><b>460</b><span>Shop</span><small>Markets to malls</small></div>
-        <div class="count"><b>210</b><span>Stay</span><small>Up to −20%</small></div>
-        <div class="count"><b>95</b><span>Do</span><small>Museums, parks, tours</small></div>
-        <div class="count"><b>84</b><span>Move</span><small>Shuttles and transport</small></div>
+        <div class="count count-eat"><b>1,340</b><span>Eat</span><small>Up to −20%</small></div>
+        <div class="count count-shop"><b>460</b><span>Shop</span><small>Markets to malls</small></div>
+        <div class="count count-stay"><b>210</b><span>Stay</span><small>Up to −20%</small></div>
+        <div class="count count-do"><b>95</b><span>Do</span><small>Museums, parks, tours</small></div>
+        <div class="count count-move"><b>84</b><span>Move</span><small>Shuttles and transport</small></div>
       </div>
     </div>
   </section>

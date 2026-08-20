@@ -58,7 +58,18 @@
   --on-dark:      #ffd22c;   /* accent text ON dark — was --cyan, which could not keep
                                 its name while holding yellow. */
   --success:      #1ba673;   /* live and confirmed — semantic, and the boards say nothing
-                                about it, so it is not theirs to overrule */
+                                about it, so it is not theirs to overrule. It does double
+                                duty as the green in the partners band's categorical set,
+                                4.29 on --primary: the board's own green there is a
+                                different green, and carrying two of them so that one can
+                                mean "confirmed" and the other "Do" would be a palette
+                                with two greens in it. */
+  --marker:       #ee4b3b;   /* the categorical red, at the board's value — 3.62 on
+                                --primary and 3.68 on --canvas, both clear of the 3.0 a
+                                large figure or a dot needs. It marks one member of a set
+                                apart from the others (Kenya among the three countries, Move
+                                among the five partner categories) and carries no state
+                                meaning of its own: nothing is wrong because it is red. */
   --success-bg:   #e8ffea;
   --canvas:       #ffffff;
   --surface:      #e9e8f1;   /* the page ground */

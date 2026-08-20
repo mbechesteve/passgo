@@ -54,6 +54,14 @@ const PAIRS = [
      the board's raw orange clears there, so it is checked where it is used rather than
      being darkened for a ground it never sits on. */
   ["brand",            "primary",      3.0, "the warm half of the CTA headline, on indigo"],
+  /* The partners band's five figures, which the board gives five different colours. All
+     are --fs-head at weight 800 on --primary, so 3.0. --highlight is checked above; the
+     other four are here. --marker is checked on --canvas as well, where it is the Kenya
+     dot on an event card rather than a figure — a graphic, and 3.0 again. */
+  ["display-tint-alt", "primary",      3.0, "the Stay figure, and the Tanzania dot, on indigo"],
+  ["success",          "primary",      3.0, "the Do figure on indigo"],
+  ["marker",           "primary",      3.0, "the Move figure on indigo"],
+  ["marker",           "canvas",       3.0, "the Kenya dot on an event card"],
 ];
 /* Note: the ratio is symmetric, so a pair is listed once. --canvas on --accent is the
    same number as --accent on --canvas — a button label on the indigo ground is covered
