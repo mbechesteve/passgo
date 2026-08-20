@@ -43,7 +43,7 @@
     <span class="brand-sub mono">The official fan pass</span>
   </a>
   <div class="nav-links">
-    <a href="index.html#pass">Get the Pass</a>
+    <a href="signup.html">Get the Pass</a>
     <a href="index.html#matches">Matches &amp; Tickets</a>
     <a href="index.html#events">Events</a>
     <a href="index.html#explore">Explore</a>
@@ -131,6 +131,25 @@
   </div>
 </footer>
 <script src="boot.js"></script>
+<script src="app-data.js"></script>
+<script src="state.js"></script>
+<script>
+/* The three questions the app asks, answered here, issuing the same Pass the app
+   would issue — issuePass() is the app's, so the serial is the app's (KE-PM-8842
+   for the first on a device, per Figure 1). The form still navigates by GET; this
+   only makes sure there is something to navigate to. */
+document.querySelector("form").addEventListener("submit", function (e) {
+  var data = new FormData(e.target);
+  var holderName = String(data.get("name") || "").trim();
+  var issuedIn = String(data.get("country") || "KE");
+  if (!holderName) return;               // let the browser's own validation speak
+  e.preventDefault();
+  window.PamojaState.ready().then(function () {
+    window.PamojaState.issue({ holderName: holderName, issuedIn: issuedIn });
+    window.location.href = "dashboard.html";
+  });
+});
+</script>
 
 </body>
 </html>

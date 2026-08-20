@@ -3,8 +3,11 @@
 The public marketing site — "Karibu, pamoja." Built from the **`Pamoja Portal.dc.html`**
 board in `Karibu Kenya eTA portal.zip` (a Claude Design canvas).
 
-A single static page: `index.html` plus `img/`. No build step, no dependencies, nothing
-imported from the app.
+Static markup — `index.html`, four more marketing/auth pages, five logged-in pages and
+`img/` — plus one build step: `npm run build:portal-bundle` runs esbuild (the portal's
+only dependency) over `src/portal-entry.ts` to produce `portal/app-data.js`, the app's
+data, logic and copy, bundled for a browser. See *The boundary with the app*, below, for
+what that import surface is and is not.
 
 ## The board's system, followed rather than approximated
 
@@ -75,8 +78,10 @@ and what a public marketing site needs to do that a product does not. It is the 
 split Hayya keeps between `hayya.qa` and the Hayya app.
 
 **The app's theme is untouched.** `tailwind.config.js`, `src/lib/theme.ts` and `DESIGN.md`
-are unchanged, and nothing here is importable from `src/`. If the two ever need to agree,
-that is a decision to take deliberately rather than by leakage.
+are unchanged, and no CSS or colour token is importable from `src/` — only figures and
+logic cross, through `src/portal-entry.ts` (see *The boundary with the app*, below). If
+the two themes ever need to agree, that is a decision to take deliberately rather than by
+leakage.
 
 ## Figures are the app's, not the board's
 
@@ -113,15 +118,25 @@ is what keeps displaying the photographs lawful. The prototype caveat moved ther
 |---|---|
 | `index.html` | the marketing page — the board, ported |
 | `login.html` | Pass number + one-time code. No password: there is none to steal, and none to store |
-| `signup.html` | the app's own three questions — country, name, ticket reference. No payment fields anywhere |
-| `dashboard.html` | the inside of the app on the web: credential, next match and seat, the record, the partner network |
+| `signup.html` | the app's own three questions — country, name, ticket reference — and now issues a real Pass on submit, through `PamojaState.issue()` |
+| `dashboard.html` | Home: credential, next match and seat, the record, the partner network |
+| `matches.html` | the fixture list, read from `MATCHES` |
+| `live.html` | the live match, minute and score, read from `MATCH_LIVE` |
+| `partners.html` | the partner network by category, and the one flow that mutates state: redemption |
+| `pass.html` | the Pass on its own — the empty state when none has been issued yet, otherwise the credential |
 | `credits.html` | photo attributions. **Unlinked** — see Photography |
 | `portal.css` | tokens, base type, buttons, nav, footer — shared by all of them |
 | `auth.css` | only what login, sign-up and the dashboard add |
+| `app.css` | the logged-in pages' own chrome: tabbar, dialogs, panels |
+| `app-data.js` | **generated**, gitignored — see *The boundary with the app* |
+| `state.js` | the page-shaped door onto `app-data.js`'s stores: `ready()`, `pass()`, `issue()`, `redeem()` |
+| `chrome.js` | mounts the five-tab bar on the logged-in pages |
+| `pages/*.js` | one script per logged-in page, rendering that page's figures from `app-data.js` |
 
-Nothing is authenticated. Both forms are `method="get"` to `dashboard.html`, so any input
-opens it, no credentials are stored, and no payment details are collected on any page —
-Rev. 2 §05 holds here as it does in the app.
+Nothing is authenticated. Both forms stay `method="get"` to `dashboard.html`; sign-up now
+issues a Pass first, so what login finds is either that Pass or, for anyone who never
+signed up, the same empty state the pages always showed. No credentials are stored and no
+payment details are collected on any page — Rev. 2 §05 holds here as it does in the app.
 
 The dashboard's figures are the **app's**, not written for the page: `KE-PM-8842`,
 Amina Nakato, `Valid · 24 days left`, Cat 2 / Gate D / Section 214 / Seat 17, the
@@ -129,11 +144,34 @@ Amina Nakato, `Valid · 24 days left`, Cat 2 / Gate D / Section 214 / Seat 17, t
 and the five partner counts. `src/utils/spec-figures.test.ts` guards those, so if the app's
 figures move, that suite is what will say this page is stale.
 
-## Not wired into deployment
+## The boundary with the app
 
-`vercel.json` and `netlify.toml` serve the app's `dist/` at the domain root. This page is
-not part of that, deliberately — putting a marketing site in front of the app changes what
-the domain root means, which is a decision to take rather than assume. To view it now:
+The markup, CSS and page scripts in `portal/` are the portal's own — nothing in `src/`
+knows they exist. Figures and logic are the app's — nothing in `portal/` reinvents a
+number or a rule the app already owns. `src/portal-entry.ts` is the whole of what
+crosses that line: every data seed, formatter and store the logged-in pages read comes
+through it, and nothing they use skips it. It excludes `src/screens`, `src/components`
+and `src/navigation` outright, because those pull React Native, which does not belong in
+a browser bundle.
+
+`npm run build:portal-bundle` (esbuild, `scripts/build-portal-bundle.mjs`) compiles that
+one file into `portal/app-data.js` — an IIFE global, `window.Pamoja` — which is
+gitignored, not committed: it is generated the same way on every machine and in CI, so
+committing it would just be a second copy to keep in sync. `portal/state.js` is a thin,
+page-shaped door onto `Pamoja`'s Zustand stores (rehydration, a `ready()` to await before
+first paint, `issue()` and `redeem()`), not a reimplementation of them.
+
+`src/utils/spec-figures.test.ts` now guards both surfaces at once: it is the single
+source for every number this README and every logged-in page repeats, so a figure moving
+in the app is a failing test here too, not a silent drift.
+
+## Wired into deployment
+
+`vercel.json` and `netlify.toml` now serve this portal at the domain root; `npm run build`
+runs `build:portal-bundle` before it builds the Expo web app into `dist/app`, and both
+configs rewrite `/app` and `/app/*` to the app's own `index.html`. Putting a marketing
+site in front of the app changes what the domain root means — that decision has now been
+taken, deliberately, rather than left assumed. To view the portal on its own:
 
 ```bash
 python3 -m http.server 8080 --directory portal   # then open http://localhost:8080
@@ -141,8 +179,6 @@ python3 -m http.server 8080 --directory portal   # then open http://localhost:80
 
 ## Still to do
 
-- Nav links all point at in-page anchors; nothing behind "Log in", "Track my Pass" or
-  "Get your Pamoja Pass" yet.
 - The language switch (EN / SW / FR) and the accessibility menu are labels, not controls.
 - The fixture ticker is hand-written from the seed rather than read from it, so it will
   drift when fixtures change.
