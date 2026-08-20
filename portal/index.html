@@ -94,28 +94,44 @@
 .stats b { font-size: var(--fs-head); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
 
 /* ── Ticker ──────────────────────────────────────────────────────────────── */
-.ticker { background: var(--charcoal); border-top: 1px solid var(--primary-soft);
-          border-bottom: 1px solid var(--primary-soft); padding: 12px 0; overflow: hidden;
-          white-space: nowrap; font-family: "JetBrains Mono", ui-monospace, monospace;
-          font-size: 12px; letter-spacing: 0.08em; color: var(--muted); }
+/* The board runs this on the full indigo rather than the charcoal, in Outfit rather than
+   the mono, and brighter: a broadcast strip, not a footnote. --accent-200 is 8.37 on
+   --primary where the old --muted was 4.80. The marquee itself is untouched — the run is
+   still duplicated and still travels translateX(-50%). */
+.ticker { background: var(--primary); padding: 11px 0; overflow: hidden; white-space: nowrap;
+          font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.12em;
+          text-transform: uppercase; color: var(--accent-200); }
 .ticker-track { display: inline-flex; align-items: center; animation: tickerscroll 32s linear infinite; }
-.ticker-run { display: inline-flex; align-items: center; gap: 36px; padding-right: 36px; }
+.ticker-run { display: inline-flex; align-items: center; gap: 44px; padding-right: 44px; }
 .ticker .live { display: inline-flex; align-items: center; gap: 8px; color: var(--on-dark); }
+/* The board marks live entries with a yellow bullet. The dot stays --success: it is the
+   only state signal in a strip that is otherwise all text, and green is what the fixture
+   chips below use for the same fact. 4.29 on --primary, clear of the 3.0 a graphic needs. */
 .ticker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success);
                animation: livedot 1.6s infinite; }
-.ticker .sep { color: var(--slate); }
-.ticker .clock { color: var(--muted); }
+.ticker .sep { color: var(--primary-soft); }
+.ticker .clock { color: var(--accent-200); }
 
 /* ── Sections ────────────────────────────────────────────────────────────── */
+/* Two grounds, alternating as the board alternates them: warm paper for the reading
+   sections, white under the one band of cards that needs to sit on nothing. The page's
+   old ground was --surface, the cooler lilac, which is now only the body behind the
+   other portal pages. */
+.sec, .sec-tight, .sec-band { background: var(--surface-soft); }
 .sec { padding: clamp(56px, 8vw, 104px) var(--pad-x) 40px; }
 .sec-tight { padding: clamp(56px, 8vw, 96px) var(--pad-x) 56px; }
-.sec-band { background: var(--surface-soft); padding: clamp(56px, 8vw, 88px) var(--pad-x) 96px; }
-.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;
-        margin-bottom: 44px; flex-wrap: wrap; }
-.head h2 { font-size: clamp(28px, 4.2vw, 42px); color: var(--primary); }
-.head .meta { font-size: 16px; font-weight: 300; color: var(--slate); flex: 0 1 auto; }
-.head .meta-mono { font-size: 12px; letter-spacing: 0.1em; color: var(--slate); flex: 0 1 auto; }
-.note { font-size: 10px; letter-spacing: 0.08em; color: var(--slate); margin-top: 18px; }
+.sec-band { padding: clamp(56px, 8vw, 88px) var(--pad-x) 96px; }
+#events { background: var(--canvas); border-top: 1px solid var(--hairline); }
+.head { display: flex; justify-content: space-between; align-items: baseline; gap: 32px;
+        margin-bottom: 36px; flex-wrap: wrap; }
+/* --fs-feature is the scale's section-display step. It reads 64px on a desktop viewport
+   where the board draws 40 — the step folded the board's 40px heads and its 64px closing
+   line into one fluid size, and the eight steps are fixed, so the page takes the step and
+   the size follows. */
+.head h2 { font-size: var(--fs-feature); color: var(--primary); line-height: 0.95; }
+.head .meta { font-size: var(--fs-small); font-weight: 400; color: var(--slate); flex: 0 1 auto; }
+.head .meta-mono { font-size: var(--fs-micro); letter-spacing: 0.12em; color: var(--steel); flex: 0 1 auto; }
+.note { font-size: var(--fs-micro); letter-spacing: 0.1em; color: var(--steel); margin-top: 18px; }
 
 /* ── Five doors: the accordion ───────────────────────────────────────────── */
 .doors { display: flex; gap: 14px; height: 440px; }
