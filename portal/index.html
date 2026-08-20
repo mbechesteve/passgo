@@ -532,6 +532,13 @@
      drifts. It is gone; portal.css owns the nav on every page. */
   /* One column, and the figure row folds to the 2x2 the Mobile board draws. */
   .hero-inner { grid-template-columns: 1fr; gap: 26px; }
+  /* The trophy doodle is the desktop board's hero picture. Stacked, it arrives below both
+     calls to action as a 280px band of line art that says nothing the copy has not, and
+     pushes the fixtures further down a screen that has none to spare — so on a phone it
+     does not come. The figure goes, not just the img: the glow is the container's own
+     background and the contact shadow its child, so hiding the picture alone would leave
+     a yellow smudge standing on a shadow. */
+  .hero-figure { display: none; }
   .stats { grid-template-columns: 1fr 1fr; }
   .stats > span { padding: 15px 0 15px 16px; border-bottom: 1px solid var(--hairline); }
   .stats > span:nth-child(odd) { padding-left: 0; }
