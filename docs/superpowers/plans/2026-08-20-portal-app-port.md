@@ -1038,10 +1038,10 @@ Delete the HTML comment block that promises hand-copied figures — it is no lon
     var counts = P.countsByCategory(partners);
     document.getElementById("categories").innerHTML = P.CATEGORIES.map(function (c) {
       return "<li>" + esc(P.CATEGORY_LABEL[c]) + " <strong>" +
-             (counts[c] || 0).toLocaleString("en-KE") + "</strong></li>";
+             (counts[c] || 0).toLocaleString("en-US") + "</strong></li>";
     }).join("");
     document.getElementById("network-total").textContent =
-      partners.length.toLocaleString("en-KE") + " partners across three countries";
+      partners.length.toLocaleString("en-US") + " partners across three countries";
 
     document.getElementById("record").innerHTML = events.length
       ? events.slice(0, 3).map(function (e) {
@@ -1331,10 +1331,10 @@ Open with the shell in *The page shell*, titled `Partners — Pamoja`. Then the 
     var partners = P.generatePartners();
     var counts = P.countsByCategory(partners);
     document.getElementById("total").textContent =
-      partners.length.toLocaleString("en-KE") + " partners";
+      partners.length.toLocaleString("en-US") + " partners";
     document.getElementById("categories").innerHTML = P.CATEGORIES.map(function (c) {
       return "<li>" + esc(P.CATEGORY_LABEL[c]) + " <strong>" +
-             (counts[c] || 0).toLocaleString("en-KE") + "</strong></li>";
+             (counts[c] || 0).toLocaleString("en-US") + "</strong></li>";
     }).join("");
 
     var near = P.NAMED_PARTNERS.slice(0, 8);
@@ -1554,7 +1554,7 @@ for (const { w, h, phone } of WIDTHS) {
       // Figures, read from the DOM, compared against the bundle's own computation.
       if (file === "partners.html" || file === "dashboard.html") {
         const expected = await page.evaluate(
-          () => window.Pamoja.generatePartners().length.toLocaleString("en-KE"));
+          () => window.Pamoja.generatePartners().length.toLocaleString("en-US"));
         const body = await page.innerText("body");
         assert.ok(body.includes(expected),
           `the network total (${expected}) must appear on the page`);
