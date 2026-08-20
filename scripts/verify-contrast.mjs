@@ -65,5 +65,25 @@ assert.ok(
     `a text-safe colour, move it into PAIRS; if not, this assertion is stale.`
 );
 
+/* --stone is also deliberately absent from PAIRS, for the opposite reason to --brand:
+   it IS used as text (the .tabbar label in app.css), just never against --primary. It
+   can't be, structurally — --stone sits on --canvas (a light ground, wants a darker
+   token) and would need to sit on --primary (a dark ground, wants a lighter one) at
+   the same time, and no single grey clears 4.5 against both #ffffff and #23276b (the
+   midpoint search that proves this: nothing between 0x00 and 0xff does). --primary
+   went from near-black to indigo under Task 1, which is what turned the old
+   .split-left .foot — the compliance line "Prototype figures · Pamoja never holds
+   funds." — from 6.07 to 3.09 on that pairing. The fix was to stop pairing them: .foot
+   now takes --muted (4.80 on --primary, already in PAIRS, already the colour the line
+   above it in the same panel uses), and --stone stays put for the tabbar. Assert the
+   ratio stays below 4.5 so nobody "fixes" a future regression by re-pairing them. */
+const stoneOnPrimary = ratio(token("stone"), token("primary"));
+assert.ok(
+  stoneOnPrimary < 4.5,
+  `--stone now reaches ${stoneOnPrimary.toFixed(2)} on --primary. If it has genuinely ` +
+    `been made safe there without breaking its --canvas use, move it into PAIRS; if not, ` +
+    `this assertion caught a stray var(--stone) on a dark ground somewhere.`
+);
+
 console.log(bad ? `\nverify-contrast: ${bad} failing` : "\nverify-contrast: all pairs ok");
 process.exit(bad ? 1 : 0);

@@ -210,8 +210,14 @@
 .split-left h2 { font-size: clamp(24px, 2.6vw, 30px); color: var(--canvas); margin: 14px 0 12px; line-height: 1; }
 .split-left p { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.55; margin-bottom: 28px; }
 .split-left .btn { align-self: flex-start; }
+/* --stone (4.32 on canvas, 3.09 on primary) is also the .tabbar label colour
+   (app.css), a light-ground use that can't take a darker value just to rescue
+   this dark-ground one — lightening --stone to clear --primary would sink its
+   canvas ratio further. --muted already sits at 4.80 on --primary and is the
+   token .split-left p uses one line up, so reuse it rather than mint a third
+   grey for the same dark panel. */
 .split-left .foot { margin-top: auto; padding-top: 28px; font-size: 10px;
-                    letter-spacing: 0.08em; color: var(--stone); }
+                    letter-spacing: 0.08em; color: var(--muted); }
 .split-right { flex: 1 1 460px; padding: clamp(20px, 3vw, 40px); display: grid;
                grid-template-columns: repeat(3, 1fr); gap: 14px;
                align-content: start; grid-auto-rows: min-content; }
