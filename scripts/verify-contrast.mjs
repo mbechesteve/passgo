@@ -75,14 +75,23 @@ assert.ok(
    .split-left .foot — the compliance line "Prototype figures · Pamoja never holds
    funds." — from 6.07 to 3.09 on that pairing. The fix was to stop pairing them: .foot
    now takes --muted (4.80 on --primary, already in PAIRS, already the colour the line
-   above it in the same panel uses), and --stone stays put for the tabbar. Assert the
-   ratio stays below 4.5 so nobody "fixes" a future regression by re-pairing them. */
+   above it in the same panel uses), and --stone stays put for the tabbar.
+
+   What follows is a tripwire on the two TOKEN VALUES, not on their use. It re-derives the
+   ratio from --stone's and --primary's own hex, so it fires only when someone edits one of
+   those two tokens. A fresh var(--stone) written onto a dark panel tomorrow would sit at
+   this same failing 3.09 and the suite would stay green — catching that needs a usage
+   scanner, which this is not. Its job is narrower and still worth doing: stop anyone
+   "fixing" a future dark-ground regression by lightening --stone until the pair clears
+   4.5, which would quietly sink its --canvas use instead. */
 const stoneOnPrimary = ratio(token("stone"), token("primary"));
 assert.ok(
   stoneOnPrimary < 4.5,
-  `--stone now reaches ${stoneOnPrimary.toFixed(2)} on --primary. If it has genuinely ` +
-    `been made safe there without breaking its --canvas use, move it into PAIRS; if not, ` +
-    `this assertion caught a stray var(--stone) on a dark ground somewhere.`
+  `--stone now reaches ${stoneOnPrimary.toFixed(2)} on --primary. A token value changed: ` +
+    `--stone or --primary. This checks the two values against each other, not where they ` +
+    `are used, so it cannot mean a stray var(--stone) appeared on a dark ground. If the ` +
+    `pair was made safe deliberately AND --stone still clears 4.5 on --canvas, move it ` +
+    `into PAIRS; otherwise the edit that raised this ratio is the bug.`
 );
 
 console.log(bad ? `\nverify-contrast: ${bad} failing` : "\nverify-contrast: all pairs ok");
