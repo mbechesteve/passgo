@@ -69,9 +69,10 @@ a rename."*
 | `--ink` | `#0a0a0a` | `#23276b` | body and headings |
 | `--primary` | `#0a0a0a` | `#23276b` | dark ground: nav, dark panels |
 | `--primary-soft` | `#181e25` | derive from indigo | raised dark surface |
-| `--accent` | `#1456f0` | `#f4772c` | interactive: CTAs, "pamoja." |
-| `--accent-mid` | `#3b82f6` | derive from orange | hover |
-| `--accent-deep` | `#1d4ed8` | derive from orange | focus ring |
+| `--accent` | `#1456f0` | `#23276b` | interactive: buttons, active tab, links |
+| `--accent-mid` | `#3b82f6` | derive from indigo | hover |
+| `--accent-deep` | `#1d4ed8` | derive from indigo | focus ring |
+| **new** `--brand` | — | `#f4772c` | the "pamoja." wordmark and decorative marks. **Display sizes only, never body text, never on white below 40px** |
 | `--surface` | `#f7f8fa` | `#e9e8f1` | sunken band |
 | `--surface-soft` | `#f2f3f5` | `#f7f6f3` | warm paper (from Mobile) |
 | `--hairline` | `#e5e7eb` | `#b9bce4` | lilac rules |
@@ -91,9 +92,28 @@ reproducible and reviewable rather than eyeballed — if a computed value fails 
 against its background, contrast wins and the deviation is recorded in the token file.
 
 Every foreground/background pair must clear **WCAG AA** (4.5:1 for body, 3:1 for large
-text). Orange `#f4772c` on white is around 3:1, so it is usable for large text, buttons
-and rules but **not** for body copy — the board uses it that way and the tokens must not
-invite otherwise.
+text). Measured, not estimated:
+
+| Pair | Ratio | Needs | |
+|---|---|---|---|
+| indigo on white / white on indigo | 13.34 | 4.5 | pass |
+| yellow `#ffd22c` on indigo | 9.22 | 3.0 | pass |
+| orange on indigo | 4.78 | 3.0 | pass |
+| **orange on white** | **2.79** | 3.0 | **fails even large text** |
+| **muted `#7c7e96` on indigo** | **3.36** | 4.5 | **fails** |
+| white on orange | 2.79 | 4.5 | fails — an orange button cannot take a white label |
+
+Two consequences, both departures from a naive reading of the board:
+
+- **Orange is not the interactive colour.** An earlier draft of the table above mapped
+  `--accent` to orange. That was wrong twice over: `--accent` colours the active tab label
+  at 11px, where 2.79 is unusable; and the board's own buttons are indigo pills — orange
+  is the wordmark and the decorative marks, not a control surface. `--accent` is indigo;
+  orange gets its own `--brand` token, restricted to display sizes.
+- **`--muted` must be lightened, not lifted.** Its documented role is secondary text on
+  dark, and the board value fails on indigo. `--muted` becomes `#989aad` (the board value
+  +10% lightness, 4.8 on indigo). This is the derivation rule yielding to contrast,
+  exactly as provided for.
 
 **Two tokens need more than a repoint:**
 
