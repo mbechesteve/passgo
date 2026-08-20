@@ -194,8 +194,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .underline-link:hover { color: var(--canvas); text-decoration: underline; }
 
 /* ── Utility bar ─────────────────────────────────────────────────────────── */
-.utility { background: var(--charcoal); color: var(--surface-soft); display: flex; align-items: center;
-           gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
+/* The board sits this strip on the indigo ground with the lilac hairline text, centred —
+   not the charcoal-on-surface-soft pairing left over from an earlier pass, and not left-
+   aligned. --primary and --hairline are the tokens that actually match its values. */
+.utility { background: var(--primary); color: var(--hairline); display: flex; align-items: center;
+           justify-content: center; gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
 
 /* ── Nav ─────────────────────────────────────────────────────────────────── */
 .nav { background: var(--primary); display: flex; align-items: center; gap: clamp(16px, 3vw, 44px);
