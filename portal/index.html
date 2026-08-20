@@ -64,10 +64,13 @@
   color: var(--ink);
   margin: 0;
 }
-/* The one legitimate use of --brand on text: --fs-display is 52-96px, far above the
-   large-text threshold, and the board draws the wordmark exactly this way. Anywhere
-   smaller and this would fail at 2.79 on white. */
-.hero-title-brand { color: var(--brand); }
+/* The wordmark, and it takes --display-tint rather than --brand. Size was never the
+   problem: --brand is 2.79 on --canvas, which is under 3.0, so it failed the large-text
+   floor here at 96px exactly as it would have at 16px — the old comment on this rule had
+   the size right and the threshold wrong. --display-tint is the same orange, dark enough
+   to clear, and it is the colour the two-tone headings further down the page use, so the
+   wordmark and "Five doors." are now demonstrably the same orange rather than nearly. */
+.hero-title-tone { color: var(--display-tint); }
 
 .hero .slash { font-size: var(--fs-micro); letter-spacing: 0.14em; color: var(--steel);
                margin: 20px 0 18px; }
@@ -110,9 +113,13 @@
                 letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); }
 .stats > span:first-child { padding-left: 0; }
 .stats > span:last-child { border-right: 0; }
-/* The board sets these in orange, indigo, cyan, indigo. Orange is 2.79 on white and the
-   cyan is gone from the palette, so all four are --ink: one figure row, one colour. */
+/* The board sets these orange, indigo, cyan, indigo, and now so does the page. --fs-head
+   at weight 800 is 28px bold — large text, 3.0 — which both display tints clear on this
+   white ground. The two that stay --ink are the board's own two: it does not colour all
+   four, and a row where every figure shouts is a row where none does. */
 .stats b { font-size: var(--fs-head); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+.stats .tone { color: var(--display-tint); }
+.stats .tone-alt { color: var(--display-tint-alt); }
 
 /* ── Ticker ──────────────────────────────────────────────────────────────── */
 /* The board runs this on the full indigo rather than the charcoal, in Outfit rather than
@@ -150,13 +157,17 @@
    the host country") at 40px, and the step now actually reaches 40 instead of
    overshooting to a display size that belonged to different, larger headings.
 
-   The board two-tones the second half of each of these in orange, but all three sit on
-   white or near-white grounds (.sec, #events) where --brand is 2.79 — under 3.0, so it
-   fails even the large-text floor at any size. These stay one flat colour; the same
-   two-tone treatment is on .cta-band h2 instead, the one heading that both sits on
-   --primary (--brand there is 4.78) and renders at display size, where the board's own
-   pairing is legible. */
+   The board two-tones the second half of each of these, and the page now does too. It
+   did not before, on the grounds that --brand is 2.79 on white — true, but the wrong
+   test twice over: the threshold for a 40px heading is 3.0, not 4.5, and the ground under
+   two of these three is --surface-soft rather than white, which is darker still. The
+   answer to both is --display-tint, which is the board's orange taken down until it
+   clears 3.0 on the ground it actually sits on. "Explore" takes --display-tint-alt, the
+   board's cyan given the same treatment, because the board sets that one heading apart
+   from the other two and the distinction is the point. */
 .head h2 { font-size: var(--fs-feature); color: var(--primary); line-height: 0.95; }
+.head h2 .tone { color: var(--display-tint); }
+.head h2 .tone-alt { color: var(--display-tint-alt); }
 .head .meta { font-size: var(--fs-small); font-weight: 400; color: var(--slate); flex: 0 1 auto; }
 .head .meta-mono { font-size: var(--fs-micro); letter-spacing: 0.12em; color: var(--steel); flex: 0 1 auto; }
 .note { font-size: var(--fs-micro); letter-spacing: 0.1em; color: var(--steel); margin-top: 18px; }
@@ -253,7 +264,7 @@
    The veil's floor was 0 at 100% — fine while kasarani.jpg was greyscale-filtered, but
    colour restores a blown-out floodlight highlight right of centre, and on a narrow
    viewport the eyebrow line ("Next at Kasarani...") is long enough to reach it: measured
-   with the veil and wash both off, that spot is pure #fff behind the yellow eyebrow text,
+   with the veil and wash both off, that spot is pure white behind the yellow eyebrow text,
    which is the worst case a photograph can offer. Solving ink-multiply-over-white for the
    eyebrow's 4.5:1 floor needs alpha ≥ 0.78; 0.82 was chosen for headroom, measured at
    5.32:1 on that exact pixel. The raking fade stays, just doesn't fade all the way out. */
@@ -545,7 +556,7 @@
           <span class="pill pill-line mono">Every match</span>
         </p>
         <h1 class="hero-title">
-          Karibu,<br><span class="hero-title-brand">pamoja.</span>
+          Karibu,<br><span class="hero-title-tone">pamoja.</span>
         </h1>
         <p class="slash mono">/ Welcome, together — your AFCON 2027 fan pass</p>
         <p class="lede">Match access, travel and city services on one digital pass. Pamoja never
@@ -564,9 +575,9 @@
       </div>
     </div>
     <div class="stats">
-      <span><b>11</b>Matches</span>
+      <span><b class="tone">11</b>Matches</span>
       <span><b>7</b>Venues</span>
-      <span><b>3</b>Countries</span>
+      <span><b class="tone-alt">3</b>Countries</span>
       <span><b>2,189</b>Partners</span>
     </div>
   </section>
@@ -596,7 +607,7 @@
 
   <section class="sec" id="pass">
     <div class="head">
-      <h2>One Pass. Five doors.</h2>
+      <h2>One Pass. <span class="tone">Five doors.</span></h2>
       <span class="meta-mono mono">Open a door</span>
     </div>
     <div class="doors">
@@ -711,7 +722,7 @@
 
   <section class="sec-band" id="events">
     <div class="head">
-      <h2>Fan events and promotions</h2>
+      <h2>Fan events <span class="tone">and promotions</span></h2>
       <span class="meta">Free with an active Pass unless marked</span>
     </div>
     <div class="rail" id="ev-rail">
@@ -761,7 +772,7 @@
 
   <section class="sec" id="explore" style="padding-bottom:clamp(64px,9vw,104px)">
     <div class="head">
-      <h2>Explore the host country</h2>
+      <h2>Explore the <span class="tone-alt">host country</span></h2>
       <span class="meta">Partner discounts apply at 2,189 businesses</span>
     </div>
     <div class="broken">

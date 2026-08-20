@@ -40,6 +40,20 @@ const PAIRS = [
   ["muted",     "primary", 4.5, "secondary type on the dark ground"],
   ["highlight", "primary", 3.0, "the figures and eyebrows on dark"],
   ["accent",    "canvas",  4.5, "links and the active destination"],
+  /* The two-tone display tints. 3.0, not 4.5: every use is --fs-feature (28-40px, 800),
+     --fs-head at 800, or --fs-display, all of which are WCAG "large text". Each is
+     listed against BOTH light grounds, because the page has two of them and the board's
+     headings do not all sit on the same one — "Fan events and promotions" is on
+     --canvas, "One Pass. Five doors." and "Explore the host country" are on
+     --surface-soft, which is darker and therefore the binding case. */
+  ["display-tint",     "canvas",       3.0, "the warm half of a display heading, on paper"],
+  ["display-tint",     "surface-soft", 3.0, "the same, on the banded ground"],
+  ["display-tint-alt", "canvas",       3.0, "the cool half of a display heading, on paper"],
+  ["display-tint-alt", "surface-soft", 3.0, "the same, on the banded ground"],
+  /* --brand is a text colour in exactly one place — "tournament." on the CTA band — and
+     the board's raw orange clears there, so it is checked where it is used rather than
+     being darkened for a ground it never sits on. */
+  ["brand",            "primary",      3.0, "the warm half of the CTA headline, on indigo"],
 ];
 /* Note: the ratio is symmetric, so a pair is listed once. --canvas on --accent is the
    same number as --accent on --canvas — a button label on the indigo ground is covered

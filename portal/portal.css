@@ -25,9 +25,35 @@
   --accent-mid:   #2d328a;   /* hover */
   --accent-deep:  #171a4c;   /* focus ring — indigo -8%, darker so it reads against the fill */
   --accent-200:   #c9cbe6;   /* indigo tint */
-  --brand:        #f4772c;   /* the "pamoja." wordmark and decorative marks.
-                                DISPLAY SIZES ONLY. Never body text, never a control
-                                surface, never on white below 40px: it is 2.79 there. */
+  --brand:        #f4772c;   /* the board's orange, at the board's own value. It is 2.79
+                                on --canvas and 2.58 on --surface-soft — below even the 3.0
+                                a display-size heading needs — so on a light ground it is a
+                                FILL and a DECORATION only, never type. On --primary it is
+                                4.78, and that is the one place it is set as text: the
+                                second half of the CTA headline, which is where the board
+                                puts it too. For orange type on paper, --display-tint. */
+
+  /* The two display tints. These are the board's two-tone headings — "One Pass. FIVE
+     DOORS.", "Fan events AND PROMOTIONS", "Explore the HOST COUNTRY" — plus the figures
+     the board colours the same way, and they are named for that job rather than for the
+     hue, because what makes them a pair is where they may be used, not that one is warm
+     and one is cool. Both are display register only: --fs-feature, --fs-head at 800 or
+     --fs-display, all of which are WCAG large text at 3.0. Neither may go near body copy.
+
+     Both differ from the board's raw value, and both differ for the same reason. The
+     ratios were measured against --surface-soft, not white: two of the three headings sit
+     on the banded ground, which is darker than paper, so clearing 3.0 on #ffffff is not
+     enough to clear it on the page. */
+  --display-tint:     #eb600c;  /* the board's #f4772c at -8% HSL lightness. Raw: 2.79 on
+                                   --canvas, 2.58 on --surface-soft. Here: 3.38 and 3.13,
+                                   and 3.95 on --primary, so it holds on all three grounds. */
+  --display-tint-alt: #1f8fc4;  /* the board's cyan (#2fb9c7 on v6, a lighter #3daeff on the
+                                   phone board) taken down until it clears: raw it is 2.36
+                                   on --canvas and 2.19 on --surface-soft. Here: 3.63, 3.36,
+                                   and 3.67 on --primary. One value for both grounds rather
+                                   than a light-ground and a dark-ground cyan, because a
+                                   second cyan differing only in lightness would be two
+                                   cyans, and this one already clears everywhere. */
   --highlight:    #ffd22c;   /* the figures and eyebrows. 9.22 on indigo. */
   --on-dark:      #ffd22c;   /* accent text ON dark — was --cyan, which could not keep
                                 its name while holding yellow. */
