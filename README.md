@@ -52,19 +52,27 @@ PassGo/
 
 ## Deploy the web build (Vercel / Netlify / static)
 
-The app exports to a static SPA — `npm run build` (`expo export --platform web`)
-writes everything to `dist/`. Two things the host must do, both already wired up:
+`npm run build` writes one directory, `dist/`, holding two stacked trees: the
+portal at the root and the Expo web export under `/app`. It runs
+`build:portal-bundle` (esbuild over `src/portal-entry.ts` → `portal/app-data.js`),
+then `expo export --platform web --output-dir dist/app`, then copies `portal/`
+over the root of `dist/` and injects the PWA manifest. Three things the host must
+do, all already wired up:
 
-- **Build with `expo export` and serve `dist/`** — otherwise the host serves
-  nothing (blank page).
-- **SPA fallback** — rewrite every route to `/index.html` so refreshes and deep
-  links don't 404.
+- **Build with `npm run build` and serve `dist/`** — not `expo export` on its
+  own, which would leave the domain root empty.
+- **Rewrite `/app` and `/app/*` to `/app/index.html`** — the app is a single-page
+  app, so its deep links need the fallback.
+- **Leave the root alone.** The portal is made of real files and must *not* have
+  a catch-all fallback: with one, a mistyped URL renders the marketing page
+  instead of 404ing. `netlify.toml` says so where the rule lives.
 
-`vercel.json` and `netlify.toml` configure both. On Vercel, the committed
-`vercel.json` overrides any auto-detected framework — just redeploy. Assets are
-referenced from the domain **root** (`/_expo/...`), so deploy at the root of the
-domain, not a sub-path.
+`vercel.json` and `netlify.toml` configure all three. On Vercel, the committed
+`vercel.json` overrides any auto-detected framework — just redeploy. The app's
+assets are referenced from `/app/...` (`experiments.baseUrl` in `app.json`), so
+deploy at the root of the domain, not a sub-path.
 
 ```bash
 npm run build      # → dist/  (what the host runs)
+npm run dev        # the same shape locally: portal at /, Metro proxied behind /app
 ```
