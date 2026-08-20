@@ -19,6 +19,7 @@
   if (!P || !S) return;
 
   var esc = C.esc;
+  var T = P.strings.S;   // HomeScreen's own copy, not a second wording of it
 
   function render() {
     var now = S.now(), pass = S.pass(), events = S.events();
@@ -54,7 +55,7 @@
           return "<li><strong>" + esc(l.primary) + "</strong><br>" +
                  '<span class="muted">' + esc(l.secondary) + "</span></li>";
         }).join("")
-      : '<li class="muted">Nothing spent yet.</li>';
+      : '<li class="muted">' + esc(T.homeSavedEmptyHint) + "</li>";
 
     // ExploreItem (src/types/index.ts) names the field `name`, not `title` — there
     // is no `title` field on the type, so a `||` fallback would only ever mask a typo.

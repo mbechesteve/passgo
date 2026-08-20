@@ -24,13 +24,24 @@ runInNewContext(src, sandbox);
 const P = sandbox.Pamoja;
 assert.ok(P, "the bundle must define a Pamoja global");
 
-for (const name of [
-  "strings", "clock", "MATCHES", "MATCH_LIVE", "ENTITLEMENTS", "generatePartners",
-  "issuePass", "validityLabel", "countsByCategory", "buildRedemption", "recordLine",
-  "totalSaved", "nextMatch", "matchLabel", "usePassStore", "useRecordStore",
-]) {
-  assert.ok(name in P, `Pamoja.${name} is missing from the bundle`);
-}
+// The whole of the boundary, in one list, asserted in BOTH directions. A page that
+// starts reading something new fails here until src/portal-entry.ts is widened
+// deliberately — and so does an export no page reads, which is what keeps that
+// file's "and nothing else" a fact rather than a wish.
+const CONTRACT = [
+  "strings", "clock",
+  "MATCHES", "EXPLORE_ITEMS", "PARKING_ZONES", "NAMED_PARTNERS", "generatePartners",
+  "DEMO_HOLDER_NAME", "passStatus", "validityLabel",
+  "CATEGORIES", "CATEGORY_LABEL", "countsByCategory",
+  "buildRedemption", "computeMoney", "kes",
+  "KINDS", "KIND_LABEL", "describeMethod", "tailOf",
+  "recordLine", "totalSaved", "totalSpent",
+  "daysUntilLabel", "gatesOpenLabel", "kickoffChipLabel", "kickoffLabel",
+  "liveMatches", "matchLabel", "matchPhase", "minuteLabel", "nextMatch",
+  "usePassStore", "useRecordStore", "usePaymentStore",
+];
+assert.deepEqual(Object.keys(P).sort(), [...CONTRACT].sort(),
+  "the bundle must expose exactly the portal contract, no more and no less");
 
 // The figures must survive bundling, not just the names.
 assert.equal(P.generatePartners().length, 2189, "Figure 3: the network totals 2,189");

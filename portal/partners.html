@@ -69,7 +69,9 @@
   <div class="sheet-head"><h2 style="margin:0;font-size:20px" id="redeem-title"></h2>
     <button class="sheet-close" aria-label="Close">&times;</button></div>
   <div class="sheet-body">
-    <p class="muted">Pamoja never holds your money — this is a direct hand-off.</p>
+    <!-- Written by pages/partners.js from S.partnerDisclaimer — the same sentence
+         PartnerScreen shows, rather than a second wording of the same promise. -->
+    <p class="muted" id="redeem-note"></p>
     <label for="gross">Amount (KES)</label>
     <input id="gross" type="number" inputmode="numeric" value="1000" min="0"
            style="min-height:44px;width:100%">

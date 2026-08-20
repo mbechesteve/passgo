@@ -17,11 +17,13 @@
   if (!P || !S) return;
 
   var esc = C.esc;
+  var T = P.strings.S;   // the app's own words for "live" and for nothing being on
 
   function render() {
     var now = S.now();
     var live = P.liveMatches(P.MATCHES, now);
-    document.getElementById("state").textContent = live.length ? "Live now" : "Nothing live";
+    document.getElementById("state").textContent =
+      live.length ? T.liveBadge : T.liveNothingOn;
     document.getElementById("live-body").innerHTML = live.length
       ? live.map(function (m) {
           return "<p><strong>" + esc(P.matchLabel(m)) + "</strong> · " +
@@ -30,8 +32,8 @@
       : (function () {
           var next = P.nextMatch(P.MATCHES, now);
           return next
-            ? '<p class="muted">Next: ' + esc(P.matchLabel(next)) + " · " +
-              esc(P.daysUntilLabel(next, now)) + "</p>"
+            ? '<p class="muted">' + esc(T.liveNextUp) + ": " +
+              esc(P.matchLabel(next)) + " · " + esc(P.daysUntilLabel(next, now)) + "</p>"
             : '<p class="muted">The tournament is over on this clock.</p>';
         })();
   }

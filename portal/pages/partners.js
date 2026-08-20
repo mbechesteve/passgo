@@ -21,6 +21,7 @@
   // nothing rather than throwing its way to a blank screen.
   if (!P || !S) return;
   var esc = C.esc;
+  var T = P.strings.S;
 
   /* The app's own formatter, through the bundle — see Task 5. Do not hand-write one:
      kes() is en-US, and a local copy reliably guesses en-KE. */
@@ -89,6 +90,8 @@
   }
 
   S.ready().then(function () {
+    // The app's own hand-off promise, in PartnerScreen's words.
+    document.getElementById("redeem-note").textContent = T.partnerDisclaimer;
     sheet = C.dialog("redeem");
     document.getElementById("gross").addEventListener("input", preview);
     document.getElementById("confirm-redeem").addEventListener("click", function () {

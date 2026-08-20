@@ -36,7 +36,7 @@
 
     document.getElementById("greeting").textContent = pass
       ? "Karibu, " + pass.holderName.split(" ")[0] + "."
-      : "No Pass on this device yet.";
+      : T.scanNoPassOnDevice;
 
     document.getElementById("validity").textContent = pass
       ? P.validityLabel(pass, now)
@@ -61,7 +61,7 @@
           return "<li><strong>" + esc(line.primary) + "</strong><br>" +
                  '<span class="muted">' + esc(line.secondary) + "</span></li>";
         }).join("")
-      : '<li class="muted">Nothing spent yet.</li>';
+      : '<li class="muted">' + esc(T.walletEmptyState) + "</li>";
 
     document.getElementById("record-totals").textContent =
       P.kes(P.totalSpent(events)) + " spent · " + P.kes(P.totalSaved(events)) + " saved";
