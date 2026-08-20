@@ -3,7 +3,10 @@
    app inside the portal needs. The breakpoint is 860px, the portal's own, so the
    marketing page and these pages reflow together. */
 
-.appmain { padding: 0 var(--pad-x) 96px; max-width: 1180px; margin: 0 auto; }
+/* No bottom padding here: it exists only to clear the fixed .tabbar, which is itself
+   phone-only, so the clearance is scoped to the same 860px breakpoint below rather
+   than paid on desktop where there is nothing to clear. */
+.appmain { padding: 0 var(--pad-x); max-width: 1180px; margin: 0 auto; }
 
 /* --- the five destinations ------------------------------------------------- */
 
@@ -35,11 +38,12 @@
 
 /* --- the pass credential, as a compact card rather than one giant figure --- */
 
-/* `.figure` (portal.css) is built for a single big stat — a 40px mono number —
+/* auth.css's `.figure` was built for a single big stat — a 40px mono number —
    so four dt/dd rows inheriting it all became that size, stacked full-width and
    wrapping mid-value on a phone ("Pass number" / "KE-PM-8842" on their own huge
    lines). A grid pairs each label with its value on one row instead: the label
-   stays small and quiet, the value reads clearly without taking over the card. */
+   stays small and quiet, the value reads clearly without taking over the card.
+   (`.figure` itself is gone now — nothing else was using it either.) */
 .credential {
   display: grid; grid-template-columns: max-content 1fr;
   column-gap: 18px; row-gap: 12px; align-items: baseline; margin: 0;
@@ -61,12 +65,17 @@
 
 /* --- detail, as a dialog rather than a destination -------------------------- */
 
+/* Kept off the board's --radius-card on purpose: the phone rule below already
+   hard-codes this same 16px on the top corners only, so the desktop card and the
+   phone bottom-sheet share one radius across the breakpoint. Moving just the
+   desktop rule to the 20px card token would put a seam at 860px where none
+   exists today; the sheet is a modal, not one of the board's cards. */
 dialog.sheet {
   border: 0; padding: 0; background: var(--canvas); color: var(--ink);
   border-radius: 16px; max-width: 620px; width: calc(100% - 32px);
-  box-shadow: 0 24px 64px rgba(10, 10, 10, 0.24);
+  box-shadow: 0 24px 64px rgba(var(--ink-rgb), 0.24);
 }
-dialog.sheet::backdrop { background: rgba(10, 10, 10, 0.44); }
+dialog.sheet::backdrop { background: rgba(var(--ink-rgb), 0.44); }
 .sheet-head {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   padding: 20px 24px; border-bottom: 1px solid var(--hairline);
@@ -86,8 +95,4 @@ dialog.sheet::backdrop { background: rgba(10, 10, 10, 0.44); }
     position: fixed; inset: auto 0 0 0;
     border-radius: 16px 16px 0 0; max-height: 88dvh; overflow-y: auto;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  dialog.sheet { animation: none; }
 }

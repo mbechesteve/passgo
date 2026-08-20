@@ -47,6 +47,9 @@
   --ink-rgb:      35, 39, 107;  /* for the translucent inks app.css needs; a component
                                    must not decompose --ink by hand */
   --pad-x:        clamp(20px, 5vw, 64px);
+  --radius-card:  20px;   /* the board's card radius, counted across both boards: pills
+                              stay 999px, circles stay 50%, only the flat-card corner moves
+                              from the ported 16px to this. */
 
   /* Eight steps, derived from the boards rather than lifted. v6 and Mobile carry 30
      distinct sizes between them, which is not 30 decisions: everything at 40px and up
