@@ -88,6 +88,26 @@
   <div class="sheet-body">
     <p class="muted">The default method is the one offered first at a counter.</p>
     <ul class="rowline" id="wallet-list"></ul>
+
+    <!-- Adding a method: the app's PaymentMethodScreen fields, and no others — which
+         kind, and the number. Every label here is written by pages/pass.js out of the
+         bundle's own strings, so the wording is the app's rather than a second copy
+         of it, and the kinds come from `KINDS` rather than being typed out.
+
+         This captures no payment and funds nothing (Rev. 2 §05). The number is read
+         once, handed to usePaymentStore.add, and dropped: only the digit tail is ever
+         stored, and the field is cleared rather than echoed back. It carries no `name`
+         and the form never submits, so it cannot leave the page even by accident. -->
+    <form id="add-method" autocomplete="off" style="margin-top:20px">
+      <fieldset id="method-kinds" style="border:0;padding:0;margin:0">
+        <legend class="eyebrow mono" id="kind-heading"></legend>
+      </fieldset>
+      <label for="method-number" id="number-heading" style="display:block;margin-top:14px"></label>
+      <input id="method-number" type="text" inputmode="numeric" autocomplete="off"
+             style="min-height:44px;width:100%">
+      <p class="muted mono" id="number-note" style="font-size:11px"></p>
+      <button class="btn" id="save-method" type="submit" style="min-height:44px"></button>
+    </form>
   </div>
 </dialog>
 

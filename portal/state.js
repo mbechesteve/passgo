@@ -120,6 +120,17 @@
     methods: function () { return payment.getState().methods; },
     chooseMethod: function (id) { payment.getState().choose(id); },
 
+    /* Adding one, so that choosing a default is a flow a fan can actually reach.
+       The store starts empty and nothing seeds it, so without this the wallet was a
+       button onto a permanent "nothing saved" — a control that looks as though it
+       can do a thing it cannot, which the spec forbids.
+
+       `raw` is handed straight to the app's own `add`, which derives the digit tail
+       in makeMethod and keeps nothing else. Rev. 2 §05 survives because the number
+       never becomes state here: this function holds no copy of it, returns nothing,
+       and the caller clears the field. */
+    addMethod: function (kind, raw) { payment.getState().add(kind, raw); },
+
     reset: function () {
       pass.getState().reset();
       record.getState().clear();

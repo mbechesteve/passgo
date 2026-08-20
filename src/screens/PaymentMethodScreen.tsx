@@ -9,14 +9,8 @@ import { Eyebrow } from "@/components/pamoja/Eyebrow";
 import { S } from "@/lib/strings";
 import { TOUCH_MIN } from "@/lib/layout";
 import { usePaymentStore } from "@/store/usePaymentStore";
-import { KINDS, describeMethod, tailOf } from "@/utils/payment";
+import { KIND_LABEL, KINDS, describeMethod, tailOf } from "@/utils/payment";
 import type { PaymentKind } from "@/types";
-
-const KIND_LABEL: Record<PaymentKind, string> = {
-  mpesa: "M-Pesa",
-  airtel: "Airtel Money",
-  card: "Card",
-};
 
 /**
  * The methods a fan will pay with, and adding another.

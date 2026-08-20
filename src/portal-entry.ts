@@ -30,7 +30,7 @@ export {
 } from "@/utils/partners";
 export { buildRedemption, computeMoney } from "@/utils/redeem";
 export { kes } from "@/utils/format";
-export { describeMethod } from "@/utils/payment";
+export { KINDS, KIND_LABEL, describeMethod, tailOf } from "@/utils/payment";
 export {
   groupByDay,
   hasBorderEvent,

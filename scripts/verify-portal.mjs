@@ -529,6 +529,78 @@ for (const { w, h } of WIDTHS) {
         });
       }
 
+      // --- the wallet, the other flow that really changes state --------------
+      // Adding is what makes choosing a default reachable: the store ships empty
+      // and nothing seeds it, so before there was a way to add one, `choose` could
+      // never run. Both halves are exercised, and then the page is reloaded —
+      // because a multi-page portal reloads on every navigation, and a wallet that
+      // does not survive that is not a wallet.
+      if (file === "pass.html" && state.populated) {
+        await check(`${label} wallet`, async () => {
+          const typed = { mpesa: "0712345789", card: "4111111111114921" };
+          await page.click("#open-wallet", { timeout: CLICK_MS });
+
+          const before = await page.evaluate(() => window.PamojaState.methods().length);
+          await page.fill("#method-number", typed.mpesa);
+          await page.click("#save-method", { timeout: CLICK_MS });
+          await page.click("#kind-card", { timeout: CLICK_MS });
+          await page.fill("#method-number", typed.card);
+          await page.click("#save-method", { timeout: CLICK_MS });
+
+          const added = await page.evaluate(() => {
+            const P = window.Pamoja, S = window.PamojaState;
+            return {
+              count: S.methods().length,
+              rows: document.querySelectorAll("#wallet-list li").length,
+              listed: (document.querySelector("#wallet-list")?.textContent ?? "").trim(),
+              described: S.methods().map((m) => P.describeMethod(m)),
+              field: document.getElementById("method-number").value,
+              stored: window.localStorage.getItem("pamoja-payment") ?? "",
+              defaults: S.methods().filter((m) => m.isDefault).map((m) => m.id),
+              ids: S.methods().map((m) => m.id),
+            };
+          });
+          assert.equal(added.count, before + 2, "saving must add exactly one method each time");
+          assert.equal(added.rows, added.count, "every saved method must be listed");
+          for (const line of added.described) {
+            assert.ok(added.listed.includes(line),
+              `the wallet must name the method as describeMethod does (${line})`);
+          }
+          assert.equal(added.field, "", "the number typed must not be echoed back");
+          // Rev. 2 §05, checked rather than asserted in prose: what reached the disk
+          // must not contain the number the fan typed.
+          for (const raw of Object.values(typed)) {
+            assert.ok(!added.stored.includes(raw),
+              "the raw number must never reach storage");
+          }
+          assert.equal(added.defaults.length, 1, "exactly one method may be the default");
+
+          // Move the default to a method that is not currently holding it.
+          const other = added.ids.find((id) => id !== added.defaults[0]);
+          await page.click(`#wallet-list input[value="${other}"]`, { timeout: CLICK_MS });
+          assert.deepEqual(
+            await page.evaluate(() => window.PamojaState.methods().filter((m) => m.isDefault).map((m) => m.id)),
+            [other], "choosing must move the default");
+
+          // And it has to still be there after the page goes away and comes back.
+          await page.reload({ waitUntil: "load" });
+          await page.waitForFunction(
+            () => !document.documentElement.hasAttribute("data-booting"), null, { timeout: 20000 });
+          await page.waitForFunction(
+            (sel) => (document.querySelector(sel)?.textContent ?? "").trim().length > 0,
+            renderedSel, { timeout: 20000 });
+          const reloaded = await page.evaluate(() => {
+            const S = window.PamojaState;
+            return {
+              ids: S.methods().map((m) => m.id),
+              defaults: S.methods().filter((m) => m.isDefault).map((m) => m.id),
+            };
+          });
+          assert.deepEqual(reloaded.ids, added.ids, "the wallet must survive a reload");
+          assert.deepEqual(reloaded.defaults, [other], "the chosen default must survive a reload");
+        });
+      }
+
       // --- the figures ------------------------------------------------------
       await check(`${label} figures`, async () => {
         const rows = await page.evaluate(PROBES[file]);

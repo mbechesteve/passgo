@@ -3,7 +3,12 @@ import type { PaymentMethod, PaymentKind } from "@/types";
 /** The kinds the redemption screen already promises: "M-Pesa, Airtel Money or card". */
 export const KINDS: PaymentKind[] = ["mpesa", "airtel", "card"];
 
-const LABEL: Record<PaymentKind, string> = {
+/**
+ * What each kind is called on screen. Exported because two surfaces name these —
+ * PaymentMethodScreen's kind picker and the portal's wallet sheet — and a second
+ * copy of "Airtel Money" is a place the two drift.
+ */
+export const KIND_LABEL: Record<PaymentKind, string> = {
   mpesa: "M-Pesa",
   airtel: "Airtel Money",
   card: "Card",
@@ -42,7 +47,7 @@ export function makeMethod(
 /** "M-Pesa · •••789", "Card · •••• 4921" — how a fan would say it aloud. */
 export function describeMethod(method: PaymentMethod): string {
   const dots = method.kind === "card" ? "•••• " : "•••";
-  return `${LABEL[method.kind]} · ${dots}${method.tail}`;
+  return `${KIND_LABEL[method.kind]} · ${dots}${method.tail}`;
 }
 
 /** The method a payment would use, or null when the fan has added none. */

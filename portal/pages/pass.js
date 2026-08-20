@@ -22,6 +22,9 @@
   if (!P || !S) return;
 
   var esc = C.esc;
+  // The app's own words, through the bundle. Nothing on this page types a sentence
+  // src/lib/strings.ts already holds.
+  var T = P.strings.S;
 
   function render() {
     var now = S.now();
@@ -83,7 +86,9 @@
     var list = document.getElementById("wallet-list");
 
     if (!methods.length) {
-      list.innerHTML = '<li class="muted">No payment method saved on this device.</li>';
+      // The app's own empty state, which now tells the truth on this page too: a
+      // method can be added right below it.
+      list.innerHTML = '<li class="muted">' + esc(T.payNoneYet) + "</li>";
       return;
     }
 
@@ -104,7 +109,81 @@
     );
   }
 
+  /* Adding a method — the flow that makes choosing a default reachable at all.
+
+     The store ships empty and nothing seeds it, so before this the wallet button
+     always opened onto "no method saved" and `choose` could never run. The spec
+     names choosing the default as one of four flows that really work, so the
+     missing half is supplied rather than the button removed.
+
+     The fields are PaymentMethodScreen's, and only those: which kind, and the
+     number. No payment is captured and no balance exists — Rev. 2 §05 — and the
+     number itself is not kept anywhere: it goes to usePaymentStore.add, which
+     stores the digit tail alone, and the field is cleared rather than read back. */
+  var kind = P.KINDS[0];
+
+  function numberField() { return document.getElementById("method-number"); }
+
+  /* The app gates its Save on `tailOf(raw, 3 | 4).length > 0`, which is true exactly
+     when the input holds at least one digit — so ask for one digit rather than
+     restating the app's per-kind tail lengths, which are payment.ts's business. */
+  function enoughTyped() {
+    return P.tailOf(numberField().value, 1).length > 0;
+  }
+
+  function syncAddForm() {
+    var card = kind === "card";
+    document.getElementById("number-heading").textContent =
+      card ? T.payCardHeading : T.payPhoneHeading;
+    numberField().placeholder = card ? T.payCardPlaceholder : T.payPhonePlaceholder;
+    document.getElementById("save-method").disabled = !enoughTyped();
+  }
+
+  function mountAddForm() {
+    document.getElementById("kind-heading").textContent = T.payKindHeading;
+    document.getElementById("number-note").textContent = T.payDiscardNote;
+    document.getElementById("save-method").textContent = T.payAddButton;
+
+    var kinds = document.getElementById("method-kinds");
+    kinds.insertAdjacentHTML("beforeend", P.KINDS.map(function (k) {
+      var id = "kind-" + k;
+      return '<label for="' + id + '" style="display:inline-flex;gap:8px;' +
+        'align-items:center;min-height:44px;margin-right:16px">' +
+        '<input type="radio" name="method-kind" id="' + id + '" value="' + esc(k) +
+        '"' + (k === kind ? " checked" : "") + ">" +
+        "<span>" + esc(P.KIND_LABEL[k]) + "</span></label>";
+    }).join(""));
+
+    Array.prototype.forEach.call(
+      kinds.querySelectorAll('input[name="method-kind"]'),
+      function (r) {
+        r.addEventListener("change", function () {
+          kind = r.value;
+          // Cleared on a change of kind, as the app clears it: a phone number
+          // half-typed is not the start of a card number.
+          numberField().value = "";
+          syncAddForm();
+        });
+      }
+    );
+
+    numberField().addEventListener("input", syncAddForm);
+
+    document.getElementById("add-method").addEventListener("submit", function (e) {
+      // There is nowhere to submit to. The form element exists so that Enter works
+      // and the label/field pairing is a real one, not so anything is sent.
+      e.preventDefault();
+      if (!enoughTyped()) return;
+      S.addMethod(kind, numberField().value);
+      numberField().value = "";
+      syncAddForm();
+    });
+
+    syncAddForm();
+  }
+
   S.ready().then(function () {
+    mountAddForm();
     var wallet = C.dialog("wallet");
     document.getElementById("open-wallet").addEventListener("click", wallet.open);
     render();
