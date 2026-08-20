@@ -27,16 +27,30 @@ not iterations; v1–v3 share v6's family but have no matching phone board. The 
 Indigo `#23276b` is both the ground and the interactive colour — nav, dark panels, body
 text, buttons, links, the active destination. Yellow `#ffd22c` carries figures and
 eyebrows (`--highlight`) and stands in for accent text on dark (`--on-dark`). Orange
-`#f4772c` (`--brand`) is the "pamoja." wordmark and the decorative marks only, restricted
-to display sizes.
+`#f4772c` (`--brand`) is a fill and a decoration, and on a light ground it is never type.
 
-That restriction is not taste — it is measured. **Orange is not a text colour**: it is
-2.79 on white, which fails even the large-text AA threshold (needs 3.0). This is why
-`--accent` is indigo rather than orange, despite orange looking like "the accent" on the
-board — the board's own buttons are indigo pills, and an earlier draft of the spec had
-`--accent` mapped to orange before that measurement overturned it. Orange never carries a
-white label either (2.79 the other way), which is why `.foot-credits` and similar controls
-sit on indigo, not orange.
+That restriction is not taste — it is measured. **The board's orange is not a text colour
+on paper**: it is 2.79 on `--canvas` and 2.58 on `--surface-soft`, failing even the
+large-text AA threshold of 3.0. This is why `--accent` is indigo rather than orange,
+despite orange looking like "the accent" on the board — the board's own buttons are indigo
+pills, and an earlier draft of the spec had `--accent` mapped to orange before that
+measurement overturned it. Orange never carries a white label either (2.79 the other way),
+which is why `.foot-credits` and similar controls sit on indigo, not orange. `--brand` is
+set as text in exactly one place: `"tournament."` on the indigo CTA band, where it is 4.78.
+
+**The two display tints** are how the board's two-tone headings survive that. The board
+tints the second half of every section heading — "One Pass. *Five doors.*", "Fan events
+*and promotions*", "Explore the *host country*" — and `--display-tint` (`#eb600c`) and
+`--display-tint-alt` (`#1f8fc4`) are the board's orange and cyan taken down until they
+clear 3.0 on the darker of the page's two light grounds: 3.13 and 3.36 on
+`--surface-soft`, 3.38 and 3.63 on `--canvas`. They are named for the register they belong
+to, not for the hue, because what they have in common is *where they may be used* — only
+`--fs-feature`, `--fs-head` at weight 800, and `--fs-display`, all of which are WCAG large
+text. Neither may go near body copy; there is no orange in this palette that can.
+
+`--marker` (`#ee4b3b`) is the categorical red, at the board's own value: it separates one
+member of a set from the rest — Kenya among the three countries, Move among the five
+partner categories — and carries no state meaning. Nothing is wrong because it is red.
 
 `--muted` is lightened from the board's own value for the same reason. The board's
 `#7c7e96`, used as secondary text on the indigo ground, is 3.36 there and fails AA
@@ -111,8 +125,10 @@ as the app.
 
 `scripts/verify-contrast.mjs` reads the token pairs straight out of `portal.css` and
 fails the build if a pairing regresses — `--muted` on `--primary`, `--accent` on
-`--canvas`, and the rest of the pairs a real element actually uses, plus a tripwire
-asserting `--brand` stays under the text-safe threshold. What it cannot do: it checks
+`--canvas`, the two display tints against *both* light grounds at 3.0, the partners band's
+five figures against `--primary`, and the rest of the pairs a real element actually uses,
+plus a tripwire asserting `--brand` stays under the text-safe threshold on paper. What it
+cannot do: it checks
 token pairs, not text set over photography. Text-over-photo contrast — the eyebrow on the
 featured fixture's image, a caption over a `.shot`/`.wash` pair — is measured by hand,
 against the actual rendered pixel, each time the imagery changes.
@@ -205,20 +221,29 @@ colour already present in every JPEG in `img/`; the v6 board's own reference ima
 colour, so the `grayscale(1)` came off and only `contrast(1.06)` stays — that part was
 never about the missing colour. The `.wash` — the `multiply`-blend gradient over each
 framed photograph — survives for a different reason: it is what keeps text legible over a
-photograph, not a stand-in for the grey the board never specified. Where a photograph sits
-under no text (the hero, once its own `filter:none` override is applied), neither the
-wash nor the contrast lift is needed for legibility and the image runs at full colour.
-Text-over-photo contrast is not something `scripts/verify-contrast.mjs` can check — see
-*Enforcement, and its limit*, above — so each wash's opacity is measured by hand against
-the actual rendered pixel; `.featured .veil`'s 0.82 alpha in `portal.css` records one such
-measurement, taken at the eyebrow text's worst-case pixel.
+photograph, not a stand-in for the grey the board never specified. Text-over-photo
+contrast is not something `scripts/verify-contrast.mjs` can check — see *Enforcement, and
+its limit*, above — so each wash's opacity is measured by hand against the actual rendered
+pixel. `.featured .veil`'s 0.82 records one such measurement, taken at the eyebrow's
+worst-case pixel; `.door .panel`'s 0.58 records another, taken at the worst pixel inside
+the *tight glyph box* of each label rather than the label's layout box, which on a
+`writing-mode: vertical-rl` title is most of the door and mostly not text.
 
-Every image, from Wikimedia Commons and **self-hosted** in `img/` rather than hotlinked —
-Wikimedia asks not to be used as a CDN — carries a credit in the page: a caption on the
-card, or a listing in the footer's attribution table, or both. The hero card is
-`Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG`, Batian and Nelion — the same summits the app's
-`PeakFrame` motif is cut from; the hero itself is now a licensed video clip, credited
-alongside it.
+Sometimes no wash is the answer. The door numbers sit on the unveiled top of a photograph,
+where the five images measured 1.57, 2.71, 8.07, 1.11 and 1.04 and a scrim heavy enough to
+grey out the top third still left two of them under 3. `.door .num` was given its own
+`--primary` ground instead, which is 9.22 by construction and does not have to be
+re-measured when someone swaps a photograph.
+
+Every *photograph*, from Wikimedia Commons and **self-hosted** in `img/` rather than
+hotlinked — Wikimedia asks not to be used as a CDN — carries a credit in the page: a
+caption on the card, or a listing in the footer's attribution table, or both.
+
+Two files in `img/` are not photographs and raise no attribution at all:
+`trophy-doodle.png`, the hero, and `panel-strip.png`, the closed doors' line art. Both are
+original illustration from the v6 board. The licensed football clip that used to hold the
+hero left with them, and its credits row left with it — an attribution outlives the work
+only as a lie.
 
 **The rule that has legal force: every image maps to an attribution on `credits.html`,
 and CC BY-SA attribution follows a derivative.** If any image is replaced — or, per the
