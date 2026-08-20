@@ -75,14 +75,32 @@
               margin-bottom: 34px; max-width: 440px; }
 .hero .acts { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
-/* The board's hero picture is a trophy illustration that does not exist in this repo. The
-   page's own hero visual — the licensed training footage — takes the slot instead, framed
-   on the card radius rather than bled behind the type. */
-.hero-figure { position: relative; height: clamp(260px, 33vw, 460px); border-radius: var(--radius-card);
-               overflow: hidden; background: var(--primary);
-               box-shadow: 0 24px 44px rgba(var(--ink-rgb), 0.18); }
-.hero-shot { filter: none; }
-.hero-shot video { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; }
+/* The board's hero picture is the trophy doodle, and it is the single loudest thing about
+   v6: line-art on paper, scattered with coloured "+" marks, floating in a soft yellow glow
+   with no frame at all. The page had been standing licensed football footage in a rounded
+   card here, which is a different idea — a photograph in a box, where the board wants an
+   illustration in air. The illustration is original artwork rather than a Wikimedia
+   photograph, so nothing follows it into credits.html; the footage that left did, and its
+   row went with it.
+
+   No border-radius, no overflow, no card background: the PNG is transparent and the glow
+   IS the container's background, so anything that clips or fills would show the box the
+   board deliberately does not draw. */
+.hero-figure { position: relative; height: clamp(280px, 34vw, 500px);
+               background: radial-gradient(closest-side,
+                             rgba(var(--highlight-rgb), 0.22) 0%,
+                             rgba(var(--highlight-rgb), 0) 100%); }
+/* object-fit: contain, not cover — the trophy is 3:4 and the slot is not, and a trophy
+   cropped at the base stops being a trophy. The drop-shadow is on the alpha, so it follows
+   the drawn line rather than a rectangle. */
+.hero-trophy { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+               filter: drop-shadow(0 34px 34px rgba(var(--ink-rgb), 0.22)); }
+/* The contact shadow the board pools under the trophy so it stands on the page rather than
+   hovering over it. Decorative, and aria-hidden in the markup. */
+.hero-ground { position: absolute; left: 50%; bottom: -8px; transform: translateX(-50%);
+               width: 240px; height: 26px; border-radius: 50%; pointer-events: none;
+               background: radial-gradient(closest-side,
+                             rgba(var(--ink-rgb), 0.20) 0%, rgba(var(--ink-rgb), 0) 100%); }
 
 /* The figure row: four columns divided by rules, the number and its label on one line. */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr);
@@ -500,13 +518,9 @@
         </div>
       </div>
       <div class="hero-figure">
-        <div class="shot hero-shot">
-          <video id="hero-video" width="1440" height="810" autoplay muted loop playsinline preload="auto"
-                 poster="img/hero-poster.webp" role="img"
-                 aria-label="A women's team training with the ball on a floodlit pitch.">
-            <source src="img/hero-football.webm" type="video/webm">
-          </video>
-        </div>
+        <img class="hero-trophy" src="img/trophy-doodle.png" width="900" height="1200"
+             alt="The AFCON trophy drawn as line art in yellow, orange and cyan, scattered with coloured plus marks.">
+        <span class="hero-ground" aria-hidden="true"></span>
       </div>
     </div>
     <div class="stats">
@@ -814,24 +828,6 @@
         .scrollBy({ left: Number(button.dataset.scroll), behavior: "smooth" });
     });
   });
-
-  /* The hero footage, held to the same promise the CSS makes for every other moving thing:
-     it stops for anyone who asks for less motion. `animation: none` cannot do this — a
-     playing video is not an animation — so it is the one piece of motion here that needs
-     script. Paused rather than removed, so the poster frame still carries the hero, and
-     re-checked live because the setting can change while the page is open. */
-  (function () {
-    var video = document.getElementById("hero-video");
-    if (!video) return;
-    var query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    function apply() {
-      if (query.matches) { video.pause(); video.removeAttribute("autoplay"); }
-      else { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
-    }
-    apply();
-    query.addEventListener ? query.addEventListener("change", apply)
-                           : query.addListener(apply);
-  })();
 
   /* The mobile menu closes itself once it has taken you somewhere. It is a CSS checkbox, so
      without this it stays open over the section you just asked for.

@@ -46,6 +46,10 @@
                                 indigo and fails AA, so this is that value +10%: 4.80. */
   --ink-rgb:      35, 39, 107;  /* for the translucent inks app.css needs; a component
                                    must not decompose --ink by hand */
+  --highlight-rgb: 255, 210, 44;  /* the same service --ink-rgb does, for the one place the
+                                     board asks for the yellow at partial alpha: the soft
+                                     glow behind the hero trophy, which is a fade to nothing
+                                     and so cannot be a solid token. */
   --pad-x:        clamp(20px, 5vw, 64px);
   --radius-card:  20px;   /* the board's card radius, counted across both boards: pills
                               stay 999px, circles stay 50%, only the flat-card corner moves
