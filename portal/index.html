@@ -275,14 +275,22 @@
           font-size: var(--fs-micro); letter-spacing: 0.12em; }
 
 /* ── Partners split card ─────────────────────────────────────────────────── */
-.split { display: flex; background: var(--primary); border-radius: 32px; overflow: hidden; flex-wrap: wrap; }
+.split { display: flex; background: var(--primary); border-radius: var(--radius-card); overflow: hidden; flex-wrap: wrap; }
 .split-left { flex: 1 1 340px; padding: clamp(32px, 4vw, 52px) clamp(26px, 3.5vw, 48px);
               display: flex; flex-direction: column; border-right: 1px solid var(--primary-soft); }
-.split-left .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--on-dark); margin-bottom: 20px; }
-.split-left .big { font-family: "JetBrains Mono", monospace; font-weight: 600;
-                   font-size: clamp(52px, 7vw, 76px); line-height: 0.9; color: var(--canvas); }
-.split-left h2 { font-size: clamp(24px, 2.6vw, 30px); color: var(--canvas); margin: 14px 0 12px; line-height: 1; }
-.split-left p { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.55; margin-bottom: 28px; }
+/* The board sets this eyebrow in its lilac rather than the yellow the page had been using
+   for every eyebrow on a dark ground — it lets the figure below it be the loud thing.
+   --hairline is that lilac, and 7.23 on the panel. */
+.split-left .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.16em; font-weight: 700;
+                       color: var(--hairline); margin-bottom: 14px; }
+/* 84px on the board, which is between step 7 and step 8 of a scale that may not grow a
+   ninth. --fs-feature is the nearer of the two that keeps this figure below the hero
+   wordmark in the page's order of loudness. Outfit 800, not the mono it was. */
+.split-left .big { font-weight: 800; font-size: var(--fs-feature); line-height: 1;
+                   letter-spacing: -0.03em; color: var(--canvas); }
+.split-left h2 { font-size: var(--fs-head); font-weight: 700; color: var(--canvas); margin: 12px 0 10px; line-height: 1.1; }
+.split-left p { font-size: var(--fs-body-sm); font-weight: 300; color: var(--accent-200);
+                line-height: 1.55; margin-bottom: 24px; }
 .split-left .btn { align-self: flex-start; }
 /* --stone (4.32 on canvas, 3.09 on primary) is also the .tabbar label colour
    (app.css), a light-ground use that can't take a darker value just to rescue
@@ -290,36 +298,34 @@
    canvas ratio further. --muted already sits at 4.80 on --primary and is the
    token .split-left p uses one line up, so reuse it rather than mint a third
    grey for the same dark panel. */
-.split-left .foot { margin-top: auto; padding-top: 28px; font-size: 10px;
-                    letter-spacing: 0.08em; color: var(--muted); }
-.split-right { flex: 1 1 460px; padding: clamp(20px, 3vw, 40px); display: grid;
-               grid-template-columns: repeat(3, 1fr); gap: 14px;
-               align-content: start; grid-auto-rows: min-content; }
+.split-left .foot { margin-top: auto; padding-top: 24px; font-size: var(--fs-micro);
+                    letter-spacing: 0.1em; color: var(--muted); }
+.split-right { flex: 1 1 460px; padding: clamp(24px, 3.5vw, 48px); display: grid;
+               grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.4vw, 30px);
+               align-content: center; grid-auto-rows: min-content; }
 @media (max-width: 560px) { .split-right { grid-template-columns: repeat(2, 1fr); } }
-.count { border: 1px solid var(--primary-soft); border-radius: 16px; padding: 22px 20px; }
-.count:hover { border-color: var(--on-dark); }
-.count b { display: block; font-family: "JetBrains Mono", monospace; font-weight: 600;
-           font-size: 30px; color: var(--on-dark); }
-.count span { display: block; font-weight: 600; font-size: 17px; color: var(--canvas); margin-top: 8px; }
-.count small { display: block; font-size: 13px; font-weight: 300; color: var(--muted); margin-top: 3px; }
+/* The board draws these as bare columns, not boxes, so the borders go. Its five figures
+   are five different colours — yellow, orange, cyan, green, red. Three of those are not
+   in the palette at all and the orange is display-only, so all five are --highlight:
+   9.22 on the panel, and one category does not get to look more important than another. */
+.count b { display: block; font-weight: 800; font-size: var(--fs-head);
+           letter-spacing: -0.02em; color: var(--on-dark); }
+.count span { display: block; font-weight: 700; font-size: var(--fs-body-sm); color: var(--canvas); margin-top: 6px; }
+.count small { display: block; font-size: var(--fs-small); font-weight: 300; color: var(--hairline); margin-top: 2px; }
 
 /* ── CTA band + footer ───────────────────────────────────────────────────── */
 .cta-band { background: var(--primary); position: relative; overflow: hidden; }
+/* Centred, as both boards centre it. The ridge behind it stays: the board puts a faint
+   doodle there, which is an asset this repo does not have, and the ridge is this branch's
+   own motif doing the same job. */
 .cta-inner { position: relative; z-index: 2; padding: clamp(56px, 8vw, 88px) var(--pad-x);
-             display: flex; justify-content: space-between; align-items: center; gap: 48px; }
-.cta-inner .eyebrow { font-size: 11px; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px; }
-.cta-band h2 { font-size: clamp(30px, 4.4vw, 44px); color: var(--canvas); line-height: 1; }
-.cta-band p { font-size: 17px; font-weight: 300; color: var(--muted); margin-top: 14px; max-width: 520px; }
+             display: flex; flex-direction: column; align-items: center; text-align: center; gap: 30px; }
+.cta-inner .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.16em; font-weight: 700;
+                      color: var(--on-dark); margin-bottom: 16px; }
+.cta-band h2 { font-size: var(--fs-feature); color: var(--canvas); line-height: 0.85; }
+.cta-band p { font-size: var(--fs-body); font-weight: 300; color: var(--accent-200);
+              margin: 14px auto 0; max-width: 500px; }
 .cta-band .btn { flex: 0 0 auto; }
-
-            gap: 48px; flex-wrap: wrap; }
-.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--canvas); }
-.foot-row p.foot-copy { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
-                        max-width: 360px; line-height: 1.6; margin-top: 12px; }
-.foot-cols { display: flex; gap: clamp(32px, 5vw, 64px); font-size: 14px; }
-.foot-cols ul { display: flex; flex-direction: column; gap: 11px; }
-.foot-cols b { color: var(--canvas); font-weight: 700; margin-bottom: 2px; }
-.foot-cols a { color: rgba(238,240,240,0.75); }
 
 /* Motion the board runs continuously, stopped for anyone who asks for less of it. */
 @media (prefers-reduced-motion: reduce) {
