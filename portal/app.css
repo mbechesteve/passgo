@@ -1,0 +1,67 @@
+/* portal/app.css — the logged-in surface.
+   Tokens, type and buttons all come from portal.css; this adds only what having an
+   app inside the portal needs. The breakpoint is 860px, the portal's own, so the
+   marketing page and these pages reflow together. */
+
+.appmain { padding: 0 var(--pad-x) 96px; max-width: 1180px; margin: 0 auto; }
+
+/* --- the five destinations ------------------------------------------------- */
+
+.tabbar { display: none; }
+
+@media (max-width: 860px) {
+  /* On a phone the bar is the navigation, so it is fixed and the page is padded
+     out from under it — including the safe area, or the last row sits beneath the
+     home indicator on iOS. */
+  .tabbar {
+    position: fixed; inset: auto 0 0 0; z-index: 40;
+    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+    background: var(--canvas); border-top: 1px solid var(--hairline);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .tabbar a {
+    /* 44px is the floor Apple, Android and WCAG 2.5.5 agree on. */
+    min-height: 44px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 3px;
+    font-size: 11px; letter-spacing: 0.04em; text-decoration: none;
+    color: var(--stone); padding: 8px 4px;
+  }
+  .tabbar a[aria-current="page"] { color: var(--accent); font-weight: 600; }
+  .tabbar .tabbar-dot { width: 5px; height: 5px; border-radius: 999px; background: currentColor; opacity: 0; }
+  .tabbar a[aria-current="page"] .tabbar-dot { opacity: 1; }
+  .appmain { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0)); }
+  .nav-links { display: none; }
+}
+
+/* --- detail, as a dialog rather than a destination -------------------------- */
+
+dialog.sheet {
+  border: 0; padding: 0; background: var(--canvas); color: var(--ink);
+  border-radius: 16px; max-width: 620px; width: calc(100% - 32px);
+  box-shadow: 0 24px 64px rgba(10, 10, 10, 0.24);
+}
+dialog.sheet::backdrop { background: rgba(10, 10, 10, 0.44); }
+.sheet-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 20px 24px; border-bottom: 1px solid var(--hairline);
+}
+.sheet-body { padding: 24px; }
+.sheet-close {
+  min-width: 44px; min-height: 44px; border: 0; background: transparent;
+  font-size: 22px; line-height: 1; color: var(--slate); cursor: pointer;
+  border-radius: 999px;
+}
+.sheet-close:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 2px; }
+
+@media (max-width: 860px) {
+  /* A phone gets a bottom sheet, not a centred card: the thumb is at the bottom. */
+  dialog.sheet {
+    width: 100%; max-width: none; margin: 0 0 0 auto;
+    position: fixed; inset: auto 0 0 0;
+    border-radius: 16px 16px 0 0; max-height: 88dvh; overflow-y: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.sheet { animation: none; }
+}
