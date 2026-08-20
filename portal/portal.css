@@ -134,6 +134,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn-on-dark { background: var(--canvas); color: var(--primary); }
 .btn-on-dark:hover { opacity: 0.92; color: var(--primary); }
 .btn-on-dark:active { filter: brightness(0.95); }
+/* The board's filled-yellow CTA on indigo — --primary on --highlight is 9.22, the same
+   pairing the On-sale chip and the open door's eyebrow already use on this page. Only the
+   two CTAs the board actually draws this way take it; the nav's pills and the featured
+   fixture's "Get tickets" stay --btn-on-dark, which the board keeps white there too. */
+.btn-highlight { background: var(--highlight); color: var(--primary); }
+.btn-highlight:hover { opacity: 0.92; color: var(--primary); }
+.btn-highlight:active { filter: brightness(0.95); }
 .btn-ghost-dark { background: transparent; color: var(--canvas); border: 1px solid rgba(255,255,255,0.55); }
 .btn-ghost-dark:hover { background: rgba(255,255,255,0.1); color: var(--canvas); }
 /* button-link: text, underlined on activation */

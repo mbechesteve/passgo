@@ -26,9 +26,10 @@
   Colour here is always a token. There is no hex literal in this file except the
   theme-color meta, which the browser reads before any stylesheet exists.
 
-  Departures from the board are recorded in
-  .superpowers/sdd/2026-08-20-portal-v6-redesign/task-4-report.md and, where the reason is
-  local to one rule, in the comment above that rule. The two standing ones from the
+  Departures from the board are recorded where the reason is local to one rule, in the
+  comment above that rule, and otherwise in the commit history on this branch — not in
+  `.superpowers/`, which is gitignored and so has nothing in it for a fresh clone to find.
+  The two standing ones from the
   earlier port still hold: the board is a fixed canvas and this is a real page, so the
   desktop rendering is the board's and media queries carry everything narrower; and the
   figures are the product's, not the board's — 7 venues, the five partner categories
@@ -129,7 +130,14 @@
 /* --fs-feature is the section-heading register: the board draws every heading that
    carries this class ("One Pass. Five doors.", "Fan events and promotions", "Explore
    the host country") at 40px, and the step now actually reaches 40 instead of
-   overshooting to a display size that belonged to different, larger headings. */
+   overshooting to a display size that belonged to different, larger headings.
+
+   The board two-tones the second half of each of these in orange, but all three sit on
+   white or near-white grounds (.sec, #events) where --brand is 2.79 — under 3.0, so it
+   fails even the large-text floor at any size. These stay one flat colour; the same
+   two-tone treatment is on .cta-band h2 instead, the one heading that both sits on
+   --primary (--brand there is 4.78) and renders at display size, where the board's own
+   pairing is legible. */
 .head h2 { font-size: var(--fs-feature); color: var(--primary); line-height: 0.95; }
 .head .meta { font-size: var(--fs-small); font-weight: 400; color: var(--slate); flex: 0 1 auto; }
 .head .meta-mono { font-size: var(--fs-micro); letter-spacing: 0.12em; color: var(--steel); flex: 0 1 auto; }
@@ -148,9 +156,16 @@
    exists precisely so a component can reach the ink at partial alpha without re-typing it.
    A closed door is a flat veil; the open one is a gradient that leaves the top of the
    photograph alone and gathers under the copy. The board's closed veil is 0.35, which is
-   enough over its flat panel art and not enough over a photograph — 0.62 keeps the white
-   title on the collapsed strips clear of it. */
-.door .wash { background: rgba(var(--ink-rgb), 0.62); }
+   enough over its flat panel art and not enough over a photograph.
+
+   0.62 was measured, not assumed, and measured short: over a screenshot of the rendered
+   doors with the title hidden, the brightest pixel behind the 17px white .d-shut title on
+   doors 02/03/05 (a blown-out sky highlight) composited to 4.16:1 — under the 4.5 that
+   size needs. The worst case is a pure-white photo pixel under the veil, which floors at
+   4.16 for this alpha regardless of which door it turns up in; solving that floor for 4.5
+   gives ~0.647, so 0.62 could not have cleared it. 0.68 does, with room: the same
+   measurement over the same three doors now reads 4.96:1. */
+.door .wash { background: rgba(var(--ink-rgb), 0.68); }
 .doors input:checked + .door .wash {
   background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 48%, rgba(var(--ink-rgb), 0.94) 100%); }
 .door .num { position: absolute; top: 16px; left: 18px; font-family: "JetBrains Mono", monospace;
@@ -338,6 +353,13 @@
    that the step is fixed to 28-40px, this moves to --fs-display, where 64px sits
    comfortably on the fluid curve. */
 .cta-band h2 { font-size: var(--fs-display); color: var(--canvas); line-height: 0.85; }
+/* The board two-tones every section heading ("Five doors.", "and promotions", "tournament.")
+   in orange. .head h2 stays flat because those sit on white, where --brand is 2.79 and
+   fails even the large-text floor — that constraint doesn't move. This heading is the one
+   the board draws the same way that actually clears it: it sits on --primary, where
+   --brand is 4.78, and it renders at --fs-display (52-96px), display register both ways.
+   So it alone gets the tint the board drew for it. */
+.cta-band h2 .tone { color: var(--brand); }
 .cta-band p { font-size: var(--fs-body); font-weight: 300; color: var(--accent-200);
               margin: 14px auto 0; max-width: 500px; }
 .cta-band .btn { flex: 0 0 auto; }
@@ -714,7 +736,7 @@
         <h2>Partner discounts across three countries</h2>
         <p>Show your Pass, pay the merchant directly, and the discount is yours — Pamoja only
           writes the record line on your device.</p>
-        <a class="btn btn-on-dark" href="#partners">Browse partners</a>
+        <a class="btn btn-highlight" href="#partners">Browse partners</a>
         <p class="foot mono">Prototype figures · Pamoja never holds funds.</p>
       </div>
       <div class="split-right">
@@ -737,10 +759,10 @@
     <div class="cta-inner">
       <div>
         <p class="eyebrow mono">Issued in under 3 minutes · no payment details needed</p>
-        <h2>Own the tournament.</h2>
+        <h2>Own the <span class="tone">tournament.</span></h2>
         <p>One pass, three countries, every match you can reach. Set it up before you fly and land ready.</p>
       </div>
-      <a class="btn btn-on-dark" href="signup.html">Get your Pamoja Pass</a>
+      <a class="btn btn-highlight" href="signup.html">Get your Pamoja Pass</a>
     </div>
   </section>
 
