@@ -71,7 +71,11 @@ input:focus-visible { outline: none; border: 2px solid var(--accent-deep); }
      band that corner is off to the side of where the quote sits, so the caption — set in
      --muted, the palette's quietest type — landed on lit stadium and lost its contrast.
      Turned vertical it darkens the bottom two-thirds the quote actually occupies, which
-     is the same correction the stacked doors accordion makes to its own wash. */
+     is the same correction the stacked doors accordion makes to its own wash.
+     Re-measured after the rebrand on the pixels behind the caption's own glyphs, since
+     this veil is a flat ink and that ink is green now: 6.20:1 on log-in and 5.99:1 on
+     sign-up, where the indigo ink read 5.72 and 5.52. Darker, not lighter — the green
+     ground is marginally deeper than the indigo it replaced. */
   .split-media .veil {
     background: linear-gradient(180deg, rgba(10,11,13,0.30) 0%, rgba(10,11,13,0.90) 72%); }
   .split-media .quote { bottom: clamp(20px, 5vw, 28px); }

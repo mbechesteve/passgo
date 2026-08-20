@@ -24,39 +24,73 @@ not iterations; v1–v3 share v6's family but have no matching phone board. The 
 
 ### The palette
 
-Indigo `#23276b` is both the ground and the interactive colour — nav, dark panels, body
-text, buttons, links, the active destination. Yellow `#ffd22c` carries figures and
-eyebrows (`--highlight`) and stands in for accent text on dark (`--on-dark`). Orange
-`#f4772c` (`--brand`) is a fill and a decoration, and on a light ground it is never type.
+**The tournament palette is green, yellow and red**, and it replaced the board's
+indigo/orange/cyan set. Nothing below is a board value any more, and none of it is an
+official brand value either: the brief was those three hues for AFCON 2027 with no hex list
+attached, so every value here is *derived* — role first, then the value that clears the
+gate. Swapping in official hexes when they exist is an edit to the `:root` block in
+`portal.css` and a re-run of `npm run verify:contrast`; nothing downstream names a hue.
 
-That restriction is not taste — it is measured. **The board's orange is not a text colour
-on paper**: it is 2.79 on `--canvas` and 2.58 on `--surface-soft`, failing even the
-large-text AA threshold of 3.0. This is why `--accent` is indigo rather than orange,
-despite orange looking like "the accent" on the board — the board's own buttons are indigo
-pills, and an earlier draft of the spec had `--accent` mapped to orange before that
-measurement overturned it. Orange never carries a white label either (2.79 the other way),
-which is why quiet footer controls sit on indigo, not orange. `--brand` is
-set as text in exactly one place: `"tournament."` on the indigo CTA band, where it is 4.78.
+Green `#0e3e28` (`--primary`, `--accent`) is both the ground and the interactive colour —
+nav, dark panels, buttons, links, the active destination. It sits at the *luminance the
+indigo held* (0.037), deliberately: every dark-ground pair in the suite had been solved
+against that figure, so matching it preserved eight tokens' headroom instead of re-solving
+them to suit a new ground. Yellow `#ffd22c` (`--highlight`, `--on-dark`) is unchanged from
+the board — it was already the register a flag yellow occupies — and is 8.35 on the green.
+Red `#e84a45` (`--brand`) is the CTA and the warm half of a display heading.
 
-**The two display tints** are how the board's two-tone headings survive that. The board
-tints the second half of every section heading — "One Pass. *Five doors.*", "Fan events
-*and promotions*", "Explore the *host country*" — and `--display-tint` (`#eb600c`) and
-`--display-tint-alt` (`#1f8fc4`) are the board's orange and cyan taken down until they
-clear 3.0 on the darker of the page's two light grounds: 3.13 and 3.36 on
-`--surface-soft`, 3.38 and 3.63 on `--canvas`. They are named for the register they belong
-to, not for the hue, because what they have in common is *where they may be used* — only
-`--fs-feature`, `--fs-head` at weight 800, and `--fs-display`, all of which are WCAG large
-text. Neither may go near body copy; there is no orange in this palette that can.
+**The red's lightness was decided by arithmetic, not taste.** A full-chroma flag red
+(luminance 0.15) reaches only **2.35** on this ground, under the 3.0 the CTA headline needs,
+because a green ground and a red brand are no longer far apart in luminance the way indigo
+and orange were. Only a mid red clears a deep green ground at all. That also inverts the old
+palette's most-quoted restriction: the board's orange was 2.79 on paper and *never* type,
+whereas this red is **3.82** on `--canvas` and clears large text outright. The assertion in
+`scripts/verify-contrast.mjs` that used to enforce "the warm colour must stay unusable as
+type" is therefore gone, replaced by a real gated pair — see the note in that file.
 
-`--marker` (`#ee4b3b`) is the categorical red, at the board's own value: it separates one
-member of a set from the rest — Kenya among the three countries, Move among the five
-partner categories — and carries no state meaning. Nothing is wrong because it is red.
+**The two display tints** still carry the board's two-tone headings — "One Pass. *Five
+doors.*", "Fan events *and promotions*", "Explore the *host country*". `--display-tint`
+(`#c2151b`) is the same red taken deeper for the two light grounds (6.15 on `--canvas`,
+5.69 on `--surface-soft`), because a 40px heading on paper wants the weight. `--display-tint-alt`
+(`#2a955f`) is the green half, and it is the one token squeezed from both sides: 3.78 and
+3.49 cap how light it may go, 3.20 on `--primary` caps how dark, and the window between is
+about a tenth of a step of luminance. Green type on a green ground is the cost of a green
+brand. They are named for the register they belong to rather than the hue, which is exactly
+why the "cool" one could stop being cool — there is no cyan in a green, yellow and red
+palette.
 
-`--muted` is lightened from the board's own value for the same reason. The board's
-`#7c7e96`, used as secondary text on the indigo ground, is 3.36 there and fails AA
-(needs 4.5). `--muted` is that value +10% lightness — `#989aad`, 4.80 on indigo. The
-board is a picture; AA is a requirement; where they disagree, AA wins, and the deviation
-is recorded in `portal.css` rather than silently absorbed.
+**`--marker` (`#f15d47`) is a second red, and the partners band is why.** Three hues cannot
+supply the five distinct marks that band needs — five figures, five tokens. Pointing
+`--marker` at `--brand` was tried first and collapsed the set to three colours across five
+categories, with Shop and Move identically red and Stay and Do both green. So the
+categorical red is a lighter red, 1.20x `--brand`'s luminance, and it has to clear 3.0 on
+*both* grounds, which caps it from either side: 3.68 on `--primary`, 3.28 on `--canvas`.
+
+`--success` `#1ba673` stays the semantic green (live, confirmed) and is now the third green
+on the page. It stays because conflating "confirmed" with "brand" is worse than carrying a
+teal-green that means one thing; it reads apart from the ground by hue, not by lightness.
+
+**One asset had the old ground painted into it.** `img/panel-strip.png`, the closed doors'
+line art, was 89.8% `#23276b` — a green site with five indigo doors is a rebrand that
+stopped at the stylesheet — so its ground is remapped to `--primary` with the doodles
+untouched. The doodles are still cyan, orange, red, yellow and blue, which is why the
+measurement comments around `.door .panel` still name those hues.
+
+**Every text-over-photograph measurement was re-taken.** `--ink-rgb` feeds every wash and
+veil on the site, so changing the ink changed all of them: the closed panel's veil now
+measures 6.25:1 (title) and 4.99:1 (number) at 0.58 and still fails at the board's 0.35
+(4.22 and 3.39); the fixture card's 0.82 holds every line (eyebrow 5.90/6.75, headline
+8.09/8.78, kick-off line 5.65/6.80); the stacked auth banner reads 6.20 and 5.99. Each
+number lives in the comment beside the value it justifies.
+
+`--muted` `#89a999` is the grey ramp's dark-ground member, and the rule that produced it
+survives the rebrand: the board's own `#7c7e96` was 3.36 on the indigo ground and failed AA
+(needs 4.5), so it was lightened until it cleared. The whole ramp is green-tinted now and
+re-solved against the new ground — `--muted` is 4.72 on `--primary`, `--slate` 6.32 and
+`--steel` 5.20 on paper, and `--stone` 4.67 on paper while deliberately staying *under* 4.5
+on `--primary`, which is the tripwire `verify-contrast.mjs` asserts. The board is a picture;
+AA is a requirement; where they disagree, AA wins, and the deviation is recorded in
+`portal.css` rather than silently absorbed.
 
 | | |
 |---|---|
@@ -174,7 +208,8 @@ Variables were **renamed**, not repointed, at that migration: `--gold` became `-
 `--green` became `--success`, `--paper` became `--surface`. A variable called `--gold`
 holding blue is worse than a rename — the same rule the v6 move above also followed
 (indigo took over `--accent` in place, rather than a fresh token appearing next to a
-stale one).
+stale one — and green took it over from indigo the same way in the rebrand, which is why
+that rebrand touched values and comments but no token names).
 
 Three departures from the minimax template were deliberate at the time, and two of the
 three still hold: **JetBrains Mono stayed** (the data register, not a second display
@@ -187,9 +222,12 @@ redesign.
 ## Why the portal's palette differs from the app's
 
 The app's theme — `deep #04222b` + `accent #0e6ba8`, per Uratibu — is untouched by any of
-this. This surface now draws indigo, yellow and orange from the v6 board, which is what a
-public marketing site can do that a product does not; before that it was near-black, gold
-and green from the canvas board, for the same reason. It is the same split Hayya keeps
+this. This surface now draws the tournament's green, yellow and red, which is what a public
+marketing site can do that a product does not; before the rebrand it was the v6 board's
+indigo, yellow and orange, and before that near-black, gold and green from the canvas
+board, each for the same reason. The seam is therefore wider than it was: the app is
+near-black and blue, the portal is green. Closing it means rebranding `src/lib/theme.ts`
+too, which is a separate job on a separate surface and was not part of this one. It is the same split Hayya keeps
 between `hayya.qa` and the Hayya app, and the *Out of scope* / *Risks* sections of
 `docs/superpowers/specs/2026-08-20-portal-v6-redesign-design.md` accept the seam this
 widens, deliberately, rather than by drift.

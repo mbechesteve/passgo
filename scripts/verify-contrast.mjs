@@ -48,20 +48,30 @@ const PAIRS = [
      --surface-soft, which is darker and therefore the binding case. */
   ["display-tint",     "canvas",       3.0, "the warm half of a display heading, on paper"],
   ["display-tint",     "surface-soft", 3.0, "the same, on the banded ground"],
-  ["display-tint-alt", "canvas",       3.0, "the cool half of a display heading, on paper"],
+  ["display-tint-alt", "canvas",       3.0, "the green half of a display heading, on paper"],
   ["display-tint-alt", "surface-soft", 3.0, "the same, on the banded ground"],
   /* --brand is a text colour in exactly one place — "tournament." on the CTA band — and
      the board's raw orange clears there, so it is checked where it is used rather than
      being darkened for a ground it never sits on. */
-  ["brand",            "primary",      3.0, "the warm half of the CTA headline, on indigo"],
+  ["brand",            "primary",      3.0, "the warm half of the CTA headline, on the green ground"],
   /* The partners band's five figures, which the board gives five different colours. All
      are --fs-head at weight 800 on --primary, so 3.0. --highlight is checked above; the
      other four are here. --marker is checked on --canvas as well, where it is the Kenya
      dot on an event card rather than a figure — a graphic, and 3.0 again. */
-  ["display-tint-alt", "primary",      3.0, "the Stay figure, and the Tanzania dot, on indigo"],
-  ["success",          "primary",      3.0, "the Do figure on indigo"],
-  ["marker",           "primary",      3.0, "the Move figure on indigo"],
+  ["display-tint-alt", "primary",      3.0, "the Stay figure, and the Tanzania dot, on the green ground"],
+  ["success",          "primary",      3.0, "the Do figure on the green ground"],
+  ["marker",           "primary",      3.0, "the Move figure on the green ground"],
   ["marker",           "canvas",       3.0, "the Kenya dot on an event card"],
+  /* --brand used to be deliberately ABSENT from this list. Under indigo it was the board's
+     orange at 2.79 on white — below even the large-text threshold — so the guarantee worth
+     asserting was that it is never type. The rebrand inverts that: the palette's one red is
+     3.82 on --canvas, which large text clears, so the pair is checkable and is checked.
+     It is still not body-copy safe (3.82 < 4.5) and no page sets it as body copy. */
+  ["brand",            "canvas",       3.0, "the red display heading, on paper"],
+  /* --accent-200 is the open door's body copy and the fixture card's kick-off line, both on
+     dark. It was never gated; the rebrand is the moment to gate it, because it is a tint of
+     the ground now and a tint of the ground is the one thing that can quietly converge. */
+  ["accent-200",       "primary",      4.5, "body copy on the dark ground"],
 ];
 /* Note: the ratio is symmetric, so a pair is listed once. --canvas on --accent is the
    same number as --accent on --canvas — a button label on the indigo ground is covered
@@ -77,15 +87,12 @@ for (const [fg, bg, min, why] of PAIRS) {
   );
 }
 
-/* --brand is deliberately absent from PAIRS: orange is 2.79 on white, which fails even
-   the large-text threshold, so it is never a text colour. Assert that instead — the
-   guarantee is that it is NOT used as one, which pages enforce, not this file. */
-const brandOnCanvas = ratio(token("brand"), token("canvas"));
-assert.ok(
-  brandOnCanvas < 3.0,
-  `--brand now reaches ${brandOnCanvas.toFixed(2)} on --canvas. If it has been changed to ` +
-    `a text-safe colour, move it into PAIRS; if not, this assertion is stale.`
-);
+/* The assertion that used to stand here required --brand to stay UNDER 3.0 on --canvas —
+   a tripwire against anyone "restoring the board value" and putting an unusable orange back
+   into type. It is gone because its subject is gone: the palette's warm colour is a red at
+   3.82 on white, and an assertion that a token must remain unusable is only worth keeping
+   while the token actually is. The pair is now gated in PAIRS above, which is the stronger
+   statement — it fails if the red is ever taken light enough to stop being readable. */
 
 /* --stone is also deliberately absent from PAIRS, for the opposite reason to --brand:
    it IS used as text (the .tabbar label in app.css), just never against --primary. It

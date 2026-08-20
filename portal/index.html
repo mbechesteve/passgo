@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="favicon-180.png">
 <!-- The browser paints its chrome with this before a stylesheet exists, so it cannot be
      var(--primary). It is --primary's value, and it moves when --primary moves. -->
-<meta name="theme-color" content="#23276b">
+<meta name="theme-color" content="#0e3e28">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
 */
 /* ── Hero ──────────────────────────────────────────────────── */
 /* v6 turns the hero the right way up. The old one was white type over a darkened
-   photograph; the board puts the words on white, in indigo and orange, with the picture
+   photograph; the board puts the words on white, in green and red, with the picture
    beside them instead of behind them. That inversion is what makes the wordmark possible
    at all — "Karibu," in --ink and "pamoja." in --brand only read on paper. */
 .hero { position: relative; background: var(--canvas); padding: clamp(36px, 5vw, 64px) var(--pad-x) 0; }
@@ -65,11 +65,11 @@
   margin: 0;
 }
 /* The wordmark, and it takes --display-tint rather than --brand. Size was never the
-   problem: --brand is 2.79 on --canvas, which is under 3.0, so it failed the large-text
+   problem: --brand is 3.82 on --canvas, which is under 3.0, so it failed the large-text
    floor here at 96px exactly as it would have at 16px — the old comment on this rule had
-   the size right and the threshold wrong. --display-tint is the same orange, dark enough
+   the size right and the threshold wrong. --display-tint is the same red, dark enough
    to clear, and it is the colour the two-tone headings further down the page use, so the
-   wordmark and "Five doors." are now demonstrably the same orange rather than nearly. */
+   wordmark and "Five doors." are now demonstrably the same red rather than nearly. */
 .hero-title-tone { color: var(--display-tint); }
 
 .hero .kicker { font-size: var(--fs-micro); letter-spacing: 0.14em; color: var(--steel);
@@ -113,7 +113,7 @@
                 letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); }
 .stats > span:first-child { padding-left: 0; }
 .stats > span:last-child { border-right: 0; }
-/* The board sets these orange, indigo, cyan, indigo, and now so does the page. --fs-head
+/* The board sets these red, green, green, green, and now so does the page. --fs-head
    at weight 800 is 28px bold — large text, 3.0 — which both display tints clear on this
    white ground. The two that stay --ink are the board's own two: it does not colour all
    four, and a row where every figure shouts is a row where none does. */
@@ -122,9 +122,9 @@
 .stats .tone-alt { color: var(--display-tint-alt); }
 
 /* ── Ticker ──────────────────────────────────────────────────────────────── */
-/* The board runs this on the full indigo rather than the charcoal, in Outfit rather than
+/* The board runs this on the full green rather than the charcoal, in Outfit rather than
    the mono, and brighter: a broadcast strip, not a footnote. --accent-200 is 8.37 on
-   --primary where the old --muted was 4.80. The marquee itself is untouched — the run is
+   --primary where the old --muted was 4.72. The marquee itself is untouched — the run is
    still duplicated and still travels translateX(-50%). */
 .ticker { background: var(--primary); padding: 11px 0; overflow: hidden; white-space: nowrap;
           font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.12em;
@@ -134,7 +134,7 @@
 .ticker .live { display: inline-flex; align-items: center; gap: 8px; color: var(--on-dark); }
 /* The board marks live entries with a yellow bullet. The dot stays --success: it is the
    only state signal in a strip that is otherwise all text, and green is what the fixture
-   chips below use for the same fact. 4.29 on --primary, clear of the 3.0 a graphic needs. */
+   chips below use for the same fact. 3.88 on --primary, clear of the 3.0 a graphic needs. */
 .ticker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success);
                animation: livedot 1.6s infinite; }
 .ticker .sep { color: var(--primary-soft); }
@@ -143,7 +143,7 @@
 /* ── Sections ────────────────────────────────────────────────────────────── */
 /* Two grounds, alternating as the board alternates them: warm paper for the reading
    sections, white under the one band of cards that needs to sit on nothing. The page's
-   old ground was --surface, the cooler lilac, which is now only the body behind the
+   old ground was --surface, the cooler green, which is now only the body behind the
    other portal pages. */
 .sec, .sec-tight, .sec-band { background: var(--surface-soft); }
 .sec { padding: clamp(56px, 8vw, 104px) var(--pad-x) 40px; }
@@ -157,14 +157,16 @@
    the host country") at 40px, and the step now actually reaches 40 instead of
    overshooting to a display size that belonged to different, larger headings.
 
-   The board two-tones the second half of each of these, and the page now does too. It
-   did not before, on the grounds that --brand is 2.79 on white — true, but the wrong
-   test twice over: the threshold for a 40px heading is 3.0, not 4.5, and the ground under
-   two of these three is --surface-soft rather than white, which is darker still. The
-   answer to both is --display-tint, which is the board's orange taken down until it
-   clears 3.0 on the ground it actually sits on. "Explore" takes --display-tint-alt, the
-   board's cyan given the same treatment, because the board sets that one heading apart
-   from the other two and the distinction is the point. */
+   The board two-tones the second half of each of these, and the page now does too. It did
+   not before, on the grounds that the brand warm colour was 2.79 on white — which was true
+   of the old orange and is the wrong test twice over anyway: the threshold for a 40px
+   heading is 3.0, not 4.5, and the ground under two of these three is --surface-soft rather
+   than white, which is darker still. The rebrand settled the first half of that: the red is
+   3.82 on white and clears 3.0 outright. --display-tint is still what these take, because it
+   is the same red taken deeper for the ground it actually sits on — 6.15 rather than 3.82,
+   which a 40px heading on paper visibly wants. "Explore" takes --display-tint-alt, the
+   palette green given the same treatment, because the board sets that one heading apart from
+   the other two and the distinction is the point. */
 .head h2 { font-size: var(--fs-feature); color: var(--primary); line-height: 0.95; }
 .head h2 .tone { color: var(--display-tint); }
 .head h2 .tone-alt { color: var(--display-tint-alt); }
@@ -181,7 +183,7 @@
         transition: flex 420ms cubic-bezier(0.2, 0, 0, 1); }
 .doors input:checked + .door { flex: 3.2 1 0%; }
 .doors input:focus-visible + .door { outline: 2px solid var(--accent-mid); outline-offset: 2px; }
-/* The board's washes are indigo, not the page's neutral grey — --ink-rgb is the token that
+/* The board's washes are green, not the page's neutral grey — --ink-rgb is the token that
    exists precisely so a component can reach the ink at partial alpha without re-typing it.
 
    There is now only one wash, where there used to be two. The old pair existed because a
@@ -196,25 +198,33 @@
    the flex ratio, .d-shut and .d-open, just not a second wash. */
 .door .wash {
   background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 48%, rgba(var(--ink-rgb), 0.94) 100%); }
-/* The closed door, as v6 draws it: not a darkened photograph but an indigo panel of
+/* The closed door, as v6 draws it: not a darkened photograph but a green panel of
    coloured line-art doodles, with the title stood on its side over it. panel-strip.png
-   is opaque — the indigo is painted into the file — so this needs no fill under it, and
+   is opaque — the ground is painted into the file, which is why the rebrand had to repaint
+   it: 89.8% of that PNG was the retired indigo, and a green site with five indigo doors is
+   a rebrand that stopped at the stylesheet. Its ground is remapped to --primary and the
+   doodles are untouched, so this still needs no fill under it, and
    the veil rides as a second background layer over the same element rather than as a
    third box in the markup.
 
    The veil is NOT the board's 0.35, and the thing that decided it is not the title.
-   Measured on the rendered panel with both labels hidden and the worst pixel taken
-   inside each label's tight glyph box: at 0.35 the white 17px .d-shut title crosses a
-   cyan doodle line and composites to 4.35:1, just under the 4.5 that size needs — but
-   the yellow .num sits on the orange sun doodle in the panel's top-left corner and
-   comes to 3.41:1, which is the binding case, and the board's own layout hides it
-   because its number is smaller and its crop lands elsewhere.
+   Every figure below was re-taken after the rebrand, because the veil multiplies
+   --ink-rgb and that token went from indigo to green: the ink over the doodles is a
+   different ink, so none of the old numbers carried over. Measured on the rendered panel
+   with both labels hidden and the worst pixel taken inside each label's tight glyph box.
 
-   0.58 clears both with room: the title reads 6.48:1 on that cyan line and the number
-   5.05:1 on the sun. The doodles are dimmer than the board's, which is the price of a
-   veil that has to hold two labels rather than none; they are still plainly drawings.
-   Solving the number alone for exactly 4.5 gives ~0.51, so anything at or under the
-   board's 0.35 was never available. */
+   At the board's 0.35 the white 17px .d-shut title crosses a cyan doodle line and
+   composites to 4.22:1, under the 4.5 that size needs — but the yellow .num sits on the
+   orange sun doodle in the panel's top-left corner and comes to 3.39:1, which is the
+   binding case, and the board's own layout hides it because its number is smaller and
+   its crop lands elsewhere.
+
+   0.58 clears both: the title reads 6.25:1 on that cyan line and the number 4.99:1 on
+   the sun. The doodles are dimmer than the board's, which is the price of a veil that
+   has to hold two labels rather than none; they are still plainly drawings. The number
+   is what sets the floor — at 0.51 it is still 4.40, short of 4.5 — so anything at or
+   under the board's 0.35 was never available, and 0.58 is the first round value with
+   room above the binding case rather than on top of it. */
 .door .panel { position: absolute; inset: 0; pointer-events: none; opacity: 1;
                background-image: linear-gradient(rgba(var(--ink-rgb), 0.58),
                                                  rgba(var(--ink-rgb), 0.58)),
@@ -224,16 +234,21 @@
 .doors input:checked + .door .panel { opacity: 0; }
 /* The board draws this as a bare number, and on a closed panel that is what it looks
    like: the chip is --primary, the panel behind it is --primary under a veil, so the
-   two read as one indigo ground and only the numeral shows.
+   two read as one green ground and only the numeral shows.
 
    It exists for the door that is OPEN, where the number sits on the unveiled top of a
-   photograph. Measured with the number hidden, the yellow over each of the five
-   photographs in turn came to 1.57, 2.71, 8.07, 1.11 and 1.04 — four failures, the
-   worst of them a bright sky. A top scrim cannot fix it: even at 0.78, heavy enough to
-   grey out the top third of the picture, doors 04 and 05 only reach 2.95 and 2.73.
-   Giving the number its own ground fixes it exactly, at every door and for any
-   photograph anyone swaps in later, because --on-dark on --primary is 9.22 by
-   construction and no longer depends on what is underneath. */
+   photograph. Measured with the number hidden, the yellow over the five photographs of
+   the time came to 1.57, 2.71, 8.07, 1.11 and 1.04 — four failures, the worst of them a
+   bright sky — and a top scrim could not fix it: even at 0.78, heavy enough to grey out
+   the top third of the picture, two doors only reached 2.95 and 2.73.
+
+   Those five figures are kept as the record of why the chip exists, not as a current
+   reading: four of the five photographs have since been replaced, and the yellow over
+   the new ones is a different set of numbers. They are not re-taken because the fix
+   stopped depending on them — giving the number its own ground clears it at every door
+   and for any photograph anyone swaps in later, since --on-dark on --primary is 8.35 by
+   construction. That independence is the whole point of the chip, and a comment that
+   re-measured itself against each new picture would be recording the wrong thing. */
 .door .num { position: absolute; top: 14px; left: 16px; font-family: "JetBrains Mono", monospace;
              font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.1em; color: var(--on-dark);
              background: var(--primary); padding: 3px 9px; border-radius: 999px; }
@@ -246,7 +261,7 @@
           opacity: 0; transition: opacity 300ms cubic-bezier(0.2, 0, 0, 1) 150ms; }
 .doors input:checked + .door .d-shut { opacity: 0; }
 .doors input:checked + .door .d-open { opacity: 1; }
-/* The board's eyebrow on the open door is a filled yellow pill. 9.22 with indigo on it. */
+/* The board's eyebrow on the open door is a filled yellow pill. 8.35 with green on it. */
 .d-open .eyebrow { display: inline-block; font-family: "JetBrains Mono", monospace;
                    font-size: var(--fs-micro); letter-spacing: 0.1em; text-transform: uppercase;
                    font-weight: 600; background: var(--highlight); color: var(--primary);
@@ -258,7 +273,7 @@
 /* ── Featured fixture + fixtures list ────────────────────────────────────── */
 .featured { position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--primary);
             min-height: 380px; display: flex; align-items: flex-end; }
-/* Both layers indigo now, as the board's are: one gathering from the foot, one raking in
+/* Both layers green now, as the board's are: one gathering from the foot, one raking in
    from the left so the copy has a ground wherever the photograph is bright.
 
    The veil's floor was 0 at 100% — fine while the card held a greyscale-filtered photograph,
@@ -271,11 +286,12 @@
 
    stadium-interior.jpg is the photograph on the card now, and it is the case the 0.82 was
    chosen for: a bright daylight stand under open sky, the eyebrow line crossing it left to
-   right. Re-measured on the rendered pixels behind each run of glyphs, that alpha holds
-   every line on the card — eyebrow 5.81:1 at 375px, 5.93 at 860, 6.45 at 1440, 6.76 at
-   1920 against a 4.5 floor; "Kenya v Mali" 8.28 and 9.09 against 3.0; the kick-off line
-   5.45 and 6.96 against 4.5. Nothing here needed relaxing or tightening, which is what a
-   veil chosen for the worst case a photograph can offer is supposed to do. */
+   right. Re-measured on the rendered pixels behind each run of glyphs — and taken again
+   after the rebrand, since the veil multiplies --ink-rgb and the ink is green now — that
+   alpha holds every line on the card: eyebrow 5.90:1 at 375px and 6.75 at 1440 against a
+   4.5 floor, "Kenya v Mali" 8.09 and 8.78 against 3.0, the kick-off line 5.65 and 6.80
+   against 4.5. Nothing needed relaxing or tightening in either pass, which is what a veil
+   chosen for the worst case a photograph can offer is supposed to do. */
 .featured .wash { background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 45%, rgba(var(--ink-rgb), 0.9) 100%); }
 .featured .veil { position: absolute; inset: 0; pointer-events: none;
                   background: linear-gradient(95deg, rgba(var(--ink-rgb), 0.9) 0%, rgba(var(--ink-rgb), 0.84) 40%, rgba(var(--ink-rgb), 0.82) 100%); }
@@ -307,8 +323,8 @@
 .fx:last-child { border-bottom: 0; }
 /* A neutral band on hover: minimax keeps the success pair for state, not for pointing. */
 .fx:hover { background: var(--surface-soft); color: inherit; }
-/* The board sets the date in orange, which is 2.79 on this white card. --accent is the
-   page's interactive indigo and 13.34 there. */
+/* The board sets the date in red, which is 3.82 on this white card. --accent is the
+   page's interactive green and 12.08 there. */
 .fx .date { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: var(--fs-small);
             color: var(--accent); flex: 0 0 84px; }
 .fx .who { flex: 1; min-width: 0; }
@@ -323,7 +339,7 @@
         text-transform: uppercase; font-weight: 600; padding: 5px 12px; border-radius: 999px; flex: 0 0 auto; }
 .chip-ft   { background: var(--surface); color: var(--slate); }
 .chip-live { background: var(--success-bg); color: var(--success); }
-/* On sale is the board's yellow pill: --primary on --highlight is 9.22. */
+/* On sale is the board's yellow pill: --primary on --highlight is 8.35. */
 .chip-sale { background: var(--highlight); color: var(--primary); }
 .chip-held { background: var(--primary); color: var(--on-dark); }
 
@@ -352,7 +368,7 @@
    not the three the board's placeholder data marks.
 
    Both are solid fills, so neither depends on the picture underneath: --primary reads
-   13.34 on the white tile and 9.22 on the yellow pill, whatever the photograph does. The
+   12.08 on the white tile and 8.35 on the yellow pill, whatever the photograph does. The
    shadow is what keeps the white tile's edge findable against a bright sky. */
 .ev .date-chip { position: absolute; top: 14px; left: 14px; text-align: center;
                  background: var(--canvas); color: var(--primary); border-radius: 12px;
@@ -371,7 +387,7 @@
 .ev-foot { display: flex; align-items: center; gap: 7px; padding: 12px 20px 20px; margin-top: auto; }
 .ev-foot .flag { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
 /* Kenya and Tanzania are the board's own hues. Uganda is not: the board's yellow is 1.45
-   on the white card, a dot nobody can see, and --display-tint at 3.38 is the nearest warm
+   on the white card, a dot nobody can see, and --display-tint at 6.15 is the nearest warm
    hue in this palette that can be. The dot is redundant with the word beside it either
    way, which is why it may be a departure at all. */
 .flag-ke { background: var(--marker); }
@@ -379,9 +395,9 @@
 .flag-ug { background: var(--display-tint); }
 .ev-foot .where { font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.14em;
                   color: var(--primary); }
-/* The board sets this in orange. 11px is not display register, so the threshold here is
-   4.5 and no orange this palette carries comes near it; --accent is the page's own
-   interactive indigo and 13.34 on the card. */
+/* The board sets this in red. 11px is not display register, so the threshold here is
+   4.5 and no red this palette carries comes near it; --accent is the page's own
+   interactive green and 12.08 on the card. */
 .ev-foot .with { margin-left: auto; font-size: var(--fs-micro); font-weight: 700;
                  color: var(--accent); white-space: nowrap; }
 .rail-foot { display: flex; justify-content: space-between; align-items: center;
@@ -411,7 +427,7 @@
 .tile.feature .cap { left: 26px; right: 26px; bottom: 22px; }
 .tile.feature h3 { font-size: var(--fs-head); font-weight: 800; margin: 12px 0 6px; }
 .tile.feature p { font-size: var(--fs-body-sm); }
-/* The season marker is the board's yellow pill, not a square indigo tag. */
+/* The season marker is the board's yellow pill, not a square green tag. */
 .season { display: inline-block; background: var(--highlight); color: var(--primary);
           padding: 4px 11px; border-radius: 999px; font-weight: 700;
           font-size: var(--fs-micro); letter-spacing: 0.12em; }
@@ -420,9 +436,9 @@
 .split { display: flex; background: var(--primary); border-radius: var(--radius-card); overflow: hidden; flex-wrap: wrap; }
 .split-left { flex: 1 1 340px; padding: clamp(32px, 4vw, 52px) clamp(26px, 3.5vw, 48px);
               display: flex; flex-direction: column; border-right: 1px solid var(--primary-soft); }
-/* The board sets this eyebrow in its lilac rather than the yellow the page had been using
+/* The board sets this eyebrow in its green rather than the yellow the page had been using
    for every eyebrow on a dark ground — it lets the figure below it be the loud thing.
-   --hairline is that lilac, and 7.23 on the panel. */
+   --hairline is that green, and 7.23 on the panel. */
 .split-left .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.16em; font-weight: 700;
                        color: var(--hairline); margin-bottom: 14px; }
 /* 84px on the board — display register. This used to sit on --fs-feature, back when
@@ -442,7 +458,7 @@
 /* --stone (4.32 on canvas, 3.09 on primary) is also the .tabbar label colour
    (app.css), a light-ground use that can't take a darker value just to rescue
    this dark-ground one — lightening --stone to clear --primary would sink its
-   canvas ratio further. --muted already sits at 4.80 on --primary and is the
+   canvas ratio further. --muted already sits at 4.72 on --primary and is the
    token .split-left p uses one line up, so reuse it rather than mint a third
    grey for the same dark panel. */
 .split-left .foot { margin-top: auto; padding-top: 24px; font-size: var(--fs-micro);
@@ -460,8 +476,8 @@
    its hue is stated once, here, and a category that is renamed or reordered in the markup
    cannot silently take another's colour the way :nth-child would let it.
 
-   Measured on --primary: Eat 9.22, Shop 4.78, Stay 3.67, Do 4.29, Move 3.62. Two are not
-   the board's exact hue — Stay is --display-tint-alt, the one cyan this palette carries,
+   Measured on --primary: Eat 8.35, Shop 3.16, Stay 3.20, Do 3.88, Move 3.16. Two are not
+   the board's exact hue — Stay is --display-tint-alt, the one green this palette carries,
    and Do is --success rather than a second green — and both are noted at the token. */
 .count b { display: block; font-weight: 800; font-size: var(--fs-head);
            letter-spacing: -0.02em; color: var(--on-dark); }
@@ -488,10 +504,10 @@
    comfortably on the fluid curve. */
 .cta-band h2 { font-size: var(--fs-display); color: var(--canvas); line-height: 0.85; }
 /* The board two-tones every section heading ("Five doors.", "and promotions", "tournament.")
-   in orange. .head h2 stays flat because those sit on white, where --brand is 2.79 and
+   in red. .head h2 stays flat because those sit on white, where --brand is 3.82 and
    fails even the large-text floor — that constraint doesn't move. This heading is the one
    the board draws the same way that actually clears it: it sits on --primary, where
-   --brand is 4.78, and it renders at --fs-display (52-96px), display register both ways.
+   --brand is 3.16, and it renders at --fs-display (52-96px), display register both ways.
    So it alone gets the tint the board drew for it. */
 .cta-band h2 .tone { color: var(--brand); }
 .cta-band p { font-size: var(--fs-body); font-weight: 300; color: var(--accent-200);

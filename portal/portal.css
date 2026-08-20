@@ -8,85 +8,111 @@
   of them end up a different shade of gold.
 */
 :root {
-  /* The Pamoja Landing v6 board (desktop) and Pamoja Mobile (phone). Names are roles
-     and did not change when the values did — the minimax blue became indigo in place,
-     because a variable called --accent holding one brand's blue and then another's
-     indigo is still --accent, whereas a variable named for a colour would now be lying.
+  /* The tournament palette: green, yellow and red. It replaces the green/red/green set
+     the v6 board drew, and it is derived the same way that one was — role first, then the
+     value that clears the gate, never a swatch lifted and hoped over. Names stayed roles
+     rather than colours, which is the whole reason they survived indigo becoming green in
+     place: a variable called --accent holding one brand's indigo and then another's green
+     is still --accent, whereas a variable named for a hue would now be lying.
 
-     Three values are NOT the board's, and each is a contrast override rather than a
-     preference. The board is a picture; AA is a requirement. */
-  --primary:      #23276b;   /* indigo: nav, dark panels, the CTA band */
-  --primary-soft: #2d328a;   /* indigo +8% lightness: raised dark surface */
-  --charcoal:     #1d2058;   /* indigo -5%: pressed */
-  --accent:       #23276b;   /* the interactive hue — buttons, links, active destination.
-                                Indigo, not orange: the board's own buttons are indigo
-                                pills, and orange is 2.79 on white, unusable for the 11px
-                                active-tab label this drives. */
-  --accent-mid:   #2d328a;   /* hover */
-  --accent-deep:  #171a4c;   /* focus ring — indigo -8%, darker so it reads against the fill */
-  --accent-200:   #c9cbe6;   /* indigo tint */
-  --brand:        #f4772c;   /* the board's orange, at the board's own value. It is 2.79
-                                on --canvas and 2.58 on --surface-soft — below even the 3.0
-                                a display-size heading needs — so on a light ground it is a
-                                FILL and a DECORATION only, never type. On --primary it is
-                                4.78, and that is the one place it is set as text: the
-                                second half of the CTA headline, which is where the board
-                                puts it too. For orange type on paper, --display-tint. */
+     Every value below is checked by scripts/verify-contrast.mjs against portal.css itself,
+     so editing one re-runs its gate rather than dating a comment.
 
-  /* The two display tints. These are the board's two-tone headings — "One Pass. FIVE
-     DOORS.", "Fan events AND PROMOTIONS", "Explore the HOST COUNTRY" — plus the figures
-     the board colours the same way, and they are named for that job rather than for the
-     hue, because what makes them a pair is where they may be used, not that one is warm
-     and one is cool. Both are display register only: --fs-feature, --fs-head at 800 or
-     --fs-display, all of which are WCAG large text at 3.0. Neither may go near body copy.
+     WHERE THESE CAME FROM: they are derived, not official. The brief was green/yellow/red
+     for AFCON 2027; no hex list came with it. Swapping in official values later is an edit
+     to this block and a re-run of the contrast suite — nothing downstream names a hue. */
+  --primary:      #0e3e28;   /* deep green: nav, dark panels, the CTA band, the footer.
+                                Sat at the luminance green held (0.037), deliberately: every
+                                dark-ground pair below was solved against that figure, so
+                                matching it kept the whole set's headroom instead of
+                                re-solving eight tokens to suit one new ground. */
+  --primary-soft: #18593b;   /* raised dark surface */
+  --charcoal:     #0c3421;   /* pressed */
+  --accent:       #0e3e28;   /* the interactive hue — buttons, links, active destination.
+                                12.08 on --canvas, which is what the 11px active-tab label
+                                needs and what the board's own filled pills want. */
+  --accent-mid:   #18593b;   /* hover */
+  --accent-deep:  #092d1d;   /* focus ring — darker, so it reads against the fill */
+  --accent-200:   #b4d6c5;   /* green tint. 7.69 on --primary: it is body copy on the open
+                                door and the kick-off line on the fixture card. */
+  --brand:        #e84a45;   /* the brand red. Its lightness was decided by arithmetic rather
+                                than taste: a full-chroma flag red (L 0.15) reaches only 2.35
+                                on this ground, under the 3.0 the CTA headline's warm half
+                                needs, because a green ground and a red brand are no longer
+                                far apart in luminance the way indigo and orange were. Only a
+                                mid red clears a deep green ground at all.
+                                3.16 on --primary, 3.82 on --canvas. */
+  --marker:       #f15d47;   /* the categorical red, and a SECOND red — which wants its reason
+                                stated, because the palette is nominally three hues. It marks
+                                one member of a set apart: Kenya among the three countries,
+                                Move among the five partner categories. That band is the
+                                binding case — five figures, five different tokens — and three
+                                hues cannot supply five marks without extending one of them by
+                                lightness. Pointing this at --brand was tried first, and it
+                                collapsed the set to three colours across five categories with
+                                Shop and Move identically red and Stay and Do both green.
+                                So: a lighter red than --brand at 1.20x its luminance, which
+                                reads as a distinct mark beside it while staying in the only
+                                window open to it — it has to clear 3.0 on BOTH grounds, which
+                                caps it from either side, and lands at 3.68 on --primary and
+                                3.28 on --canvas. It still carries no state meaning of its
+                                own: nothing is wrong because it is red. */
 
-     Both differ from the board's raw value, and both differ for the same reason. The
-     ratios were measured against --surface-soft, not white: two of the three headings sit
-     on the banded ground, which is darker than paper, so clearing 3.0 on #ffffff is not
-     enough to clear it on the page. */
-  --display-tint:     #eb600c;  /* the board's #f4772c at -8% HSL lightness. Raw: 2.79 on
-                                   --canvas, 2.58 on --surface-soft. Here: 3.38 and 3.13,
-                                   and 3.95 on --primary, so it holds on all three grounds. */
-  --display-tint-alt: #1f8fc4;  /* the board's cyan (#2fb9c7 on v6, a lighter #3daeff on the
-                                   phone board) taken down until it clears: raw it is 2.36
-                                   on --canvas and 2.19 on --surface-soft. Here: 3.63, 3.36,
-                                   and 3.67 on --primary. One value for both grounds rather
-                                   than a light-ground and a dark-ground cyan, because a
-                                   second cyan differing only in lightness would be two
-                                   cyans, and this one already clears everywhere. */
-  --highlight:    #ffd22c;   /* the figures and eyebrows. 9.22 on indigo. */
-  --on-dark:      #ffd22c;   /* accent text ON dark — was --cyan, which could not keep
-                                its name while holding yellow. */
+  /* The two display tints — the board's two-tone headings ("One Pass. FIVE DOORS.", "Fan
+     events AND PROMOTIONS", "Explore the HOST COUNTRY") and the figures coloured the same
+     way. They are named for where they may be used, not for their hue, which is what let
+     the warm one stay warm and the cool one stop being cool: there is no cyan in a green,
+     yellow and red palette, so the second tint is now the brand green itself. Both are
+     display register only — --fs-feature, --fs-head at 800, or --fs-display, all of which
+     are WCAG large text at 3.0. Neither may go near body copy.
+     Ratios are measured against --surface-soft as well as white, because two of the three
+     headings sit on the banded ground, which is darker than paper. */
+  --display-tint:     #c2151b;  /* the deep red, for type on the two light grounds: 6.15 on
+                                   --canvas, 5.69 on --surface-soft. Deeper than --brand
+                                   because on paper a red heading wants the weight, and
+                                   nothing here has to clear the green ground. */
+  --display-tint-alt: #2a955f;  /* the green half. It is the one token squeezed from both
+                                   sides — 3.78 on --canvas and 3.49 on --surface-soft cap
+                                   how light it may go, 3.20 on --primary caps how dark, and
+                                   the window between them is about a tenth of a step of
+                                   luminance wide. Green type on a green ground is the cost
+                                   of a green brand; this is the value that pays it. */
+  --highlight:    #ffd22c;   /* the yellow, unchanged from the board — it was already the
+                                register the flag yellow occupies, and it is 8.35 on the new
+                                ground. The figures, the eyebrows, the countdown pill. */
+  --on-dark:      #ffd22c;   /* accent text ON dark */
   --success:      #1ba673;   /* live and confirmed — semantic, and the boards say nothing
-                                about it, so it is not theirs to overrule. It does double
-                                duty as the green in the partners band's categorical set,
-                                4.29 on --primary: the board's own green there is a
-                                different green, and carrying two of them so that one can
-                                mean "confirmed" and the other "Do" would be a palette
-                                with two greens in it. */
-  --marker:       #ee4b3b;   /* the categorical red, at the board's value — 3.62 on
-                                --primary and 3.68 on --canvas, both clear of the 3.0 a
-                                large figure or a dot needs. It marks one member of a set
-                                apart from the others (Kenya among the three countries, Move
-                                among the five partner categories) and carries no state
-                                meaning of its own: nothing is wrong because it is red. */
+                                about it, so it is not theirs to overrule. 3.88 on --primary.
+                                It is a third green now (ground, brand tint, this), and it
+                                stays because conflating "confirmed" with "brand" is worse
+                                than carrying a teal-green that means one thing. It reads
+                                apart from the ground by hue, not by lightness. */
   --success-bg:   #e8ffea;
   --canvas:       #ffffff;
-  --surface:      #e9e8f1;   /* the page ground */
-  --surface-soft: #f7f6f3;   /* banded sections — the warm paper from the Mobile board */
-  --hairline:     #b9bce4;   /* lilac rules */
-  --ink:          #23276b;   /* body and headings */
-  --slate:        #515365;   /* body copy — muted -18%, 7.57 on white */
-  --steel:        #63657c;   /* muted -10% */
-  --stone:        #767891;   /* muted -2% */
-  --muted:        #989aad;   /* secondary text on dark. The board's #7c7e96 is 3.36 on
-                                indigo and fails AA, so this is that value +10%: 4.80. */
-  --ink-rgb:      35, 39, 107;  /* for the translucent inks app.css needs; a component
-                                   must not decompose --ink by hand */
+  --surface:      #e1eae5;   /* the page ground, green-tinted where it was green-tinted */
+  --surface-soft: #f7f6f3;   /* banded sections — the warm paper from the Mobile board, left
+                                neutral on purpose: it is the only ground the red and green
+                                display tints both have to clear, and tinting it green would
+                                spend that headroom on nothing. */
+  --hairline:     #bee2d0;   /* rules, green tint */
+  --ink:          #143726;   /* body and headings. 13.09 on --canvas, 10.66 on --surface. A
+                                near-black green rather than the ground green: the ground is
+                                a field, this is type, and type at 15px wants the depth. */
+  --slate:        #51645b;   /* body copy — 6.32 on white */
+  --steel:        #5e7168;   /* 5.20 on white */
+  --stone:        #677870;   /* 4.67 on white. It is text (the .tabbar label in app.css) and
+                                has to clear 4.5 there while staying under 4.5 on --primary,
+                                which is the tripwire verify-contrast.mjs asserts. */
+  --muted:        #89a999;   /* secondary text on dark: 4.72 on --primary */
+  --ink-rgb:      20, 55, 38;   /* for the translucent inks app.css and the washes need; a
+                                   component must not decompose --ink by hand. Every veil and
+                                   wash on the site multiplies THIS, so changing it changed
+                                   every text-over-photograph measurement — all of them were
+                                   re-taken, see the notes at each wash. */
   --highlight-rgb: 255, 210, 44;  /* the same service --ink-rgb does, for the one place the
                                      board asks for the yellow at partial alpha: the soft
-                                     glow behind the hero trophy, which is a fade to nothing
-                                     and so cannot be a solid token. */
+                                     glow behind the hero trophy, a fade to nothing and so
+                                     not expressible as a solid token. */
   --pad-x:        clamp(20px, 5vw, 64px);
   --radius-card:  20px;   /* the board's card radius, counted across both boards: pills
                               stay 999px, circles stay 50%, only the flat-card corner moves
@@ -132,7 +158,10 @@ body { margin: 0; background: var(--surface); color: var(--charcoal);
        -webkit-font-smoothing: antialiased; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-mid); }
-::selection { background: #1456f033; }
+/* The last literal in this file was a leftover 20% of the retired minimax blue. A
+   selection has to be a brand colour or a neutral, and this palette has a yellow that
+   is 8.35 on the ground and light enough to keep --ink legible over it. */
+::selection { background: rgba(var(--highlight-rgb), 0.42); }
 h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; }
 p { margin: 0; }
 img { display: block; max-width: 100%; }
@@ -179,7 +208,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn-on-dark { background: var(--canvas); color: var(--primary); }
 .btn-on-dark:hover { opacity: 0.92; color: var(--primary); }
 .btn-on-dark:active { filter: brightness(0.95); }
-/* The board's filled-yellow CTA on indigo — --primary on --highlight is 9.22, the same
+/* The board's filled-yellow CTA on green — --primary on --highlight is 8.35, the same
    pairing the On-sale chip and the open door's eyebrow already use on this page. Only the
    two CTAs the board actually draws this way take it; the nav's pills and the featured
    fixture's "Get tickets" stay --btn-on-dark, which the board keeps white there too. */
@@ -193,7 +222,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .underline-link:hover { color: var(--canvas); text-decoration: underline; }
 
 /* ── Utility bar ─────────────────────────────────────────────────────────── */
-/* The board sits this strip on the indigo ground with the lilac hairline text, centred —
+/* The board sits this strip on the green ground with the green hairline text, centred —
    not the charcoal-on-surface-soft pairing left over from an earlier pass, and not left-
    aligned. --primary and --hairline are the tokens that actually match its values. */
 
