@@ -66,3 +66,46 @@ One copy note: **"Own the tournament."** echoes the Craydel brand bible's rallyi
 ("Own it with Craydel"), which is bundled in the same zip. It reads fine for a fan pass,
 but it arrived from a study-abroad brand's verbal DNA rather than from Pamoja's, so it is
 worth a deliberate keep-or-change rather than adopting by inheritance.
+
+## The derived type scale
+
+The board's 30 rounded sizes are not 30 decisions. The six values at 40px and above are
+all `font-weight: 800`, and Mobile's 52px/48px are the same two headings as v6's 96px/84px
+— one element at two artboard widths. They collapse into fluid steps. The dense band at
+10–14px (103 of the uses) is the label/mono register, which needs three steps, not five.
+
+Eight steps, and what each covers:
+
+| Token | Value | Board sizes it absorbs |
+|---|---|---|
+| `--fs-micro` | `11px` | 9, 10, 11 — eyebrows, mono labels |
+| `--fs-small` | `13px` | 12, 13 |
+| `--fs-body-sm` | `15px` | 14, 15, 16 |
+| `--fs-body` | `17px` | 17, 18, 19 |
+| `--fs-subhead` | `22px` | 20, 21, 22, 24, 25 |
+| `--fs-head` | `28px` | 26, 27, 29, 32 |
+| `--fs-feature` | `clamp(40px, 5.5vw, 64px)` | 34, 40, 48, 56, 64 |
+| `--fs-display` | `clamp(52px, 9vw, 96px)` | 52 (mobile) → 84, 96 (desktop) — the hero |
+
+7px and 8px appear once and five times respectively, below the portal's own legibility
+floor; they fold into `--fs-micro`.
+
+## Contrast: two of the board's own pairings fail WCAG AA
+
+Computed, not guessed:
+
+| Pair | Ratio | Needs | |
+|---|---|---|---|
+| indigo `#23276b` on white | 13.34 | 4.5 | pass |
+| white on indigo | 13.34 | 4.5 | pass |
+| yellow `#ffd22c` on indigo | 9.22 | 3.0 | pass |
+| orange `#f4772c` on indigo | 4.78 | 3.0 | pass |
+| muted `#7c7e96` on white | **3.98** | 4.5 | **fails body** |
+| orange `#f4772c` on white | **2.79** | 3.0 | **fails even large text** |
+
+So orange cannot carry text on white — it is a fill colour there (button grounds, rules,
+the "pamoja." wordmark at display size where the board sets it on white, which is itself
+borderline and should be checked against the board's actual usage). And the board's muted
+grey needs darkening for body use. These are the two places where the spec's rule —
+contrast wins over the 8%-lightness derivation, and the deviation is recorded — actually
+bites.
