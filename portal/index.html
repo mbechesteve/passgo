@@ -381,6 +381,9 @@
   .fx .who { flex: 1 1 100%; }
   .fx .venue { flex: 0 1 auto; margin-right: auto; }
   .fx .chip { flex: 0 0 auto; }
+  /* The chevron is what tipped a long venue onto a fourth line. The Mobile board draws
+     these rows without one, and the whole row is the link either way. */
+  .fx svg { display: none; }
   .split-left { border-right: 0; border-bottom: 1px solid var(--primary-soft); }
 }
 @media (max-width: 560px) {
