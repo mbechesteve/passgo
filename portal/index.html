@@ -224,42 +224,55 @@
 .chip-held { background: var(--primary); color: var(--on-dark); }
 
 /* ── Fan events rail ─────────────────────────────────────────────────────── */
+/* Still scrolled by the buttons' scrollBy(+-364): the card is 320 wide and the gap 24,
+   both unchanged, so the step still lands where it landed. */
 .rail { display: flex; gap: 24px; overflow-x: auto; scroll-behavior: smooth;
         padding-bottom: 10px; scrollbar-width: none; }
 .rail::-webkit-scrollbar { display: none; }
-.ev { flex: 0 0 320px; color: inherit; }
-.ev:hover { color: inherit; }
-.ev .frame { position: relative; aspect-ratio: 1 / 1.02; border-radius: 16px;
+/* The board turns each event into a bordered white card with the photograph on top and
+   the copy in a padded foot, rather than a loose tile with a caption under it. */
+.ev { flex: 0 0 320px; color: inherit; background: var(--canvas);
+      border: 1px solid var(--hairline); border-radius: var(--radius-card); overflow: hidden;
+      transition: border-color 200ms ease; }
+.ev:hover { color: inherit; border-color: var(--primary); }
+.ev .frame { position: relative; aspect-ratio: 16 / 11; border-radius: 0;
              overflow: hidden; background: var(--primary); }
-/* The rail's wash is lighter than the page's: rgba(13,14,17,0.8), not 0.9 of --ink-2. */
-.ev .wash { background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(13,14,17,0.8) 100%); }
-.ev h3 { font-size: 20px; font-weight: 700; color: var(--primary); margin: 16px 0 6px; }
-.ev .meta { font-family: "JetBrains Mono", monospace; font-size: 12px;
-            letter-spacing: 0.08em; color: var(--slate); }
+.ev .wash { background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.1) 0%, rgba(var(--ink-rgb), 0.4) 100%); }
+.ev h3 { font-size: var(--fs-subhead); font-weight: 700; color: var(--primary);
+         line-height: 1.2; margin: 0; padding: 18px 20px 0; }
+.ev .meta { display: block; font-family: "JetBrains Mono", monospace; font-size: var(--fs-small);
+            letter-spacing: 0.06em; line-height: 1.5; color: var(--steel); padding: 8px 20px 20px; }
 .rail-foot { display: flex; justify-content: space-between; align-items: center;
              margin-top: 22px; gap: 24px; flex-wrap: wrap; }
 .rail-nav { display: flex; gap: 12px; }
 .round { width: 48px; height: 48px; border-radius: 50%; cursor: pointer;
          display: flex; align-items: center; justify-content: center; }
-.round-ghost { border: 1px solid var(--hairline); background: var(--canvas); color: var(--slate); }
+.round-ghost { border: 1px solid var(--hairline); background: var(--canvas); color: var(--primary); }
 .round-ghost:hover { border-color: var(--primary); color: var(--primary); }
 .round-solid { border: none; background: var(--primary); color: var(--canvas); }
 .round-solid:hover { background: var(--charcoal); }
 
 /* ── Explore broken grid ─────────────────────────────────────────────────── */
+/* The desktop board draws this section as a numbered picker driving one large preview
+   card. That is new behaviour and needs a paragraph of description per place that this
+   page does not have, so the grid stays and takes its treatment from the Mobile board,
+   which draws the same section as a hero tile over a two-up grid — which is what this is. */
 .broken { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; gap: 18px; }
-.tile { position: relative; border-radius: 16px; overflow: hidden; background: var(--primary);
+.tile { position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--primary);
         display: block; color: inherit; }
 .tile:hover { color: inherit; }
-.tile .cap { position: absolute; left: 22px; right: 22px; bottom: 20px; pointer-events: none; }
-.tile h3 { font-size: 21px; font-weight: 700; color: var(--canvas); margin-bottom: 4px; }
-.tile p { font-size: 13px; font-weight: 300; color: var(--muted); }
-.tile.feature { grid-column: span 2; grid-row: span 2; border-radius: 32px; }
-.tile.feature .cap { left: 28px; right: 28px; bottom: 26px; }
-.tile.feature h3 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 800; margin: 14px 0 6px; }
-.tile.feature p { font-size: 16px; }
-.season { display: inline-block; background: var(--accent); color: var(--canvas);
-          padding: 4px 10px; border-radius: 4px; font-size: 10px; letter-spacing: 0.12em; }
+.tile .wash { background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 45%, rgba(var(--ink-rgb), 0.92) 100%); }
+.tile .cap { position: absolute; left: 20px; right: 20px; bottom: 16px; pointer-events: none; }
+.tile h3 { font-size: var(--fs-subhead); font-weight: 700; color: var(--canvas); margin-bottom: 4px; }
+.tile p { font-size: var(--fs-small); font-weight: 300; color: var(--accent-200); }
+.tile.feature { grid-column: span 2; grid-row: span 2; }
+.tile.feature .cap { left: 26px; right: 26px; bottom: 22px; }
+.tile.feature h3 { font-size: var(--fs-head); font-weight: 800; margin: 12px 0 6px; }
+.tile.feature p { font-size: var(--fs-body-sm); }
+/* The season marker is the board's yellow pill, not a square indigo tag. */
+.season { display: inline-block; background: var(--highlight); color: var(--primary);
+          padding: 4px 11px; border-radius: 999px; font-weight: 700;
+          font-size: var(--fs-micro); letter-spacing: 0.12em; }
 
 /* ── Partners split card ─────────────────────────────────────────────────── */
 .split { display: flex; background: var(--primary); border-radius: 32px; overflow: hidden; flex-wrap: wrap; }
