@@ -327,17 +327,55 @@
 .rail::-webkit-scrollbar { display: none; }
 /* The board turns each event into a bordered white card with the photograph on top and
    the copy in a padded foot, rather than a loose tile with a caption under it. */
+/* A column, so that the foot can be pushed to the bottom: the rail stretches every card
+   to the tallest, and a two-line title used to leave the country line floating halfway up
+   its own card while the neighbour's sat at the bottom. */
 .ev { flex: 0 0 320px; color: inherit; background: var(--canvas);
       border: 1px solid var(--hairline); border-radius: var(--radius-card); overflow: hidden;
-      transition: border-color 200ms ease; }
+      transition: border-color 200ms ease; display: flex; flex-direction: column; }
 .ev:hover { color: inherit; border-color: var(--primary); }
 .ev .frame { position: relative; aspect-ratio: 16 / 11; border-radius: 0;
              overflow: hidden; background: var(--primary); }
 .ev .wash { background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.1) 0%, rgba(var(--ink-rgb), 0.4) 100%); }
+/* The board floats the date on the photograph as a white tile, day over month, and puts a
+   yellow pill in the opposite corner when the event is free — instead of running both
+   facts into the end of the caption, which is where this page had them. Same information,
+   and no new information: the free ones are still the two the page always said were free,
+   not the three the board's placeholder data marks.
+
+   Both are solid fills, so neither depends on the picture underneath: --primary reads
+   13.34 on the white tile and 9.22 on the yellow pill, whatever the photograph does. The
+   shadow is what keeps the white tile's edge findable against a bright sky. */
+.ev .date-chip { position: absolute; top: 14px; left: 14px; text-align: center;
+                 background: var(--canvas); color: var(--primary); border-radius: 12px;
+                 padding: 8px 12px; box-shadow: 0 4px 14px rgba(var(--ink-rgb), 0.18); }
+.ev .date-chip b { display: block; font-size: var(--fs-subhead); font-weight: 800; line-height: 1; }
+.ev .date-chip span { display: block; font-size: var(--fs-micro); font-weight: 800; letter-spacing: 0.14em; }
+.ev .free { position: absolute; top: 14px; right: 14px; background: var(--highlight);
+            color: var(--primary); font-size: var(--fs-micro); font-weight: 800;
+            letter-spacing: 0.1em; padding: 5px 11px; border-radius: 999px; }
 .ev h3 { font-size: var(--fs-subhead); font-weight: 700; color: var(--primary);
          line-height: 1.2; margin: 0; padding: 18px 20px 0; }
 .ev .meta { display: block; font-family: "JetBrains Mono", monospace; font-size: var(--fs-small);
-            letter-spacing: 0.06em; line-height: 1.5; color: var(--steel); padding: 8px 20px 20px; }
+            letter-spacing: 0.06em; line-height: 1.5; color: var(--steel); padding: 8px 20px 0; }
+/* The card foot the board adds: a coloured dot for the country, the country, and the
+   promise on the right. */
+.ev-foot { display: flex; align-items: center; gap: 7px; padding: 12px 20px 20px; margin-top: auto; }
+.ev-foot .flag { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+/* Kenya and Tanzania are the board's own hues. Uganda is not: the board's yellow is 1.45
+   on the white card, a dot nobody can see, and --display-tint at 3.38 is the nearest warm
+   hue in this palette that can be. The dot is redundant with the word beside it either
+   way, which is why it may be a departure at all. */
+.flag-ke { background: var(--marker); }
+.flag-tz { background: var(--display-tint-alt); }
+.flag-ug { background: var(--display-tint); }
+.ev-foot .where { font-size: var(--fs-micro); font-weight: 700; letter-spacing: 0.14em;
+                  color: var(--primary); }
+/* The board sets this in orange. 11px is not display register, so the threshold here is
+   4.5 and no orange this palette carries comes near it; --accent is the page's own
+   interactive indigo and 13.34 on the card. */
+.ev-foot .with { margin-left: auto; font-size: var(--fs-micro); font-weight: 700;
+                 color: var(--accent); white-space: nowrap; }
 .rail-foot { display: flex; justify-content: space-between; align-items: center;
              margin-top: 22px; gap: 24px; flex-wrap: wrap; }
 .rail-nav { display: flex; gap: 12px; }
@@ -740,34 +778,40 @@
     </div>
     <div class="rail" id="ev-rail">
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/uhuru-park.jpg" alt="A lake at Uhuru Park at sunset."></div><div class="wash"></div></div>
+        <div class="frame"><div class="shot"><img src="img/uhuru-park.jpg" alt="A lake at Uhuru Park at sunset."></div><div class="wash"></div><span class="date-chip"><b>20</b><span class="mono">Jun</span></span><span class="free mono">Free</span></div>
         <h3>Opening Fan Festival</h3>
-        <span class="meta mono">Uhuru Park · Nairobi, Kenya · 20 Jun · Free</span>
+        <span class="meta mono">Uhuru Park · Nairobi</span>
+        <span class="ev-foot"><span class="flag flag-ke"></span><span class="where mono">Kenya</span><span class="with">With your Pass →</span></span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/ev-bongo.jpg" alt="Musicians performing on an outdoor stage at night."></div><div class="wash"></div></div>
+        <div class="frame"><div class="shot"><img src="img/ev-bongo.jpg" alt="Musicians performing on an outdoor stage at night."></div><div class="wash"></div><span class="date-chip"><b>24</b><span class="mono">Jun</span></span></div>
         <h3>Bongo Flava Live</h3>
-        <span class="meta mono">Coco Beach · Dar es Salaam, Tanzania · 24 Jun</span>
+        <span class="meta mono">Coco Beach · Dar es Salaam</span>
+        <span class="ev-foot"><span class="flag flag-tz"></span><span class="where mono">Tanzania</span><span class="with">With your Pass →</span></span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/ev-kampala.jpg" alt="Kampala Road."></div><div class="wash"></div></div>
+        <div class="frame"><div class="shot"><img src="img/ev-kampala.jpg" alt="Kampala Road."></div><div class="wash"></div><span class="date-chip"><b>25</b><span class="mono">Jun</span></span><span class="free mono">Free</span></div>
         <h3>Kampala Fan Parade &amp; Concert</h3>
-        <span class="meta mono">Kampala Road · Kampala, Uganda · 25 Jun · Free</span>
+        <span class="meta mono">Kampala Road · Kampala</span>
+        <span class="ev-foot"><span class="flag flag-ug"></span><span class="where mono">Uganda</span><span class="with">With your Pass →</span></span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/ev-koroga.jpg" alt="A night concert under stage lights."></div><div class="wash"></div></div>
+        <div class="frame"><div class="shot"><img src="img/ev-koroga.jpg" alt="A night concert under stage lights."></div><div class="wash"></div><span class="date-chip"><b>27</b><span class="mono">Jun</span></span></div>
         <h3>Koroga Festival · AFCON Edition</h3>
-        <span class="meta mono">Carnivore Grounds · Nairobi, Kenya · 27 Jun</span>
+        <span class="meta mono">Carnivore Grounds · Nairobi</span>
+        <span class="ev-foot"><span class="flag flag-ke"></span><span class="where mono">Kenya</span><span class="with">With your Pass →</span></span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/ev-zanzibar.jpg" alt="Forodhani Gardens seafront at sunset."></div><div class="wash"></div></div>
+        <div class="frame"><div class="shot"><img src="img/ev-zanzibar.jpg" alt="Forodhani Gardens seafront at sunset."></div><div class="wash"></div><span class="date-chip"><b>28</b><span class="mono">Jun</span></span></div>
         <h3>Zanzibar Beach Fan Fest</h3>
-        <span class="meta mono">Forodhani Gardens · Zanzibar, Tanzania · 28 Jun</span>
+        <span class="meta mono">Forodhani Gardens · Zanzibar</span>
+        <span class="ev-foot"><span class="flag flag-tz"></span><span class="where mono">Tanzania</span><span class="with">With your Pass →</span></span>
       </a>
       <a class="ev" href="#events">
-        <div class="frame"><div class="shot"><img src="img/ev-closing.jpg" alt="A music festival at Kasarani."></div><div class="wash"></div></div>
+        <div class="frame"><div class="shot"><img src="img/ev-closing.jpg" alt="A music festival at Kasarani."></div><div class="wash"></div><span class="date-chip"><b>17</b><span class="mono">Jul</span></span></div>
         <h3>Closing Concert</h3>
-        <span class="meta mono">Kasarani · Nairobi, Kenya · 17 Jul</span>
+        <span class="meta mono">Kasarani · Nairobi</span>
+        <span class="ev-foot"><span class="flag flag-ke"></span><span class="where mono">Kenya</span><span class="with">With your Pass →</span></span>
       </a>
     </div>
     <div class="rail-foot">
