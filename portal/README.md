@@ -119,18 +119,18 @@ is what keeps displaying the photographs lawful. The prototype caveat moved ther
 | `index.html` | the marketing page — the board, ported |
 | `login.html` | Pass number + one-time code. No password: there is none to steal, and none to store |
 | `signup.html` | the app's own three questions — country, name, ticket reference — and now issues a real Pass on submit, through `PamojaState.issue()` |
-| `dashboard.html` | Home: credential, next match and seat, the record, the partner network |
+| `dashboard.html` | Home: the next match, the partner network, and the three most recent lines of the record |
 | `matches.html` | the fixture list, read from `MATCHES` |
-| `live.html` | the live match, minute and score, read from `MATCH_LIVE` |
+| `live.html` | whatever `liveMatches(MATCHES, now)` says is under way, with its minute — no score: the portal reads the fixtures, not `MATCH_LIVE` |
 | `partners.html` | the partner network by category, and the one flow that mutates state: redemption |
-| `pass.html` | the Pass on its own — the empty state when none has been issued yet, otherwise the credential |
+| `pass.html` | the Pass, the whole record newest-first, and the wallet: adding a payment method and choosing the default |
 | `credits.html` | photo attributions. **Unlinked** — see Photography |
 | `portal.css` | tokens, base type, buttons, nav, footer — shared by all of them |
 | `auth.css` | only what login, sign-up and the dashboard add |
 | `app.css` | the logged-in pages' own chrome: tabbar, dialogs, panels |
 | `app-data.js` | **generated**, gitignored — see *The boundary with the app* |
-| `state.js` | the page-shaped door onto `app-data.js`'s stores: `ready()`, `pass()`, `issue()`, `redeem()` |
-| `chrome.js` | mounts the five-tab bar on the logged-in pages |
+| `state.js` | the page-shaped door onto `app-data.js`'s stores: `ready()`, `pass()`, `issue()`, `redeem()`, `addMethod()`, `chooseMethod()` |
+| `chrome.js` | mounts the five-tab bar on the logged-in pages. Needs nothing from the bundle, and is mounted before each page waits on it, so a page with no `app-data.js` is still navigable |
 | `pages/*.js` | one script per logged-in page, rendering that page's figures from `app-data.js` |
 
 Nothing is authenticated. Both forms stay `method="get"` to `dashboard.html`; sign-up now
@@ -138,11 +138,15 @@ issues a Pass first, so what login finds is either that Pass or, for anyone who 
 signed up, the same empty state the pages always showed. No credentials are stored and no
 payment details are collected on any page — Rev. 2 §05 holds here as it does in the app.
 
-The dashboard's figures are the **app's**, not written for the page: `KE-PM-8842`,
-Amina Nakato, `Valid · 24 days left`, Cat 2 / Gate D / Section 214 / Seat 17, the
+Every figure on the logged-in pages is the **app's**, not written for the page:
+`KE-PM-8842`, Amina Nakato and `Valid · 24 days left` on `pass.html`, the
 `KES 850 · food and drink · Kasarani ward · 12:55` record line with its `KES 150` saved,
 and the five partner counts. `src/utils/spec-figures.test.ts` guards those, so if the app's
-figures move, that suite is what will say this page is stale.
+figures move, that suite is what will say these pages are stale.
+
+One figure the app has and these pages do not: the ticket — Cat 2 / Gate D / Section 214 /
+Seat 17. `PassScreen` shows it and `pass.html` does not yet, though `PamojaState.ticket()`
+is there for whoever adds it.
 
 ## The boundary with the app
 
@@ -159,7 +163,12 @@ one file into `portal/app-data.js` — an IIFE global, `window.Pamoja` — which
 gitignored, not committed: it is generated the same way on every machine and in CI, so
 committing it would just be a second copy to keep in sync. `portal/state.js` is a thin,
 page-shaped door onto `Pamoja`'s Zustand stores (rehydration, a `ready()` to await before
-first paint, `issue()` and `redeem()`), not a reimplementation of them.
+first paint, `issue()`, `redeem()`, `addMethod()` and `chooseMethod()`), not a
+reimplementation of them.
+
+The boundary is checked, not merely stated: `npm run verify:bundle` compares the built
+global's own key set against the contract it expects, in both directions, so neither a
+page reaching for something new nor an export nothing reads goes unnoticed.
 
 `src/utils/spec-figures.test.ts` now guards both surfaces at once: it is the single
 source for every number this README and every logged-in page repeats, so a figure moving
@@ -174,8 +183,11 @@ site in front of the app changes what the domain root means — that decision ha
 taken, deliberately, rather than left assumed. To view the portal on its own:
 
 ```bash
-python3 -m http.server 8080 --directory portal   # then open http://localhost:8080
+npm run portal     # builds app-data.js, then serves portal/ on http://localhost:8080
 ```
+
+Use the script rather than a bare `python3 -m http.server`: `app-data.js` is build output
+and gitignored, and a portal served without it shows no figures at all.
 
 ## Still to do
 

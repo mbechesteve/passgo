@@ -31,7 +31,7 @@ assert.ok(P, "the bundle must define a Pamoja global");
 const CONTRACT = [
   "strings", "clock",
   "MATCHES", "EXPLORE_ITEMS", "PARKING_ZONES", "NAMED_PARTNERS", "generatePartners",
-  "DEMO_HOLDER_NAME", "passStatus", "validityLabel",
+  "DEMO_HOLDER_NAME", "issuePass", "passStatus", "validityLabel",
   "CATEGORIES", "CATEGORY_LABEL", "countsByCategory",
   "buildRedemption", "computeMoney", "kes",
   "KINDS", "KIND_LABEL", "describeMethod", "tailOf",

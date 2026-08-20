@@ -262,11 +262,17 @@ const PROBES = {
         text("#live-body"), P.matchLabel(m)]);
     } else {
       const next = P.nextMatch(P.MATCHES, now);
-      // With nothing live the page falls back to the next fixture; past the last
-      // one there is no fixture to name, only the tournament-is-over line, so all
-      // that can be required then is that the body is not blank.
-      rows.push(["the fallback line", "contains", text("#live-body"),
-        next ? P.matchLabel(next) : ""]);
+      if (next) {
+        // With nothing live the page falls back to naming the next fixture.
+        rows.push(["the fallback line", "contains", text("#live-body"),
+          P.matchLabel(next)]);
+      } else {
+        // Past the last fixture there is no fixture to name, only the
+        // tournament-is-over line — and `contains ""` is a check that cannot fail.
+        // What is promised here is that the body still says something.
+        rows.push(["a body line past the last fixture", "equals",
+          String(text("#live-body").length > 0), "true"]);
+      }
     }
     return rows;
   },
@@ -627,6 +633,101 @@ for (const { w, h } of WIDTHS) {
       await page.close();
     }
   }
+}
+
+// ---------------------------------------------------------------------------
+// signup.html
+// ---------------------------------------------------------------------------
+
+// The sixth page that matters, and the only one outside the five that writes to a
+// store. It produces the Figure 1 serial, and it carries the double-submit guard
+// that keeps producing it: issuing twice would make the device's first Pass
+// KE-PM-8843. Both are checked here, and the serial is computed in the page from
+// issuePass rather than written down.
+for (const { w, h } of WIDTHS) {
+  const label = `signup.html @ ${w}px`;
+  const failedBefore = failures.length;
+  const page = await browser.newPage({ viewport: { width: w, height: h } });
+  const errs = [];
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    if (/fonts\.(googleapis|gstatic)\.com/.test(m.text())) return;
+    errs.push(m.text());
+  });
+  page.on("pageerror", (e) => errs.push("pageerror: " + e.message));
+
+  await page.goto(`${ORIGIN}/signup.html`, { waitUntil: "load" });
+  const booted = await check(`${label} boot`, () => page.waitForFunction(
+    () => !document.documentElement.hasAttribute("data-booting"), null, { timeout: 20000 }));
+
+  if (booted) {
+    // The app's three questions, and no fourth: where the Pass is collected, who
+    // it is for, and the ticket it travels with.
+    await check(`${label} the three questions`, async () => {
+      const form = await page.evaluate(() => ({
+        countries: document.querySelectorAll('form input[name="country"]').length,
+        name: !!document.querySelector('form input[name="name"]'),
+        ticket: !!document.querySelector('form input[name="ticket"]'),
+        method: document.querySelector("form").getAttribute("method"),
+      }));
+      assert.equal(form.countries, 3, "one option per host country");
+      assert.ok(form.name, "the form must ask who the Pass is for");
+      assert.ok(form.ticket, "the form must ask for the ticket reference");
+      // Nothing is authenticated and nothing is posted anywhere — see the spec's
+      // out-of-scope list. A form that had grown a POST would be a real change.
+      assert.equal(form.method, "get", "the form must stay a GET");
+    });
+
+    await check(`${label} issues the Figure 1 Pass, once`, async () => {
+      assert.equal(await page.evaluate(() => window.PamojaState.pass()), null,
+        "a fresh profile must start with no Pass");
+      // Submitted twice, synchronously, which is exactly what the guard is for:
+      // a second issue would take the device's first Pass off the Figure 1 serial.
+      await page.evaluate(() => {
+        const form = document.querySelector("form");
+        form.requestSubmit();
+        form.requestSubmit();
+      });
+      try {
+        await page.waitForURL(/dashboard\.html/, { timeout: 20000 });
+      } catch (e) {
+        // The second submit issuing too would set location.href a second time and
+        // abort the first navigation, so say what that almost certainly means
+        // rather than leaving "frame was detached" to be interpreted.
+        throw new Error(
+          `the page did not settle on dashboard.html (${e.message}) — the likeliest ` +
+          "cause is the submit handler navigating twice, i.e. the double-submit " +
+          "guard no longer holding");
+      }
+      await page.waitForFunction(
+        () => !!window.PamojaState && !!window.PamojaState.pass(), null, { timeout: 20000 });
+      const issued = await page.evaluate(() => {
+        const P = window.Pamoja, S = window.PamojaState;
+        const pass = S.pass();
+        const field = document.querySelector('input[name="name"]');
+        return {
+          shortCode: pass.shortCode,
+          holderName: pass.holderName,
+          // What the app would mint for the FIRST Pass on a device. If the double
+          // submit got through, the serial above is the second one and these differ.
+          expected: P.issuePass({
+            holderName: pass.holderName, issuedIn: pass.issuedIn, sequence: 0,
+          }).shortCode,
+          typed: field ? field.value : null,
+        };
+      });
+      assert.equal(issued.shortCode, issued.expected,
+        "the first Pass on a device must carry the first serial");
+    });
+  }
+
+  await check(`${label} console`, () => {
+    assert.deepEqual(errs, [], `console errors: ${errs.join(" | ")}`);
+  });
+
+  if (failures.length === failedBefore) console.log(`  ok   ${label}`);
+  else console.error(`  FAIL ${label}`);
+  await page.close();
 }
 
 await browser.close();

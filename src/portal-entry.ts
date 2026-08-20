@@ -25,7 +25,10 @@ export { EXPLORE_ITEMS } from "@/data/explore";
 export { PARKING_ZONES } from "@/data/parking";
 export { NAMED_PARTNERS, generatePartners } from "@/data/partners";
 
-export { DEMO_HOLDER_NAME } from "@/utils/issue";
+// Read by scripts/verify-portal.mjs, not by a page: the harness mints the serial
+// the app would give a device's first Pass and compares signup.html's against it,
+// rather than writing KE-PM-8842 into a third place.
+export { DEMO_HOLDER_NAME, issuePass } from "@/utils/issue";
 export { passStatus, validityLabel } from "@/utils/pass";
 export { CATEGORIES, CATEGORY_LABEL, countsByCategory } from "@/utils/partners";
 export { buildRedemption, computeMoney } from "@/utils/redeem";
