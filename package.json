@@ -11,6 +11,7 @@
     "build:portal-bundle": "node scripts/build-portal-bundle.mjs",
     "build": "npm run build:portal-bundle && expo export --platform web --output-dir dist/app && node scripts/copy-portal.mjs && node scripts/inject-pwa.mjs",
     "verify:bundle": "node scripts/verify-bundle.mjs",
+    "verify:portal": "npm run build:portal-bundle && node scripts/verify-portal.mjs",
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "web:app": "expo start --web",
