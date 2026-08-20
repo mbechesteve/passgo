@@ -7,7 +7,7 @@
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="favicon-512.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="favicon-180.png">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#23276b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -34,12 +34,12 @@
 </div>
 
 <div class="utility mono m11">
-  <span style="color:var(--muted)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+  <span>AFCON 2027 · Kenya · Uganda · Tanzania</span>
 </div>
 
 <nav class="nav" aria-label="Main">
   <input class="menu-toggle" type="checkbox" id="menu">
-  <a href="index.html" style="color:inherit">
+  <a href="index.html">
     <span class="brand-name">Pamoja</span>
     <span class="brand-sub mono">The official fan pass</span>
   </a>
@@ -66,20 +66,20 @@
 </main>
 <nav class="tabbar"></nav>
 <dialog class="sheet" id="redeem">
-  <div class="sheet-head"><h2 style="margin:0;font-size:20px" id="redeem-title"></h2>
+  <div class="sheet-head"><h2 id="redeem-title"></h2>
     <button class="sheet-close" aria-label="Close">&times;</button></div>
   <div class="sheet-body">
     <!-- Written by pages/partners.js from S.partnerDisclaimer — the same sentence
          PartnerScreen shows, rather than a second wording of the same promise. -->
     <p class="muted" id="redeem-note"></p>
     <label for="gross">Amount (KES)</label>
-    <input id="gross" type="number" inputmode="numeric" value="1000" min="0"
-           style="min-height:44px;width:100%">
+    <input id="gross" class="full-control" type="number" inputmode="numeric" value="1000" min="0">
     <!-- 1000 matches the app's own prefill (ConfirmScreen.tsx:36, a screen-local
          useState literal rather than a shared constant, so there is nothing in
          src/ to read it from). -->
     <p id="redeem-preview"></p>
-    <button class="btn" id="confirm-redeem" style="min-height:44px">Confirm</button>
+    <!-- .btn already sets min-height: 44px; the inline style repeating it was a no-op. -->
+    <button class="btn" id="confirm-redeem">Confirm</button>
   </div>
 </dialog>
 <script src="app-data.js"></script><script src="state.js"></script>

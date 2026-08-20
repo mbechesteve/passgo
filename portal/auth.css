@@ -56,6 +56,11 @@ input:focus-visible { outline: none; border: 2px solid var(--accent-deep); }
 .dash-head { display: flex; justify-content: space-between; align-items: flex-end;
              gap: 32px; flex-wrap: wrap; margin-bottom: 36px; }
 .dash-head h1 { font-size: var(--fs-feature); color: var(--primary); }
+/* Home and Pass repeat this as an inline style on the h1 that follows their clock
+   eyebrow — the gap the eyebrow's own line-height doesn't leave. Scoped to that pairing
+   rather than every .dash-head h1, so Matches/Live/Partners, which open straight on
+   their h1 with nothing above it, don't pick up a margin they never had. */
+.eyebrow + h1 { margin-top: 10px; }
 .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
 .panel { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--radius-card);
          padding: 26px 28px; grid-column: span 12; }
@@ -66,15 +71,24 @@ input:focus-visible { outline: none; border: 2px solid var(--accent-deep); }
 .panel.dark .eyebrow { color: var(--on-dark); }
 .muted { font-size: var(--fs-body-sm); font-weight: 300; color: var(--slate); }
 .panel.dark .muted { color: var(--muted); }
-.rowline { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0;
-           border-bottom: 1px solid var(--hairline); font-size: var(--fs-body-sm); }
-.panel.dark .rowline { border-color: var(--primary-soft); }
-.rowline:last-child { border-bottom: 0; }
+/* .rowline is the list; each row is one of its <li> children — a label/value line with
+   a hairline under it, the shape every page here renders (categories, fixtures, wallet
+   methods, the record). The class always lands on the <ul>, so the rule has to target
+   the children rather than the list itself: applied to .rowline directly, a flexbox
+   with `justify-content: space-between` on the *list* pushes every row onto one line
+   and off the edge of the card, instead of stacking them. */
+.rowline > li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+                padding: 13px 0; border-bottom: 1px solid var(--hairline); font-size: var(--fs-body-sm); }
+.panel.dark .rowline > li { border-color: var(--primary-soft); }
+.rowline > li:last-child { border-bottom: 0; }
 .rowline .mono-val { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: var(--fs-small); color: var(--slate); }
 .panel.dark .rowline .mono-val { color: var(--muted); }
+/* Named for what it is: a pill. 999px brings the radius in line with the marketing
+   page's own status chips (.chip, On sale/Live) rather than the flat 4px corner a card
+   or a button uses. */
 .pill-tag { display: inline-block; font-family: "JetBrains Mono", ui-monospace, monospace;
             text-transform: uppercase; font-size: var(--fs-micro); letter-spacing: 0.1em; font-weight: 600;
-            padding: 5px 11px; border-radius: 4px; background: var(--success-bg); color: var(--success); }
+            padding: 5px 11px; border-radius: 999px; background: var(--success-bg); color: var(--success); }
 @media (min-width: 880px) {
   .c4 { grid-column: span 4; } .c5 { grid-column: span 5; }
   .c6 { grid-column: span 6; } .c7 { grid-column: span 7; } .c8 { grid-column: span 8; }

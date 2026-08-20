@@ -7,7 +7,7 @@
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="favicon-512.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="favicon-180.png">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#23276b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -34,12 +34,12 @@
 </div>
 
 <div class="utility mono m11">
-  <span style="color:var(--muted)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+  <span>AFCON 2027 · Kenya · Uganda · Tanzania</span>
 </div>
 
 <nav class="nav" aria-label="Main">
   <input class="menu-toggle" type="checkbox" id="menu">
-  <a href="index.html" style="color:inherit">
+  <a href="index.html">
     <span class="brand-name">Pamoja</span>
     <span class="brand-sub mono">The official fan pass</span>
   </a>
@@ -60,7 +60,7 @@
   <div class="dash-head">
     <div>
       <p class="eyebrow mono" id="clock"></p>
-      <h1 style="margin-top:10px" id="greeting"></h1>
+      <h1 id="greeting"></h1>
     </div>
     <span class="pill-tag" id="validity"></span>
   </div>
@@ -82,7 +82,7 @@
 
 <dialog class="sheet" id="wallet">
   <div class="sheet-head">
-    <h2 style="margin:0;font-size:20px">Wallet</h2>
+    <h2>Wallet</h2>
     <button class="sheet-close" aria-label="Close">&times;</button>
   </div>
   <div class="sheet-body">
@@ -103,10 +103,12 @@
         <legend class="eyebrow mono" id="kind-heading"></legend>
       </fieldset>
       <label for="method-number" id="number-heading" style="display:block;margin-top:14px"></label>
-      <input id="method-number" type="text" inputmode="numeric" autocomplete="off"
-             style="min-height:44px;width:100%">
-      <p class="muted mono" id="number-note" style="font-size:11px"></p>
-      <button class="btn" id="save-method" type="submit" style="min-height:44px"></button>
+      <input id="method-number" class="full-control" type="text" inputmode="numeric" autocomplete="off">
+      <!-- 11px is --fs-micro's own value; the token in place of the literal it happened
+           to match. -->
+      <p class="muted mono" id="number-note" style="font-size:var(--fs-micro)"></p>
+      <!-- .btn already sets min-height: 44px; the inline style repeating it was a no-op. -->
+      <button class="btn" id="save-method" type="submit"></button>
     </form>
   </div>
 </dialog>

@@ -79,8 +79,7 @@
     var near = P.NAMED_PARTNERS.slice(0, 8);
     var list = document.getElementById("nearby");
     list.innerHTML = near.map(function (p, i) {
-      return '<li><button class="btn btn-ghost" data-i="' + i + '" ' +
-             'style="min-height:44px;width:100%;text-align:left">' +
+      return '<li><button class="btn btn-ghost full-control" data-i="' + i + '">' +
              "<strong>" + esc(p.name) + "</strong> · " + esc(p.discountPct) +
              "% off</button></li>";
     }).join("");

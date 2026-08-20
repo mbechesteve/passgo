@@ -41,8 +41,7 @@
     document.getElementById("count").textContent = all.length + " matches";
     var list = document.getElementById("fixtures");
     list.innerHTML = all.map(function (m, i) {
-      return '<li><button class="btn btn-ghost" data-i="' + i + '" ' +
-             'style="min-height:44px;width:100%;text-align:left">' +
+      return '<li><button class="btn btn-ghost full-control" data-i="' + i + '">' +
              "<strong>" + esc(P.matchLabel(m)) + "</strong> · " +
              esc(P.kickoffChipLabel(m)) + " · " + esc(P.matchPhase(m, now)) +
              "</button></li>";

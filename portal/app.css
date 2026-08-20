@@ -8,6 +8,37 @@
    than paid on desktop where there is nothing to clear. */
 .appmain { padding: 0 var(--pad-x); max-width: 1180px; margin: 0 auto; }
 
+/* The logo link and the utility bar's dimmer clause repeat, word for word, at the top
+   of all five pages. Selectors instead of five copies each of the same inline style. */
+.nav > a { color: inherit; }
+.utility span { color: var(--muted); }
+
+/* `min-height:44px;width:100%` was typed inline on the fixture and partner row buttons
+   in pages/matches.js and pages/partners.js, and again (without the height, which an
+   input has no free 44px default for) on the two bare number inputs below — one class
+   instead of four copies of the same couple of declarations. */
+.full-control { min-height: 44px; width: 100%; text-align: left; }
+/* text-align on its own only moves the inputs' own text: .btn is display: inline-flex
+   with justify-content: center, so the row buttons need the flex property, not the
+   text property, to actually start at the left edge instead of centring their label. */
+.full-control.btn { justify-content: flex-start; }
+
+/* .btn-ghost had no rule at all until now — dashboard.html's two dialog openers and the
+   fixture/partner row buttons in matches.js/partners.js all reference it, and all three
+   were rendering in the browser's own UA button grey, which happens to sit close enough
+   to --surface-soft that the gap read as intentional until you looked for its source.
+   A light fill rather than .btn-tertiary's hairline border: these sit inside a .panel
+   that already has one. */
+.btn-ghost { background: var(--surface-soft); color: var(--primary); }
+.btn-ghost:hover { background: var(--surface); }
+.btn-ghost:active { filter: brightness(0.97); }
+
+/* The sheet-head heading size repeats as an inline style on every dialog in these five
+   pages. 20px fits none of the eight --fs-* steps (15 and 22 are the neighbours), and a
+   ninth step for one heading in a handful of dialogs is not a step — it stays a literal,
+   just a single one instead of five. */
+.sheet-head h2 { margin: 0; font-size: 20px; }
+
 /* --- the five destinations ------------------------------------------------- */
 
 .tabbar { display: none; }
