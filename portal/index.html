@@ -172,22 +172,60 @@
 .doors input:focus-visible + .door { outline: 2px solid var(--accent-mid); outline-offset: 2px; }
 /* The board's washes are indigo, not the page's neutral grey — --ink-rgb is the token that
    exists precisely so a component can reach the ink at partial alpha without re-typing it.
-   A closed door is a flat veil; the open one is a gradient that leaves the top of the
-   photograph alone and gathers under the copy. The board's closed veil is 0.35, which is
-   enough over its flat panel art and not enough over a photograph.
 
-   0.62 was measured, not assumed, and measured short: over a screenshot of the rendered
-   doors with the title hidden, the brightest pixel behind the 17px white .d-shut title on
-   doors 02/03/05 (a blown-out sky highlight) composited to 4.16:1 — under the 4.5 that
-   size needs. The worst case is a pure-white photo pixel under the veil, which floors at
-   4.16 for this alpha regardless of which door it turns up in; solving that floor for 4.5
-   gives ~0.647, so 0.62 could not have cleared it. 0.68 does, with room: the same
-   measurement over the same three doors now reads 4.96:1. */
-.door .wash { background: rgba(var(--ink-rgb), 0.68); }
-.doors input:checked + .door .wash {
+   There is now only one wash, where there used to be two. The old pair existed because a
+   closed door was a photograph too and needed a flat 0.68 veil to hold its white title;
+   the closed door is .panel now, an illustration that carries its own veil, so the
+   photograph underneath is only ever seen on the door that is open. One state, one
+   treatment: the gradient that leaves the top of the picture alone and gathers under the
+   copy. Fading .panel out therefore cross-fades into the gradient rather than into a
+   flat slab and back, which is what the two-wash version did mid-transition.
+
+   `input:checked + .door` still drives the accordion — it now moves .panel's opacity,
+   the flex ratio, .d-shut and .d-open, just not a second wash. */
+.door .wash {
   background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 48%, rgba(var(--ink-rgb), 0.94) 100%); }
-.door .num { position: absolute; top: 16px; left: 18px; font-family: "JetBrains Mono", monospace;
-             font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.1em; color: var(--on-dark); }
+/* The closed door, as v6 draws it: not a darkened photograph but an indigo panel of
+   coloured line-art doodles, with the title stood on its side over it. panel-strip.png
+   is opaque — the indigo is painted into the file — so this needs no fill under it, and
+   the veil rides as a second background layer over the same element rather than as a
+   third box in the markup.
+
+   The veil is NOT the board's 0.35, and the thing that decided it is not the title.
+   Measured on the rendered panel with both labels hidden and the worst pixel taken
+   inside each label's tight glyph box: at 0.35 the white 17px .d-shut title crosses a
+   cyan doodle line and composites to 4.35:1, just under the 4.5 that size needs — but
+   the yellow .num sits on the orange sun doodle in the panel's top-left corner and
+   comes to 3.41:1, which is the binding case, and the board's own layout hides it
+   because its number is smaller and its crop lands elsewhere.
+
+   0.58 clears both with room: the title reads 6.48:1 on that cyan line and the number
+   5.05:1 on the sun. The doodles are dimmer than the board's, which is the price of a
+   veil that has to hold two labels rather than none; they are still plainly drawings.
+   Solving the number alone for exactly 4.5 gives ~0.51, so anything at or under the
+   board's 0.35 was never available. */
+.door .panel { position: absolute; inset: 0; pointer-events: none; opacity: 1;
+               background-image: linear-gradient(rgba(var(--ink-rgb), 0.58),
+                                                 rgba(var(--ink-rgb), 0.58)),
+                                 url("img/panel-strip.png");
+               background-size: cover, cover; background-position: center, center;
+               transition: opacity 300ms cubic-bezier(0.2, 0, 0, 1); }
+.doors input:checked + .door .panel { opacity: 0; }
+/* The board draws this as a bare number, and on a closed panel that is what it looks
+   like: the chip is --primary, the panel behind it is --primary under a veil, so the
+   two read as one indigo ground and only the numeral shows.
+
+   It exists for the door that is OPEN, where the number sits on the unveiled top of a
+   photograph. Measured with the number hidden, the yellow over each of the five
+   photographs in turn came to 1.57, 2.71, 8.07, 1.11 and 1.04 — four failures, the
+   worst of them a bright sky. A top scrim cannot fix it: even at 0.78, heavy enough to
+   grey out the top third of the picture, doors 04 and 05 only reach 2.95 and 2.73.
+   Giving the number its own ground fixes it exactly, at every door and for any
+   photograph anyone swaps in later, because --on-dark on --primary is 9.22 by
+   construction and no longer depends on what is underneath. */
+.door .num { position: absolute; top: 14px; left: 16px; font-family: "JetBrains Mono", monospace;
+             font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.1em; color: var(--on-dark);
+             background: var(--primary); padding: 3px 9px; border-radius: 999px; }
 /* Collapsed: the title, turned on its side, and nothing else. */
 .d-shut { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
           writing-mode: vertical-rl; font-weight: 700; font-size: var(--fs-body); color: var(--canvas);
@@ -401,16 +439,18 @@
 @media (min-width: 760px)  { .broken { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 250px; } }
 @media (min-width: 1100px) { .broken { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 280px; gap: 24px; } }
 @media (max-width: 1100px) {
-  /* Five doors need width to be five doors. Below this they stack, all open — so every
-     one of them takes the open door's gathering gradient, not just the checked one. */
+  /* Five doors need width to be five doors. Below this they stack, all open. */
   .doors { flex-direction: column; height: auto; }
   .door { flex: 1 1 auto !important; min-height: 250px; }
+  /* No door is closed here, so no door wears the doodle panel: every one shows its own
+     photograph with its copy over it, which is also what the Mobile board draws for the
+     one door it opens. Hidden rather than removed from the markup, because which door is
+     "closed" is a runtime fact the radio inputs own, not a fact the HTML can encode. */
+  .door .panel { opacity: 0; }
   /* Stacked, the copy starts a third of the way down rather than sitting in the last
      inch, so the veil has to be dark that high up: it opens at 0.45 and is at full
      strength by the time the first line of the description arrives. */
-  /* The checked door is named too, or its higher-specificity open gradient outlives the
-     media query and one tile in five keeps the desktop treatment. */
-  .door .wash, .doors input:checked + .door .wash {
+  .door .wash {
     background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.5) 0%, rgba(var(--ink-rgb), 0.93) 38%); }
   .d-shut { display: none; }
   /* Stacked, .d-open is the door's only in-flow child, and an in-flow child paints
@@ -564,6 +604,7 @@
       <label class="door" for="door-1">
         <span class="shot"><img src="img/door-access.jpg" alt="Supporters outside Kasarani before kick-off."></span>
         <span class="wash"></span>
+        <span class="panel"></span>
         <span class="num">01</span>
         <span class="d-shut">Match access</span>
         <span class="d-open">
@@ -577,6 +618,7 @@
       <label class="door" for="door-2">
         <span class="shot"><img src="img/door-travel.jpg" alt="Jomo Kenyatta International Airport from the air."></span>
         <span class="wash"></span>
+        <span class="panel"></span>
         <span class="num">02</span>
         <span class="d-shut">Travel &amp; borders</span>
         <span class="d-open">
@@ -590,6 +632,7 @@
       <label class="door" for="door-3">
         <span class="shot"><img src="img/door-market.jpg" alt="Market stalls in Stone Town."></span>
         <span class="wash"></span>
+        <span class="panel"></span>
         <span class="num">03</span>
         <span class="d-shut">Partner discounts</span>
         <span class="d-open">
@@ -603,6 +646,7 @@
       <label class="door" for="door-4">
         <span class="shot"><img src="img/nairobi.jpg" alt="The Nairobi skyline."></span>
         <span class="wash"></span>
+        <span class="panel"></span>
         <span class="num">04</span>
         <span class="d-shut">City services</span>
         <span class="d-open">
@@ -616,6 +660,7 @@
       <label class="door" for="door-5">
         <span class="shot"><img src="img/door-security.jpg" alt="Police officers marching on arrival at an airport."></span>
         <span class="wash"></span>
+        <span class="panel"></span>
         <span class="num">05</span>
         <span class="d-shut">Security</span>
         <span class="d-open">
