@@ -72,8 +72,12 @@ a neighbouring task, which you may not have read.
 ```
 
 Take the boot-curtain markup — the inline `data-booting` head script and the `#boot`
-element — verbatim from `portal/dashboard.html` as it stands today, and place it exactly
-where that file places it. Do not retype it from memory; it pairs with `boot.js`.
+element — verbatim from `portal/login.html`, and place it exactly where that file places
+it. Do not retype it from memory; it pairs with `boot.js`.
+
+(An earlier draft said to copy it from `dashboard.html`. That file is the pre-plan
+prototype and has no curtain at all. `index.html`, `login.html` and `signup.html` each
+carry it and are byte-identical; `login.html` is the smallest of the three.)
 
 The closing scripts are, in this order (page script varies):
 
@@ -601,7 +605,7 @@ Five destinations need one navigation, one dialog treatment and one responsive r
 
 **Interfaces:**
 - Consumes: `portal.css` tokens; `window.PamojaState` from Task 3.
-- Produces: `window.PamojaChrome.mount(activeId)` renders the five-item bar into `<nav class="tabbar">`; `window.PamojaChrome.dialog(id)` returns `{open(), close()}` for a `<dialog id>`. Tasks 5–9 call both.
+- Produces: `window.PamojaChrome.mount(activeId)` renders the five-item bar into `<nav class="tabbar">`; `window.PamojaChrome.dialog(id)` returns `{open(), close(), el}` for a `<dialog id>`; `window.PamojaChrome.esc(s)` HTML-escapes a value. Tasks 5–9 call all three.
 
 - [ ] **Step 1: Write the chrome stylesheet**
 
@@ -722,7 +726,16 @@ dialog.sheet::backdrop { background: rgba(10, 10, 10, 0.44); }
     };
   }
 
-  global.PamojaChrome = { mount: mount, dialog: dialog, TABS: TABS };
+  /* Escaping lives here rather than in each page script. Every page interpolates
+     store data into innerHTML, so every page needs it; five copies of the same four
+     replacements is five chances for one of them to be subtly different. */
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  global.PamojaChrome = { mount: mount, dialog: dialog, esc: esc, TABS: TABS };
 })(window);
 ```
 
@@ -808,13 +821,12 @@ Open with the shell in *The page shell*, titled `Your Pass — Pamoja`. Then the
   "use strict";
   var P = window.Pamoja, S = window.PamojaState, C = window.PamojaChrome;
 
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
+  var esc = C.esc;
 
-  function money(n) { return "KES " + n.toLocaleString("en-KE"); }
+  /* Money is formatted by the app's own kes() — exported through the bundle. A local
+     helper here would be a second implementation of the same rule, and the obvious
+     hand-written one gets it wrong: kes() renders en-US ("KES 1,000"), not en-KE. */
+  var money = P.kes;
 
   function render() {
     var now = S.now();
@@ -939,7 +951,7 @@ Rewrites the existing 181-line static page so its figures come from the bundle i
 
 - [ ] **Step 1: Rewrite the body**
 
-Keep the file's existing `<head>` and boot markup, bring its `.nav-links` into line with *The page shell*, add `<link rel="stylesheet" href="app.css">`, and replace `<main class="dash">…</main>` with:
+**Replace the file wholesale** with the shell in *The page shell*, titled `Your Pass — Pamoja`, plus the body below. Do not try to preserve the existing `<head>`: `dashboard.html` is the pre-plan prototype, it has no boot curtain, and its nav points at anchors that no longer describe the site. The body it currently carries is the hand-typed prototype this task exists to replace.
 
 ```html
 <main class="appmain" id="page">
@@ -1004,11 +1016,7 @@ Delete the HTML comment block that promises hand-copied figures — it is no lon
   "use strict";
   var P = window.Pamoja, S = window.PamojaState, C = window.PamojaChrome;
 
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
+  var esc = C.esc;
 
   function render() {
     var now = S.now(), pass = S.pass(), events = S.events();
@@ -1122,11 +1130,7 @@ Open with the shell in *The page shell*, titled `Matches — Pamoja`. Then the b
   "use strict";
   var P = window.Pamoja, S = window.PamojaState, C = window.PamojaChrome;
 
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
+  var esc = C.esc;
 
   var sheet;
 
@@ -1208,11 +1212,7 @@ Open with the shell in *The page shell*, titled `Live — Pamoja`. Then the body
   "use strict";
   var P = window.Pamoja, S = window.PamojaState, C = window.PamojaChrome;
 
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
+  var esc = C.esc;
 
   function render() {
     var now = S.now();
@@ -1306,7 +1306,9 @@ Open with the shell in *The page shell*, titled `Partners — Pamoja`. Then the 
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
-  function money(n) { return "KES " + Number(n).toLocaleString("en-KE"); }
+  /* The app's own formatter, through the bundle — see Task 5. Do not hand-write one:
+     kes() is en-US, and a local copy reliably guesses en-KE. */
+  var money = P.kes;
 
   var sheet, current = null;
 
