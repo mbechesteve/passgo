@@ -35,7 +35,7 @@ large-text AA threshold of 3.0. This is why `--accent` is indigo rather than ora
 despite orange looking like "the accent" on the board — the board's own buttons are indigo
 pills, and an earlier draft of the spec had `--accent` mapped to orange before that
 measurement overturned it. Orange never carries a white label either (2.79 the other way),
-which is why `.foot-credits` and similar controls sit on indigo, not orange. `--brand` is
+which is why quiet footer controls sit on indigo, not orange. `--brand` is
 set as text in exactly one place: `"tournament."` on the indigo CTA band, where it is 4.78.
 
 **The two display tints** are how the board's two-tone headings survive that. The board
@@ -245,11 +245,20 @@ original illustration from the v6 board. The licensed football clip that used to
 hero left with them, and its credits row left with it — an attribution outlives the work
 only as a lie.
 
-**The rule that has legal force: every image maps to an attribution on `credits.html`,
-and CC BY-SA attribution follows a derivative.** If any image is replaced — or, per the
-v6 spec, re-cropped from the same source — its credit has to move or extend with it; an
-image that cannot be mapped to a credit does not ship. Attribution lives on
-**`credits.html`**, linked from the footer by a single "Photo credits" line. Neither the
+**`credits.html` is no longer linked from any page.** It was removed from the footers of
+`index`, `login` and `signup` on request. The file itself is kept, and every photograph
+still on the site is still mapped to a row in it — so the mapping is intact and only the
+route to it is gone.
+
+That route is what CC BY-SA asks for. These are Wikimedia photographs under CC BY-SA, and
+the licence's attribution term is not discharged by a credits page nothing points at. This
+is recorded here rather than argued: restoring compliance is one line in the shared footer,
+and the alternative — swapping the remaining photographs for the original illustrations the
+v6 board supplies, which raise no attribution at all — is the other way to close it.
+
+**The mapping rule still holds for anyone adding an image:** every photograph maps to a row
+on `credits.html`, and CC BY-SA attribution follows a derivative, so a re-crop of the same
+source extends its credit rather than escaping it. Neither the
 canvas board's footer nor the v6 board's carries any legal text, and neither does this
 one — but the link is not optional decoration: the "BY" in CC BY-SA is a licence term, so
 that page is what keeps displaying the photographs lawful. The prototype caveat lives
@@ -278,7 +287,7 @@ competing decision.
 | `live.html` | whatever `liveMatches(MATCHES, now)` says is under way, with its minute — no score: the portal reads the fixtures, not `MATCH_LIVE` |
 | `partners.html` | the partner network by category, and the one flow that mutates state: redemption |
 | `pass.html` | the Pass, the whole record newest-first, and the wallet: adding a payment method and choosing the default |
-| `credits.html` | photo attributions. **Unlinked** — see Photography |
+| `credits.html` | photo attributions. **Unlinked** — kept, but no page routes to it. See Photography |
 | `portal.css` | tokens, base type, buttons, nav, footer — shared by all of them |
 | `auth.css` | only what login, sign-up and the dashboard add |
 | `app.css` | the logged-in pages' own chrome: tabbar, dialogs, panels |

@@ -139,7 +139,6 @@ img { display: block; max-width: 100%; }
 ul { margin: 0; padding: 0; list-style: none; }
 
 .mono { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; }
-.m11  { font-size: var(--fs-micro); letter-spacing: 0.1em; }
 
 /* Focus rings: green on light, white on dark — as the board sets them. */
 :focus-visible { outline: 2px solid var(--accent-mid); outline-offset: 2px; }
@@ -197,8 +196,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* The board sits this strip on the indigo ground with the lilac hairline text, centred —
    not the charcoal-on-surface-soft pairing left over from an earlier pass, and not left-
    aligned. --primary and --hairline are the tokens that actually match its values. */
-.utility { background: var(--primary); color: var(--hairline); display: flex; align-items: center;
-           justify-content: center; gap: 16px; padding: 8px var(--pad-x); flex-wrap: wrap; }
 
 /* ── Nav ─────────────────────────────────────────────────────────────────── */
 .nav { background: var(--primary); display: flex; align-items: center; gap: clamp(16px, 3vw, 44px);
@@ -232,8 +229,6 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
    --muted on --primary is 4.8:1 at --fs-small: clear of the 4.5:1 body-text floor,
    because small print that fails contrast doesn't discharge the licence either. */
 .foot-legal { border-top: 1px solid var(--primary-soft); margin-top: 32px; padding-top: 20px; }
-.foot-credits { display: inline-block; font-size: var(--fs-small); color: var(--muted); }
-.foot-credits:hover { color: var(--on-dark); }
 
 /* ── Mobile nav (shared) ─────────────────────────────────────────────────── */
 .burger, .mob-only { display: none; }

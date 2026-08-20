@@ -11,7 +11,6 @@
 /* The logo link and the utility bar's dimmer clause repeat, word for word, at the top
    of all five pages. Selectors instead of five copies each of the same inline style. */
 .nav > a { color: inherit; }
-.utility span { color: var(--muted); }
 
 /* `min-height:44px;width:100%` was typed inline on the fixture and partner row buttons
    in pages/matches.js and pages/partners.js, and again (without the height, which an
