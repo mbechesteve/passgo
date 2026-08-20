@@ -38,8 +38,10 @@
         }).join("")
       : '<dd><a href="signup.html">Get your Pamoja Pass</a></dd>';
 
+    // The most recent use leads, as it does in the app's WalletScreen — see
+    // PamojaState.eventsNewestFirst for why the store's order is reversed here.
     document.getElementById("record").innerHTML = events.length
-      ? events.map(function (e) {
+      ? S.eventsNewestFirst().map(function (e) {
           var line = P.recordLine(e);
           return "<li><strong>" + esc(line.primary) + "</strong><br>" +
                  '<span class="muted">' + esc(line.secondary) + "</span></li>";

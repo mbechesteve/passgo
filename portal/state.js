@@ -54,6 +54,27 @@
     ticket: function () { return pass.getState().ticket; },
     events: function () { return record.getState().events; },
 
+    /* The record with the newest use first — the order both surfaces that show it
+       want, and the opposite of the order the store keeps.
+
+       useRecordStore appends, so events[0] is the fan's FIRST use. A "Recent" list
+       taken off the front therefore stops changing after the third redemption, and
+       the whole record reads oldest-down.
+
+       The app's own rule is groupByDay, which sorts newest day first and newest
+       event first within a day. It was tried here and it cannot order this page: it
+       sorts on `e.at`, and every redemption the portal writes is stamped with
+       `now()` — the frozen demo clock, 2027-06-23T12:55 EAT. Four uses share one
+       instant, a stable sort leaves them exactly as they arrived, and the oldest
+       still leads. Insertion order is the only ordering the portal actually has, so
+       it is reversed explicitly rather than dressed up as a timestamp sort.
+
+       Copied to reverse: the array is the store's own, and reversing in place would
+       mutate state behind Zustand's back. */
+    eventsNewestFirst: function () {
+      return record.getState().events.slice().reverse();
+    },
+
     issue: function (input) {
       pass.getState().issue(input);
       return pass.getState().pass;

@@ -33,8 +33,11 @@
     document.getElementById("network-total").textContent =
       partners.length.toLocaleString("en-US") + " partners across three countries";
 
+    // Newest three, not the first three the store happens to hold — see
+    // PamojaState.eventsNewestFirst for why the store's own order is the wrong way
+    // round for a heading that says "Recent".
     document.getElementById("record").innerHTML = events.length
-      ? events.slice(0, 3).map(function (e) {
+      ? S.eventsNewestFirst().slice(0, 3).map(function (e) {
           var l = P.recordLine(e);
           return "<li><strong>" + esc(l.primary) + "</strong><br>" +
                  '<span class="muted">' + esc(l.secondary) + "</span></li>";

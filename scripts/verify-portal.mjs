@@ -192,11 +192,27 @@ const PROBES = {
     const next = P.nextMatch(P.MATCHES, now);
     if (next) rows.push(["the next fixture", "contains", text("#next-match"), P.matchLabel(next)]);
 
-    rows.push(["the validity label", "contains", text("#validity"),
-      pass ? P.validityLabel(pass, now) : ""]);
+    if (pass) {
+      rows.push(["the validity label", "contains", text("#validity"),
+        P.validityLabel(pass, now)]);
+    } else {
+      // There is no bundle-computed label to compare against on a device with no
+      // Pass, and `contains ""` is a check that cannot fail. What the empty branch
+      // actually promises is that the slot still says something rather than
+      // sitting blank, so that is what is asserted.
+      rows.push(["a validity line with no Pass", "equals",
+        String(text("#validity").length > 0), "true"]);
+    }
     if (events.length) {
-      rows.push(["the most recent redemption", "contains", text("#record"),
-        P.recordLine(events[0]).primary]);
+      // useRecordStore appends, so the LAST element is the newest use, and a
+      // heading that says "Recent" has to lead with it. Read the first row rather
+      // than the whole list: a list that merely contains the newest somewhere
+      // would still pass while rendering oldest-first.
+      const first = (document.querySelector("#record li")?.textContent ?? "").trim();
+      rows.push(["the newest redemption leads the record", "contains", first,
+        P.recordLine(events[events.length - 1]).primary]);
+      rows.push(["the recent list is capped", "equals",
+        String(document.querySelectorAll("#record li").length <= 3), "true"]);
     }
     // A greeting that names somebody on a device with no Pass, or one that does
     // not name the holder on a device with one, is the empty/populated branch
@@ -285,6 +301,13 @@ const PROBES = {
     rows.push(["the saved total", "contains", totals, P.kes(P.totalSaved(events))]);
     rows.push(["one row per redemption", "equals",
       String(document.querySelectorAll("#record li").length), String(events.length || 1)]);
+    if (events.length) {
+      // Same rule as Home: the store appends, so the newest use is the last one
+      // held, and the record has to lead with it rather than trail it.
+      const firstRow = (document.querySelector("#record li")?.textContent ?? "").trim();
+      rows.push(["the newest redemption leads the record", "contains", firstRow,
+        P.recordLine(events[events.length - 1]).primary]);
+    }
 
     if (pass) {
       // Every field the credential claims to show, compared against the store.
@@ -372,11 +395,16 @@ for (const { w, h } of WIDTHS) {
         // make — issue() and redeem() on the shared store — not a hand-rolled
         // shortcut that writes the stores directly. Both home.js and pass.js
         // subscribe to the store, so this repaints the loaded page synchronously.
+        // Two redemptions, not one, and from two partners whose discounts differ —
+        // so the two record lines read differently and "the newest leads" is a
+        // claim that can actually fail. One event orders trivially.
         await page.evaluate(() => {
           const S = window.PamojaState, P = window.Pamoja;
-          if (!S.pass()) S.issue({ holderName: "Amina Nakato", issuedIn: "KE" });
+          if (!S.pass()) S.issue({ holderName: P.DEMO_HOLDER_NAME, issuedIn: "KE" });
           if (S.events().length === 0) {
-            S.redeem({ partner: P.NAMED_PARTNERS[0], gross: 1000, channel: "shortcode" });
+            for (const partner of P.NAMED_PARTNERS.slice(0, 2)) {
+              S.redeem({ partner, gross: 1000, channel: "shortcode" });
+            }
           }
         });
       }
