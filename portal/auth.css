@@ -56,7 +56,7 @@ input:focus-visible { outline: none; border: 2px solid var(--accent-deep); }
 .panel h2 { font-size: 20px; color: inherit; }
 .panel .eyebrow { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase;
                   font-size: 10px; letter-spacing: 0.12em; color: var(--slate); margin-bottom: 12px; }
-.panel.dark .eyebrow { color: var(--cyan); }
+.panel.dark .eyebrow { color: var(--on-dark); }
 .figure { font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 600;
           font-size: 40px; line-height: 1; color: var(--primary); }
 .panel.dark .figure { color: var(--canvas); }
