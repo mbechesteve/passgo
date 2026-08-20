@@ -488,7 +488,10 @@
 .cta-band h2 .tone { color: var(--brand); }
 .cta-band p { font-size: var(--fs-body); font-weight: 300; color: var(--accent-200);
               margin: 14px auto 0; max-width: 500px; }
-.cta-band .btn { flex: 0 0 auto; }
+/* The board draws this one CTA larger and heavier than every other yellow pill on the
+   page (Browse partners, Get tickets stay the shared size) — it is the page's last word,
+   so it gets its own weight: 17px 38px padding, 800 rather than the base pill's 600. */
+.cta-band .btn { flex: 0 0 auto; padding: 17px 38px; font-weight: 800; }
 
 /* Motion the board runs continuously, stopped for anyone who asks for less of it. */
 @media (prefers-reduced-motion: reduce) {
