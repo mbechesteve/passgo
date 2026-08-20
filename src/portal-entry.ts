@@ -29,6 +29,8 @@ export {
   nearby,
 } from "@/utils/partners";
 export { buildRedemption, computeMoney } from "@/utils/redeem";
+export { kes } from "@/utils/format";
+export { describeMethod } from "@/utils/payment";
 export {
   groupByDay,
   hasBorderEvent,

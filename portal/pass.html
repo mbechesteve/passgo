@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Pass — Pamoja</title>
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="favicon-180.png">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+<link rel="stylesheet" href="auth.css">
+<link rel="stylesheet" href="app.css">
+<script>document.documentElement.setAttribute("data-booting", "");</script>
+</head>
+<body>
+
+<div class="boot" id="boot" role="status" aria-live="polite">
+  <div class="boot-mark">
+    <!-- peakGlyphPath(160, 104) from src/utils/peaks.ts — Nelion, the Gate of the
+         Mists, then Batian, the highest point, which is why nothing sits above it. -->
+    <svg width="160" height="104" viewBox="0 0 160 104" fill="none" aria-hidden="true">
+      <path class="boot-track" pathLength="100" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" d="M 0,104 L 67.2,11.96 L 78.4,35.98 L 89.6,0 L 160,104"/>
+      <path class="boot-ridge" pathLength="100" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" d="M 0,104 L 67.2,11.96 L 78.4,35.98 L 89.6,0 L 160,104"/>
+    </svg>
+    <p class="boot-word">Pamoja</p>
+    <p class="boot-sub mono">Loading the fan pass</p>
+  </div>
+</div>
+
+<div class="utility mono m11">
+  <span style="color:var(--muted)">AFCON 2027 · Kenya · Uganda · Tanzania</span>
+</div>
+
+<nav class="nav" aria-label="Main">
+  <input class="menu-toggle" type="checkbox" id="menu">
+  <a href="index.html" style="color:inherit">
+    <span class="brand-name">Pamoja</span>
+    <span class="brand-sub mono">The official fan pass</span>
+  </a>
+  <div class="nav-links">
+    <a href="dashboard.html">Home</a>
+    <a href="matches.html">Matches</a>
+    <a href="live.html">Live</a>
+    <a href="partners.html">Partners</a>
+    <a href="pass.html">Pass</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-ghost-dark desk-only" href="index.html">Log out</a>
+    <label class="burger" for="menu" aria-label="Open the menu">&#8801;</label>
+  </div>
+</nav>
+
+<main class="appmain" id="page">
+  <div class="dash-head">
+    <div>
+      <p class="eyebrow mono" id="clock"></p>
+      <h1 style="margin-top:10px" id="greeting"></h1>
+    </div>
+    <span class="pill-tag" id="validity"></span>
+  </div>
+
+  <section class="panel" aria-labelledby="cred-h">
+    <h2 id="cred-h">Your Pass</h2>
+    <dl class="figure" id="credential"></dl>
+    <button class="btn" id="open-wallet">Wallet and payment method</button>
+  </section>
+
+  <section class="panel" aria-labelledby="rec-h">
+    <h2 id="rec-h">Your record</h2>
+    <ul class="rowline" id="record"></ul>
+    <p class="muted" id="record-totals"></p>
+  </section>
+</main>
+
+<nav class="tabbar"></nav>
+
+<dialog class="sheet" id="wallet">
+  <div class="sheet-head">
+    <h2 style="margin:0;font-size:20px">Wallet</h2>
+    <button class="sheet-close" aria-label="Close">&times;</button>
+  </div>
+  <div class="sheet-body">
+    <p class="muted">The default method is the one offered first at a counter.</p>
+    <ul class="rowline" id="wallet-list"></ul>
+  </div>
+</dialog>
+
+<script src="app-data.js"></script>
+<script src="state.js"></script>
+<script src="chrome.js"></script>
+<script src="pages/pass.js"></script>
+<script src="boot.js"></script>
+
+</body>
+</html>
