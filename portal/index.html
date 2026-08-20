@@ -172,40 +172,55 @@
             line-height: 1.45; max-width: 420px; }
 
 /* ── Featured fixture + fixtures list ────────────────────────────────────── */
-.featured { position: relative; border-radius: 32px; overflow: hidden; background: var(--primary);
-            min-height: 440px; display: flex; align-items: flex-end; }
+.featured { position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--primary);
+            min-height: 380px; display: flex; align-items: flex-end; }
+/* Both layers indigo now, as the board's are: one gathering from the foot, one raking in
+   from the left so the copy has a ground wherever the photograph is bright. */
+.featured .wash { background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 45%, rgba(var(--ink-rgb), 0.9) 100%); }
 .featured .veil { position: absolute; inset: 0; pointer-events: none;
-                  background: linear-gradient(90deg, rgba(10,11,13,0.9) 0%, rgba(10,11,13,0.5) 55%, rgba(10,11,13,0.1) 100%); }
-.countdown { position: absolute; top: 28px; right: 28px; z-index: 2; color: var(--on-dark);
-             border: 1px solid rgba(61,174,255,0.5); border-radius: 999px; padding: 8px 16px;
-             font-size: 12px; letter-spacing: 0.12em; }
-.featured-body { position: relative; z-index: 2; padding: clamp(28px, 5vw, 56px); max-width: 820px; }
-.featured-body .eyebrow { font-size: 12px; letter-spacing: 0.14em; color: var(--on-dark); margin-bottom: 16px; }
-.featured-body h2 { font-size: clamp(38px, 6.5vw, 72px); letter-spacing: -0.04em;
-                    color: var(--canvas); line-height: 0.95; }
-.featured-body .when { font-size: 13px; letter-spacing: 0.1em; color: var(--muted); margin: 18px 0 30px; }
+                  background: linear-gradient(95deg, rgba(var(--ink-rgb), 0.9) 0%, rgba(var(--ink-rgb), 0.5) 55%, rgba(var(--ink-rgb), 0) 100%); }
+/* Was an outlined pill in a leftover rgba of the retired cyan. The board fills it yellow. */
+.countdown { position: absolute; top: 24px; right: 28px; z-index: 2; background: var(--highlight);
+             color: var(--primary); border-radius: 999px; padding: 8px 16px; font-weight: 700;
+             font-size: var(--fs-micro); letter-spacing: 0.12em; }
+.featured-body { position: relative; z-index: 2; padding: clamp(28px, 4vw, 40px); max-width: 820px; }
+.featured-body .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.16em; color: var(--on-dark); margin-bottom: 12px; }
+.featured-body h2 { font-size: var(--fs-feature); letter-spacing: -0.03em;
+                    color: var(--canvas); line-height: 0.9; }
+.featured-body .when { font-size: var(--fs-small); letter-spacing: 0.1em; color: var(--accent-200);
+                       margin: 12px 0 20px; }
 .featured-body .acts { display: flex; gap: 12px; flex-wrap: wrap; }
 
 .list-head { display: flex; justify-content: space-between; align-items: baseline;
-             margin: 48px 0 8px; gap: 24px; flex-wrap: wrap; }
-.list-head h3 { font-size: clamp(24px, 3vw, 28px); color: var(--primary); }
-.fixtures { border-top: 1px solid var(--hairline); }
-.fx { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); padding: 22px 12px;
-      border-bottom: 1px solid var(--hairline); color: inherit; }
+             margin: 44px 0 20px; gap: 24px; flex-wrap: wrap; }
+.list-head h3 { font-size: var(--fs-head); color: var(--primary); }
+/* The board lifts the fixtures onto a white card with a hairline round it and the rows
+   ruled inside — the list stops being loose text on the section ground. */
+.fixtures { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--radius-card);
+            overflow: hidden; }
+.fx { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); padding: 17px 28px;
+      border-bottom: 1px solid var(--surface); color: inherit; }
+.fx:last-child { border-bottom: 0; }
 /* A neutral band on hover: minimax keeps the success pair for state, not for pointing. */
 .fx:hover { background: var(--surface-soft); color: inherit; }
-.fx .date { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 15px;
-            color: var(--accent); flex: 0 0 88px; }
+/* The board sets the date in orange, which is 2.79 on this white card. --accent is the
+   page's interactive indigo and 13.34 there. */
+.fx .date { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: var(--fs-small);
+            color: var(--accent); flex: 0 0 84px; }
 .fx .who { flex: 1; min-width: 0; }
-.fx .who b { display: block; font-size: 20px; font-weight: 700; color: var(--primary); }
-.fx .who span { display: block; font-size: 14px; font-weight: 300; color: var(--slate); margin-top: 2px; }
-.fx .venue { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.1em;
-             color: var(--slate); flex: 0 0 auto; }
-.chip { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.1em;
-        text-transform: uppercase; font-weight: 600; padding: 5px 11px; border-radius: 4px; flex: 0 0 auto; }
-.chip-ft   { background: var(--surface-soft); color: var(--slate); }
+.fx .who b { display: block; font-size: var(--fs-body-sm); font-weight: 700; color: var(--primary); }
+.fx .who span { display: block; font-size: var(--fs-small); font-weight: 300; color: var(--slate); margin-top: 2px; }
+.fx .venue { font-family: "JetBrains Mono", monospace; font-size: var(--fs-micro); letter-spacing: 0.12em;
+             color: var(--steel); flex: 0 0 auto; text-align: right; }
+/* The chevron carried a hard-coded blue from the retired palette. It is a graphic, not
+   text, so --stone at 4.32 on the card is comfortably past the 3.0 a graphic needs. */
+.fx svg { stroke: var(--stone); flex: 0 0 auto; }
+.chip { font-family: "JetBrains Mono", monospace; font-size: var(--fs-micro); letter-spacing: 0.1em;
+        text-transform: uppercase; font-weight: 600; padding: 5px 12px; border-radius: 999px; flex: 0 0 auto; }
+.chip-ft   { background: var(--surface); color: var(--slate); }
 .chip-live { background: var(--success-bg); color: var(--success); }
-.chip-sale { background: var(--accent-200); color: var(--accent-deep); }
+/* On sale is the board's yellow pill: --primary on --highlight is 9.22. */
+.chip-sale { background: var(--highlight); color: var(--primary); }
 .chip-held { background: var(--primary); color: var(--on-dark); }
 
 /* ── Fan events rail ─────────────────────────────────────────────────────── */
@@ -551,17 +566,17 @@
       <span class="meta-mono mono">All 11 fixtures · 7 venues · 3 countries</span>
     </div>
     <div class="fixtures">
-      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Zambia v Morocco</b><span>Group C, Matchday 2 · In play, 70′</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Uganda v Senegal</b><span>Group B, Matchday 2 · In play, 55′</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">26 Jun</span><span class="who"><b>Kenya v Mali</b><span>Group A, Matchday 2 · Your seat is held</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-held">Ticket held</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">28 Jun</span><span class="who"><b>Mali v Zambia</b><span>Group C, Matchday 3 · Seats from KES 1,000</span></span><span class="venue mono">Talanta · Nairobi</span><span class="chip chip-sale">On sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Uganda v Ghana</b><span>Group B, Matchday 3</span></span><span class="venue mono">Namboole · Kampala</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Côte d'Ivoire v Zambia</b><span>Group C, Matchday 3</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">1 Jul</span><span class="who"><b>Tanzania v Algeria</b><span>Group D · Dar es Salaam</span></span><span class="venue mono">Benjamin Mkapa · Dar</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">2 Jul</span><span class="who"><b>Egypt v Senegal</b><span>Group B · Eldoret</span></span><span class="venue mono">Kipchoge Keino · Eldoret</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">3 Jul</span><span class="who"><b>Kenya v Morocco</b><span>Group A, Matchday 3</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">4 Jul</span><span class="who"><b>Morocco v Ghana</b><span>Group C · Kakamega</span></span><span class="venue mono">Bukhungu · Kakamega</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-      <a class="fx" href="#matches"><span class="date">10 Jul</span><span class="who"><b>Senegal v Egypt</b><span>Knockout round</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1456f0" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Zambia v Morocco</b><span>Group C, Matchday 2 · In play, 70′</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">23 Jun</span><span class="who"><b>Uganda v Senegal</b><span>Group B, Matchday 2 · In play, 55′</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-live">Live</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">26 Jun</span><span class="who"><b>Kenya v Mali</b><span>Group A, Matchday 2 · Your seat is held</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-held">Ticket held</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">28 Jun</span><span class="who"><b>Mali v Zambia</b><span>Group C, Matchday 3 · Seats from KES 1,000</span></span><span class="venue mono">Talanta · Nairobi</span><span class="chip chip-sale">On sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Uganda v Ghana</b><span>Group B, Matchday 3</span></span><span class="venue mono">Namboole · Kampala</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">29 Jun</span><span class="who"><b>Côte d'Ivoire v Zambia</b><span>Group C, Matchday 3</span></span><span class="venue mono">Nyayo · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">1 Jul</span><span class="who"><b>Tanzania v Algeria</b><span>Group D · Dar es Salaam</span></span><span class="venue mono">Benjamin Mkapa · Dar</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">2 Jul</span><span class="who"><b>Egypt v Senegal</b><span>Group B · Eldoret</span></span><span class="venue mono">Kipchoge Keino · Eldoret</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">3 Jul</span><span class="who"><b>Kenya v Morocco</b><span>Group A, Matchday 3</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">4 Jul</span><span class="who"><b>Morocco v Ghana</b><span>Group C · Kakamega</span></span><span class="venue mono">Bukhungu · Kakamega</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      <a class="fx" href="#matches"><span class="date">10 Jul</span><span class="who"><b>Senegal v Egypt</b><span>Knockout round</span></span><span class="venue mono">Kasarani · Nairobi</span><span class="chip chip-ft">Not yet on sale</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
     </div>
   </section>
 
