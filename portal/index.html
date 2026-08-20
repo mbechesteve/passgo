@@ -344,10 +344,21 @@
      one of them takes the open door's gathering gradient, not just the checked one. */
   .doors { flex-direction: column; height: auto; }
   .door { flex: 1 1 auto !important; min-height: 250px; }
-  .door .wash {
-    background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 40%, rgba(var(--ink-rgb), 0.94) 100%); }
+  /* Stacked, the copy starts a third of the way down rather than sitting in the last
+     inch, so the veil has to be dark that high up: it opens at 0.45 and is at full
+     strength by the time the first line of the description arrives. */
+  /* The checked door is named too, or its higher-specificity open gradient outlives the
+     media query and one tile in five keeps the desktop treatment. */
+  .door .wash, .doors input:checked + .door .wash {
+    background: linear-gradient(180deg, rgba(var(--ink-rgb), 0.5) 0%, rgba(var(--ink-rgb), 0.93) 38%); }
   .d-shut { display: none; }
-  .d-open { position: static; opacity: 1 !important; padding: 90px 24px 8px; }
+  /* Stacked, .d-open is the door's only in-flow child, and an in-flow child paints
+     UNDER an absolutely positioned sibling — .wash — so every word of the five doors
+     was invisible on a phone. It needs a position of its own to paint above the veil,
+     and display: block for the padding to hold the copy off the top of the photograph;
+     a span in normal flow is inline and takes neither. */
+  .d-open { position: relative; z-index: 2; display: block;
+            opacity: 1 !important; padding: 96px 24px 20px; }
 }
 @media (max-width: 860px) {
   /* The mobile nav used to be restated here, byte for byte, over the copy portal.css
