@@ -47,6 +47,22 @@
   --ink-rgb:      35, 39, 107;  /* for the translucent inks app.css needs; a component
                                    must not decompose --ink by hand */
   --pad-x:        clamp(20px, 5vw, 64px);
+
+  /* Eight steps, derived from the boards rather than lifted. v6 and Mobile carry 30
+     distinct sizes between them, which is not 30 decisions: everything at 40px and up
+     is weight 800, and Mobile's 52px/48px are v6's 96px/84px at a narrower artboard —
+     one element, two widths. Those collapse into the two fluid steps below. The dense
+     band at 10-14px is the label and mono register and needs three steps, not five.
+     7px and 8px appear six times between them, below this portal's legibility floor,
+     and fold into --fs-micro. */
+  --fs-micro:    11px;                      /* eyebrows, mono labels */
+  --fs-small:    13px;
+  --fs-body-sm:  15px;
+  --fs-body:     17px;
+  --fs-subhead:  22px;
+  --fs-head:     28px;
+  --fs-feature:  clamp(40px, 5.5vw, 64px);  /* section displays */
+  --fs-display:  clamp(52px, 9vw, 96px);    /* the hero, phone to desktop */
 }
 @keyframes livedot { 0%, 100% { opacity: 1 } 50% { opacity: 0.35 } }
 @keyframes tickerscroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
@@ -58,7 +74,8 @@
    arrivals too, not just clicks. */
 html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 body { margin: 0; background: var(--surface); color: var(--charcoal);
-       font-family: 'DM Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+       font-family: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+       -webkit-font-smoothing: antialiased; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-mid); }
 ::selection { background: #1456f033; }
@@ -68,7 +85,7 @@ img { display: block; max-width: 100%; }
 ul { margin: 0; padding: 0; list-style: none; }
 
 .mono { font-family: "JetBrains Mono", ui-monospace, monospace; text-transform: uppercase; }
-.m11  { font-size: 11px; letter-spacing: 0.1em; }
+.m11  { font-size: var(--fs-micro); letter-spacing: 0.1em; }
 
 /* Focus rings: green on light, white on dark — as the board sets them. */
 :focus-visible { outline: 2px solid var(--accent-mid); outline-offset: 2px; }
@@ -90,9 +107,9 @@ ul { margin: 0; padding: 0; list-style: none; }
    fill — which is the template's own answer, the "tertiary" pill it embeds in its coral
    promo strip. Sizes bump to a 44px minimum: the template says 36px for circular utility
    buttons, and 44 is the floor Apple, Android and WCAG 2.5.5 agree on. */
-.btn { font-family: "DM Sans", system-ui, sans-serif; border: none; cursor: pointer;
+.btn { font-family: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif; border: none; cursor: pointer;
        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-       min-height: 44px; font-size: 14px; font-weight: 600; padding: 11px 24px;
+       min-height: 44px; font-size: var(--fs-body-sm); font-weight: 600; padding: 11px 24px;
        border-radius: 9999px; }
 .btn-primary { background: var(--primary); color: var(--canvas); }
 .btn-primary:hover, .btn-primary:active { background: var(--charcoal); color: var(--canvas); }
@@ -107,7 +124,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn-ghost-dark { background: transparent; color: var(--canvas); border: 1px solid rgba(255,255,255,0.55); }
 .btn-ghost-dark:hover { background: rgba(255,255,255,0.1); color: var(--canvas); }
 /* button-link: text, underlined on activation */
-.underline-link { color: var(--canvas); font-size: 14px; font-weight: 500; padding: 8px 0; }
+.underline-link { color: var(--canvas); font-size: var(--fs-body-sm); font-weight: 500; padding: 8px 0; }
 .underline-link:hover { color: var(--canvas); text-decoration: underline; }
 
 /* ── Utility bar ─────────────────────────────────────────────────────────── */
@@ -117,10 +134,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ── Nav ─────────────────────────────────────────────────────────────────── */
 .nav { background: var(--primary); display: flex; align-items: center; gap: clamp(16px, 3vw, 44px);
        padding: 18px var(--pad-x); position: sticky; top: 0; z-index: 30; }
-.brand-name { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--canvas); line-height: 1; }
-.brand-sub { display: block; margin-top: 3px; font-size: 9px; letter-spacing: 0.14em; color: var(--muted); }
+.brand-name { font-size: var(--fs-head); font-weight: 800; letter-spacing: -0.02em; color: var(--canvas); line-height: 1; }
+.brand-sub { display: block; margin-top: 3px; font-size: var(--fs-micro); letter-spacing: 0.14em; color: var(--muted); }
 .nav-links { display: flex; gap: 34px; align-items: center; flex: 1; }
-.nav-links a { color: var(--canvas); font-size: 16px; font-weight: 500; }
+.nav-links a { color: var(--canvas); font-size: var(--fs-body); font-weight: 500; }
 .nav-links a:hover { color: var(--on-dark); }
 .nav-cta { display: flex; gap: 12px; align-items: center; }
 
@@ -130,10 +147,10 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
          padding: clamp(40px, 6vw, 64px) var(--pad-x); }
 .foot-row { display: flex; justify-content: space-between; align-items: flex-start;
             gap: 48px; flex-wrap: wrap; }
-.foot-row p.foot-brand { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--canvas); }
-.foot-row p.foot-copy { font-size: 14px; font-weight: 300; color: rgba(238,240,240,0.7);
+.foot-row p.foot-brand { font-size: var(--fs-subhead); font-weight: 800; letter-spacing: -0.02em; color: var(--canvas); }
+.foot-row p.foot-copy { font-size: var(--fs-body-sm); font-weight: 300; color: rgba(238,240,240,0.7);
                         max-width: 360px; line-height: 1.6; margin-top: 12px; }
-.foot-cols { display: flex; gap: clamp(32px, 5vw, 64px); font-size: 14px; }
+.foot-cols { display: flex; gap: clamp(32px, 5vw, 64px); font-size: var(--fs-body-sm); }
 .foot-cols ul { display: flex; flex-direction: column; gap: 11px; }
 .foot-cols b { color: var(--canvas); font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
@@ -150,7 +167,7 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
   .menu-toggle:checked ~ .nav-links { display: flex; }
   .burger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
             border: 1px solid rgba(255,255,255,0.55); border-radius: 999px; color: var(--canvas);
-            font-size: 18px; cursor: pointer; letter-spacing: 2px; }
+            font-size: var(--fs-body); cursor: pointer; letter-spacing: 2px; }
   .mob-only { display: inline-flex; }
   .desk-only { display: none; }
   .nav-cta { margin-left: auto; }
@@ -185,8 +202,8 @@ html[data-booting] .boot.is-done { opacity: 0; pointer-events: none; }
   55%, 70%  { stroke-dashoffset: 0; }
   100%      { stroke-dashoffset: -100; }
 }
-.boot-word { color: var(--canvas); font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
-.boot-sub { color: rgba(238, 240, 240, 0.55); font-size: 10px; text-transform: uppercase;
+.boot-word { color: var(--canvas); font-size: var(--fs-head); font-weight: 700; letter-spacing: -0.02em; }
+.boot-sub { color: rgba(238, 240, 240, 0.55); font-size: var(--fs-micro); text-transform: uppercase;
             letter-spacing: 0.16em; margin-top: -14px; }
 
 /* Asked for less motion, the mountain is simply drawn, not drawn repeatedly. */
