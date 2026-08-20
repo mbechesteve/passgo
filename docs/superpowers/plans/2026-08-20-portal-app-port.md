@@ -400,8 +400,11 @@ assert.equal(P.generatePartners().length, 2189, "Figure 3: the network totals 2,
 assert.equal(P.MATCHES.length, 11, "the seed carries eleven matches");
 assert.ok(P.clock.now() instanceof Date, "clock.now() must return a Date");
 
-// No React Native may have been dragged in.
-assert.ok(!/react-native/i.test(src), "the bundle must not contain react-native");
+// The alias took: the RN storage package must not survive into the bundle. Asserted
+// on the package specifier rather than on /react-native/i, which also matches comment
+// prose and identifiers and would fail on a perfectly good bundle.
+assert.ok(!src.includes("@react-native-async-storage"),
+  "AsyncStorage must have been aliased away");
 
 console.log("verify-bundle: ok — Pamoja exposes the portal contract");
 ```
@@ -520,27 +523,37 @@ git commit -m "feat: bundle the app's data and logic for the portal"
       return pass.getState().pass;
     },
 
-    /* Both redemption entry points — scanned and card code — land here. The app
-       offers no intermediate code-entry step and neither does the portal; only the
-       channel label differs. */
+    /* Both redemption entry points — scanned, and card code read at the counter.
+       The app offers no intermediate code-entry step and neither does the portal.
+
+       The two do NOT converge on one store call. useRecordStore keeps `append` (a
+       use that happened through the app) separate from `ingestShortCode` (a use
+       that arrived inbound, where the fan never touched her phone), and its own
+       comment says keeping them separate "is what makes the no-exclusion promise
+       real". Collapsing them here would quietly undo that. */
     redeem: function (input) {
+      var events = record.getState().events;
       var event = P.buildRedemption({
         pass: pass.getState().pass,
         partner: input.partner,
         gross: input.gross,
-        channel: input.channel,
+        channel: input.channel,          // "qr" | "nfc" | "shortcode"
         at: State.now(),
+        seq: events.length,              // required: keeps event ids distinct
       });
-      record.getState().add(event);
+      if (input.channel === "shortcode") record.getState().ingestShortCode(event);
+      else record.getState().append(event);
       return event;
     },
 
-    walletOrder: function () { return payment.getState().order; },
-    reorderWallet: function (from, to) { payment.getState().reorder(from, to); },
+    /* The wallet is a list of methods with one default — there is no ordering in
+       the app, so there is none here. `choose` is the only thing that moves. */
+    methods: function () { return payment.getState().methods; },
+    chooseMethod: function (id) { payment.getState().choose(id); },
 
     reset: function () {
       pass.getState().reset();
-      record.getState().reset();
+      record.getState().clear();
     },
 
     /* Re-render on change, for the dialogs that mutate. */
@@ -554,14 +567,20 @@ git commit -m "feat: bundle the app's data and logic for the portal"
 })(window);
 ```
 
-- [ ] **Step 2: Reconcile the call signatures against the real stores**
+- [ ] **Step 2: Confirm the store surface**
 
-`redeem`, `reorderWallet` and `reset` above assume method names on the stores. Confirm each before moving on:
+The code above was written against the stores as they actually are, after a scan that
+found four mismatches in an earlier draft. Confirm it still holds:
 
-Run: `grep -nE "add:|reset:|reorder:|order:|events:" src/store/useRecordStore.ts src/store/usePaymentStore.ts`
-Run: `sed -n '1,40p' src/utils/redeem.ts`
+Run: `grep -nE "append:|ingestShortCode:|clear:|choose:|methods:|hydrated:" src/store/useRecordStore.ts src/store/usePaymentStore.ts`
+Run: `sed -n '13,22p' src/utils/redeem.ts`
 
-Expected: `useRecordStore` exposes `events` and `add`; `usePaymentStore` exposes `order` and `reorder`; `buildRedemption` takes a `RedemptionInput`. **If any name or field differs, correct `portal/state.js` to match the store — never the other way round.** The stores are the app's and this task does not modify them.
+Expected: `useRecordStore` exposes `events`, `append`, `ingestShortCode`, `clear`;
+`usePaymentStore` exposes `methods`, `add`, `choose`, `forget`; all three stores expose
+`hydrated`; `RedemptionInput` requires `pass`, `partner`, `gross`, `channel`, `at`, `seq`.
+
+**If anything differs, correct `portal/state.js` to match the store — never the other
+way round.** The stores are the app's and this task does not modify them.
 
 - [ ] **Step 3: Commit**
 
@@ -763,8 +782,8 @@ Open with the shell in *The page shell*, titled `Your Pass — Pamoja`. Then the
     <button class="sheet-close" aria-label="Close">&times;</button>
   </div>
   <div class="sheet-body">
-    <p class="muted">The first method is offered first at a counter.</p>
-    <ol class="rowline" id="wallet-list"></ol>
+    <p class="muted">The default method is the one offered first at a counter.</p>
+    <ul class="rowline" id="wallet-list"></ul>
   </div>
 </dialog>
 
@@ -838,34 +857,36 @@ Open with the shell in *The page shell*, titled `Your Pass — Pamoja`. Then the
     renderWallet();
   }
 
-  /* Reorder by button, not by drag. Wallet order is one of the four flows that
-     really mutates, so it has to be operable — and a drag target is unusable with a
-     keyboard and awkward with a thumb. Up/down is neither. */
+  /* Choosing the default, not reordering.
+
+     The app has no ordering: usePaymentStore is a list of methods with one marked
+     default, moved by choose(id). A drag-to-reorder control here would offer a
+     capability the product does not have. Radios say "one of these is the default"
+     exactly, and are operable by keyboard and thumb without any drag affordance. */
   function renderWallet() {
-    var order = S.walletOrder();
-    document.getElementById("wallet-list").innerHTML = order.map(function (m, i) {
-      return "<li>" + esc(m) +
-        '<span style="float:right">' +
-        '<button class="sheet-close" data-up="' + i + '" aria-label="Move ' + esc(m) +
-        ' up"' + (i === 0 ? " disabled" : "") + ">&uarr;</button>" +
-        '<button class="sheet-close" data-down="' + i + '" aria-label="Move ' + esc(m) +
-        ' down"' + (i === order.length - 1 ? " disabled" : "") + ">&darr;</button>" +
-        "</span></li>";
+    var methods = S.methods();
+    var list = document.getElementById("wallet-list");
+
+    if (!methods.length) {
+      list.innerHTML = '<li class="muted">No payment method saved on this device.</li>';
+      return;
+    }
+
+    list.innerHTML = methods.map(function (m, i) {
+      var id = "method-" + i;
+      return '<li><label for="' + id + '" style="display:flex;gap:12px;' +
+        'align-items:center;min-height:44px">' +
+        '<input type="radio" name="default-method" id="' + id + '" value="' +
+        esc(m.id) + '"' + (m.isDefault ? " checked" : "") + ">" +
+        "<span>" + esc(m.label) + "</span></label></li>";
     }).join("");
 
-    var list = document.getElementById("wallet-list");
-    Array.prototype.forEach.call(list.querySelectorAll("[data-up]"), function (b) {
-      b.addEventListener("click", function () {
-        var i = Number(b.dataset.up);
-        S.reorderWallet(i, i - 1);
-      });
-    });
-    Array.prototype.forEach.call(list.querySelectorAll("[data-down]"), function (b) {
-      b.addEventListener("click", function () {
-        var i = Number(b.dataset.down);
-        S.reorderWallet(i, i + 1);
-      });
-    });
+    Array.prototype.forEach.call(
+      list.querySelectorAll('input[name="default-method"]'),
+      function (r) {
+        r.addEventListener("change", function () { S.chooseMethod(r.value); });
+      }
+    );
   }
 
   S.ready().then(function () {
@@ -878,7 +899,16 @@ Open with the shell in *The page shell*, titled `Your Pass — Pamoja`. Then the
 })();
 ```
 
-- [ ] **Step 3: Verify in a browser**
+- [ ] **Step 3: Confirm the PaymentMethod fields**
+
+`renderWallet` reads `m.id`, `m.isDefault` and `m.label`. Confirm those are the real
+field names:
+
+Run: `grep -n "PaymentMethod" -A10 src/types/index.ts | head -20`
+
+Correct the page to match the type. Do not add fallbacks — use the real names.
+
+- [ ] **Step 4: Verify in a browser**
 
 Run: `npm run build:portal-bundle` then serve and open the page:
 
@@ -886,9 +916,9 @@ Run: `npm run build:portal-bundle` then serve and open the page:
 python3 -m http.server 8080 --directory portal
 ```
 
-Open `http://localhost:8080/pass.html`. Expected: the greeting, a validity pill, and either the credential or a link to sign up; the Wallet button opens a sheet; the up/down buttons reorder the methods and the new order survives a reload; no console errors. Wait for `[data-booting]` to clear before judging a blank page — that is the Mount Kenya curtain, not a failure.
+Open `http://localhost:8080/pass.html`. Expected: the greeting, a validity pill, and either the credential or a link to sign up; the Wallet button opens a sheet; with no method saved it says so rather than showing an empty list; no console errors. Wait for `[data-booting]` to clear before judging a blank page — that is the Mount Kenya curtain, not a failure.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add portal/pass.html portal/pages/pass.js
@@ -1245,6 +1275,9 @@ Open with the shell in *The page shell*, titled `Partners — Pamoja`. Then the 
     <label for="gross">Amount (KES)</label>
     <input id="gross" type="number" inputmode="numeric" value="1000" min="0"
            style="min-height:44px;width:100%">
+    <!-- 1000 matches the app's own prefill (ConfirmScreen.tsx:36, a screen-local
+         useState literal rather than a shared constant, so there is nothing in
+         src/ to read it from). -->
     <p id="redeem-preview"></p>
     <button class="btn" id="confirm-redeem" style="min-height:44px">Confirm</button>
   </div>
@@ -1324,7 +1357,10 @@ Open with the shell in *The page shell*, titled `Partners — Pamoja`. Then the 
       S.redeem({
         partner: current,
         gross: Number(document.getElementById("gross").value || 0),
-        channel: "Card code",
+        // Channel is "nfc" | "qr" | "shortcode". This sheet is the counter path —
+        // the fan reads her card code aloud — so it is shortcode, which state.js
+        // routes through ingestShortCode rather than append.
+        channel: "shortcode",
       });
       sheet.close();
     });
@@ -1338,7 +1374,11 @@ Open with the shell in *The page shell*, titled `Partners — Pamoja`. Then the 
 
 Run: `sed -n '1,40p' src/utils/redeem.ts`
 
-Confirm `RedemptionInput`'s exact fields and that `computeMoney` returns `{net, saved}` (adjust `preview()` if the property names differ), and that `Partner` really carries `discountPct`. Correct the page to match `src/`.
+`computeMoney` returns `Money` — `{ currency, gross, discount, net }`. There is no
+`saved` field, so `preview()` above is wrong: it must read `m.discount`, not `m.saved`.
+Fix it. Then confirm `Partner` really carries `discountPct` and `name`, and that
+`RedemptionInput` still takes `pass`, `partner`, `gross`, `channel`, `at`, `seq`.
+Correct the page to match `src/`, never the reverse.
 
 - [ ] **Step 4: Verify and commit**
 
