@@ -64,7 +64,17 @@
   --fs-body:     17px;
   --fs-subhead:  22px;
   --fs-head:     28px;
-  --fs-feature:  clamp(40px, 5.5vw, 64px);  /* section displays */
+  /* --fs-feature is the section-heading register: the board's 40px section heads
+     ("One Pass. Five doors.", "Fan events and promotions", "Explore the host country"),
+     three uses. It used to also carry the board's 56/64/84px one-off displays (the
+     featured fixture's score line, the CTA headline, the partners stat) folded in as
+     the same step's ceiling — the growth term reached 64px by 1164px, so every real
+     desktop width rendered the display size and the step never actually occupied 40.
+     That collapse is why 28 (--fs-head) and 40 never had daylight between them. Those
+     larger one-off headings are display register and take --fs-display where they
+     occur; --fs-feature now only ever spans its own 28-40px band. Do not re-merge them
+     into a ninth step — the two roles differ in cast, not in count. */
+  --fs-feature:  clamp(28px, 3.2vw, 40px);
   --fs-display:  clamp(52px, 9vw, 96px);    /* the hero, phone to desktop */
 }
 @keyframes livedot { 0%, 100% { opacity: 1 } 50% { opacity: 0.35 } }

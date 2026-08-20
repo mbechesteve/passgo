@@ -8,12 +8,13 @@
                      background: linear-gradient(200deg, rgba(10,11,13,0.45) 0%, rgba(10,11,13,0.92) 100%); }
 .split-media .quote { position: absolute; left: clamp(24px, 4vw, 56px); right: clamp(24px, 4vw, 56px);
                       bottom: clamp(28px, 4vw, 56px); color: var(--canvas); }
-/* Bespoke, not a scale step: this sits in the one real gap in the eight-step scale,
-   between --fs-head's fixed 28px and --fs-feature's 40px floor. --fs-head can't grow
-   with the viewport at all, and --fs-feature's floor alone is already bigger than this
-   quote's whole clamp range — reaching for either flattens a supporting pull-quote into
-   either a label or a section display. The scale stays eight steps; this stays its own
-   clamp. Same reasoning applies to `.form-card h1` and `.dash-head h1` below. */
+/* Bespoke, not a scale step — and no longer because of a hole between --fs-head and
+   --fs-feature; --fs-feature spans a real 28-40px now, with --fs-head sitting right
+   below it. This stays its own clamp on its own merits: a two-line supporting
+   pull-quote, set lighter in role than a single-line section heading, and its 24-34px
+   range sits visibly under --fs-feature's 28-40px at every width. `.form-card h1` and
+   `.dash-head h1` below were bound by the same old reasoning and do fit the fixed step
+   now; they use it. */
 .split-media .quote p { font-size: clamp(24px, 3vw, 34px); font-weight: 800;
                         letter-spacing: -0.03em; line-height: 1.05; }
 .split-media .quote span { display: block; margin-top: 14px; font-size: var(--fs-small);
@@ -22,7 +23,7 @@
               padding: clamp(40px, 6vw, 88px) var(--pad-x); background: var(--surface); }
 .form-card { width: 100%; max-width: 460px; }
 .form-card .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.14em; color: var(--accent); margin-bottom: 14px; }
-.form-card h1 { font-size: clamp(30px, 4.4vw, 42px); color: var(--primary); } /* see gap note above */
+.form-card h1 { font-size: var(--fs-feature); color: var(--primary); }
 .form-card .sub { margin-top: 14px; font-size: var(--fs-body); font-weight: 300; color: var(--slate); }
 
 label.field { display: block; margin-top: 26px; }
@@ -54,7 +55,7 @@ input:focus-visible { outline: none; border: 2px solid var(--accent-deep); }
 .dash { padding: clamp(32px, 5vw, 56px) var(--pad-x) clamp(56px, 8vw, 88px); }
 .dash-head { display: flex; justify-content: space-between; align-items: flex-end;
              gap: 32px; flex-wrap: wrap; margin-bottom: 36px; }
-.dash-head h1 { font-size: clamp(30px, 4.4vw, 44px); color: var(--primary); } /* see gap note near .split-media .quote p */
+.dash-head h1 { font-size: var(--fs-feature); color: var(--primary); }
 .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
 .panel { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--radius-card);
          padding: 26px 28px; grid-column: span 12; }

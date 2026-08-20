@@ -126,10 +126,10 @@
 #events { background: var(--canvas); border-top: 1px solid var(--hairline); }
 .head { display: flex; justify-content: space-between; align-items: baseline; gap: 32px;
         margin-bottom: 36px; flex-wrap: wrap; }
-/* --fs-feature is the scale's section-display step. It reads 64px on a desktop viewport
-   where the board draws 40 — the step folded the board's 40px heads and its 64px closing
-   line into one fluid size, and the eight steps are fixed, so the page takes the step and
-   the size follows. */
+/* --fs-feature is the section-heading register: the board draws every heading that
+   carries this class ("One Pass. Five doors.", "Fan events and promotions", "Explore
+   the host country") at 40px, and the step now actually reaches 40 instead of
+   overshooting to a display size that belonged to different, larger headings. */
 .head h2 { font-size: var(--fs-feature); color: var(--primary); line-height: 0.95; }
 .head .meta { font-size: var(--fs-small); font-weight: 400; color: var(--slate); flex: 0 1 auto; }
 .head .meta-mono { font-size: var(--fs-micro); letter-spacing: 0.12em; color: var(--steel); flex: 0 1 auto; }
@@ -187,7 +187,11 @@
              font-size: var(--fs-micro); letter-spacing: 0.12em; }
 .featured-body { position: relative; z-index: 2; padding: clamp(28px, 4vw, 40px); max-width: 820px; }
 .featured-body .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.16em; color: var(--on-dark); margin-bottom: 12px; }
-.featured-body h2 { font-size: var(--fs-feature); letter-spacing: -0.03em;
+/* The board draws this score line ("Kenya v Mali") at 56px — display register, not the
+   40px section heads .head h2 uses, even though both used to render identically at
+   --fs-feature's old, buggy 64px ceiling. Now that the step is fixed to its true 28-40px
+   band, this one moves to --fs-display, where 56px actually falls on its fluid curve. */
+.featured-body h2 { font-size: var(--fs-display); letter-spacing: -0.03em;
                     color: var(--canvas); line-height: 0.9; }
 .featured-body .when { font-size: var(--fs-small); letter-spacing: 0.1em; color: var(--accent-200);
                        margin: 12px 0 20px; }
@@ -285,10 +289,15 @@
    --hairline is that lilac, and 7.23 on the panel. */
 .split-left .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.16em; font-weight: 700;
                        color: var(--hairline); margin-bottom: 14px; }
-/* 84px on the board, which is between step 7 and step 8 of a scale that may not grow a
-   ninth. --fs-feature is the nearer of the two that keeps this figure below the hero
-   wordmark in the page's order of loudness. Outfit 800, not the mono it was. */
-.split-left .big { font-weight: 800; font-size: var(--fs-feature); line-height: 1;
+/* 84px on the board — display register. This used to sit on --fs-feature, back when
+   that step's fluid ceiling overshot to 64px and read as the nearer approximation of
+   84 without tying the figure to the hero's exact size. Now that --fs-feature is fixed
+   to its true 28-40px section-heading band, holding it there would shrink this figure
+   to something smaller than a section head, which is not the board's figure at all.
+   --fs-display is the only remaining step that reaches anywhere near 84px; landing on
+   the hero's own step is a smaller mismatch than landing far below the figure's
+   intended size, and the two aren't adjacent on the page. Outfit 800, not the mono it was. */
+.split-left .big { font-weight: 800; font-size: var(--fs-display); line-height: 1;
                    letter-spacing: -0.03em; color: var(--canvas); }
 .split-left h2 { font-size: var(--fs-head); font-weight: 700; color: var(--canvas); margin: 12px 0 10px; line-height: 1.1; }
 .split-left p { font-size: var(--fs-body-sm); font-weight: 300; color: var(--accent-200);
@@ -324,7 +333,11 @@
              display: flex; flex-direction: column; align-items: center; text-align: center; gap: 30px; }
 .cta-inner .eyebrow { font-size: var(--fs-micro); letter-spacing: 0.16em; font-weight: 700;
                       color: var(--on-dark); margin-bottom: 16px; }
-.cta-band h2 { font-size: var(--fs-feature); color: var(--canvas); line-height: 0.85; }
+/* The board draws this CTA headline at 64px — display register, not the 40px section
+   heads elsewhere on the page. It rode along on --fs-feature's old buggy ceiling; now
+   that the step is fixed to 28-40px, this moves to --fs-display, where 64px sits
+   comfortably on the fluid curve. */
+.cta-band h2 { font-size: var(--fs-display); color: var(--canvas); line-height: 0.85; }
 .cta-band p { font-size: var(--fs-body); font-weight: 300; color: var(--accent-200);
               margin: 14px auto 0; max-width: 500px; }
 .cta-band .btn { flex: 0 0 auto; }
