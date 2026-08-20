@@ -592,8 +592,12 @@
     <a href="#partners">Partners</a>
   </div>
   <div class="nav-cta">
-    <a class="btn btn-on-dark desk-only" href="login.html">Log in</a>
-    <a class="btn btn-on-dark mob-only" href="signup.html">Get the Pass</a>
+    <!-- The board shows both nav CTAs side by side on desktop — outlined Log in,
+         filled Get the Pass as the primary action. Get the Pass now shows at every
+         width; Log in stays desk-only so the mobile nav-cta keeps its one action
+         beside the burger, which is the sensible phone reading, not the board's. -->
+    <a class="btn btn-ghost-dark desk-only" href="login.html">Log in</a>
+    <a class="btn btn-on-dark" href="signup.html">Get the Pass</a>
     <label class="burger" for="menu" aria-label="Open the menu">&equiv;</label>
   </div>
 </nav>
