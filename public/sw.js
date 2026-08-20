@@ -2,6 +2,9 @@
 // online (important during active development), with a cache fallback so it
 // still opens offline once installed. A fetch handler is also what makes the
 // app installable ("Add to Home Screen") on Android/Chrome.
+//
+// Served from /app/sw.js, so its scope is /app/ — the marketing portal at the
+// domain root is outside it and is never intercepted or cached here.
 const CACHE = "pamoja-v1";
 
 self.addEventListener("install", () => self.skipWaiting());
@@ -31,7 +34,7 @@ self.addEventListener("fetch", (event) => {
       .catch(() =>
         caches
           .match(request)
-          .then((cached) => cached || caches.match("/index.html"))
+          .then((cached) => cached || caches.match("/app/index.html"))
       )
   );
 });

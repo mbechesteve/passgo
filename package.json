@@ -6,11 +6,13 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "dev": "expo start --web",
-    "build": "expo export --platform web && node scripts/inject-pwa.mjs",
+    "web": "node scripts/dev-server.mjs",
+    "dev": "node scripts/dev-server.mjs",
+    "build": "expo export --platform web --output-dir dist/app && node scripts/copy-portal.mjs && node scripts/inject-pwa.mjs",
     "lint": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "web:app": "expo start --web",
+    "portal": "python3 -m http.server 8080 --directory portal"
   },
   "dependencies": {
     "@expo-google-fonts/dm-sans": "^0.4.2",

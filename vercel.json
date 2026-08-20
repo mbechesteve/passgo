@@ -1,11 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "expo export --platform web && node scripts/inject-pwa.mjs",
+  "buildCommand": "expo export --platform web --output-dir dist/app && node scripts/copy-portal.mjs && node scripts/inject-pwa.mjs",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/app", "destination": "/app/index.html" },
+    { "source": "/app/(.*)", "destination": "/app/index.html" }
+  ],
   "headers": [
     {
-      "source": "/_expo/(.*)",
+      "source": "/app/_expo/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

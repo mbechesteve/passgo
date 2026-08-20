@@ -1,15 +1,16 @@
 [build]
-  command = "expo export --platform web && node scripts/inject-pwa.mjs"
+  command = "expo export --platform web --output-dir dist/app && node scripts/copy-portal.mjs && node scripts/inject-pwa.mjs"
   publish = "dist"
 
-# SPA fallback — serve index.html for any route the static files don't match,
-# so deep links and page refreshes don't 404.
+# SPA fallback, scoped to the app. The portal owns the domain root and is made of
+# real files, so it needs no fallback — and must not have one, or a mistyped URL
+# would quietly render the marketing page instead of 404ing.
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/app/*"
+  to = "/app/index.html"
   status = 200
 
 [[headers]]
-  for = "/_expo/*"
+  for = "/app/_expo/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
