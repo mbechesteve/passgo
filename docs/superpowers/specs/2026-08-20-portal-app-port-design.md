@@ -101,9 +101,16 @@ rehydration is per-page rather than once.
 Real, mutating behaviour is scoped to four flows:
 
 - issuing a Pass (the three questions `signup.html` already asks)
-- redeeming at a partner, from both entry points the app offers
-- reordering the wallet
+- redeeming at a partner, from both entry points the app offers, keeping the record
+  store's deliberate split between `append` (through the app) and `ingestShortCode`
+  (read aloud at a counter)
+- choosing the default payment method
 - the record accumulating, with its saved total
+
+An earlier draft of this list said "reordering the wallet". It was wrong: no reorder
+exists anywhere in the app. `usePaymentStore` holds a list of methods with one marked
+default, moved by `choose(id)`. The portal may not offer a capability the product does
+not have, so the flow is choosing the default.
 
 Everything else renders from seed data and does not pretend to mutate. A page that cannot
 really do a thing does not offer a control that looks as though it can.
