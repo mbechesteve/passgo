@@ -192,10 +192,18 @@
 .featured { position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--primary);
             min-height: 380px; display: flex; align-items: flex-end; }
 /* Both layers indigo now, as the board's are: one gathering from the foot, one raking in
-   from the left so the copy has a ground wherever the photograph is bright. */
+   from the left so the copy has a ground wherever the photograph is bright.
+
+   The veil's floor was 0 at 100% — fine while kasarani.jpg was greyscale-filtered, but
+   colour restores a blown-out floodlight highlight right of centre, and on a narrow
+   viewport the eyebrow line ("Next at Kasarani...") is long enough to reach it: measured
+   with the veil and wash both off, that spot is pure #fff behind the yellow eyebrow text,
+   which is the worst case a photograph can offer. Solving ink-multiply-over-white for the
+   eyebrow's 4.5:1 floor needs alpha ≥ 0.78; 0.82 was chosen for headroom, measured at
+   5.32:1 on that exact pixel. The raking fade stays, just doesn't fade all the way out. */
 .featured .wash { background: linear-gradient(180deg, rgba(var(--ink-rgb), 0) 45%, rgba(var(--ink-rgb), 0.9) 100%); }
 .featured .veil { position: absolute; inset: 0; pointer-events: none;
-                  background: linear-gradient(95deg, rgba(var(--ink-rgb), 0.9) 0%, rgba(var(--ink-rgb), 0.5) 55%, rgba(var(--ink-rgb), 0) 100%); }
+                  background: linear-gradient(95deg, rgba(var(--ink-rgb), 0.9) 0%, rgba(var(--ink-rgb), 0.84) 40%, rgba(var(--ink-rgb), 0.82) 100%); }
 /* Was an outlined pill in a leftover rgba of the retired cyan. The board fills it yellow. */
 .countdown { position: absolute; top: 24px; right: 28px; z-index: 2; background: var(--highlight);
              color: var(--primary); border-radius: 999px; padding: 8px 16px; font-weight: 700;
@@ -709,8 +717,11 @@
       <a class="tile" href="#explore">
         <!-- 800px, which is what a 340px tile needs. It shared the hero's 2400px file while
              the hero was Mount Kenya; now that the hero is the Mara, that would be 1 MB for
-             a thumbnail. -->
-        <div class="shot" style="filter:none"><img src="img/tile-mt-kenya.webp" alt="The summits of Mount Kenya."></div><div class="wash"></div>
+             a thumbnail. It had been re-exported from mt-kenya.jpg with the page's old
+             grayscale baked into its own pixels (a `filter:none` override sat here to stop
+             the shared filter being applied twice) — regenerated in colour from the same
+             source crop, so it now takes the shared .shot filter like every other tile. -->
+        <div class="shot"><img src="img/tile-mt-kenya.webp" alt="The summits of Mount Kenya."></div><div class="wash"></div>
         <div class="cap"><h3>Mount Kenya</h3><p>Batian, Nelion, the Gate of the Mists</p></div>
       </a>
       <a class="tile" href="#explore">
@@ -774,6 +785,9 @@
       <p class="foot-brand">Pamoja</p>
       <p class="foot-copy">The fan companion for the PAMOJA Pass at AFCON 2027. Pamoja never
         holds funds — every payment is a direct hand-off.</p>
+      <!-- CC BY-SA requires attribution to travel with the photograph; this is that
+           requirement's only path off this page, so it is not optional decoration. -->
+      <a class="foot-credits" href="credits.html">Photo credits</a>
     </div>
     <div class="foot-cols">
       <ul>

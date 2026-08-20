@@ -104,8 +104,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 :focus-visible { outline: 2px solid var(--accent-mid); outline-offset: 2px; }
 .hero :focus-visible, .cta-band :focus-visible, .nav :focus-visible { outline-color: var(--canvas); }
 
-/* Framed photography: grey, then a multiply wash. Every image on the page. */
-.shot { position: absolute; inset: 0; filter: grayscale(1) contrast(1.06); }
+/* Framed photography: colour, with a mild contrast lift; a multiply wash still sits over
+   most of these (see .wash below) because that wash is what keeps text legible on top of
+   a photograph, not a decoration for the grey the board never actually specified. The
+   board's own images are colour, so the grayscale(1) that used to sit here — hiding real
+   colour already present in every JPEG in portal/img — comes off; contrast(1.06) is kept,
+   it was never about the missing colour. */
+.shot { position: absolute; inset: 0; filter: contrast(1.06); }
 .shot img { width: 100%; height: 100%; object-fit: cover; }
 .wash { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply;
         background: linear-gradient(160deg, rgba(72,78,84,0.5) 0%, rgba(28,30,34,0.9) 100%); }
@@ -175,6 +180,12 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
 .foot-cols b { color: var(--canvas); font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
 .foot-cols a:hover { color: var(--on-dark); }
+/* The one link the footer carries for a reason other than navigation: CC BY-SA's
+   attribution term follows every photograph on the site, and this is the only route to
+   the page that pays it. Styled like the nav columns' links, not hidden as fine print. */
+.foot-credits { display: inline-block; margin-top: 16px; font-size: var(--fs-body-sm);
+                color: rgba(238,240,240,0.75); }
+.foot-credits:hover { color: var(--on-dark); }
 
 /* ── Mobile nav (shared) ─────────────────────────────────────────────────── */
 .burger, .mob-only { display: none; }
