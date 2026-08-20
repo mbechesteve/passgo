@@ -224,11 +224,15 @@ footer { border-top: 1px solid var(--primary-soft); background: var(--primary); 
 .foot-cols b { color: var(--canvas); font-weight: 700; margin-bottom: 2px; }
 .foot-cols a { color: rgba(238,240,240,0.75); }
 .foot-cols a:hover { color: var(--on-dark); }
-/* The one link the footer carries for a reason other than navigation: CC BY-SA's
-   attribution term follows every photograph on the site, and this is the only route to
-   the page that pays it. Styled like the nav columns' links, not hidden as fine print. */
-.foot-credits { display: inline-block; margin-top: 16px; font-size: var(--fs-body-sm);
-                color: rgba(238,240,240,0.75); }
+/* The board's footer carries no small print of its own to copy, so this follows the
+   convention it would use if it did: a bottom rule below the nav columns, the register
+   the eye reads as legal boilerplate rather than a fourth nav item. CC BY-SA's
+   attribution term still needs a route off the page — sitting it here keeps it a real,
+   visible-without-interaction link, just no longer dressed as navigation.
+   --muted on --primary is 4.8:1 at --fs-small: clear of the 4.5:1 body-text floor,
+   because small print that fails contrast doesn't discharge the licence either. */
+.foot-legal { border-top: 1px solid var(--primary-soft); margin-top: 32px; padding-top: 20px; }
+.foot-credits { display: inline-block; font-size: var(--fs-small); color: var(--muted); }
 .foot-credits:hover { color: var(--on-dark); }
 
 /* ── Mobile nav (shared) ─────────────────────────────────────────────────── */
