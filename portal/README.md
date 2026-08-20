@@ -1,7 +1,10 @@
 # Pamoja portal
 
-The public marketing site — "Karibu, pamoja." Built from the **`Pamoja Portal.dc.html`**
-board in `Karibu Kenya eTA portal.zip` (a Claude Design canvas).
+The public marketing site — "Karibu, pamoja." Originally built from the
+**`Pamoja Portal.dc.html`** board in `Karibu Kenya eTA portal.zip` (a Claude Design
+canvas); it now follows the **Pamoja Landing v6 + Mobile** boards — see *The board's
+system, followed rather than approximated*, below, for what that means and *History*,
+further down, for what it followed in between.
 
 Static markup — `index.html`, four more marketing/auth pages, five logged-in pages and
 `img/` — plus one build step: `npm run build:portal-bundle` runs esbuild (the portal's
@@ -11,20 +14,108 @@ what that import surface is and is not.
 
 ## The board's system, followed rather than approximated
 
-Taken from `Pamoja Portal.dc.html` itself, not eyeballed from a screenshot:
+The portal follows the **Pamoja Landing v6** board (desktop) and **Pamoja Mobile**
+(phone), from `Pamoja Page Vibrant Redesign.zip` — the only pair of the seven boards in
+that zip that share a palette and therefore specify a responsive story rather than
+leaving one to be guessed. v4 (forest green) and v5 (maroon) are different directions,
+not iterations; v1–v3 share v6's family but have no matching phone board. The survey is
+`docs/design/2026-08-20-vibrant-redesign-findings.md`; the decision record is
+`docs/superpowers/specs/2026-08-20-portal-v6-redesign-design.md`.
+
+### The palette
+
+Indigo `#23276b` is both the ground and the interactive colour — nav, dark panels, body
+text, buttons, links, the active destination. Yellow `#ffd22c` carries figures and
+eyebrows (`--highlight`) and stands in for accent text on dark (`--on-dark`). Orange
+`#f4772c` (`--brand`) is the "pamoja." wordmark and the decorative marks only, restricted
+to display sizes.
+
+That restriction is not taste — it is measured. **Orange is not a text colour**: it is
+2.79 on white, which fails even the large-text AA threshold (needs 3.0). This is why
+`--accent` is indigo rather than orange, despite orange looking like "the accent" on the
+board — the board's own buttons are indigo pills, and an earlier draft of the spec had
+`--accent` mapped to orange before that measurement overturned it. Orange never carries a
+white label either (2.79 the other way), which is why `.foot-credits` and similar controls
+sit on indigo, not orange.
+
+`--muted` is lightened from the board's own value for the same reason. The board's
+`#7c7e96`, used as secondary text on the indigo ground, is 3.36 there and fails AA
+(needs 4.5). `--muted` is that value +10% lightness — `#989aad`, 4.80 on indigo. The
+board is a picture; AA is a requirement; where they disagree, AA wins, and the deviation
+is recorded in `portal.css` rather than silently absorbed.
 
 | | |
 |---|---|
-| Radius | **10px** on cards and buttons; 4px on chips; 999px **only** in the nav |
-| Imagery | `grayscale(1) contrast(1.06)`, then a `multiply` gradient wash over it |
-| Sections | 88–96px vertical, 64px horizontal |
-| Heads | 42px section · 72px featured fixture · 36px feature tile · 21px small tile |
-| Gold | `#F2C744` eyebrows and numbers · `#F2C200` buttons · `#FFD427` hover |
-| Green | `#067647` carries list dates, event titles and chevrons |
-| Bands | `#eef0f0` behind events and partners |
+| Radius | `--radius-card` 20px on cards; 999px pills (the board's most common radius by far); 50% circles |
+| Imagery | colour, `contrast(1.06)`, a `multiply` wash carried over — see *Photography*, below |
+| Weights | top-loaded: 800 and 700 dominate, against a light 300/500 tail — considerably heavier than the previous setting |
+| Faces | **Outfit**, replacing DM Sans; **JetBrains Mono stays** — see *Type*, below |
 
-The first build got this wrong — pills everywhere, colour photography, 14px cards, no
-fixtures list — which is why it did not look like the board.
+The first build of this portal, before it followed any board at all, got even the shape
+of the thing wrong — pills everywhere, colour photography, 14px cards, no fixtures list.
+That failure predates both boards discussed in this file and is why later builds started
+from a board's own file rather than a screenshot of one.
+
+### Type
+
+The board carries 30 distinct font sizes between the two artboards, from 9px to 96px,
+including canvas half-pixel artifacts (9.5, 10.5, 11.5…) that are rendering residue, not
+design decisions. Those are not 30 decisions, and the scale here is **eight derived
+steps, not the board's thirty**:
+
+| Token | Value | Board sizes it absorbs |
+|---|---|---|
+| `--fs-micro` | `11px` | 9, 10, 11 — eyebrows, mono labels |
+| `--fs-small` | `13px` | 12, 13 |
+| `--fs-body-sm` | `15px` | 14, 15, 16 |
+| `--fs-body` | `17px` | 17, 18, 19 |
+| `--fs-subhead` | `22px` | 20, 21, 22, 24, 25 |
+| `--fs-head` | `28px` | 26, 27, 29, 32 |
+| `--fs-feature` | `clamp(28px, 3.2vw, 40px)` | 34, 40, 48, 56, 64 — see below |
+| `--fs-display` | `clamp(52px, 9vw, 96px)` | 52 (Mobile) → 84, 96 (v6) — the hero |
+
+Two collapses drive that count. Everything at 40px and up on the board is weight 800, so
+weight rather than size is doing the work of a separate register above 40. And Mobile's
+52px/48px headings are v6's 96px/84px headings at a narrower artboard — one element
+rendered at two widths, not two decisions — so they fold into the single fluid
+`--fs-display` step rather than each getting their own token.
+
+`--fs-feature` is the **section-heading register** — the board's 40px section heads
+("One Pass. Five doors.", "Fan events and promotions", "Explore the host country"). The
+board's larger one-off headings (the featured fixture's score line, the CTA headline, the
+partners stat, at 56/64/84px) are **display register**, not section-heading register.
+These two were merged in an earlier draft, and the merge resolved to the wrong end: the
+clamp's growth term reached 64px by 1164px, so every real desktop width rendered the
+display size and `--fs-feature` never actually occupied its own 28–40px band — 64px
+showed up everywhere a desktop was involved. The fix was to split them back apart, not to
+retune the clamp. `--fs-feature` now spans only 28–40px; do not re-merge it with
+`--fs-display` — the two roles differ in cast, not in count.
+
+`--fs-feature`'s comment in `portal.css` and `.split-media .quote p` in `auth.css` are
+where this is spelled out in full if a future change needs the reasoning again.
+
+**One bespoke size, tracked here because it is not on the scale.**
+`portal/auth.css`'s `.split-media .quote p` (the login/sign-up split-screen pull-quote)
+is a one-off `clamp(24px, 3vw, 34px)`, not a scale step. It is a genuine role
+difference — a two-line supporting pull-quote set lighter than a single-line section
+heading, sitting under `--fs-feature`'s 28–40px band at every width — and it is
+documented at its own declaration, but nowhere a board author would look for it. If a
+future board draws a pull-quote, check it against this rather than assuming it belongs on
+the eight-step scale.
+
+**JetBrains Mono stays.** It is the data register — the Pass serial, record lines,
+kickoff times, figures — not a second display face competing with Outfit. Same reasoning
+as the app.
+
+### Enforcement, and its limit
+
+`scripts/verify-contrast.mjs` reads the token pairs straight out of `portal.css` and
+fails the build if a pairing regresses — `--muted` on `--primary`, `--accent` on
+`--canvas`, and the rest of the pairs a real element actually uses, plus a tripwire
+asserting `--brand` stays under the text-safe threshold. What it cannot do: it checks
+token pairs, not text set over photography. Text-over-photo contrast — the eyebrow on the
+featured fixture's image, a caption over a `.shot`/`.wash` pair — is measured by hand,
+against the actual rendered pixel, each time the imagery changes.
 
 ## The interactions, ported too
 
@@ -40,13 +131,19 @@ fixtures list — which is why it did not look like the board.
 Only the rail buttons need script. Everything else is CSS, so the page works with
 JavaScript disabled, and all of it stops under `prefers-reduced-motion`.
 
-## It now follows minimax, like the app
+## History: it once followed minimax, like the app
 
-The portal was built to the canvas board — near-black, gold `#F2C744`, green `#067647`,
-10px radii, Outfit. It now follows **`minimax/DESIGN.md`**, the same template the app was
-re-skinned to, so the two surfaces are one product again.
+**This section is superseded.** The portal no longer follows minimax; it follows the v6
+board described above. It is kept because the reasoning behind that earlier move is
+still worth having, and a reader who finds only the current state cannot tell what was
+tried and rejected before it.
 
-| | Board | Now (minimax) |
+The portal was originally built to the Claude Design canvas board — near-black, gold
+`#F2C744`, green `#067647`, 10px radii, Outfit. For one stretch of its history it instead
+followed **`minimax/DESIGN.md`**, the same template the app was re-skinned to, so that the
+two surfaces were one product, palette and all.
+
+| | Canvas board | Minimax (then) |
 |---|---|---|
 | Interactive | gold `#F2C744` | brand-blue `#1456f0` |
 | On dark text | gold | brand-cyan `#3daeff` |
@@ -57,25 +154,29 @@ re-skinned to, so the two surfaces are one product again.
 | Cards | 10px | 16px, with 32px on the photo-hero surfaces |
 | Inputs | 10px | 8px, 2px `#1d4ed8` when focused |
 
-Variables were **renamed**, not repointed: `--gold` became `--accent`, `--green` became
-`--success`, `--paper` became `--surface`. A variable called `--gold` holding blue is worse
-than a rename.
+Variables were **renamed**, not repointed, at that migration: `--gold` became `--accent`,
+`--green` became `--success`, `--paper` became `--surface`. A variable called `--gold`
+holding blue is worse than a rename — the same rule the v6 move above also followed
+(indigo took over `--accent` in place, rather than a fresh token appearing next to a
+stale one).
 
-Three departures from the template, each deliberate:
+Three departures from the minimax template were deliberate at the time, and two of the
+three still hold: **JetBrains Mono stayed** (the data register, not a second display
+face — the reasoning the current *Type* section above restates); **hovers stayed** (the
+template documented none, which suits a product UI and not a marketing page a mouse
+visits); **circular buttons stayed 44px**, not the template's 36px, because 44 is the
+floor Apple, Android and WCAG 2.5.5 agree on, and that floor does not move with a
+redesign.
 
-- **JetBrains Mono stays.** The template says not to add a second display face; mono here
-  is the data register, not display. Same reasoning as the app.
-- **Hovers stay.** The template documents none — "per the no-hover policy" — which suits a
-  product UI and not a marketing page a mouse visits.
-- **Circular buttons are 44px, not the template's 36px.** 44 is the floor Apple, Android
-  and WCAG 2.5.5 agree on.
+## Why the portal's palette differs from the app's
 
-## Why the board's palette is gone
-
-The app is `deep #04222b` + `accent #0e6ba8` — two hues, per Uratibu. This surface is
-near-black `#121316`, gold `#F2C744` and green `#067647`, which is what the board draws
-and what a public marketing site needs to do that a product does not. It is the same
-split Hayya keeps between `hayya.qa` and the Hayya app.
+The app's theme — `deep #04222b` + `accent #0e6ba8`, per Uratibu — is untouched by any of
+this. This surface now draws indigo, yellow and orange from the v6 board, which is what a
+public marketing site can do that a product does not; before that it was near-black, gold
+and green from the canvas board, for the same reason. It is the same split Hayya keeps
+between `hayya.qa` and the Hayya app, and the *Out of scope* / *Risks* sections of
+`docs/superpowers/specs/2026-08-20-portal-v6-redesign-design.md` accept the seam this
+widens, deliberately, rather than by drift.
 
 **The app's theme is untouched.** `tailwind.config.js`, `src/lib/theme.ts` and `DESIGN.md`
 are unchanged, and no CSS or colour token is importable from `src/` — only figures and
@@ -99,24 +200,52 @@ the page repeats it rather than inventing a second version of the same fact.
 
 ## Photography
 
-Six images from Wikimedia Commons, **self-hosted** in `img/` rather than hotlinked —
-Wikimedia asks not to be used as a CDN. Every one carries a credit in the page: a caption
-on the card and a full attribution list with links in the footer. The hero is
-`Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG`, which is Batian and Nelion — the same summits
-the app's `PeakFrame` motif is cut from.
+Colour, not greyscale. `.shot` used to run `grayscale(1) contrast(1.06)` to hide the real
+colour already present in every JPEG in `img/`; the v6 board's own reference imagery is
+colour, so the `grayscale(1)` came off and only `contrast(1.06)` stays — that part was
+never about the missing colour. The `.wash` — the `multiply`-blend gradient over each
+framed photograph — survives for a different reason: it is what keeps text legible over a
+photograph, not a stand-in for the grey the board never specified. Where a photograph sits
+under no text (the hero, once its own `filter:none` override is applied), neither the
+wash nor the contrast lift is needed for legibility and the image runs at full colour.
+Text-over-photo contrast is not something `scripts/verify-contrast.mjs` can check — see
+*Enforcement, and its limit*, above — so each wash's opacity is measured by hand against
+the actual rendered pixel; `.featured .veil`'s 0.82 alpha in `portal.css` records one such
+measurement, taken at the eyebrow text's worst-case pixel.
 
-If any image is replaced, its credit has to move with it. CC BY-SA requires attribution.
+Every image, from Wikimedia Commons and **self-hosted** in `img/` rather than hotlinked —
+Wikimedia asks not to be used as a CDN — carries a credit in the page: a caption on the
+card, or a listing in the footer's attribution table, or both. The hero card is
+`Pt_Thomson_Batian_Nelion_Mt_Kenya.JPG`, Batian and Nelion — the same summits the app's
+`PeakFrame` motif is cut from; the hero itself is now a licensed video clip, credited
+alongside it.
 
-Attribution lives on **`credits.html`**, linked from the footer by a single "Photo
-credits" line. The board's footer carries no legal text and neither does this one — but
-the link is not optional decoration: the "BY" in CC BY-SA is a licence term, so that page
-is what keeps displaying the photographs lawful. The prototype caveat moved there too.
+**The rule that has legal force: every image maps to an attribution on `credits.html`,
+and CC BY-SA attribution follows a derivative.** If any image is replaced — or, per the
+v6 spec, re-cropped from the same source — its credit has to move or extend with it; an
+image that cannot be mapped to a credit does not ship. Attribution lives on
+**`credits.html`**, linked from the footer by a single "Photo credits" line. Neither the
+canvas board's footer nor the v6 board's carries any legal text, and neither does this
+one — but the link is not optional decoration: the "BY" in CC BY-SA is a licence term, so
+that page is what keeps displaying the photographs lawful. The prototype caveat lives
+there too.
 
 ## Pages
 
+No board — the original canvas board or v6 — was ever drawn for the five logged-in
+pages below (`dashboard.html`, `matches.html`, `live.html`, `partners.html`,
+`pass.html`). They exist because tokens, not layouts, drive them: `portal/app.css` and
+`portal/pages/*.js` hold no raw colour values, only role tokens, so repointing
+`portal.css`'s `:root` re-skins the marketing page and all five of these at once, and a
+board's component form — card radius, weight, the eyebrow-and-number treatment — is
+carried across by derivation from the same rules rather than by eye. If a board is ever
+drawn for these five pages, it **supersedes** this derivation rather than conflicting
+with it — the derivation was always a stand-in for a board that did not exist yet, not a
+competing decision.
+
 | File | What it is |
 |---|---|
-| `index.html` | the marketing page — the board, ported |
+| `index.html` | the marketing page — the v6 board, ported |
 | `login.html` | Pass number + one-time code. No password: there is none to steal, and none to store |
 | `signup.html` | the app's own three questions — country, name, ticket reference — and now issues a real Pass on submit, through `PamojaState.issue()` |
 | `dashboard.html` | Home: the next match, the partner network, and the three most recent lines of the record |
